@@ -129,5 +129,5 @@ app.*.map.json
 test/
 web/
 windows/
-.dart_tool/
-.idea/
+.dart_tool
+.idea

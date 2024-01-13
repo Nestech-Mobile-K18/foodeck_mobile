@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:template/resources/fonts.dart';
+import 'package:template/resources/routes.dart';
 import 'package:template/routes/router.dart';
 
 class MyApp extends StatefulWidget {
@@ -22,6 +23,7 @@ class _MyAppState extends State<MyApp> {
         appBarTheme: const AppBarTheme(color: Colors.transparent),
       ),
       onGenerateRoute: generateRoute,
+      initialRoute: RouteName.splash,
     );
   }
 }

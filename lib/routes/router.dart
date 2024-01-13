@@ -1,20 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:template/common/view/page_under_construction.dart';
-import 'package:template/pages/login/login_view.dart';
-
-import '../pages/splash/splash_view.dart';
 import '../resources/routes.dart';
+import '../pages/otp/otp_view.dart';
+import 'package:flutter/material.dart';
+import '../pages/login/login_view.dart';
+import '../pages/splash/splash_view.dart';
+import '../common/view/page_under_construction.dart';
+import '../pages/create_account/create_account_view.dart';
+
+
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case RouteName.splash:
-      return _pageBuilder((_) => SplashView(), settings: settings);
+      return _pageBuilder((_) => const SplashView(), settings: settings);
 
     case RouteName.login:
-      return _pageBuilder((_) => LoginView(), settings: settings);
+      return _pageBuilder((_) => const LoginView(), settings: settings);
+
+    case RouteName.createAccount:
+      return _pageBuilder((_) => const CreateAccountView(), settings: settings);
+
+    case RouteName.otp:
+      return _pageBuilder((_) => const OtpView(), settings: settings);
 
     default:
-      return _pageBuilder((_) => PageUnderConstruction(), settings: settings);
+      return _pageBuilder((_) => const PageUnderConstruction(), settings: settings);
   }
 }
 
