@@ -1,3 +1,5 @@
+/*
+
 import 'package:flutter/material.dart';
 import 'package:template/resources/media_res.dart';
 import 'package:template/pages/login/login_view.dart';
@@ -36,3 +38,6 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 }
+
+
+ */

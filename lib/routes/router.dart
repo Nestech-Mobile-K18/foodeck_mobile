@@ -1,3 +1,5 @@
+/*
+
 import 'dart:collection';
 
 import 'package:template/pages/map/map_view.dart';
@@ -41,3 +43,6 @@ PageRouteBuilder<dynamic> _pageBuilder(Widget Function(BuildContext) page,
           FadeTransition(opacity: animation, child: child),
       pageBuilder: (context, _, __) => page(context));
 }
+
+
+ */

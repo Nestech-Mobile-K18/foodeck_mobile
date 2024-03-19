@@ -1,3 +1,6 @@
+/*
+
+
 import 'package:flutter/material.dart';
 import 'package:template/resources/fonts.dart';
 import 'package:template/resources/routes.dart';
@@ -24,6 +27,40 @@ class _MyAppState extends State<MyApp> {
       ),
       onGenerateRoute: generateRoute,
       initialRoute: RouteName.splash,
+    );
+  }
+}
+
+
+*/
+
+import 'package:flutter/material.dart';
+import 'package:template/pages/login/login_screen.dart';
+import 'package:template/pages/splash/splash_screen.dart';
+import 'package:template/routes/common.dart';
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: commonValue.splashUrl,
+      routes: {
+        commonValue.splashUrl: (context) => SplashPage(),
+        commonValue.login: (context) => LoginScreen(),
+
+        // '/': (context) => SplashFuturePage(),
+      },
     );
   }
 }
