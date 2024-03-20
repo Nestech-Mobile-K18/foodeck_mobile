@@ -39,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         LoginMethodButton(
           onTap: () async {
-            await _loginViewModel.facebookSignIn();
+            await _loginViewModel.signInWithFacebook(context);
           },
           isIcon: true,
           color: ColorsGlobal.globalBlue,
