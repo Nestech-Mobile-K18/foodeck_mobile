@@ -1,8 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/pages/home/home_page.dart';
 import 'package:template/pages/login/login_page.dart';
 import 'package:template/values/images.dart';
+import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/loading_animation.dart';
 
 class SplashPage extends StatefulWidget {
@@ -15,43 +20,55 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   bool show = true;
   bool showLoading = true;
+  bool showFinish = false;
+  final supabase = Supabase.instance.client;
+  late final StreamSubscription<AuthState> authSubscription;
 
   @override
   void initState() {
-    start();
-    loadingAnimation();
-    navigateToHome();
+    startAnimation();
     super.initState();
   }
 
-  void start() {
-    Future.delayed(const Duration(milliseconds: 0), () {
+  Future startAnimation() async {
+    await Future(() {
       setState(() {
         show = !show;
       });
     });
-  }
-
-  void loadingAnimation() {
-    Future.delayed(
-      const Duration(milliseconds: 3000),
+    await Future.delayed(
+      const Duration(milliseconds: 2500),
       () {
         setState(() {
           showLoading = !showLoading;
         });
       },
     );
-  }
-
-  void navigateToHome() {
-    Future.delayed(
-      const Duration(milliseconds: 7000),
+    await Future.delayed(const Duration(milliseconds: 3000), () {
+      setState(() {
+        showFinish = !showFinish;
+      });
+    });
+    await Future.delayed(const Duration(milliseconds: 3500), () {
+      setState(() {
+        show = !show;
+      });
+    });
+    await Future.delayed(
+      const Duration(milliseconds: 4000),
       () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginPage(),
-            ));
+        authSubscription = supabase.auth.onAuthStateChange.listen((event) {
+          final session = event.session;
+          if (session != null) {
+            Get.to(() => HomePage(),
+                transition: Transition.zoom,
+                duration: Duration(milliseconds: 1000));
+          } else if (session == null) {
+            Get.to(() => const LoginPage(),
+                transition: Transition.zoom,
+                duration: Duration(milliseconds: 1000));
+          }
+        });
       },
     );
   }
@@ -59,57 +76,53 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          setState(() {
-            show = !show;
-          });
-        },
-        child: AnimatedContainer(
-            duration: const Duration(seconds: 2),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: show
-                    ? null
-                    : const DecorationImage(
-                        image: AssetImage(splashScreen), fit: BoxFit.cover)),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                AnimatedPositioned(
-                    duration: const Duration(seconds: 2),
-                    top: show ? 0 : 170,
-                    child: Image.asset(foodDeck)),
-                AnimatedPositioned(
-                    duration: const Duration(seconds: 2),
-                    top: 290,
-                    left: show ? 0 : 92,
-                    child: const Text(
-                      'Foodeck',
-                      style: TextStyle(
+      body: AnimatedContainer(
+          duration: const Duration(seconds: 2),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              image: show
+                  ? null
+                  : const DecorationImage(
+                      image: AssetImage(splashScreen), fit: BoxFit.cover)),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              AnimatedPositioned(
+                  duration: const Duration(seconds: 2),
+                  top: show ? 0 : 170,
+                  child: Image.asset(foodDeck)),
+              AnimatedPositioned(
+                  duration: const Duration(seconds: 2),
+                  top: 290,
+                  left: show ? 0 : 92,
+                  child: Text('Foodeck',
+                      style: inter.copyWith(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    )),
-                AnimatedPositioned(
-                    duration: const Duration(seconds: 2),
-                    top: show ? 800 : 387,
-                    child: const Text(
-                      textAlign: TextAlign.center,
-                      'Aliquam commodo tortor lacinia lorem\naccumsan aliquam',
-                      style: TextStyle(fontSize: 17, color: Colors.white),
-                    )),
-                Positioned(
-                  top: 500,
-                  child: AnimatedOpacity(
-                      opacity: showLoading ? 0 : 1,
-                      duration: const Duration(seconds: 2),
-                      child: const WaveDots(size: 36, color: Colors.white)),
-                )
-              ],
-            )),
-      ),
+                          color: Colors.white))),
+              AnimatedPositioned(
+                  duration: const Duration(seconds: 2),
+                  top: show ? 800 : 387,
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'Aliquam commodo tortor lacinia lorem\naccumsan aliquam',
+                    style: inter.copyWith(fontSize: 17, color: Colors.white),
+                  )),
+              Positioned(
+                top: showFinish ? 450 : 500,
+                child: showFinish
+                    ? SizedBox(
+                        // height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        child: show ? null : Lottie.asset(loading))
+                    : AnimatedOpacity(
+                        opacity: showLoading ? 0 : 1,
+                        duration: const Duration(seconds: 2),
+                        child: const WaveDots(size: 36, color: Colors.white)),
+              )
+            ],
+          )),
     );
   }
 }

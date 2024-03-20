@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatefulWidget {
-  const CustomButton(
-      {super.key,
-      required this.onPressed,
-      this.icons,
-      required this.text,
-      required this.color,
-      this.borderSide});
+  const CustomButton({
+    super.key,
+    required this.onPressed,
+    this.icons,
+    required this.text,
+    required this.color,
+    this.borderSide,
+  });
   final VoidCallback onPressed;
   final Widget? icons;
   final Text text;
   final Color color;
   final BorderSide? borderSide;
+
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }
@@ -27,7 +29,7 @@ class _CustomButtonState extends State<CustomButton> {
         label: widget.text,
         icon: widget.icons ?? const Text(''),
         style: ButtonStyle(
-            fixedSize: const MaterialStatePropertyAll(Size.fromHeight(62)),
+            fixedSize: const MaterialStatePropertyAll(Size(328, 62)),
             backgroundColor: MaterialStatePropertyAll(widget.color),
             shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),

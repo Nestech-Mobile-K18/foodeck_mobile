@@ -7,3 +7,4 @@ const String appleLogo = 'assets/icons/AppleLogo.png';
 const String emailLogo = 'assets/icons/EmailLogo.png';
 const String facebookLogo = 'assets/icons/FacebookLogo.png';
 const String googleLogo = 'assets/icons/GoogleLogo.png';
+const String loading = 'assets/icons/Loading.json';
