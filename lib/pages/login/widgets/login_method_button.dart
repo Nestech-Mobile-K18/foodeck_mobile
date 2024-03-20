@@ -5,12 +5,14 @@ class LoginMethodButton extends StatelessWidget {
   final String? title;
   final String? assetIcon;
   final VoidCallback? onTap;
+  final bool? isIcon;
 
   const LoginMethodButton({
     super.key,
     required this.color,
     required this.title,
-    required this.assetIcon,
+    this.assetIcon,
+    this.isIcon,
     this.onTap,
   });
 
@@ -20,8 +22,8 @@ class LoginMethodButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 22),
         alignment: Alignment.center,
-        height: 65,
         width: double.infinity,
         decoration: BoxDecoration(
           color: color,
@@ -32,7 +34,7 @@ class LoginMethodButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("$assetIcon"),
+            if (isIcon == true) Image.asset("$assetIcon"),
             const SizedBox(
               width: 10,
             ),
