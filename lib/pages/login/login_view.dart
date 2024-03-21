@@ -39,14 +39,17 @@ class _LoginViewState extends State<LoginView> {
         ),
         LoginMethodButton(
           onTap: () async {
-            await _loginViewModel.signInWithFacebook(context);
+            await _loginViewModel.facebookSignIn(context);
           },
           isIcon: true,
           color: ColorsGlobal.globalBlue,
           title: StringExtensions.loginViaFacebook,
           assetIcon: image.MediaRes.logoFacebook,
         ),
-        const LoginMethodButton(
+        LoginMethodButton(
+          onTap: () async {
+            await _loginViewModel.appleSignIn(context);
+          },
           isIcon: true,
           color: ColorsGlobal.globalBlack,
           title: StringExtensions.loginViaApple,
