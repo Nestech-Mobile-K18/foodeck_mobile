@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/login/login_page.dart';
 import 'package:template/pages/login/widgets/login_email.dart';
+import 'package:template/pages/login/widgets/otp.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/buttons.dart';
@@ -25,23 +25,44 @@ class _CreateAccountState extends State<CreateAccount> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-  Future<void> signUpAndAddUsers() async {
+  Future signUpAndAddUsers() async {
     try {
       await supabase.auth.signUp(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
-      await supabase.auth.signInWithOtp(
-          email: emailController.text.trim(),
-          emailRedirectTo: 'io.supabase.flutterquickstart://login-callback/');
-      await supabase.from('users').insert({
-        'Email': emailController.text.trim(),
-        'Name': nameController.text.trim(),
-        'Phone No.': phoneController.text.trim(),
-        'Password': passwordController.text.trim(),
+      await Future.delayed(const Duration(milliseconds: 100), () {
+        supabase.auth
+            .signInWithOtp(
+                shouldCreateUser: false,
+                email: emailController.text.trim(),
+                emailRedirectTo:
+                    'io.supabase.flutterquickstart://login-callback/')
+            .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Please check OTP in your email'))));
+      });
+      await Future.delayed(const Duration(milliseconds: 200), () {
+        supabase.from('users').insert({
+          'Email': emailController.text.trim(),
+          'Name': nameController.text.trim(),
+          'Phone No.': phoneController.text.trim(),
+          'Password': passwordController.text.trim(),
+        });
+      });
+      await Future.delayed(const Duration(milliseconds: 300), () {
+        Get.to(
+            () => Otp(
+                  email: emailController.text.trim(),
+                ),
+            transition: Transition.leftToRight,
+            duration: const Duration(milliseconds: 600));
       });
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error occurred, please retry')));
     }
   }
 
@@ -62,13 +83,6 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Get.to((const LoginPage()),
-                  transition: Transition.leftToRightWithFade,
-                  duration: const Duration(milliseconds: 600));
-            },
-          ),
           shape: const UnderlineInputBorder(
               borderSide: BorderSide(width: 8, color: primaryGrey)),
           title: Text('Create an account',
@@ -136,7 +150,9 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                 ),
                 CustomButton(
-                    onPressed: signUpAndAddUsers,
+                    onPressed: () {
+                      signUpAndAddUsers();
+                    },
                     text: Text('Create an account',
                         style: inter.copyWith(
                             fontSize: 17,

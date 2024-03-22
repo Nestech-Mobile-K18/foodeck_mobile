@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/login/widgets/create_account.dart';
 import 'package:template/pages/login/widgets/login_email.dart';
 import 'package:template/values/colors.dart';
@@ -18,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final supabase = Supabase.instance.client;
   void loginEmail() {
     Get.to(() => const LoginEmail(),
         transition: Transition.rightToLeft,

@@ -17,3 +17,18 @@ List<LoginButton> loginButton = [
   LoginButton(emailLogo, 'Login via Email', lightPink),
   LoginButton('', 'Create an account', Colors.white)
 ];
+
+class OTPFill {
+  final TextEditingController otpSlot;
+
+  OTPFill(this.otpSlot);
+}
+
+List<OTPFill> otpFill = [
+  OTPFill(TextEditingController()),
+  OTPFill(TextEditingController()),
+  OTPFill(TextEditingController()),
+  OTPFill(TextEditingController()),
+  OTPFill(TextEditingController()),
+  OTPFill(TextEditingController()),
+];

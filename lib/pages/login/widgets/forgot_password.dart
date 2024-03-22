@@ -22,12 +22,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         },
         child: Scaffold(
             appBar: AppBar(
-              leading: BackButton(
-                onPressed: () {
-                  Get.to((const LoginEmail()),
-                      transition: Transition.leftToRightWithFade);
-                },
-              ),
               shape: const UnderlineInputBorder(
                   borderSide: BorderSide(width: 8, color: primaryGrey)),
               title: Text('Forgot Password',

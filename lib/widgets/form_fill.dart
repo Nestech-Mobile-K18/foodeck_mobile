@@ -21,6 +21,8 @@ class CustomFormFill extends StatefulWidget {
     this.textAlign,
     this.lengthLimitingTextInputFormatter,
     this.filteringTextInputFormatter,
+    this.focusNode,
+    this.padding,
   });
   final TextInputType? textInputType;
   final Function(String)? function;
@@ -37,6 +39,8 @@ class CustomFormFill extends StatefulWidget {
   final TextAlign? textAlign;
   final TextInputFormatter? lengthLimitingTextInputFormatter;
   final TextInputFormatter? filteringTextInputFormatter;
+  final EdgeInsets? padding;
+  final FocusNode? focusNode;
   @override
   State<CustomFormFill> createState() => _CustomFormFillState();
 }
@@ -45,6 +49,7 @@ class _CustomFormFillState extends State<CustomFormFill> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: widget.focusNode,
       inputFormatters: [
         widget.lengthLimitingTextInputFormatter ??
             LengthLimitingTextInputFormatter(99),
@@ -68,7 +73,7 @@ class _CustomFormFillState extends State<CustomFormFill> {
               inter.copyWith(fontSize: 12, color: widget.labelColor),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           errorText: widget.errorText,
-          contentPadding:
+          contentPadding: widget.padding ??
               const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: widget.borderColor ?? Colors.grey),

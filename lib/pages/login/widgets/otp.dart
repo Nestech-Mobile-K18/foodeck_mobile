@@ -2,26 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/pages/login/widgets/create_account.dart';
 import 'package:template/pages/login/widgets/login_email.dart';
 import 'package:template/values/colors.dart';
+import 'package:template/values/list.dart';
 import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/form_fill.dart';
 
 class Otp extends StatefulWidget {
-  const Otp({super.key});
-
+  const Otp({super.key, required this.email});
+  final String email;
   @override
   State<Otp> createState() => _OtpState();
 }
 
 class _OtpState extends State<Otp> {
   final currentIndex = ValueNotifier(0);
-  final otpController = TextEditingController();
+  final supabase = Supabase.instance.client;
+
   Future checkOTP() async {
-    await supabase.auth
-        .verifyOTP(token: otpController.text, type: OtpType.email);
+    try {
+      await supabase.auth
+          .verifyOTP(
+              token: otpFill.elementAt(0).toString() +
+                  otpFill.elementAt(1).toString() +
+                  otpFill.elementAt(2).toString() +
+                  otpFill.elementAt(3).toString() +
+                  otpFill.elementAt(4).toString() +
+                  otpFill.elementAt(5).toString(),
+              type: OtpType.email,
+              email: widget.email)
+          .then((value) => Get.to(() => const LoginEmail()));
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error occurred, please retry')));
+    }
+  }
+
+  Future resendOTP() async {
+    try {
+      await supabase.auth.resend(type: OtpType.email, email: widget.email);
+    } on AuthException catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error occurred, please retry')));
+    }
   }
 
   @override
@@ -32,12 +61,6 @@ class _OtpState extends State<Otp> {
         },
         child: Scaffold(
             appBar: AppBar(
-              leading: BackButton(
-                onPressed: () {
-                  Get.to((const CreateAccount()),
-                      transition: Transition.leftToRightWithFade);
-                },
-              ),
               shape: const UnderlineInputBorder(
                   borderSide: BorderSide(width: 8, color: primaryGrey)),
               title: Text('OTP',
@@ -63,11 +86,13 @@ class _OtpState extends State<Otp> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: List.generate(
-                                    4,
+                                    6,
                                     (index) => CustomFormFill(
-                                      textEditingController: otpController,
+                                      padding: EdgeInsets.zero,
+                                      textEditingController:
+                                          otpFill[index].otpSlot,
                                       textAlign: TextAlign.center,
-                                      boxWidth: 76,
+                                      boxWidth: 50,
                                       boxHeight: 76,
                                       textInputType: TextInputType.number,
                                       borderColor: currentIndex.value >= index
@@ -83,7 +108,7 @@ class _OtpState extends State<Otp> {
                                           currentIndex.value = index;
                                         });
                                         if (value.length == 1) {
-                                          currentIndex.value == 3
+                                          currentIndex.value == 5
                                               ? null
                                               : FocusScope.of(context)
                                                   .nextFocus();
@@ -102,10 +127,15 @@ class _OtpState extends State<Otp> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 40),
-                            child: Text(
-                              'Resend',
-                              style: inter.copyWith(
-                                  fontSize: 13, color: Colors.grey),
+                            child: GestureDetector(
+                              onTap: () {
+                                resendOTP();
+                              },
+                              child: Text(
+                                'Resend',
+                                style: inter.copyWith(
+                                    fontSize: 13, color: Colors.grey),
+                              ),
                             ),
                           ),
                           ValueListenableBuilder(
@@ -114,20 +144,18 @@ class _OtpState extends State<Otp> {
                                 Widget? child) {
                               return GestureDetector(
                                 onTap: () {
-                                  currentIndex.value == 3
-                                      ? Get.to(() => const LoginEmail())
-                                      : null;
+                                  currentIndex.value == 5 ? checkOTP() : null;
                                 },
                                 child: Center(
                                   child: AnimatedContainer(
                                     height: 62,
                                     width: 328,
                                     decoration: BoxDecoration(
-                                        color: currentIndex.value == 3
+                                        color: currentIndex.value == 5
                                             ? lightPink
                                             : Colors.white,
                                         borderRadius: BorderRadius.circular(16),
-                                        boxShadow: currentIndex.value == 3
+                                        boxShadow: currentIndex.value == 5
                                             ? [
                                                 BoxShadow(
                                                     color: Colors.grey.shade500,
@@ -150,7 +178,7 @@ class _OtpState extends State<Otp> {
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                         duration: const Duration(seconds: 2),
-                                        child: Text(currentIndex.value == 3
+                                        child: Text(currentIndex.value == 5
                                             ? 'Confirm'
                                             : ''),
                                       ),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/home/home_page.dart';
-import 'package:template/pages/login/login_page.dart';
 import 'package:template/pages/login/widgets/create_account.dart';
 import 'package:template/pages/login/widgets/forgot_password.dart';
 import 'package:template/values/colors.dart';
@@ -67,13 +66,6 @@ class _LoginEmailState extends State<LoginEmail> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Get.to((const LoginPage()),
-                  transition: Transition.leftToRightWithFade,
-                  duration: const Duration(milliseconds: 600));
-            },
-          ),
           shape: const UnderlineInputBorder(
               borderSide: BorderSide(width: 8, color: primaryGrey)),
           title: Text('Login via Email',
