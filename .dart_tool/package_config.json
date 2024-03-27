@@ -128,6 +128,42 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "google_identity_services_web",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_identity_services_web-0.3.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "google_sign_in",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_sign_in-6.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "google_sign_in_android",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_sign_in_android-6.1.22",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "google_sign_in_ios",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_sign_in_ios-5.7.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "google_sign_in_platform_interface",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_sign_in_platform_interface-2.4.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "google_sign_in_web",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/google_sign_in_web-0.12.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "gotrue",
       "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/gotrue-2.5.1",
       "packageUri": "lib/",
@@ -159,9 +195,9 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.1",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.7",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "2.19"
     },
     {
       "name": "jwt_decode",
@@ -524,7 +560,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-03-19T04:51:59.467054Z",
+  "generated": "2024-03-27T08:11:18.627509Z",
   "generator": "pub",
   "generatorVersion": "3.4.0-99.1.beta"
 }

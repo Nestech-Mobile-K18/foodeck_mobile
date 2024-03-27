@@ -15,14 +15,12 @@ class CustomFormFill extends StatefulWidget {
     this.labelColor,
     this.icons,
     this.obscureText,
-    this.boxHeight,
-    this.boxWidth,
+    this.boxSize,
     this.borderColor,
     this.textAlign,
-    this.lengthLimitingTextInputFormatter,
-    this.filteringTextInputFormatter,
     this.focusNode,
     this.padding,
+    this.textInputFormatter,
   });
   final TextInputType? textInputType;
   final Function(String)? function;
@@ -34,11 +32,9 @@ class CustomFormFill extends StatefulWidget {
   final Color? borderColor;
   final IconButton? icons;
   final bool? obscureText;
-  final double? boxHeight;
-  final double? boxWidth;
+  final BoxConstraints? boxSize;
   final TextAlign? textAlign;
-  final TextInputFormatter? lengthLimitingTextInputFormatter;
-  final TextInputFormatter? filteringTextInputFormatter;
+  final List<TextInputFormatter>? textInputFormatter;
   final EdgeInsets? padding;
   final FocusNode? focusNode;
   @override
@@ -50,12 +46,7 @@ class _CustomFormFillState extends State<CustomFormFill> {
   Widget build(BuildContext context) {
     return TextFormField(
       focusNode: widget.focusNode,
-      inputFormatters: [
-        widget.lengthLimitingTextInputFormatter ??
-            LengthLimitingTextInputFormatter(99),
-        widget.filteringTextInputFormatter ??
-            FilteringTextInputFormatter.singleLineFormatter
-      ],
+      inputFormatters: widget.textInputFormatter,
       textAlign: widget.textAlign ?? TextAlign.start,
       obscureText: widget.obscureText ?? false,
       keyboardType: widget.textInputType,
@@ -64,15 +55,19 @@ class _CustomFormFillState extends State<CustomFormFill> {
       controller: widget.textEditingController,
       decoration: InputDecoration(
           suffixIcon: widget.icons,
-          constraints: BoxConstraints(
-              maxHeight: widget.boxHeight ?? 62,
-              maxWidth: widget.boxWidth ?? 328),
+          constraints: widget.boxSize ?? const BoxConstraints(maxWidth: 328),
           labelText: widget.labelText,
           labelStyle: inter.copyWith(fontSize: 12, color: Colors.grey),
           floatingLabelStyle:
               inter.copyWith(fontSize: 12, color: widget.labelColor),
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           errorText: widget.errorText,
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: Colors.grey)),
+          focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: Colors.red)),
           contentPadding: widget.padding ??
               const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           enabledBorder: OutlineInputBorder(
@@ -82,7 +77,8 @@ class _CustomFormFillState extends State<CustomFormFill> {
               borderSide: const BorderSide(color: lightPink),
               borderRadius: BorderRadius.circular(16)),
           hintText: widget.hintText,
-          hintStyle: inter.copyWith(fontSize: 17, color: Colors.grey)),
+          hintStyle: inter.copyWith(fontSize: 17, color: Colors.grey),
+          helperText: ''),
     );
   }
 }

@@ -31,15 +31,8 @@ class _CreateAccountState extends State<CreateAccount> {
           email: emailController.text.trim(),
           password: passwordController.text.trim());
       await Future.delayed(const Duration(milliseconds: 100), () {
-        supabase.auth
-            .signInWithOtp(
-                shouldCreateUser: false,
-                email: emailController.text.trim(),
-                emailRedirectTo:
-                    'io.supabase.flutterquickstart://login-callback/')
-            .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Please check OTP in your email'))));
+        supabase.auth.signInWithOtp(
+            shouldCreateUser: false, email: emailController.text.trim());
       });
       await Future.delayed(const Duration(milliseconds: 200), () {
         supabase.from('users').insert({
@@ -83,96 +76,104 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Navigator.pop(context);
+              FocusScope.of(context).unfocus();
+            },
+          ),
           shape: const UnderlineInputBorder(
               borderSide: BorderSide(width: 8, color: primaryGrey)),
           title: Text('Create an account',
               style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
         ),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Input your credentials',
-                    style: inter.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: CustomFormFill(
-                    textInputType: TextInputType.name,
-                    labelText: 'Name',
-                    hintText: 'John Doe',
-                    labelColor: lightPink,
-                    textEditingController: nameController,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Input your credentials',
+                      style: inter.copyWith(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: CustomFormFill(
+                      textInputType: TextInputType.name,
+                      labelText: 'Name',
+                      hintText: 'John Doe',
+                      labelColor: lightPink,
+                      textEditingController: nameController,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: CustomFormFill(
-                    textInputType: TextInputType.emailAddress,
-                    labelText: 'Email',
-                    hintText: 'johndoe123@gmail.com',
-                    labelColor: lightPink,
-                    textEditingController: emailController,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: CustomFormFill(
+                      textInputType: TextInputType.emailAddress,
+                      labelText: 'Email',
+                      hintText: 'johndoe123@gmail.com',
+                      labelColor: lightPink,
+                      textEditingController: emailController,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: CustomFormFill(
-                    textInputType: TextInputType.phone,
-                    labelText: 'Phone No.',
-                    hintText: '+92 3014124781',
-                    lengthLimitingTextInputFormatter:
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: CustomFormFill(
+                      textInputType: TextInputType.phone,
+                      labelText: 'Phone No.',
+                      hintText: '+92 3014124781',
+                      textInputFormatter: [
                         LengthLimitingTextInputFormatter(10),
-                    filteringTextInputFormatter:
                         FilteringTextInputFormatter.digitsOnly,
-                    labelColor: lightPink,
-                    textEditingController: phoneController,
+                      ],
+                      labelColor: lightPink,
+                      textEditingController: phoneController,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 40),
-                  child: CustomFormFill(
-                    labelText: 'Password',
-                    labelColor: lightPink,
-                    icons: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            showPass = !showPass;
-                          });
-                        },
-                        icon: Icon(showPass
-                            ? Icons.visibility
-                            : Icons.visibility_off)),
-                    obscureText: showPass ? false : true,
-                    textEditingController: passwordController,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 40),
+                    child: CustomFormFill(
+                      labelText: 'Password',
+                      labelColor: lightPink,
+                      icons: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPass = !showPass;
+                            });
+                          },
+                          icon: Icon(showPass
+                              ? Icons.visibility
+                              : Icons.visibility_off)),
+                      obscureText: showPass ? false : true,
+                      textEditingController: passwordController,
+                    ),
                   ),
-                ),
-                CustomButton(
-                    onPressed: () {
-                      signUpAndAddUsers();
-                    },
-                    text: Text('Create an account',
-                        style: inter.copyWith(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    color: lightPink),
-                CustomButton(
-                    borderSide: const BorderSide(color: Colors.grey),
-                    onPressed: () {
-                      Get.to(() => const LoginEmail(),
-                          transition: Transition.upToDown,
-                          duration: const Duration(milliseconds: 600));
-                    },
-                    text: Text('Login instead',
-                        style: inter.copyWith(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey)),
-                    color: Colors.white)
-              ],
+                  CustomButton(
+                      onPressed: () {
+                        signUpAndAddUsers();
+                      },
+                      text: Text('Create an account',
+                          style: inter.copyWith(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      color: lightPink),
+                  CustomButton(
+                      borderSide: const BorderSide(color: Colors.grey),
+                      onPressed: () {
+                        Get.to(() => const LoginEmail(),
+                            transition: Transition.upToDown,
+                            duration: const Duration(milliseconds: 600));
+                      },
+                      text: Text('Login instead',
+                          style: inter.copyWith(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey)),
+                      color: Colors.white)
+                ],
+              ),
             ),
           ),
         ),
