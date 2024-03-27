@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-import '../../../services/mapbox_config.dart';
+import 'mapbox_config.dart';
 
 class ShowMap extends StatelessWidget {
   const ShowMap({super.key});
