@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                         itemBuilder: (context, index) {
                           if (index == loginButton.length - 3) {
                             return Platform.isAndroid
-                                ? SizedBox()
+                                ? const SizedBox()
                                 : CustomButton(
                                     onPressed: () {
                                       check(loginButton[index].loginText);
