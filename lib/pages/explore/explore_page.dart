@@ -15,7 +15,6 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage> {
   PageController pageController =
       PageController(initialPage: 0, viewportFraction: 0.95);
-  double viewportFraction = 0.8;
   double pageOffset = 0;
   final currentCard = ValueNotifier(0);
   late Timer timer;
@@ -64,7 +63,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 homeBar,
                 fit: BoxFit.cover,
               )),
-          toolbarHeight: 168,
+          toolbarHeight: 142,
           automaticallyImplyLeading: false,
           titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white),
           titleSpacing: 24,
@@ -83,7 +82,7 @@ class _ExplorePageState extends State<ExplorePage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
                   style: inter.copyWith(fontSize: 17, color: Colors.grey),
                   decoration: InputDecoration(
@@ -111,7 +110,7 @@ class _ExplorePageState extends State<ExplorePage> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -120,9 +119,12 @@ class _ExplorePageState extends State<ExplorePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   child: Stack(children: [
-                    Image.asset(
-                      food,
-                      fit: BoxFit.cover,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(
+                        food,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Positioned(
                       top: 106,
