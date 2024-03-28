@@ -17,10 +17,8 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   final emailController = TextEditingController();
-  final newEmailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool updatePassword = false;
-  Future resetPassword() async {
+
+  Future login() async {
     try {
       await supabase.auth
           .signInWithOtp(email: emailController.text, shouldCreateUser: false)
@@ -36,25 +34,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
-  Future changePassword() async {
-    try {
-      await supabase.auth.updateUser(UserAttributes(
-          email: newEmailController.text.trim(),
-          password: passwordController.text.trim()));
-    } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
-    }
-  }
+  // Future changePassword() async {
+  //   try {
+  //     await supabase.auth.updateUser(UserAttributes(
+  //         email: newEmailController.text.trim(),
+  //         password: passwordController.text.trim()));
+  //   } on AuthException catch (error) {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(error.message)));
+  //   } catch (error) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Error occurred, please retry')));
+  //   }
+  // }
 
   @override
   void dispose() {
     emailController.dispose();
-    newEmailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
@@ -73,7 +69,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 },
               ),
               shape: const UnderlineInputBorder(
-                  borderSide: BorderSide(width: 8, color: primaryGrey)),
+                  borderSide: BorderSide(width: 8, color: dividerGrey)),
               title: Text('Forgot Password',
                   style: inter.copyWith(
                       fontSize: 17, fontWeight: FontWeight.bold)),
@@ -90,50 +86,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 40),
-                          child: updatePassword
-                              ? Column(
-                                  children: [
-                                    CustomFormFill(
-                                      textInputType: TextInputType.emailAddress,
-                                      labelText: 'Email',
-                                      hintText: 'johndoe123@gmail.com',
-                                      labelColor: lightPink,
-                                      textEditingController: newEmailController,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 16),
-                                      child: CustomFormFill(
-                                        labelText: 'New Password',
-                                        labelColor: lightPink,
-                                        textEditingController:
-                                            passwordController,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : CustomFormFill(
-                                  labelText: 'Email',
-                                  hintText: 'johndoe123@gmail.com',
-                                  labelColor: lightPink,
-                                  textEditingController: emailController,
-                                ),
+                          child: CustomFormFill(
+                            labelText: 'Email',
+                            hintText: 'johndoe123@gmail.com',
+                            labelColor: globalPink,
+                            textEditingController: emailController,
+                          ),
                         ),
                         CustomButton(
                             onPressed: () {
-                              updatePassword
-                                  ? changePassword()
-                                  : resetPassword();
-                              // Get.to(() => const LoginEmail(),
-                              //     transition: Transition.rightToLeft,
-                              //     duration:
-                              //         const Duration(milliseconds: 600));
+                              login();
                             },
-                            text: Text(updatePassword ? 'Update' : 'Reset',
+                            text: Text('Login',
                                 style: inter.copyWith(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white)),
-                            color: lightPink)
+                            color: globalPink)
                       ])),
             ))));
   }

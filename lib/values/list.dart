@@ -11,24 +11,9 @@ class LoginButton {
 }
 
 List<LoginButton> loginButton = [
-  LoginButton(googleLogo, 'Login via Google', primaryRed),
-  LoginButton(facebookLogo, 'Login via Facebook', primaryBlue),
+  LoginButton(googleLogo, 'Login via Google', buttonRed),
+  LoginButton(facebookLogo, 'Login via Facebook', buttonBlue),
   LoginButton(appleLogo, 'Login via Apple', Colors.black),
-  LoginButton(emailLogo, 'Login via Email', lightPink),
+  LoginButton(emailLogo, 'Login via Email', globalPink),
   LoginButton('', 'Create an account', Colors.white)
-];
-
-class OTPFill {
-  final TextEditingController otpSlot;
-
-  OTPFill(this.otpSlot);
-}
-
-List<OTPFill> otpFill = [
-  OTPFill(TextEditingController()),
-  OTPFill(TextEditingController()),
-  OTPFill(TextEditingController()),
-  OTPFill(TextEditingController()),
-  OTPFill(TextEditingController()),
-  OTPFill(TextEditingController()),
 ];

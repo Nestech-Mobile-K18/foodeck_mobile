@@ -74,7 +74,7 @@ class _CustomFormFillState extends State<CustomFormFill> {
               borderSide: BorderSide(color: widget.borderColor ?? Colors.grey),
               borderRadius: BorderRadius.circular(16)),
           focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: lightPink),
+              borderSide: const BorderSide(color: globalPink),
               borderRadius: BorderRadius.circular(16)),
           hintText: widget.hintText,
           hintStyle: inter.copyWith(fontSize: 17, color: Colors.grey),

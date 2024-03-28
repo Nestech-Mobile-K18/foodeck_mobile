@@ -11,6 +11,8 @@ import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/buttons.dart';
 import 'package:template/widgets/form_fill.dart';
 
+import '../../../main.dart';
+
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
 
@@ -20,7 +22,6 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   bool showPass = false;
-  final supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -43,10 +44,7 @@ class _CreateAccountState extends State<CreateAccount> {
         });
       });
       await Future.delayed(const Duration(milliseconds: 300), () {
-        Get.to(
-            () => Otp(
-                  email: emailController.text.trim(),
-                ),
+        Get.to(() => Otp(email: emailController.text.trim()),
             transition: Transition.leftToRight,
             duration: const Duration(milliseconds: 600));
       });
@@ -83,7 +81,7 @@ class _CreateAccountState extends State<CreateAccount> {
             },
           ),
           shape: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 8, color: primaryGrey)),
+              borderSide: BorderSide(width: 8, color: dividerGrey)),
           title: Text('Create an account',
               style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
         ),
@@ -103,7 +101,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       textInputType: TextInputType.name,
                       labelText: 'Name',
                       hintText: 'John Doe',
-                      labelColor: lightPink,
+                      labelColor: globalPink,
                       textEditingController: nameController,
                     ),
                   ),
@@ -113,7 +111,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
-                      labelColor: lightPink,
+                      labelColor: globalPink,
                       textEditingController: emailController,
                     ),
                   ),
@@ -127,7 +125,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         LengthLimitingTextInputFormatter(10),
                         FilteringTextInputFormatter.digitsOnly,
                       ],
-                      labelColor: lightPink,
+                      labelColor: globalPink,
                       textEditingController: phoneController,
                     ),
                   ),
@@ -135,7 +133,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
                     child: CustomFormFill(
                       labelText: 'Password',
-                      labelColor: lightPink,
+                      labelColor: globalPink,
                       icons: IconButton(
                           onPressed: () {
                             setState(() {
@@ -158,7 +156,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
-                      color: lightPink),
+                      color: globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: () {

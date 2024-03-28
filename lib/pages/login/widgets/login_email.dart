@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/home/home_page.dart';
 import 'package:template/pages/login/widgets/create_account.dart';
 import 'package:template/pages/login/widgets/forgot_password.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/buttons.dart';
 import 'package:template/widgets/form_fill.dart';
+
+import '../../../main.dart';
 
 class LoginEmail extends StatefulWidget {
   const LoginEmail({super.key});
@@ -20,20 +21,16 @@ class LoginEmail extends StatefulWidget {
 
 class _LoginEmailState extends State<LoginEmail> {
   bool showPass = false;
-  final supabase = Supabase.instance.client;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  late final StreamSubscription<AuthState> authSubscription;
   RegExp emailRegex = RegExp(
       r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
   Future login() async {
     try {
       if (emailRegex.hasMatch(emailController.text)) {
-        await supabase.auth
-            .signInWithPassword(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim())
-            .then((value) => authSubscription);
+        await supabase.auth.signInWithPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
       }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context)
@@ -42,17 +39,6 @@ class _LoginEmailState extends State<LoginEmail> {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error occurred, please retry')));
     }
-  }
-
-  @override
-  void initState() {
-    authSubscription = supabase.auth.onAuthStateChange.listen((event) {
-      final session = event.session;
-      if (session != null) {
-        Get.to(() => const HomePage());
-      }
-    });
-    super.initState();
   }
 
   @override
@@ -77,7 +63,7 @@ class _LoginEmailState extends State<LoginEmail> {
             },
           ),
           shape: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 8, color: primaryGrey)),
+              borderSide: BorderSide(width: 8, color: dividerGrey)),
           title: Text('Login via Email',
               style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
         ),
@@ -98,9 +84,9 @@ class _LoginEmailState extends State<LoginEmail> {
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
                       labelColor: emailRegex.hasMatch(emailController.text)
-                          ? lightPink
+                          ? globalPink
                           : emailController.text.isEmpty
-                              ? lightPink
+                              ? globalPink
                               : Colors.red,
                       textEditingController: emailController,
                       function: (value) {
@@ -119,7 +105,7 @@ class _LoginEmailState extends State<LoginEmail> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
                       labelText: 'Password',
-                      labelColor: lightPink,
+                      labelColor: globalPink,
                       icons: IconButton(
                           onPressed: () {
                             setState(() {
@@ -156,7 +142,7 @@ class _LoginEmailState extends State<LoginEmail> {
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
-                      color: lightPink),
+                      color: globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: () {

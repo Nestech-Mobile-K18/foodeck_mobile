@@ -10,6 +10,8 @@ import 'package:template/values/images.dart';
 import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/loading_animation.dart';
 
+import '../../main.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -21,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
   bool show = true;
   bool showLoading = true;
   bool showFinish = false;
-  final supabase = Supabase.instance.client;
+
   late final StreamSubscription<AuthState> authSubscription;
 
   @override
@@ -60,13 +62,13 @@ class _SplashPageState extends State<SplashPage> {
         authSubscription = supabase.auth.onAuthStateChange.listen((event) {
           final session = event.session;
           if (session != null) {
-            Get.to(() => HomePage(),
+            Get.to(() => const HomePage(),
                 transition: Transition.zoom,
-                duration: Duration(milliseconds: 1000));
+                duration: const Duration(milliseconds: 1000));
           } else if (session == null) {
             Get.to(() => const LoginPage(),
                 transition: Transition.zoom,
-                duration: Duration(milliseconds: 1000));
+                duration: const Duration(milliseconds: 1000));
           }
         });
       },

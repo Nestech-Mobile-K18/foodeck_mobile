@@ -7,6 +7,8 @@ import 'package:template/values/colors.dart';
 import 'package:template/values/text_styles.dart';
 import 'package:template/widgets/form_fill.dart';
 
+import '../../../main.dart';
+
 class Otp extends StatefulWidget {
   const Otp({super.key, required this.email});
   final String email;
@@ -22,7 +24,7 @@ class _OtpState extends State<Otp> {
   }
 
   final currentIndex = ValueNotifier(0);
-  final supabase = Supabase.instance.client;
+
   List<String> otpValues = List.filled(6, '');
   Future showSnackBar() async {
     await Future(() => ScaffoldMessenger.of(context).showSnackBar(
@@ -73,7 +75,7 @@ class _OtpState extends State<Otp> {
                 },
               ),
               shape: const UnderlineInputBorder(
-                  borderSide: BorderSide(width: 8, color: primaryGrey)),
+                  borderSide: BorderSide(width: 8, color: dividerGrey)),
               title: Text('OTP',
                   style: inter.copyWith(
                       fontSize: 17, fontWeight: FontWeight.bold)),
@@ -106,7 +108,7 @@ class _OtpState extends State<Otp> {
                                         maxWidth: 50, maxHeight: 76),
                                     textInputType: TextInputType.number,
                                     borderColor: currentIndex.value >= index
-                                        ? lightPink
+                                        ? globalPink
                                         : Colors.grey,
                                     textInputFormatter: [
                                       FilteringTextInputFormatter.digitsOnly,
@@ -162,7 +164,7 @@ class _OtpState extends State<Otp> {
                                   width: 328,
                                   decoration: BoxDecoration(
                                       color: currentIndex.value == 5
-                                          ? lightPink
+                                          ? globalPink
                                           : Colors.white,
                                       borderRadius: BorderRadius.circular(16),
                                       boxShadow: currentIndex.value == 5

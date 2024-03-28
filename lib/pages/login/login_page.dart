@@ -184,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ..onTap = () {},
                                       text: 'Terms & Conditions',
                                       style: inter.copyWith(
-                                          fontSize: 13, color: lightPink))
+                                          fontSize: 13, color: globalPink))
                                 ])))
                   ],
                 ),
