@@ -7,14 +7,15 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? title;
   final bool? obscureText;
+  final TextInputType? textInputType;
 
-  const CustomTextField({
-    Key? key,
-    this.hintText,
-    this.controller,
-    this.title,
-    this.obscureText,
-  }) : super(key: key);
+  const CustomTextField(
+      {super.key,
+      this.hintText,
+      this.controller,
+      this.title,
+      this.obscureText,
+      this.textInputType});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -70,6 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   CustomTextFieldManager.resetAllExcept(this);
                 });
               },
+              keyboardType: widget.textInputType ?? TextInputType.text,
               controller: widget.controller,
               textAlign: TextAlign.left,
               obscureText: widget.obscureText ?? false,

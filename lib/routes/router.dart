@@ -1,7 +1,8 @@
-import 'dart:collection';
-
+import 'package:template/pages/forgot_password/new_password_view.dart';
+import 'package:template/pages/home/home_view.dart';
 import 'package:template/pages/map/map_view.dart';
 
+import '../pages/forgot_password/forgot_password_view.dart';
 import '../resources/routes.dart';
 import '../pages/otp/otp_view.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case RouteName.map:
       return _pageBuilder((_) => const MapBoxView(), settings: settings);
+
+    case RouteName.forgotPassword:
+      return _pageBuilder((_) => const ForgotPasswordView(),
+          settings: settings);
+    case RouteName.newPassword:
+      return _pageBuilder((_) => const NewPasswordView(), settings: settings);
+    case RouteName.home:
+      return _pageBuilder((_) => const HomeView(), settings: settings);
 
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),

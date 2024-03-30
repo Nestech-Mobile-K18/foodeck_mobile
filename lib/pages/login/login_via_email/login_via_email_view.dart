@@ -1,20 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/login/widgets/login_method_button.dart';
+import 'package:template/pages/create_account/create_account_view.dart';
+import 'package:template/pages/forgot_password/forgot_password_view.dart';
+import 'package:template/pages/login/login_via_email/login_via_email_model.dart';
+import 'package:template/pages/login/login_via_email/login_via_email_view_model.dart';
+import 'package:template/widgets/method_button.dart';
 import 'package:template/widgets/cross_bar.dart';
-import 'package:template/resources/colors.dart';
-import 'package:template/resources/string.dart';
 import 'package:template/widgets/custom_button.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/custom_textfield.dart';
+import 'package:template/resources/const.dart';
 
 class LoginViaEmailView extends StatefulWidget {
-  const LoginViaEmailView({Key? key}) : super(key: key);
+  const LoginViaEmailView({super.key});
 
   @override
   State<LoginViaEmailView> createState() => _LoginViaEmailViewState();
 }
 
 class _LoginViaEmailViewState extends State<LoginViaEmailView> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final Validation _validation = Validation();
+  final LogInViaEmailViewModel _viewModel = LogInViaEmailViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(() {
+      _validation.isEmailValid(emailController.text);
+    });
+    passwordController.addListener(() {
+      _validation.isPasswordValid(passwordController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.removeListener(() {
+      _validation.isEmailValid(emailController.text);
+    });
+    passwordController.removeListener(() {
+      _validation.isPasswordValid(passwordController.text);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,26 +74,34 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
             Container(
               margin: const EdgeInsets.fromLTRB(15, 20, 0, 10),
               child: const CustomText(
-                title: StringExtensions.titleLoginViaEmail,
+                title: StringExtensions.inputYourCredentials,
                 color: ColorsGlobal.globalBlack,
                 fontWeight: FontWeight.w600,
                 size: 20,
               ),
             ),
             const SizedBox(height: 10),
-            const CustomTextField(
+            CustomTextField(
+              controller: emailController,
+              textInputType: TextInputType.emailAddress,
               title: StringExtensions.email,
             ),
             const SizedBox(height: 20),
-            const CustomTextField(
+            CustomTextField(
+              controller: passwordController,
               title: StringExtensions.password,
+              textInputType: TextInputType.visiblePassword,
               obscureText: true,
             ),
             const SizedBox(height: 15),
             Container(
-              margin: EdgeInsets.only(bottom: 20),
-              padding: EdgeInsets.only(left: 25),
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(left: 25),
               child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordView()));
+                },
                 child: const CustomText(
                   title: StringExtensions.forgotPassword,
                   size: 13,
@@ -71,16 +109,42 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
                 ),
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
-                  LoginMethodButton(
+                  MethodButton(
+                      onTap: () {
+                        if (!_validation.isEmailValid(emailController.text)) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Email không hợp lệ'),
+                          ));
+                        } else if (!_validation
+                            .isPasswordValid(passwordController.text)) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'Mật khẩu không hợp lệ, Phải ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự đặc biệt'),
+                          ));
+                        } else {
+                          LoginViaEmailModel loginRequest = LoginViaEmailModel(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                          _viewModel.signInWithEmail(loginRequest, context);
+                        }
+                      },
                       color: ColorsGlobal.globalPink,
                       title: StringExtensions.login),
                   CustomButton(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CreateAccountView(),
+                      ),
+                    ),
                     color: ColorsGlobal.globalWhite,
-                    title: StringExtensions.createAcAccountInstead,
+                    title: StringExtensions.createAnAccountInstead,
                     border: 1,
                     colorTitle: ColorsGlobal.globalGrey,
                   ),

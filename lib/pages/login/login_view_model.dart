@@ -1,30 +1,36 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/home/home_view.dart';
+import 'package:template/resources/error_strings.dart';
+import 'package:template/services/errror.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginViewModel {
   final supabase = Supabase.instance.client;
   final fb = FacebookAuth.instance;
-  Map? _userData;
+  final ErrorDialog showError = ErrorDialog();
+  late Map<dynamic, dynamic> _userData;
 
-  void _setupAuthListener(BuildContext context) {
-    supabase.auth.onAuthStateChange.listen((data) {
-      final event = data.event;
-      if (event == AuthChangeEvent.signedIn) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
-      }
-    });
+  Future<bool> isLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    return isLoggedIn;
   }
 
-  Future<AuthResponse> googleSignIn() async {
+  Future<void> setLoggedIn(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', value);
+  }
+
+  Future<void> handleSuccessfulLogin() async {
+    await setLoggedIn(true);
+  }
+
+  Future<AuthResponse> googleSignIn(BuildContext context) async {
     /// TODO: update the Web client ID with your own.
     ///
     /// Web Client ID that you registered with Google Cloud.
@@ -43,20 +49,32 @@ class LoginViewModel {
     final idToken = googleAuth.idToken;
 
     if (accessToken == null) {
-      throw 'No Access Token found.';
+      throw ErrorString.errorNoAccessTokenFound;
     }
     if (idToken == null) {
-      throw 'No ID Token found.';
+      throw ErrorString.errorNoIDTokenFound;
     }
-
-    return supabase.auth.signInWithIdToken(
+    final response = supabase.auth.signInWithIdToken(
       provider: OAuthProvider.google,
       idToken: idToken,
       accessToken: accessToken,
     );
+    Map<String, dynamic> userData = {
+      'email': googleUser.email,
+      'name': googleUser.displayName,
+    };
+    if (userData.isNotEmpty) {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
+    }
+    await supabase.from('users').upsert(userData);
+
+    await handleSuccessfulLogin();
+
+    return response;
   }
 
-  Future<AuthResponse> facebookSignIn(BuildContext context) async {
+  Future<void> facebookSignIn(BuildContext context) async {
     try {
       // Create an instance of FacebookLogin
       final result =
@@ -64,43 +82,32 @@ class LoginViewModel {
       if (result.status == LoginStatus.success) {
         final requestData =
             await FacebookAuth.i.getUserData(fields: "email, name");
-        _userData = requestData;
+        _userData = {
+          'email': requestData['email'],
+          'name': requestData['name'],
+        };
         final AccessToken? accessToken = result.accessToken;
-
-        // Đăng nhập với idToken lấy được
-        final response = await supabase.auth.signInWithIdToken(
-          provider: OAuthProvider.facebook,
-          accessToken: accessToken?.token,
-          idToken: accessToken!.token,
+        await supabase.auth.signInWithOAuth(
+          OAuthProvider.facebook,
         );
-        return response;
+        await supabase.from('users').upsert(_userData);
+        if (_userData.isNotEmpty) {
+          await handleSuccessfulLogin();
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomeView()));
+        }
       } else if (result.status == LoginStatus.cancelled) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Người dùng đã hủy đăng nhập vào Facebook!'),
-        ));
+        showError.showError(context, ErrorString.errorCancelLoginFacebook);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Không thể truy cập vào Facebook!'),
-        ));
+        showError.showError(context, ErrorString.cantAccessFacebook);
       }
     } catch (e) {
-      // Xử lý ngoại lệ nếu có
       print(e);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Đã xảy ra lỗi khi đăng nhập!'),
-      ));
+      showError.showError(context, ErrorString.errorOccurredLogIn);
     }
-
-    // Trả về một giá trị mặc định nếu không thể đăng nhập thành công
-    return AuthResponse(
-      user: null,
-      session: null,
-    );
   }
 
   Future<void> appleSignIn(BuildContext context) async {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Không thể truy cập vào Apple ID!'),
-    ));
+    showError.showError(context, ErrorString.doesNotSupportApple);
   }
 }

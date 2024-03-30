@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:template/pages/login/login_via_email/login_via_email_view.dart';
 import 'package:template/pages/login/login_view_model.dart';
-import 'package:template/pages/login/widgets/login_method_button.dart';
-import 'package:template/resources/colors.dart';
+import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/media_res.dart' as image;
-import 'package:template/resources/scale.dart';
-import 'package:template/resources/string.dart';
 import 'package:template/widgets/custom_button.dart';
 import 'package:template/widgets/custom_text.dart';
+import 'package:template/resources/const.dart';
+
+import '../home/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -17,7 +17,25 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final _loginViewModel = LoginViewModel();
+  final LoginViewModel _viewModel = LoginViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoggedIn();
+  }
+
+  void _checkLoggedIn() async {
+    bool isLoggedIn = await _viewModel.isLoggedIn();
+    if (isLoggedIn) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeView(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,34 +46,34 @@ class _LoginViewState extends State<LoginView> {
         const SizedBox(
           height: 10,
         ),
-        LoginMethodButton(
+        MethodButton(
           onTap: () async {
-            await _loginViewModel.googleSignIn();
+            await _viewModel.googleSignIn(context);
           },
           isIcon: true,
           color: ColorsGlobal.globalRed,
           title: StringExtensions.loginViaGoogle,
           assetIcon: image.MediaRes.logoGoogle,
         ),
-        LoginMethodButton(
+        MethodButton(
           onTap: () async {
-            await _loginViewModel.facebookSignIn(context);
+            await _viewModel.facebookSignIn(context);
           },
           isIcon: true,
           color: ColorsGlobal.globalBlue,
           title: StringExtensions.loginViaFacebook,
           assetIcon: image.MediaRes.logoFacebook,
         ),
-        LoginMethodButton(
+        MethodButton(
           onTap: () async {
-            await _loginViewModel.appleSignIn(context);
+            await _viewModel.appleSignIn(context);
           },
           isIcon: true,
           color: ColorsGlobal.globalBlack,
           title: StringExtensions.loginViaApple,
           assetIcon: image.MediaRes.logoApple,
         ),
-        LoginMethodButton(
+        MethodButton(
           isIcon: true,
           color: ColorsGlobal.globalPink,
           title: StringExtensions.loginViaEmail,
@@ -68,7 +86,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         const CustomButton(
           color: ColorsGlobal.globalWhite,
-          title: StringExtensions.createAcAccount,
+          title: StringExtensions.createAnAccount,
           border: 1,
           colorTitle: ColorsGlobal.globalGrey,
         ),
@@ -82,15 +100,18 @@ class _LoginViewState extends State<LoginView> {
             children: [
               CustomText(
                 title: StringExtensions.privacyAndPolicy,
-                maxLine: 2,
+                softWrap: false,
+                maxLine: 1,
               ),
               SizedBox(
                 width: 5,
               ),
-              CustomText(
-                title: StringExtensions.termsAndConditions,
-                color: ColorsGlobal.globalPink,
-                maxLine: 2,
+              Flexible(
+                child: CustomText(
+                  title: StringExtensions.termsAndConditions,
+                  color: ColorsGlobal.globalPink,
+                  maxLine: 2,
+                ),
               ),
             ],
           ),

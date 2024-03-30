@@ -7,12 +7,16 @@ class CustomText extends StatelessWidget {
   final Color? color;
   final int? maxLine;
   final FontWeight? fontWeight;
+  final bool? softWrap;
+  final TextAlign? textAlign;
   const CustomText(
       {super.key,
       required this.title,
       this.size = 13,
       this.maxLine,
+      this.softWrap,
       this.color,
+      this.textAlign,
       this.fontWeight});
 
   @override
@@ -20,6 +24,8 @@ class CustomText extends StatelessWidget {
     return Text(
       title,
       maxLines: maxLine ?? 1,
+      textAlign: textAlign,
+      softWrap: softWrap ?? false,
       style: TextStyle(
           fontSize: size,
           color: color ?? ColorsGlobal.globalGrey,
