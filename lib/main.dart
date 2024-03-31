@@ -34,3 +34,5 @@ class MyApp extends StatelessWidget {
 }
 
 final supabase = Supabase.instance.client;
+
+final data = supabase.from('banners').stream(primaryKey: ['id']);

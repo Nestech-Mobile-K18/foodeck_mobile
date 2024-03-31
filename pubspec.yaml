@@ -44,6 +44,7 @@ dependencies:
   get: ^4.6.6
   google_sign_in: ^6.2.1
   flutter_map: ^6.1.0
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

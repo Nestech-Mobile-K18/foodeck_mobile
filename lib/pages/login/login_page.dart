@@ -92,8 +92,6 @@ class _LoginPageState extends State<LoginPage> {
         case 'Login via Facebook':
           facebookSignIn();
           break;
-        // default:
-        //   nextPage();
       }
     });
   }
