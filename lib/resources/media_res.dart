@@ -10,4 +10,14 @@ class MediaRes {
 
   static const backgroundSplash = '$_baseImage/splash_page_background.png';
   static const logoSplash = '$_baseImage/splash_page_logo.png';
+
+  static const backgroupLogin = '$_baseImage/background_login.png';
+  static const imgLogin = '$_baseImage/img_login.png';
+
+  static const icGoogle = '$_baseImage/ic_google.png';
+  static const icApple = '$_baseImage/ic_apple.png';
+  static const icMail = '$_baseImage/ic_mail.png';
+  static const icFacebook = '$_baseImage/ic_facebook.png';
+
+
 }

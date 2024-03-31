@@ -1,5 +1,8 @@
 import 'dart:collection';
 
+import 'package:template/pages/home/home_view.dart';
+import 'package:template/pages/login/widgets/sign_up.dart';
+import 'package:template/pages/login/widgets/login_email_view.dart';
 import 'package:template/pages/map/map_view.dart';
 
 import '../resources/routes.dart';
@@ -27,6 +30,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case RouteName.map:
       return _pageBuilder((_) => const MapBoxView(), settings: settings);
 
+    case RouteName.home:
+      return _pageBuilder(
+        (_) => HomePage(
+          userData: settings.arguments != null
+              ? settings.arguments as Map<dynamic, dynamic>
+              : null,
+        ),
+        settings: settings,
+      );
+    case RouteName.loginEmail:
+      return _pageBuilder((_) => const LoginEmailView(), settings: settings);
+    case RouteName.signup:
+      return _pageBuilder((_) => const SignUp(), settings: settings);
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),
           settings: settings);
