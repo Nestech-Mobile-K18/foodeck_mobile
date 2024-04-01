@@ -39,36 +39,32 @@ class _SplashPageState extends State<SplashPage> {
       });
     });
     await Future.delayed(
-      const Duration(milliseconds: 2500),
+      const Duration(milliseconds: 2000),
       () {
         setState(() {
           showLoading = !showLoading;
         });
       },
     );
-    await Future.delayed(const Duration(milliseconds: 3000), () {
+    await Future.delayed(const Duration(milliseconds: 2500), () {
       setState(() {
         showFinish = !showFinish;
       });
     });
-    await Future.delayed(const Duration(milliseconds: 3500), () {
+    await Future.delayed(const Duration(milliseconds: 3000), () {
       setState(() {
         show = !show;
       });
     });
     await Future.delayed(
-      const Duration(milliseconds: 4000),
+      const Duration(milliseconds: 3500),
       () {
         authSubscription = supabase.auth.onAuthStateChange.listen((event) {
           final session = event.session;
           if (session != null) {
-            Get.to(() => const HomePage(),
-                transition: Transition.zoom,
-                duration: const Duration(milliseconds: 1000));
+            Get.to(() => const HomePage());
           } else if (session == null) {
-            Get.to(() => const LoginPage(),
-                transition: Transition.zoom,
-                duration: const Duration(milliseconds: 1000));
+            Get.to(() => const LoginPage());
           }
         });
       },
@@ -79,7 +75,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedContainer(
-          duration: const Duration(seconds: 2),
+          duration: const Duration(milliseconds: 1500),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
@@ -91,11 +87,11 @@ class _SplashPageState extends State<SplashPage> {
             alignment: Alignment.center,
             children: [
               AnimatedPositioned(
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(milliseconds: 1500),
                   top: show ? 0 : 170,
                   child: Image.asset(foodDeck)),
               AnimatedPositioned(
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(milliseconds: 1500),
                   top: 290,
                   left: show ? 0 : 92,
                   child: Text('Foodeck',
@@ -104,7 +100,7 @@ class _SplashPageState extends State<SplashPage> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white))),
               AnimatedPositioned(
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(milliseconds: 1500),
                   top: show ? 800 : 387,
                   child: Text(
                     textAlign: TextAlign.center,
@@ -120,7 +116,7 @@ class _SplashPageState extends State<SplashPage> {
                         child: show ? null : Lottie.asset(loading))
                     : AnimatedOpacity(
                         opacity: showLoading ? 0 : 1,
-                        duration: const Duration(seconds: 2),
+                        duration: const Duration(milliseconds: 1500),
                         child: const WaveDots(size: 36, color: Colors.white)),
               )
             ],

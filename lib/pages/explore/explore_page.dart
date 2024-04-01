@@ -30,26 +30,23 @@ class _ExplorePageState extends State<ExplorePage> {
               )),
           toolbarHeight: 142,
           automaticallyImplyLeading: false,
-          titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white),
+          titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white70),
           titleSpacing: 24,
           title: Column(
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
+                  Image.asset(mapPin),
+                  const SizedBox(
                     width: 12,
                   ),
-                  Text('Block B Phase 2 Johar Town, Lahore')
+                  const Text('Block B Phase 2 Johar Town, Lahore')
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: TextFormField(
-                  style: inter.copyWith(fontSize: 17, color: Colors.grey),
+                  style: inter.copyWith(fontSize: 17, color: Colors.grey[400]),
                   decoration: InputDecoration(
                       constraints:
                           const BoxConstraints(maxWidth: 328, maxHeight: 54),
@@ -60,12 +57,12 @@ class _ExplorePageState extends State<ExplorePage> {
                           borderSide: BorderSide.none),
                       hintText: 'Search...',
                       hintStyle:
-                          inter.copyWith(fontSize: 17, color: Colors.grey),
+                          inter.copyWith(fontSize: 17, color: Colors.grey[400]),
                       contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.fromLTRB(24, 16, 8, 16),
-                        child: Icon(
-                          Icons.search,
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 16, 8, 16),
+                        child: Image.asset(
+                          search,
                           color: Colors.grey,
                         ),
                       )),

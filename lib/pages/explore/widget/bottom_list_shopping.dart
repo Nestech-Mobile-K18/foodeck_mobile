@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/pages/explore/widget/banner_items.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/list.dart';
 import 'package:template/values/text_styles.dart';
@@ -46,7 +47,14 @@ class _BottomListShoppingState extends State<BottomListShopping> {
         'shop_name': bottomList[index].popular,
         'place': bottomList[index].zone,
         'vote': bottomList[index].star
-      });
+      }).then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              'Bạn đã thích sản phẩm này',
+              style: inter,
+            ),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: globalPinkShadow,
+          )));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message)));
@@ -64,7 +72,14 @@ class _BottomListShoppingState extends State<BottomListShopping> {
         'shop_name': bottomList[index].popular,
         'place': bottomList[index].zone,
         'vote': bottomList[index].star
-      });
+      }).then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              'Bạn đã xóa thích sản phẩm này',
+              style: inter,
+            ),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: buttonShadowBlack,
+          )));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.message)));
@@ -76,116 +91,33 @@ class _BottomListShoppingState extends State<BottomListShopping> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Explore More',
-          style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
-        ),
-        Padding(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        'Explore More',
+        style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
+      ),
+      Padding(
           padding: const EdgeInsets.only(top: 12),
           child: SizedBox(
-            height: 674,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: bottomList.length,
-                scrollDirection: Axis.vertical,
-                clipBehavior: Clip.none,
-                itemBuilder: (context, index) => Padding(
+              height: 674,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: bottomList.length,
+                  scrollDirection: Axis.vertical,
+                  clipBehavior: Clip.none,
+                  itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Stack(alignment: Alignment.topRight, children: [
-                            Card(
-                              elevation: 10,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.red,
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        bottomList[index].bottomFood,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    )),
-                                width: MediaQuery.of(context).size.width,
-                                height: 160,
-                              ),
-                            ),
-                            Positioned(
-                              left: 12,
-                              bottom: 12,
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  child: Text(
-                                    bottomList[index].timeSend,
-                                    style: inter.copyWith(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  check(index);
-                                },
-                                icon: Icon(
-                                  like[index]
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color:
-                                      like[index] ? globalPink : Colors.white,
-                                ))
-                          ]),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      text: bottomList[index].popular,
-                                      style: inter.copyWith(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                      children: [
-                                    TextSpan(
-                                        text: bottomList[index].zone,
-                                        style: inter.copyWith(
-                                            fontSize: 15,
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.normal))
-                                  ])),
-                              TextButton.icon(
-                                style: const ButtonStyle(
-                                    padding: MaterialStatePropertyAll(
-                                        EdgeInsets.zero)),
-                                onPressed: null,
-                                label: Text(bottomList[index].star,
-                                    style: inter.copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black)),
-                                icon: const Icon(
-                                  Icons.star,
-                                  color: voteYellow,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    )),
-          ),
-        )
-      ],
-    );
+                      child: BannerItems(
+                          foodImage: bottomList[index].bottomFood,
+                          deliveryTime: bottomList[index].timeSend,
+                          shopName: bottomList[index].popular,
+                          shopAddress: bottomList[index].zone,
+                          rateStar: bottomList[index].star,
+                          action: () {
+                            check(index);
+                          },
+                          heartColor: like[index])))))
+    ]);
   }
 }

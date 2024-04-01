@@ -4,6 +4,7 @@ import 'package:template/pages/notifications/notifications_page.dart';
 import 'package:template/pages/profile/profile_page.dart';
 import 'package:template/pages/saved/saved_page.dart';
 import 'package:template/values/colors.dart';
+import 'package:template/values/images.dart';
 import 'package:template/values/text_styles.dart';
 
 import '../../main.dart';
@@ -38,27 +39,56 @@ class _HomePageState extends State<HomePage> {
             selectedLabelStyle: inter.copyWith(fontSize: 11),
             unselectedLabelStyle: inter.copyWith(fontSize: 11),
             showUnselectedLabels: true,
-            unselectedItemColor: Colors.grey,
+            unselectedItemColor: Colors.grey[400],
             selectedItemColor: globalPink,
             elevation: 20,
-            selectedIconTheme: const IconThemeData(color: globalPink),
-            unselectedIconTheme: const IconThemeData(color: Colors.grey),
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                  label: 'Explore', icon: Icon(Icons.search)),
+                  label: 'Explore',
+                  icon: Image.asset(
+                    search,
+                    color: currentIndex == 0 ? Colors.pink : Colors.grey,
+                  )),
               BottomNavigationBarItem(
-                  label: 'Saved', icon: Icon(Icons.favorite_border)),
+                  label: 'Saved',
+                  icon: Image.asset(
+                    heart,
+                    color: currentIndex == 1 ? Colors.pink : Colors.grey,
+                  )),
               BottomNavigationBarItem(
-                  label: 'Notifications', icon: Icon(Icons.notifications_none)),
+                  label: 'Notifications',
+                  icon: Image.asset(
+                    bell,
+                    color: currentIndex == 2 ? Colors.pink : Colors.grey,
+                  )),
               BottomNavigationBarItem(
-                  label: 'Profile', icon: Icon(Icons.person_outline_rounded)),
+                  label: 'Profile',
+                  icon: Image.asset(
+                    user,
+                    color: currentIndex == 3 ? Colors.pink : Colors.grey,
+                  )),
             ]),
         floatingActionButton: StreamBuilder(
           stream: data,
           builder: (BuildContext context,
               AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (!snapshot.hasData) {
-              return const SizedBox();
+              return FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    if (currentIndex < 1) {
+                      currentIndex = currentIndex + 1;
+                    }
+                    null;
+                  });
+                },
+                backgroundColor: globalPink,
+                shape: const CircleBorder(),
+                child: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.white,
+                ),
+              );
             }
             return snapshot.data!.isEmpty
                 ? const SizedBox()

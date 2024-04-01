@@ -161,24 +161,3 @@ List<BottomList> bottomList = [
   BottomList(chocolate, '20 min', 'Thicc Shakes\n', 'Wapda Town', '4.5'),
   BottomList(panCake, '30 min', 'Daily Deli\n', 'Garden Town', '4.8')
 ];
-
-class List1 {
-  final String a;
-  final String b;
-  final String c;
-  final String d;
-  final String e;
-
-  List1(this.a, this.b, this.c, this.d, this.e);
-}
-
-List<List1> list = [
-  List1(dailyDeli, '40 min', 'Daily Deli\n', 'Johar Town', '4.8'),
-  List1(riceBowl, '12 min', 'Rice Bowl\n', 'Wapda Town', '4.8'),
-  List1(healthyFood, '25 min', 'Healthy Food\n', 'Grand Town', '4.4'),
-  List1(indonesianFood, '30 min', 'Indonesian Food\n', 'Rolan Town', '5'),
-  List1(coffee, '15 min', 'Coffee\n', 'Mid Town', '4.7'),
-  List1(cake, '40 min', 'Jean’s Cakes\n', 'Johar Town', '4.8'),
-  List1(chocolate, '20 min', 'Thicc Shakes\n', 'Wapda Town', '4.5'),
-  List1(panCake, '30 min', 'Daily Deli\n', 'Garden Town', '4.8')
-];
