@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
 import 'package:template/values/colors.dart';
@@ -20,19 +21,48 @@ class BottomListShopping extends StatefulWidget {
 
 class _BottomListShoppingState extends State<BottomListShopping> {
   List<bool> like = [false, false, false];
-  void check(int index) {
+  @override
+  void initState() {
+    saveData();
+    super.initState();
+  }
+
+  void saveData() async {
+    final save = await SharedPreferences.getInstance();
+    if (save.getBool('5') != null) {
+      setState(() {
+        like[0] = save.getBool('5') ?? false;
+      });
+    }
+    if (save.getBool('6') != null) {
+      setState(() {
+        like[1] = save.getBool('6') ?? false;
+      });
+    }
+    if (save.getBool('7') != null) {
+      setState(() {
+        like[2] = save.getBool('7') ?? false;
+      });
+    }
+  }
+
+  void check(int index) async {
+    final save = await SharedPreferences.getInstance();
     setState(() {
       switch (index) {
         case 0:
           like[0] = !like[0];
+          save.setBool('5', like[0]);
           like[0] ? saveBanner(index) : deleteBanner(index);
           break;
         case 1:
           like[1] = !like[1];
+          save.setBool('6', like[1]);
           like[1] ? saveBanner(index) : deleteBanner(index);
           break;
         case 2:
           like[2] = !like[2];
+          save.setBool('7', like[2]);
           like[2] ? saveBanner(index) : deleteBanner(index);
           break;
       }

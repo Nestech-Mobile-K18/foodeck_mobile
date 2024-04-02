@@ -51,10 +51,37 @@ class _HomePageState extends State<HomePage> {
                   )),
               BottomNavigationBarItem(
                   label: 'Saved',
-                  icon: Image.asset(
-                    heart,
-                    color: currentIndex == 1 ? Colors.pink : Colors.grey,
-                  )),
+                  icon: StreamBuilder(
+                      stream: data,
+                      builder: (context, snapshot) => !snapshot.hasData
+                          ? Image.asset(
+                              heart,
+                              color:
+                                  currentIndex == 1 ? Colors.pink : Colors.grey,
+                            )
+                          : snapshot.data!.isEmpty
+                              ? Image.asset(
+                                  heart,
+                                  color: currentIndex == 1
+                                      ? Colors.pink
+                                      : Colors.grey,
+                                )
+                              : currentIndex == 1
+                                  ? Image.asset(
+                                      heart,
+                                      color: currentIndex == 1
+                                          ? Colors.pink
+                                          : Colors.grey,
+                                    )
+                                  : Badge(
+                                      backgroundColor: globalPink,
+                                      child: Image.asset(
+                                        heart,
+                                        color: currentIndex == 1
+                                            ? Colors.pink
+                                            : Colors.grey,
+                                      ),
+                                    ))),
               BottomNavigationBarItem(
                   label: 'Notifications',
                   icon: Image.asset(
@@ -73,22 +100,7 @@ class _HomePageState extends State<HomePage> {
           builder: (BuildContext context,
               AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
             if (!snapshot.hasData) {
-              return FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    if (currentIndex < 1) {
-                      currentIndex = currentIndex + 1;
-                    }
-                    null;
-                  });
-                },
-                backgroundColor: globalPink,
-                shape: const CircleBorder(),
-                child: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.white,
-                ),
-              );
+              return const SizedBox();
             }
             return snapshot.data!.isEmpty
                 ? const SizedBox()

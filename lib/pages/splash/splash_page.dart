@@ -113,7 +113,10 @@ class _SplashPageState extends State<SplashPage> {
                     ? SizedBox(
                         // height: MediaQuery.of(context).size.height * 0.2,
                         width: MediaQuery.of(context).size.width * 0.2,
-                        child: show ? null : Lottie.asset(loading))
+                        child: show
+                            ? null
+                            : Lottie.network(
+                                'https://lottie.host/2f69bbbf-7368-47fe-aff8-791b31b78ee0/bSWKVEp02T.json'))
                     : AnimatedOpacity(
                         opacity: showLoading ? 0 : 1,
                         duration: const Duration(milliseconds: 1500),

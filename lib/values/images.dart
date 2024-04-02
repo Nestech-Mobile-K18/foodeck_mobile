@@ -29,4 +29,3 @@ const String heart = 'assets/icons/Heart.png';
 const String bell = 'assets/icons/Bell.png';
 const String user = 'assets/icons/User.png';
 const String mapPin = 'assets/icons/MapPin.png';
-const String loading = 'assets/icons/Loading.json';

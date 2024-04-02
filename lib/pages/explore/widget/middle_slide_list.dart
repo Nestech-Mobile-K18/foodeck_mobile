@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/deals/deals_page.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
@@ -21,30 +22,71 @@ class MiddleSlideList extends StatefulWidget {
 class _MiddleSlideListState extends State<MiddleSlideList> {
   PageController pageController =
       PageController(initialPage: 0, viewportFraction: 0.99);
-  final currentCard = ValueNotifier(0);
-  List<bool> like = [false, false, false, false, false];
-  void check(int index) {
+  int currentCard = 0;
+  List<bool> love = [false, false, false, false, false];
+  @override
+  void initState() {
+    saveData();
+    super.initState();
+  }
+
+  void saveData() async {
+    final save = await SharedPreferences.getInstance();
+    if (save.getBool('0') != null) {
+      setState(() {
+        love[0] = save.getBool('0') ?? false;
+      });
+    }
+    if (save.getBool('1') != null) {
+      setState(() {
+        love[1] = save.getBool('1') ?? false;
+      });
+    }
+    if (save.getBool('2') != null) {
+      setState(() {
+        love[2] = save.getBool('2') ?? false;
+      });
+    }
+    if (save.getBool('3') != null) {
+      setState(() {
+        love[3] = save.getBool('3') ?? false;
+      });
+    }
+    if (save.getBool('4') != null) {
+      setState(() {
+        love[4] = save.getBool('4') ?? false;
+      });
+    }
+  }
+
+  void check(int index) async {
+    final save = await SharedPreferences.getInstance();
     setState(() {
       switch (index) {
         case 0:
-          like[0] = !like[0];
-          like[0] ? saveBanner(index) : deleteBanner(index);
+          love[0] = !love[0];
+          save.setBool('0', love[0]);
+          love[0] ? saveBanner(index) : deleteBanner(index);
           break;
         case 1:
-          like[1] = !like[1];
-          like[1] ? saveBanner(index) : deleteBanner(index);
+          love[1] = !love[1];
+          save.setBool('1', love[1]);
+          love[1] ? saveBanner(index) : deleteBanner(index);
           break;
         case 2:
-          like[2] = !like[2];
-          like[2] ? saveBanner(index) : deleteBanner(index);
+          love[2] = !love[2];
+          save.setBool('2', love[2]);
+          love[2] ? saveBanner(index) : deleteBanner(index);
           break;
         case 3:
-          like[3] = !like[3];
-          like[3] ? saveBanner(index) : deleteBanner(index);
+          love[3] = !love[3];
+          save.setBool('3', love[3]);
+          love[3] ? saveBanner(index) : deleteBanner(index);
           break;
         case 4:
-          like[4] = !like[4];
-          like[4] ? saveBanner(index) : deleteBanner(index);
+          love[4] = !love[4];
+          save.setBool('4', love[4]);
+          love[4] ? saveBanner(index) : deleteBanner(index);
           break;
       }
     });
@@ -112,18 +154,13 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
               'Deals',
               style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            ValueListenableBuilder(
-              valueListenable: currentCard,
-              builder: (BuildContext context, int value, Widget? child) {
-                return IconButton(
-                    onPressed: () {
-                      Get.to(() => const DealsPage(),
-                          transition: Transition.rightToLeft,
-                          duration: const Duration(milliseconds: 600));
-                    },
-                    icon: const Icon(Icons.arrow_forward));
-              },
-            )
+            IconButton(
+                onPressed: () {
+                  Get.to(() => const DealsPage(),
+                      transition: Transition.rightToLeft,
+                      duration: const Duration(milliseconds: 600));
+                },
+                icon: const Icon(Icons.arrow_forward))
           ],
         ),
       ),
@@ -135,7 +172,7 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
               child: PageView.builder(
                   scrollBehavior: const ScrollBehavior(),
                   onPageChanged: (value) {
-                    currentCard.value = value;
+                    currentCard = value;
                   },
                   controller: pageController,
                   clipBehavior: Clip.none,
@@ -152,7 +189,7 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
                       action: () {
                         check(index);
                       },
-                      heartColor: like[index]))))
+                      heartColor: love[index]))))
     ]);
   }
 }

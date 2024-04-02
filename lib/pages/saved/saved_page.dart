@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/main.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
@@ -39,12 +41,11 @@ class _SavedPageState extends State<SavedPage> {
         builder: (BuildContext context,
             AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-                child: Lottie.network(
-                    'https://lottie.host/c8590a03-ef81-4c20-94eb-cca6c731a0ff/plYvp8aTL1.json'));
+            return const SizedBox();
           }
           final banners = snapshot.data!;
           Future deleteBanner(index) async {
+            final save = await SharedPreferences.getInstance();
             try {
               await supabase.from('banners').delete().match({
                 'food': banners[index]['food'],
@@ -52,7 +53,34 @@ class _SavedPageState extends State<SavedPage> {
                 'shop_name': banners[index]['shop_name'],
                 'place': banners[index]['place'],
                 'vote': banners[index]['vote']
-              });
+              }).then((value) => setState(() {
+                    switch (index) {
+                      case 0:
+                        save.setBool('0', !(save.getBool('0') ?? true));
+                        break;
+                      case 1:
+                        save.setBool('1', !(save.getBool('1') ?? true));
+                        break;
+                      case 2:
+                        save.setBool('2', !(save.getBool('2') ?? true));
+                        break;
+                      case 3:
+                        save.setBool('3', !(save.getBool('3') ?? true));
+                        break;
+                      case 4:
+                        save.setBool('4', !(save.getBool('4') ?? true));
+                        break;
+                      case 5:
+                        save.setBool('5', !(save.getBool('5') ?? true));
+                        break;
+                      case 6:
+                        save.setBool('6', !(save.getBool('6') ?? true));
+                        break;
+                      case 7:
+                        save.setBool('7', !(save.getBool('7') ?? true));
+                        break;
+                    }
+                  }));
             } on AuthException catch (error) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(error.message)));
@@ -84,47 +112,66 @@ class _SavedPageState extends State<SavedPage> {
                                   shopAddress: banners[index]['place'],
                                   rateStar: banners[index]['vote'],
                                   action: () {
-                                    showDialog(
+                                    showGeneralDialog(
                                       context: context,
-                                      builder: (context) => SimpleDialog(
-                                        alignment: Alignment.center,
-                                        title: Text(
-                                          'Bạn có muốn xóa tất cả sản phẩm cùng tên này ra khỏi danh sách?',
-                                          style: inter,
-                                        ),
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      deleteBanner(index).then(
-                                                          (value) =>
-                                                              Navigator.pop(
-                                                                  context));
-                                                    },
-                                                    child: Text('Có',
-                                                        style: inter.copyWith(
-                                                            color:
-                                                                Colors.red))),
-                                                TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('Không',
-                                                        style: inter.copyWith(
-                                                            color:
-                                                                Colors.blue)))
+                                      barrierDismissible: true,
+                                      barrierLabel: '',
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          const SizedBox(),
+                                      transitionBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        return ScaleTransition(
+                                          scale:
+                                              Tween<double>(begin: 0.5, end: 1)
+                                                  .animate(animation),
+                                          child: FadeTransition(
+                                            opacity: Tween<double>(
+                                                    begin: 0.5, end: 1)
+                                                .animate(animation),
+                                            child: CupertinoAlertDialog(
+                                              title: Text(
+                                                'Bạn có muốn xóa sản phẩm này ra khỏi danh sách lưu?',
+                                                style: inter,
+                                              ),
+                                              actions: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 20),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            deleteBanner(index)
+                                                                .then((value) =>
+                                                                    Navigator.pop(
+                                                                        context));
+                                                          },
+                                                          child: Text('Có',
+                                                              style: inter.copyWith(
+                                                                  color: Colors
+                                                                      .red))),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text('Không',
+                                                              style: inter.copyWith(
+                                                                  color: Colors
+                                                                      .blue)))
+                                                    ],
+                                                  ),
+                                                )
                                               ],
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                   heartColor: false,

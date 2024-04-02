@@ -23,21 +23,24 @@ class _LoginEmailState extends State<LoginEmail> {
   bool showPass = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  RegExp emailRegex = RegExp(
-      r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
   Future login() async {
     try {
-      if (emailRegex.hasMatch(emailController.text)) {
+      if (emailRegex.hasMatch(emailController.text) &&
+          passRegex.hasMatch(passwordController.text)) {
         await supabase.auth.signInWithPassword(
             email: emailController.text.trim(),
             password: passwordController.text.trim());
       }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Email or Password is not correct, please retry')));
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack, content: Text(error.message)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Error occurred, please retry')));
     }
   }
 
@@ -56,12 +59,6 @@ class _LoginEmailState extends State<LoginEmail> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-              FocusScope.of(context).unfocus();
-            },
-          ),
           shape: const UnderlineInputBorder(
               borderSide: BorderSide(width: 8, color: dividerGrey)),
           title: Text('Login via Email',
@@ -83,11 +80,24 @@ class _LoginEmailState extends State<LoginEmail> {
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
+                      exampleText: 'Example: johndoe123@gmail.com',
+                      borderColor: emailController.text.isNotEmpty
+                          ? globalPink
+                          : Colors.grey,
+                      inputColor: emailRegex.hasMatch(emailController.text)
+                          ? globalPink
+                          : Colors.red,
                       labelColor: emailRegex.hasMatch(emailController.text)
                           ? globalPink
                           : emailController.text.isEmpty
                               ? globalPink
                               : Colors.red,
+                      focusErrorBorderColor:
+                          emailRegex.hasMatch(emailController.text)
+                              ? globalPink
+                              : emailController.text.isEmpty
+                                  ? globalPink
+                                  : Colors.red,
                       textEditingController: emailController,
                       function: (value) {
                         setState(() {
@@ -105,7 +115,17 @@ class _LoginEmailState extends State<LoginEmail> {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
                       labelText: 'Password',
-                      labelColor: globalPink,
+                      labelColor: passRegex.hasMatch(passwordController.text)
+                          ? globalPink
+                          : passwordController.text.isEmpty
+                              ? globalPink
+                              : Colors.red,
+                      focusErrorBorderColor:
+                          passRegex.hasMatch(passwordController.text)
+                              ? globalPink
+                              : passwordController.text.isEmpty
+                                  ? globalPink
+                                  : Colors.red,
                       icons: IconButton(
                           onPressed: () {
                             setState(() {
@@ -116,6 +136,16 @@ class _LoginEmailState extends State<LoginEmail> {
                               ? Icons.visibility
                               : Icons.visibility_off)),
                       obscureText: showPass ? false : true,
+                      function: (value) {
+                        setState(() {
+                          passRegex.hasMatch(passwordController.text);
+                        });
+                      },
+                      errorText: passRegex.hasMatch(passwordController.text)
+                          ? null
+                          : passwordController.text.isEmpty
+                              ? null
+                              : 'Need number, symbol, capital and small letter',
                       textEditingController: passwordController,
                     ),
                   ),
@@ -129,7 +159,11 @@ class _LoginEmailState extends State<LoginEmail> {
                       },
                       child: Text(
                         'Forgot Password?',
-                        style: inter.copyWith(fontSize: 13, color: Colors.grey),
+                        style: inter.copyWith(
+                            fontSize: 13,
+                            color: Colors.grey,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.grey),
                       ),
                     ),
                   ),

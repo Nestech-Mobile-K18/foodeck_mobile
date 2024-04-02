@@ -26,34 +26,45 @@ class _CreateAccountState extends State<CreateAccount> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
+  RegExp nameRegex = RegExp(r'^([a-zA-Z]{2,}\s[a-zA-Z]+\s?[a-zA-Z]+?\S)$');
   Future signUpAndAddUsers() async {
     try {
-      await supabase.auth.signUp(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-      await Future.delayed(const Duration(milliseconds: 100), () {
-        supabase.auth.signInWithOtp(
-            shouldCreateUser: false, email: emailController.text.trim());
-      });
-      await Future.delayed(const Duration(milliseconds: 200), () {
-        supabase.from('users').insert({
-          'Email': emailController.text.trim(),
-          'Name': nameController.text.trim(),
-          'Phone No.': phoneController.text.trim(),
-          'Password': passwordController.text.trim(),
+      if (nameRegex.hasMatch(nameController.text) &&
+          emailRegex.hasMatch(emailController.text) &&
+          phoneRegex.hasMatch(phoneController.text) &&
+          passRegex.hasMatch(passwordController.text)) {
+        await supabase.auth.signUp(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
+        await Future.delayed(const Duration(milliseconds: 100), () {
+          supabase.auth.signInWithOtp(
+              shouldCreateUser: false, email: emailController.text.trim());
         });
-      });
-      await Future.delayed(const Duration(milliseconds: 300), () {
-        Get.to(() => Otp(email: emailController.text.trim()),
-            transition: Transition.leftToRight,
-            duration: const Duration(milliseconds: 600));
-      });
+        await Future.delayed(const Duration(milliseconds: 200), () {
+          supabase.from('users').insert({
+            'Email': emailController.text.trim(),
+            'Name': nameController.text.trim(),
+            'Phone No.': phoneController.text.trim(),
+            'Password': passwordController.text.trim(),
+          });
+        });
+        await Future.delayed(const Duration(milliseconds: 300), () {
+          Get.to(() => Otp(email: emailController.text.trim()),
+              transition: Transition.leftToRight,
+              duration: const Duration(milliseconds: 600));
+        });
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('All info above must be valid')));
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack, content: Text(error.message)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Error occurred, please retry')));
     }
   }
 
@@ -74,12 +85,6 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.pop(context);
-              FocusScope.of(context).unfocus();
-            },
-          ),
           shape: const UnderlineInputBorder(
               borderSide: BorderSide(width: 8, color: dividerGrey)),
           title: Text('Create an account',
@@ -98,12 +103,31 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
-                      textInputType: TextInputType.name,
-                      labelText: 'Name',
-                      hintText: 'John Doe',
-                      labelColor: globalPink,
-                      textEditingController: nameController,
-                    ),
+                        textInputType: TextInputType.name,
+                        labelText: 'Full Name',
+                        hintText: 'John Doe',
+                        labelColor: nameRegex.hasMatch(nameController.text)
+                            ? globalPink
+                            : nameController.text.isEmpty
+                                ? globalPink
+                                : Colors.red,
+                        focusErrorBorderColor:
+                            nameRegex.hasMatch(nameController.text)
+                                ? globalPink
+                                : nameController.text.isEmpty
+                                    ? globalPink
+                                    : Colors.red,
+                        textEditingController: nameController,
+                        function: (value) {
+                          setState(() {
+                            nameRegex.hasMatch(nameController.text);
+                          });
+                        },
+                        errorText: nameRegex.hasMatch(nameController.text)
+                            ? null
+                            : nameController.text.isEmpty
+                                ? null
+                                : '${nameController.text} is not a valid name'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -111,7 +135,17 @@ class _CreateAccountState extends State<CreateAccount> {
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
-                      labelColor: globalPink,
+                      labelColor: emailRegex.hasMatch(emailController.text)
+                          ? globalPink
+                          : emailController.text.isEmpty
+                              ? globalPink
+                              : Colors.red,
+                      focusErrorBorderColor:
+                          emailRegex.hasMatch(emailController.text)
+                              ? globalPink
+                              : emailController.text.isEmpty
+                                  ? globalPink
+                                  : Colors.red,
                       textEditingController: emailController,
                     ),
                   ),
@@ -122,11 +156,29 @@ class _CreateAccountState extends State<CreateAccount> {
                       labelText: 'Phone No.',
                       hintText: '+92 3014124781',
                       textInputFormatter: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(13)
                       ],
-                      labelColor: globalPink,
+                      labelColor: phoneController.text.isEmpty
+                          ? globalPink
+                          : phoneRegex.hasMatch(phoneController.text)
+                              ? globalPink
+                              : Colors.red,
+                      focusErrorBorderColor: phoneController.text.isEmpty
+                          ? globalPink
+                          : phoneRegex.hasMatch(phoneController.text)
+                              ? globalPink
+                              : Colors.red,
                       textEditingController: phoneController,
+                      function: (value) {
+                        setState(() {
+                          phoneRegex.hasMatch(phoneController.text);
+                        });
+                      },
+                      errorText: phoneController.text.isEmpty
+                          ? null
+                          : phoneRegex.hasMatch(phoneController.text)
+                              ? null
+                              : '${phoneController.text} is not a valid phone number',
                     ),
                   ),
                   Padding(

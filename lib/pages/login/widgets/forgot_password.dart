@@ -20,17 +20,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future login() async {
     try {
-      await supabase.auth
-          .signInWithOtp(email: emailController.text, shouldCreateUser: false)
-          .then((value) => Get.to(() => Otp(email: emailController.text),
-              transition: Transition.leftToRight,
-              duration: const Duration(milliseconds: 600)));
+      if (emailRegex.hasMatch(emailController.text)) {
+        await supabase.auth
+            .signInWithOtp(email: emailController.text, shouldCreateUser: false)
+            .then((value) => Get.to(() => Otp(email: emailController.text),
+                transition: Transition.leftToRight,
+                duration: const Duration(milliseconds: 600)));
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Email is not correct, please retry')));
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack, content: Text(error.message)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Error occurred, please retry')));
     }
   }
 
@@ -62,12 +68,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         },
         child: Scaffold(
             appBar: AppBar(
-              leading: BackButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  FocusScope.of(context).unfocus();
-                },
-              ),
               shape: const UnderlineInputBorder(
                   borderSide: BorderSide(width: 8, color: dividerGrey)),
               title: Text('Forgot Password',
@@ -85,13 +85,36 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             style: inter.copyWith(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 40),
+                          padding: const EdgeInsets.only(top: 16, bottom: 20),
                           child: CustomFormFill(
-                            labelText: 'Email',
-                            hintText: 'johndoe123@gmail.com',
-                            labelColor: globalPink,
-                            textEditingController: emailController,
-                          ),
+                              textInputType: TextInputType.emailAddress,
+                              labelText: 'Email',
+                              hintText: 'johndoe123@gmail.com',
+                              exampleText: 'Example: johndoe123@gmail.com',
+                              labelColor:
+                                  emailRegex.hasMatch(emailController.text)
+                                      ? globalPink
+                                      : emailController.text.isEmpty
+                                          ? globalPink
+                                          : Colors.red,
+                              focusErrorBorderColor:
+                                  emailRegex.hasMatch(emailController.text)
+                                      ? globalPink
+                                      : emailController.text.isEmpty
+                                          ? globalPink
+                                          : Colors.red,
+                              textEditingController: emailController,
+                              function: (value) {
+                                setState(() {
+                                  emailRegex.hasMatch(emailController.text);
+                                });
+                              },
+                              errorText: emailRegex
+                                      .hasMatch(emailController.text)
+                                  ? null
+                                  : emailController.text.isEmpty
+                                      ? null
+                                      : '${emailController.text} is not a valid email'),
                         ),
                         CustomButton(
                             onPressed: () {
