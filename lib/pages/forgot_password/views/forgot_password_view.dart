@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/forgot_password/forgot_password_view_model.dart';
-import 'package:template/resources/const.dart';
-import '../../widgets/cross_bar.dart';
-import '../../widgets/custom_text.dart';
-import '../../widgets/custom_textfield.dart';
-import '../../widgets/method_button.dart';
+import 'package:template/pages/forgot_password/vm/forgot_password_view_model.dart';
+import 'package:template/pages/otp/views/otp_view.dart';
 
-class NewPasswordView extends StatefulWidget {
-  final String? email;
-  const NewPasswordView({super.key, this.email});
+import 'package:template/widgets/cross_bar.dart';
+import 'package:template/widgets/custom_text.dart';
+import 'package:template/widgets/custom_textfield.dart';
+import 'package:template/widgets/method_button.dart';
+import 'package:template/resources/const.dart';
+
+class ForgotPasswordView extends StatefulWidget {
+  const ForgotPasswordView({super.key});
 
   @override
-  State<NewPasswordView> createState() => _NewPasswordViewState();
+  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
-class _NewPasswordViewState extends State<NewPasswordView> {
-  final TextEditingController newPasswordController = TextEditingController();
-  final ForgotPasswordViewModel _viewModel = ForgotPasswordViewModel();
+class _ForgotPasswordViewState extends State<ForgotPasswordView> {
+  final TextEditingController emailController = TextEditingController();
   final Validation _validation = Validation();
-
+  final ForgotPasswordViewModel _viewModel = ForgotPasswordViewModel();
+  @override
   void initState() {
     super.initState();
-    newPasswordController.addListener(() {
-      _validation.isEmailValid(newPasswordController.text);
+    emailController.addListener(() {
+      _validation.isEmailValid(emailController.text);
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    newPasswordController.removeListener(() {
-      _validation.isEmailValid(newPasswordController.text);
+    emailController.removeListener(() {
+      _validation.isEmailValid(emailController.text);
     });
   }
 
@@ -71,21 +72,19 @@ class _NewPasswordViewState extends State<NewPasswordView> {
             ),
             const SizedBox(height: 10),
             CustomTextField(
-              controller: newPasswordController,
-              title: StringExtensions.password,
-              textInputType: TextInputType.visiblePassword,
-              obscureText: true,
+              controller: emailController,
+              title: StringExtensions.email,
+              textInputType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: MethodButton(
                   onTap: () {
-                    _viewModel.validNewPassword(
-                        context, newPasswordController.text, widget.email!);
+                    _viewModel.validReset(context, emailController.text.trim());
                   },
                   color: ColorsGlobal.globalPink,
-                  title: StringExtensions.confirm),
+                  title: StringExtensions.reset),
             )
           ],
         ),

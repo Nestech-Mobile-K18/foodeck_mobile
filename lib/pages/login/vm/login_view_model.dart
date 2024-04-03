@@ -4,10 +4,12 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/home/home_view.dart';
+import 'package:template/pages/home/view/home_view.dart';
 import 'package:template/resources/error_strings.dart';
 import 'package:template/services/errror.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../application/views/application_view.dart';
 
 class LoginViewModel {
   final supabase = Supabase.instance.client;
@@ -28,6 +30,14 @@ class LoginViewModel {
 
   Future<void> handleSuccessfulLogin() async {
     await setLoggedIn(true);
+  }
+
+  void checkLoggedIn(BuildContext context) async {
+    bool isLogged = await isLoggedIn();
+    if (isLogged) {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/application', (route) => false);
+    }
   }
 
   Future<AuthResponse> googleSignIn(BuildContext context) async {
@@ -65,7 +75,7 @@ class LoginViewModel {
     };
     if (userData.isNotEmpty) {
       Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => HomeView()));
+          .pushNamedAndRemoveUntil('/application', (route) => false);
     }
     await supabase.from('users').upsert(userData);
 
@@ -94,7 +104,7 @@ class LoginViewModel {
         if (_userData.isNotEmpty) {
           await handleSuccessfulLogin();
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomeView()));
+              MaterialPageRoute(builder: (context) => ApplicationView()));
         }
       } else if (result.status == LoginStatus.cancelled) {
         showError.showError(context, ErrorString.errorCancelLoginFacebook);

@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/forgot_password/forgot_password_view_model.dart';
-import 'package:template/pages/otp/otp_view.dart';
-
-import 'package:template/widgets/cross_bar.dart';
-import 'package:template/widgets/custom_text.dart';
-import 'package:template/widgets/custom_textfield.dart';
-import 'package:template/widgets/method_button.dart';
+import 'package:template/pages/forgot_password/vm/forgot_password_view_model.dart';
 import 'package:template/resources/const.dart';
+import '../../../widgets/cross_bar.dart';
+import '../../../widgets/custom_text.dart';
+import '../../../widgets/custom_textfield.dart';
+import '../../../widgets/method_button.dart';
 
-class ForgotPasswordView extends StatefulWidget {
-  const ForgotPasswordView({super.key});
+class NewPasswordView extends StatefulWidget {
+  final String? email;
+  const NewPasswordView({super.key, this.email});
 
   @override
-  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
+  State<NewPasswordView> createState() => _NewPasswordViewState();
 }
 
-class _ForgotPasswordViewState extends State<ForgotPasswordView> {
-  final TextEditingController emailController = TextEditingController();
-  final Validation _validation = Validation();
+class _NewPasswordViewState extends State<NewPasswordView> {
+  final TextEditingController newPasswordController = TextEditingController();
   final ForgotPasswordViewModel _viewModel = ForgotPasswordViewModel();
-  @override
+  final Validation _validation = Validation();
+
   void initState() {
     super.initState();
-    emailController.addListener(() {
-      _validation.isEmailValid(emailController.text);
+    newPasswordController.addListener(() {
+      _validation.isEmailValid(newPasswordController.text);
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    emailController.removeListener(() {
-      _validation.isEmailValid(emailController.text);
+    newPasswordController.removeListener(() {
+      _validation.isEmailValid(newPasswordController.text);
     });
   }
 
@@ -72,24 +71,21 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             ),
             const SizedBox(height: 10),
             CustomTextField(
-              controller: emailController,
-              title: StringExtensions.email,
-              textInputType: TextInputType.emailAddress,
+              controller: newPasswordController,
+              title: StringExtensions.password,
+              textInputType: TextInputType.visiblePassword,
+              obscureText: true,
             ),
             const SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: MethodButton(
                   onTap: () {
-                    _viewModel.validReset(context, emailController.text.trim());
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OtpView(
-                              email: emailController.text.trim(),
-                              fromHomeScreen: false,
-                            )));
+                    _viewModel.validNewPassword(
+                        context, newPasswordController.text, widget.email!);
                   },
                   color: ColorsGlobal.globalPink,
-                  title: StringExtensions.reset),
+                  title: StringExtensions.confirm),
             )
           ],
         ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/create_account/create_account_model.dart';
-import 'package:template/pages/otp/otp_view.dart';
+import 'package:template/pages/create_account/models/create_account_model.dart';
+import 'package:template/pages/otp/views/otp_view.dart';
 import 'package:template/resources/const.dart';
 
-import '../../services/errror.dart';
+import '../../../services/errror.dart';
 
 class CreateAccountViewModel {
   final supabase = Supabase.instance.client;

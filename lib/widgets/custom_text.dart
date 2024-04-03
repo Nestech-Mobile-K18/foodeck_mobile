@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:template/resources/colors.dart';
 
 class CustomText extends StatelessWidget {
-  final String title;
+  final String? title;
   final double size;
   final Color? color;
   final int? maxLine;
@@ -22,7 +22,7 @@ class CustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      title,
+      title ?? '',
       maxLines: maxLine ?? 1,
       textAlign: textAlign,
       softWrap: softWrap ?? false,

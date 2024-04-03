@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/otp/otp_model.dart';
-import 'package:template/pages/otp/otp_view_model.dart';
+import 'package:template/pages/otp/models/otp_model.dart';
+import 'package:template/pages/otp/vm/otp_view_model.dart';
 import 'package:template/pages/otp/widgets/generate_form_otp.dart';
 
 import 'package:template/widgets/cross_bar.dart';

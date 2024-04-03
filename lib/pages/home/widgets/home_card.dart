@@ -3,14 +3,14 @@ import 'package:template/widgets/custom_text.dart';
 
 import '../../../resources/const.dart';
 
-class HomeCategogies extends StatelessWidget {
+class HomeCard extends StatelessWidget {
   final String? imgString;
   final String? headerText;
   final String? contentText;
   final double? heightCard;
   final double? widthCard;
 
-  const HomeCategogies(
+  const HomeCard(
       {super.key,
       required this.imgString,
       required this.headerText,

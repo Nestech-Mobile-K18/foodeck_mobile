@@ -29,4 +29,13 @@ class MediaRes {
   static const banner2 = '$_baseImage/ic_banner_2.png';
   static const banner3 = '$_baseImage/ic_banner_3.png';
   static const cart = '$_baseIcon/ic_cart.png';
+  static const dailyDeli = '$_baseImage/ic_daily_deli.png';
+  static const riceBowl = '$_baseImage/ic_rice_bowl.png';
+  static const cakes = '$_baseImage/ic_cakes.png';
+  static const shakes = '$_baseImage/ic_shakes.png';
+  static const deli = '$_baseImage/ic_deli.png';
+
+  // profile
+
+  static const avatar = '$_baseImage/ic_avatar.png';
 }

@@ -1,15 +1,16 @@
-import 'package:template/pages/forgot_password/new_password_view.dart';
-import 'package:template/pages/home/home_view.dart';
+import 'package:template/pages/application/views/application_view.dart';
+import 'package:template/pages/home/view/home_view.dart';
 import 'package:template/pages/map/map_view.dart';
 
-import '../pages/forgot_password/forgot_password_view.dart';
+import '../pages/forgot_password/views/forgot_password_view.dart';
+import '../pages/forgot_password/views/new_password_view.dart';
 import '../resources/routes.dart';
-import '../pages/otp/otp_view.dart';
+import '../pages/otp/views/otp_view.dart';
 import 'package:flutter/material.dart';
-import '../pages/login/login_view.dart';
+import '../pages/login/views/login_view.dart';
 import '../pages/splash/splash_view.dart';
 import '../common/view/page_under_construction.dart';
-import '../pages/create_account/create_account_view.dart';
+import '../pages/create_account/views/create_account_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -35,6 +36,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _pageBuilder((_) => const NewPasswordView(), settings: settings);
     case RouteName.home:
       return _pageBuilder((_) => const HomeView(), settings: settings);
+    case RouteName.application:
+      return _pageBuilder((_) => const ApplicationView(), settings: settings);
 
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),

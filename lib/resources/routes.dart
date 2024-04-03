@@ -1,5 +1,3 @@
-import 'package:template/pages/forgot_password/new_password_view.dart';
-
 class RouteName {
   static const splash = '/';
   static const login = '/login';
@@ -9,4 +7,5 @@ class RouteName {
   static const forgotPassword = '/forgot-password';
   static const newPassword = '/new-password';
   static const home = '/home';
+  static const application = '/application';
 }

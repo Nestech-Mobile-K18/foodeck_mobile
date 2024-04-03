@@ -1,33 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/create_account/create_account_view.dart';
-import 'package:template/pages/forgot_password/forgot_password_view.dart';
-import 'package:template/pages/login/login_via_email/login_via_email_model.dart';
-import 'package:template/pages/login/login_via_email/login_via_email_view_model.dart';
+import 'package:template/pages/create_account/models/create_account_model.dart';
+import 'package:template/pages/create_account/vm/create_account_view_model.dart';
+import 'package:template/resources/const.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_button.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/custom_textfield.dart';
-import 'package:template/resources/const.dart';
 
-class LoginViaEmailView extends StatefulWidget {
-  const LoginViaEmailView({super.key});
+class CreateAccountView extends StatefulWidget {
+  const CreateAccountView({super.key});
 
   @override
-  State<LoginViaEmailView> createState() => _LoginViaEmailViewState();
+  State<CreateAccountView> createState() => _CreateAccountViewState();
 }
 
-class _LoginViaEmailViewState extends State<LoginViaEmailView> {
+class _CreateAccountViewState extends State<CreateAccountView> {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final Validation _validation = Validation();
-  final LogInViaEmailViewModel _viewModel = LogInViaEmailViewModel();
+  final CreateAccountViewModel _viewModel = CreateAccountViewModel();
 
   @override
   void initState() {
     super.initState();
+    nameController.addListener(() {
+      _validation.isNameValid(nameController.text);
+    });
     emailController.addListener(() {
       _validation.isEmailValid(emailController.text);
+    });
+    phoneController.addListener(() {
+      _validation.isPhoneValid(phoneController.text);
     });
     passwordController.addListener(() {
       _validation.isPasswordValid(passwordController.text);
@@ -37,8 +43,14 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
   @override
   void dispose() {
     super.dispose();
+    nameController.removeListener(() {
+      _validation.isNameValid(nameController.text);
+    });
     emailController.removeListener(() {
       _validation.isEmailValid(emailController.text);
+    });
+    phoneController.removeListener(() {
+      _validation.isPhoneValid(phoneController.text);
     });
     passwordController.removeListener(() {
       _validation.isPasswordValid(passwordController.text);
@@ -51,7 +63,7 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const CustomText(
-            title: StringExtensions.loginViaEmail,
+            title: StringExtensions.createAnAccount,
             size: 17,
             fontWeight: FontWeight.w600,
             color: ColorsGlobal.globalBlack),
@@ -82,9 +94,21 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
             ),
             const SizedBox(height: 10),
             CustomTextField(
+              controller: nameController,
+              title: StringExtensions.name,
+              textInputType: TextInputType.name,
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
               controller: emailController,
-              textInputType: TextInputType.emailAddress,
               title: StringExtensions.email,
+              textInputType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 10),
+            CustomTextField(
+              controller: phoneController,
+              title: StringExtensions.phone,
+              textInputType: TextInputType.phone,
             ),
             const SizedBox(height: 20),
             CustomTextField(
@@ -94,57 +118,28 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
               obscureText: true,
             ),
             const SizedBox(height: 15),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              padding: const EdgeInsets.only(left: 25),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordView()));
-                },
-                child: const CustomText(
-                  title: StringExtensions.forgotPassword,
-                  size: 13,
-                  color: ColorsGlobal.globalGrey,
-                ),
-              ),
-            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   MethodButton(
                       onTap: () {
-                        if (!_validation.isEmailValid(emailController.text)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('Email không hợp lệ'),
-                          ));
-                        } else if (!_validation
-                            .isPasswordValid(passwordController.text)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                'Mật khẩu không hợp lệ, Phải ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự đặc biệt'),
-                          ));
-                        } else {
-                          LoginViaEmailModel loginRequest = LoginViaEmailModel(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                          _viewModel.signInWithEmail(loginRequest, context);
-                        }
+                        CreateAccountModel _signUpModel = CreateAccountModel(
+                          name: nameController.text.trim(),
+                          email: emailController.text.trim(),
+                          phone: phoneController.text.trim(),
+                          password: passwordController.text.trim(),
+                        );
+                        _viewModel.auththenSignUp(_signUpModel, context);
                       },
                       color: ColorsGlobal.globalPink,
-                      title: StringExtensions.login),
+                      title: StringExtensions.createAnAccount),
                   CustomButton(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const CreateAccountView(),
-                      ),
-                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                     color: ColorsGlobal.globalWhite,
-                    title: StringExtensions.createAnAccountInstead,
+                    title: StringExtensions.loginInstead,
                     border: 1,
                     colorTitle: ColorsGlobal.globalGrey,
                   ),

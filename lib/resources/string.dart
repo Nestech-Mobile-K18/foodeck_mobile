@@ -27,4 +27,5 @@ class StringExtensions {
   static const showNow = "Show Now";
   static const code = "Code : CVB25";
   static const deals = "Deals";
+  static const exploreMore = "Explore More";
 }

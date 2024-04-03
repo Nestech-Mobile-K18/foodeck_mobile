@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/login/login_via_email/login_via_email_view.dart';
+import 'package:template/pages/login/login_via_email/views/login_via_email_view.dart';
 import 'package:template/resources/validation.dart';
 import 'package:template/services/errror.dart';
+
+import '../../otp/views/otp_view.dart';
 
 class ForgotPasswordViewModel {
   final supabase = Supabase.instance.client;
@@ -12,14 +14,29 @@ class ForgotPasswordViewModel {
   Future<void> resetPassword(String email, BuildContext context) async {
     try {
       // Kiểm tra xem email đã tồn tại trên Supabase chưa
-      final response = await supabase.auth.getUserIdentities();
+      var response = await supabase
+          .from('users') // Thay your_table_name bằng tên bảng của bạn
+          .select('email');
 
       if (response.isEmpty) {
         // Nếu email không tồn tại, hiển thị thông báo lỗi
         _showError.showError(context, 'Email không tồn tại');
       } else {
         // Nếu email tồn tại, gửi yêu cầu đặt lại mật khẩu
-        await supabase.auth.resetPasswordForEmail(email);
+        var records = response.toList() as List;
+        for (var record in records) {
+          var userEmail = record['email'];
+          if (userEmail != email) {
+            _showError.showError(context, 'Email chưa đăng kí');
+          } else {
+            await supabase.auth.resetPasswordForEmail(email);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => OtpView(
+                      email: email,
+                      fromHomeScreen: false,
+                    )));
+          }
+        }
       }
     } catch (e) {
       _showError.showError(context, 'Vui lòng mã OTP hết hiệu lực trong 60s');

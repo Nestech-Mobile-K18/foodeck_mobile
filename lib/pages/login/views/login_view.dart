@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/login/login_via_email/login_via_email_view.dart';
-import 'package:template/pages/login/login_view_model.dart';
+import 'package:template/pages/login/login_via_email/views/login_via_email_view.dart';
+import 'package:template/pages/login/vm/login_view_model.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/media_res.dart' as image;
 import 'package:template/widgets/custom_button.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/resources/const.dart';
 
-import '../home/home_view.dart';
+import '../../home/view/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -22,18 +22,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     super.initState();
-    _checkLoggedIn();
-  }
-
-  void _checkLoggedIn() async {
-    bool isLoggedIn = await _viewModel.isLoggedIn();
-    if (isLoggedIn) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => HomeView(),
-        ),
-      );
-    }
+    _viewModel.checkLoggedIn(context);
   }
 
   @override

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/widgets/loading_indicator.dart';
 
-import '../../services/mapbox_config.dart';
+import '../../../services/mapbox_config.dart';
 
 class HomeViewModel {
   Location location = Location();
@@ -16,10 +17,19 @@ class HomeViewModel {
 
   Future<void> updateAddressOnSupabase(String? address) async {
     if (address != null) {
-      var user = supabase.auth.currentUser;
-      if (user != null) {
-        var userId = user.id;
-        await supabase
+      // Perform a SELECT query to get the ID from the data table
+      var response = await supabase
+          .from('users') // Replace your_table_name with your table name
+          .select('id');
+
+      // Get a list of records from query results
+      var records = response.toList() as List;
+      // Loop through the list of records and update the data for each record
+      for (var record in records) {
+        // Get the ID from the current record
+        var userId = record['id'];
+        // Continue with the information update operations using this ID
+        var updateResponse = await supabase
             .from('users')
             .update({'address': address}).eq('id', userId);
       }
@@ -43,6 +53,7 @@ class HomeViewModel {
         if (response.statusCode == 200) {
           var data = json.decode(response.body);
           String? address = data['features'][0]['place_name'];
+
           updateAddressOnSupabase(address);
 
           if (onAddressReceived != null) {
