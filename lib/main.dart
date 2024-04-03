@@ -4,7 +4,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/pages/home/home_page.dart';
+import 'package:template/pages/login/login_page.dart';
+import 'package:template/pages/login/widgets/create_account.dart';
+import 'package:template/pages/login/widgets/login_email.dart';
 import 'package:template/pages/splash/splash_page.dart';
+import 'package:template/values/route.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
@@ -24,10 +29,16 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (BuildContext context, Orientation orientation,
           DeviceType deviceType) {
-        return const GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: SplashPage(),
-        );
+        return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: splashPage,
+            routes: {
+              splashPage: (context) => SplashPage(),
+              createAccount: (p0) => CreateAccount(),
+              loginEmail: (p0) => LoginEmail(),
+              loginPage: (p0) => LoginPage(),
+              homePage: (p0) => HomePage()
+            });
       },
     );
   }

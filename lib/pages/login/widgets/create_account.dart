@@ -27,37 +27,30 @@ class _CreateAccountState extends State<CreateAccount> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
-  RegExp nameRegex = RegExp(r'^([a-zA-Z]{2,}\s[a-zA-Z]+\s?[a-zA-Z]+?\S)$');
+  RegExp nameRegex = RegExp(
+      r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
   Future signUpAndAddUsers() async {
     try {
-      if (nameRegex.hasMatch(nameController.text) &&
-          emailRegex.hasMatch(emailController.text) &&
-          phoneRegex.hasMatch(phoneController.text) &&
-          passRegex.hasMatch(passwordController.text)) {
-        await supabase.auth.signUp(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim());
-        await Future.delayed(const Duration(milliseconds: 100), () {
-          supabase.auth.signInWithOtp(
-              shouldCreateUser: false, email: emailController.text.trim());
+      await supabase.auth.signUp(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+      await Future.delayed(const Duration(milliseconds: 100), () {
+        supabase.auth.signInWithOtp(
+            shouldCreateUser: false, email: emailController.text.trim());
+      });
+      await Future.delayed(const Duration(milliseconds: 200), () {
+        supabase.from('users').insert({
+          'Email': emailController.text.trim(),
+          'Name': nameController.text.trim(),
+          'Phone No.': phoneController.text.trim(),
+          'Password': passwordController.text.trim(),
         });
-        await Future.delayed(const Duration(milliseconds: 200), () {
-          supabase.from('users').insert({
-            'Email': emailController.text.trim(),
-            'Name': nameController.text.trim(),
-            'Phone No.': phoneController.text.trim(),
-            'Password': passwordController.text.trim(),
-          });
-        });
-        await Future.delayed(const Duration(milliseconds: 300), () {
-          Get.to(() => Otp(email: emailController.text.trim()),
-              transition: Transition.leftToRight,
-              duration: const Duration(milliseconds: 600));
-        });
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('All info above must be valid')));
+      });
+      await Future.delayed(const Duration(milliseconds: 300), () {
+        Get.to(() => Otp(email: emailController.text.trim()),
+            transition: Transition.leftToRight,
+            duration: const Duration(milliseconds: 600));
+      });
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: buttonShadowBlack, content: Text(error.message)));
@@ -81,7 +74,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus();
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         appBar: AppBar(
@@ -103,14 +96,26 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
+                        boxShadow: nameRegex.hasMatch(nameController.text)
+                            ? Colors.pink.shade100
+                            : Colors.white,
                         textInputType: TextInputType.name,
                         labelText: 'Full Name',
                         hintText: 'John Doe',
+                        exampleText: nameRegex.hasMatch(nameController.text)
+                            ? null
+                            : 'Example: John Doe',
                         labelColor: nameRegex.hasMatch(nameController.text)
                             ? globalPink
                             : nameController.text.isEmpty
                                 ? globalPink
                                 : Colors.red,
+                        borderColor: nameController.text.isNotEmpty
+                            ? globalPink
+                            : Colors.grey,
+                        inputColor: nameRegex.hasMatch(nameController.text)
+                            ? globalPink
+                            : Colors.red,
                         focusErrorBorderColor:
                             nameRegex.hasMatch(nameController.text)
                                 ? globalPink
@@ -132,9 +137,21 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
+                      boxShadow: emailRegex.hasMatch(emailController.text)
+                          ? Colors.pink.shade100
+                          : Colors.white,
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
+                      exampleText: emailRegex.hasMatch(emailController.text)
+                          ? null
+                          : 'Example: johndoe123@gmail.com',
+                      borderColor: emailController.text.isNotEmpty
+                          ? globalPink
+                          : Colors.grey,
+                      inputColor: emailRegex.hasMatch(emailController.text)
+                          ? globalPink
+                          : Colors.red,
                       labelColor: emailRegex.hasMatch(emailController.text)
                           ? globalPink
                           : emailController.text.isEmpty
@@ -147,14 +164,30 @@ class _CreateAccountState extends State<CreateAccount> {
                                   ? globalPink
                                   : Colors.red,
                       textEditingController: emailController,
+                      function: (value) {
+                        setState(() {
+                          emailRegex.hasMatch(emailController.text);
+                        });
+                      },
+                      errorText: emailRegex.hasMatch(emailController.text)
+                          ? null
+                          : emailController.text.isEmpty
+                              ? null
+                              : '${emailController.text} is not a valid email',
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
+                      boxShadow: phoneRegex.hasMatch(phoneController.text)
+                          ? Colors.pink.shade100
+                          : Colors.white,
                       textInputType: TextInputType.phone,
                       labelText: 'Phone No.',
                       hintText: '+92 3014124781',
+                      exampleText: phoneRegex.hasMatch(phoneController.text)
+                          ? null
+                          : 'Need correct number',
                       textInputFormatter: [
                         LengthLimitingTextInputFormatter(13)
                       ],
@@ -163,6 +196,12 @@ class _CreateAccountState extends State<CreateAccount> {
                           : phoneRegex.hasMatch(phoneController.text)
                               ? globalPink
                               : Colors.red,
+                      borderColor: phoneController.text.isNotEmpty
+                          ? globalPink
+                          : Colors.grey,
+                      inputColor: phoneRegex.hasMatch(phoneController.text)
+                          ? globalPink
+                          : Colors.red,
                       focusErrorBorderColor: phoneController.text.isEmpty
                           ? globalPink
                           : phoneRegex.hasMatch(phoneController.text)
@@ -184,23 +223,64 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
                     child: CustomFormFill(
+                      boxShadow: passRegex.hasMatch(passwordController.text)
+                          ? Colors.pink.shade100
+                          : Colors.white,
                       labelText: 'Password',
-                      labelColor: globalPink,
-                      icons: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              showPass = !showPass;
-                            });
-                          },
-                          icon: Icon(showPass
-                              ? Icons.visibility
-                              : Icons.visibility_off)),
+                      exampleText: passRegex.hasMatch(passwordController.text)
+                          ? null
+                          : 'Example: Johndoe123!',
+                      labelColor: passRegex.hasMatch(passwordController.text)
+                          ? globalPink
+                          : passwordController.text.isEmpty
+                              ? globalPink
+                              : Colors.red,
+                      inputColor: passRegex.hasMatch(passwordController.text)
+                          ? globalPink
+                          : Colors.red,
+                      borderColor: passwordController.text.isNotEmpty
+                          ? globalPink
+                          : Colors.grey,
+                      focusErrorBorderColor:
+                          passRegex.hasMatch(passwordController.text)
+                              ? globalPink
+                              : passwordController.text.isEmpty
+                                  ? globalPink
+                                  : Colors.red,
+                      icons: passwordController.text.isEmpty
+                          ? const SizedBox()
+                          : IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  showPass = !showPass;
+                                });
+                              },
+                              icon: Icon(
+                                showPass
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color:
+                                    passRegex.hasMatch(passwordController.text)
+                                        ? globalPink
+                                        : Colors.red,
+                              )),
                       obscureText: showPass ? false : true,
+                      function: (value) {
+                        setState(() {
+                          passRegex.hasMatch(passwordController.text);
+                        });
+                      },
+                      errorText: passRegex.hasMatch(passwordController.text)
+                          ? null
+                          : passwordController.text.isEmpty
+                              ? null
+                              : 'Need number, symbol, capital and small letter',
                       textEditingController: passwordController,
                     ),
                   ),
                   CustomButton(
                       onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         signUpAndAddUsers();
                       },
                       text: Text('Create an account',
@@ -212,6 +292,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         Get.to(() => const LoginEmail(),
                             transition: Transition.upToDown,
                             duration: const Duration(milliseconds: 600));

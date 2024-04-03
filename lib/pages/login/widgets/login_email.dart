@@ -25,15 +25,9 @@ class _LoginEmailState extends State<LoginEmail> {
   final passwordController = TextEditingController();
   Future login() async {
     try {
-      if (emailRegex.hasMatch(emailController.text) &&
-          passRegex.hasMatch(passwordController.text)) {
-        await supabase.auth.signInWithPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim());
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Email or Password is not correct, please retry')));
+      await supabase.auth.signInWithPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: buttonShadowBlack, content: Text(error.message)));
@@ -55,7 +49,7 @@ class _LoginEmailState extends State<LoginEmail> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus();
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         appBar: AppBar(
@@ -77,10 +71,15 @@ class _LoginEmailState extends State<LoginEmail> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
+                      boxShadow: emailRegex.hasMatch(emailController.text)
+                          ? Colors.pink.shade100
+                          : Colors.white,
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
-                      exampleText: 'Example: johndoe123@gmail.com',
+                      exampleText: emailRegex.hasMatch(emailController.text)
+                          ? null
+                          : 'Example: johndoe123@gmail.com',
                       borderColor: emailController.text.isNotEmpty
                           ? globalPink
                           : Colors.grey,
@@ -114,27 +113,47 @@ class _LoginEmailState extends State<LoginEmail> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
+                      boxShadow: passRegex.hasMatch(passwordController.text)
+                          ? Colors.pink.shade100
+                          : Colors.white,
                       labelText: 'Password',
+                      exampleText: passRegex.hasMatch(passwordController.text)
+                          ? null
+                          : 'Example: Johndoe123!',
                       labelColor: passRegex.hasMatch(passwordController.text)
                           ? globalPink
                           : passwordController.text.isEmpty
                               ? globalPink
                               : Colors.red,
+                      inputColor: passRegex.hasMatch(passwordController.text)
+                          ? globalPink
+                          : Colors.red,
+                      borderColor: passwordController.text.isNotEmpty
+                          ? globalPink
+                          : Colors.grey,
                       focusErrorBorderColor:
                           passRegex.hasMatch(passwordController.text)
                               ? globalPink
                               : passwordController.text.isEmpty
                                   ? globalPink
                                   : Colors.red,
-                      icons: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              showPass = !showPass;
-                            });
-                          },
-                          icon: Icon(showPass
-                              ? Icons.visibility
-                              : Icons.visibility_off)),
+                      icons: passwordController.text.isEmpty
+                          ? const SizedBox()
+                          : IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  showPass = !showPass;
+                                });
+                              },
+                              icon: Icon(
+                                showPass
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color:
+                                    passRegex.hasMatch(passwordController.text)
+                                        ? globalPink
+                                        : Colors.red,
+                              )),
                       obscureText: showPass ? false : true,
                       function: (value) {
                         setState(() {
@@ -150,9 +169,10 @@ class _LoginEmailState extends State<LoginEmail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 40),
+                    padding: const EdgeInsets.only(bottom: 40, top: 10),
                     child: GestureDetector(
                       onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         Get.to(() => const ForgotPassword(),
                             transition: Transition.rightToLeft,
                             duration: const Duration(milliseconds: 600));
@@ -160,10 +180,7 @@ class _LoginEmailState extends State<LoginEmail> {
                       child: Text(
                         'Forgot Password?',
                         style: inter.copyWith(
-                            fontSize: 13,
-                            color: Colors.grey,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.grey),
+                            fontSize: 13, decoration: TextDecoration.underline),
                       ),
                     ),
                   ),
@@ -180,6 +197,7 @@ class _LoginEmailState extends State<LoginEmail> {
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         Get.to(() => const CreateAccount(),
                             transition: Transition.downToUp,
                             duration: const Duration(milliseconds: 600));

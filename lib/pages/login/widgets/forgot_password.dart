@@ -20,16 +20,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future login() async {
     try {
-      if (emailRegex.hasMatch(emailController.text)) {
-        await supabase.auth
-            .signInWithOtp(email: emailController.text, shouldCreateUser: false)
-            .then((value) => Get.to(() => Otp(email: emailController.text),
-                transition: Transition.leftToRight,
-                duration: const Duration(milliseconds: 600)));
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Email is not correct, please retry')));
+      await supabase.auth
+          .signInWithOtp(email: emailController.text, shouldCreateUser: false)
+          .then((value) => Get.to(() => Otp(email: emailController.text),
+              transition: Transition.leftToRight,
+              duration: const Duration(milliseconds: 600)));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: buttonShadowBlack, content: Text(error.message)));
@@ -64,7 +59,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
             appBar: AppBar(
@@ -87,16 +82,30 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 20),
                           child: CustomFormFill(
+                              boxShadow:
+                                  emailRegex.hasMatch(emailController.text)
+                                      ? Colors.pink.shade100
+                                      : Colors.white,
                               textInputType: TextInputType.emailAddress,
                               labelText: 'Email',
                               hintText: 'johndoe123@gmail.com',
-                              exampleText: 'Example: johndoe123@gmail.com',
+                              exampleText:
+                                  emailRegex.hasMatch(emailController.text)
+                                      ? null
+                                      : 'Example: johndoe123@gmail.com',
                               labelColor:
                                   emailRegex.hasMatch(emailController.text)
                                       ? globalPink
                                       : emailController.text.isEmpty
                                           ? globalPink
                                           : Colors.red,
+                              borderColor: emailController.text.isNotEmpty
+                                  ? globalPink
+                                  : Colors.grey,
+                              inputColor:
+                                  emailRegex.hasMatch(emailController.text)
+                                      ? globalPink
+                                      : Colors.red,
                               focusErrorBorderColor:
                                   emailRegex.hasMatch(emailController.text)
                                       ? globalPink

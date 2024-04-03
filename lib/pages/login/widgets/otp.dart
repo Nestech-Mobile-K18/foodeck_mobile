@@ -28,7 +28,9 @@ class _OtpState extends State<Otp> {
   List<String> otpValues = List.filled(6, '');
   Future showSnackBar() async {
     await Future(() => ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please check OTP in your email'))));
+        const SnackBar(
+            backgroundColor: buttonShadowBlack,
+            content: Text('Please check OTP in your email'))));
   }
 
   Future checkOTP() async {
@@ -37,11 +39,12 @@ class _OtpState extends State<Otp> {
       await supabase.auth
           .verifyOTP(token: token, type: OtpType.email, email: widget.email);
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack, content: Text(error.message)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Error occurred, please retry')));
     }
   }
 
@@ -50,13 +53,16 @@ class _OtpState extends State<Otp> {
       await supabase.auth
           .signInWithOtp(shouldCreateUser: false, email: widget.email)
           .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please check OTP in your email'))));
+              const SnackBar(
+                  backgroundColor: buttonShadowBlack,
+                  content: Text('Please check OTP in your email'))));
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: buttonShadowBlack, content: Text(error.message)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error occurred, please retry')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: buttonShadowBlack,
+          content: Text('Error occurred, please retry')));
     }
   }
 
@@ -64,16 +70,10 @@ class _OtpState extends State<Otp> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
             appBar: AppBar(
-              leading: BackButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  FocusScope.of(context).unfocus();
-                },
-              ),
               shape: const UnderlineInputBorder(
                   borderSide: BorderSide(width: 8, color: dividerGrey)),
               title: Text('OTP',
@@ -87,7 +87,7 @@ class _OtpState extends State<Otp> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Confirm the code we sent you',
+                        Text('Confirm the code we sent to ${widget.email}',
                             style: inter.copyWith(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
                         Padding(
@@ -102,6 +102,11 @@ class _OtpState extends State<Otp> {
                                 children: List.generate(
                                   6,
                                   (index) => CustomFormFill(
+                                    boxShadow: currentIndex.value >= index
+                                        ? Colors.pink.shade100
+                                        : Colors.white,
+                                    heightBoxShadow: 48,
+                                    widthBoxShadow: 50,
                                     padding: EdgeInsets.zero,
                                     textAlign: TextAlign.center,
                                     boxSize: const BoxConstraints(
@@ -146,7 +151,8 @@ class _OtpState extends State<Otp> {
                             child: Text(
                               'Resend',
                               style: inter.copyWith(
-                                  fontSize: 13, color: Colors.grey),
+                                  fontSize: 13,
+                                  decoration: TextDecoration.underline),
                             ),
                           ),
                         ),

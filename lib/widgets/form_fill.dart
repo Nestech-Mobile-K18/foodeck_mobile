@@ -22,7 +22,10 @@ class CustomFormFill extends StatefulWidget {
       this.textInputFormatter,
       this.focusErrorBorderColor,
       this.exampleText,
-      this.inputColor});
+      this.inputColor,
+      this.boxShadow,
+      this.heightBoxShadow,
+      this.widthBoxShadow});
   final TextInputType? textInputType;
   final Function(String)? function;
   final TextEditingController? textEditingController;
@@ -32,7 +35,7 @@ class CustomFormFill extends StatefulWidget {
   final Color? labelColor;
   final Color? borderColor;
   final Color? focusErrorBorderColor;
-  final IconButton? icons;
+  final Widget? icons;
   final bool? obscureText;
   final BoxConstraints? boxSize;
   final TextAlign? textAlign;
@@ -40,6 +43,9 @@ class CustomFormFill extends StatefulWidget {
   final EdgeInsets? padding;
   final String? exampleText;
   final Color? inputColor;
+  final Color? boxShadow;
+  final double? heightBoxShadow;
+  final double? widthBoxShadow;
   @override
   State<CustomFormFill> createState() => _CustomFormFillState();
 }
@@ -47,44 +53,65 @@ class CustomFormFill extends StatefulWidget {
 class _CustomFormFillState extends State<CustomFormFill> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      inputFormatters: widget.textInputFormatter,
-      textAlign: widget.textAlign ?? TextAlign.start,
-      obscureText: widget.obscureText ?? false,
-      keyboardType: widget.textInputType,
-      onChanged: widget.function,
-      style:
-          inter.copyWith(fontSize: 17, color: widget.inputColor ?? globalPink),
-      controller: widget.textEditingController,
-      decoration: InputDecoration(
-          suffixIcon: widget.icons,
-          constraints: widget.boxSize ?? const BoxConstraints(maxWidth: 328),
-          labelText: widget.labelText,
-          labelStyle: inter.copyWith(fontSize: 12, color: Colors.grey),
-          floatingLabelStyle:
-              inter.copyWith(fontSize: 12, color: widget.labelColor),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          errorText: widget.errorText,
-          errorBorder: OutlineInputBorder(
+    return Stack(
+      children: [
+        AnimatedContainer(
+          width: widget.widthBoxShadow ?? 328,
+          height: widget.heightBoxShadow ?? 58,
+          duration: const Duration(milliseconds: 1000),
+          decoration: BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Colors.grey)),
-          focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: Colors.red)),
-          contentPadding: widget.padding ??
-              const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: widget.borderColor ?? Colors.grey),
-              borderRadius: BorderRadius.circular(16)),
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: widget.focusErrorBorderColor ?? globalPink),
-              borderRadius: BorderRadius.circular(16)),
-          hintText: widget.hintText,
-          hintStyle: inter.copyWith(fontSize: 17, color: globalPinkShadow),
-          helperText: widget.exampleText ?? '',
-          helperStyle: TextStyle(color: buttonShadowBlack),
-          errorStyle: TextStyle(color: Colors.red)),
+              boxShadow: [
+                BoxShadow(
+                    color: widget.boxShadow ?? Colors.transparent,
+                    offset: const Offset(4, 4),
+                    blurRadius: 5,
+                    spreadRadius: 1)
+              ]),
+        ),
+        TextFormField(
+          inputFormatters: widget.textInputFormatter,
+          textAlign: widget.textAlign ?? TextAlign.start,
+          obscureText: widget.obscureText ?? false,
+          keyboardType: widget.textInputType,
+          onChanged: widget.function,
+          style: inter.copyWith(
+              fontSize: 17, color: widget.inputColor ?? globalPink),
+          controller: widget.textEditingController,
+          decoration: InputDecoration(
+              suffixIcon: widget.icons,
+              constraints:
+                  widget.boxSize ?? const BoxConstraints(maxWidth: 328),
+              labelText: widget.labelText,
+              labelStyle: inter.copyWith(fontSize: 12, color: Colors.grey),
+              floatingLabelStyle:
+                  inter.copyWith(fontSize: 12, color: widget.labelColor),
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              errorText: widget.errorText,
+              errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.red)),
+              focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Colors.red)),
+              contentPadding: widget.padding ??
+                  const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: widget.borderColor ?? Colors.grey),
+                  borderRadius: BorderRadius.circular(16)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.focusErrorBorderColor ?? globalPink),
+                  borderRadius: BorderRadius.circular(16)),
+              hintText: widget.hintText,
+              hintStyle: inter.copyWith(fontSize: 17, color: globalPinkShadow),
+              helperText: widget.exampleText ?? '',
+              helperStyle: const TextStyle(color: buttonShadowBlack),
+              errorStyle: const TextStyle(color: Colors.red)),
+        ),
+      ],
     );
   }
 }
