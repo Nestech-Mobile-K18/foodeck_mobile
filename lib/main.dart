@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
             initialRoute: splashPage,
             routes: {
               splashPage: (context) => SplashPage(),
-              createAccount: (p0) => CreateAccount(),
-              loginEmail: (p0) => LoginEmail(),
-              loginPage: (p0) => LoginPage(),
-              homePage: (p0) => HomePage()
+              createAccount: (context) => CreateAccount(),
+              loginEmail: (context) => LoginEmail(),
+              loginPage: (context) => LoginPage(),
+              homePage: (context) => HomePage()
             });
       },
     );

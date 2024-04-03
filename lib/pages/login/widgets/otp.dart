@@ -187,14 +187,14 @@ class _OtpState extends State<Otp> {
                                                   spreadRadius: 1)
                                             ]
                                           : null),
-                                  duration: const Duration(seconds: 2),
+                                  duration: const Duration(seconds: 1),
                                   child: Center(
                                     child: AnimatedDefaultTextStyle(
                                       style: inter.copyWith(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
-                                      duration: const Duration(seconds: 2),
+                                      duration: const Duration(seconds: 1),
                                       child: Text(currentIndex.value == 5
                                           ? 'Confirm'
                                           : ''),

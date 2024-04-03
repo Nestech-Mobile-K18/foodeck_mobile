@@ -20,6 +20,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future login() async {
     try {
+      FocusScope.of(context).requestFocus(FocusNode());
       await supabase.auth
           .signInWithOtp(email: emailController.text, shouldCreateUser: false)
           .then((value) => Get.to(() => Otp(email: emailController.text),
