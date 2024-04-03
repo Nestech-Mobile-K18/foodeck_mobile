@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:template/pages/create_account/views/create_account_view.dart';
 import 'package:template/pages/login/login_via_email/views/login_via_email_view.dart';
 import 'package:template/pages/login/vm/login_view_model.dart';
+import 'package:template/pages/login/widgets/deep_link.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/media_res.dart' as image;
 import 'package:template/widgets/custom_button.dart';
@@ -73,38 +75,21 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
         ),
-        const CustomButton(
+        CustomButton(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const CreateAccountView(),
+            ),
+          ),
           color: ColorsGlobal.globalWhite,
           title: StringExtensions.createAnAccount,
           border: 1,
           colorTitle: ColorsGlobal.globalGrey,
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          alignment: Alignment.center,
-          height: 65,
-          width: SizeScale.screenWidth,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomText(
-                title: StringExtensions.privacyAndPolicy,
-                softWrap: false,
-                maxLine: 1,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Flexible(
-                child: CustomText(
-                  title: StringExtensions.termsAndConditions,
-                  color: ColorsGlobal.globalPink,
-                  maxLine: 2,
-                ),
-              ),
-            ],
-          ),
-        )
+        SizedBox(
+          height: 10,
+        ),
+        DeepLink()
       ],
     ));
   }

@@ -7,9 +7,8 @@ class LoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Container xám nhạt để tạo overlay
         Container(
-          color: Colors.black.withOpacity(0.5), // Màu xám nhạt với độ mờ là 50%
+          color: Colors.black.withOpacity(0.5),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
         ),

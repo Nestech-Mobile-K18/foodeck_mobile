@@ -6,7 +6,7 @@ class StringExtensions {
   static const createAnAccount = "Create an account";
   static const createAnAccountInstead = "Create an account instead";
   static const privacyAndPolicy = "By signing up, you are agreeing to our";
-  static const termsAndConditions = "Terms & Conditions";
+  static const termsAndConditions = " Terms & Conditions";
   static const email = "Email";
   static const password = "Password";
   static const login = "Login";
@@ -23,6 +23,7 @@ class StringExtensions {
   static const reset = "Reset";
   static const food = "Food";
   static const contentFood = "Order food you love";
+  // home
   static const address = 'Block B Phase 2 Johar Town, Lahore';
   static const showNow = "Show Now";
   static const code = "Code : CVB25";
