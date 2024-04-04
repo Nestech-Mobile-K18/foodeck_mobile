@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/main.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
 import 'package:template/values/text_styles.dart';
+import 'package:template/widgets/loading_animation.dart';
 
 class SavedPage extends StatefulWidget {
   const SavedPage({super.key});
@@ -41,7 +42,7 @@ class _SavedPageState extends State<SavedPage> {
         builder: (BuildContext context,
             AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           if (!snapshot.hasData) {
-            return const SizedBox();
+            return const Center(child: WaveDots(size: 36, color: Colors.grey));
           }
           final banners = snapshot.data!;
           Future deleteBanner(index) async {

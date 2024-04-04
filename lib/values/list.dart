@@ -134,6 +134,7 @@ class MiddleList {
   final String shopName;
   final String place;
   final String vote;
+
   MiddleList(this.foodOrder, this.time, this.shopName, this.place, this.vote);
 }
 
@@ -161,3 +162,51 @@ List<BottomList> bottomList = [
   BottomList(chocolate, '20 min', 'Thicc Shakes\n', 'Wapda Town', '4.5'),
   BottomList(panCake, '30 min', 'Daily Deli\n', 'Garden Town', '4.8')
 ];
+
+class FoodItems {
+  final String picture;
+  final String nameFood;
+  final String detail;
+  final String price;
+
+  final FoodCategory foodCategory;
+
+  //
+  // List<Addon> availableAddons;
+
+  FoodItems({
+    required this.picture,
+    required this.nameFood,
+    required this.detail,
+    required this.price,
+    required this.foodCategory,
+    // required this.availableAddons
+  });
+}
+
+// List<FoodItems> popularItems = [
+//   FoodItems(
+//       picture: picture,
+//       nameFood: nameFood,
+//       detail: detail,
+//       price: price,
+//       foodCategory: foodCategory,
+//       availableAddons: availableAddons),
+//   FoodItems(friedChicken, 'Chicken Fajita Pizza\n',
+//       '8” pizza with regular soft drink\n', '\$10'),
+//   FoodItems(coffeeMilk, 'Deal 1\n',
+//       '1 regular burger with croquette and hot cocoa\n', '\$12'),
+//   FoodItems(
+//       hamburger, 'Deal 2\n', '1 regular burger with small fries\n', '\$6'),
+//   FoodItems(simpleDesert, 'Deal 3\n',
+//       '2 pieces of beef stew with homemade sauce\n', '\$23')
+// ];
+
+enum FoodCategory { Popular, Deals, Wraps, Beverages, Sandwiches }
+
+class Addon {
+  final String addonName;
+  final String price;
+
+  Addon(this.addonName, this.price);
+}

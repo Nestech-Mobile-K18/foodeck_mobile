@@ -18,6 +18,11 @@ const String firstBanner = 'assets/images/FirstBanner.png';
 const String coffee = 'assets/images/Coffee.png';
 const String lastBanner = 'assets/images/LastBanner.png';
 const String riceBowl = 'assets/images/RiceBowl.png';
+const String coffeeMilk = 'assets/images/CoffeeMilk.png';
+const String friedChicken = 'assets/images/FriedChicken.png';
+const String hamburger = 'assets/images/Hamburger.png';
+const String pizza = 'assets/images/Pizza.png';
+const String simpleDesert = 'assets/images/SimpleDesert.png';
 // Icons
 const String appleLogo = 'assets/icons/AppleLogo.png';
 const String emailLogo = 'assets/icons/EmailLogo.png';
@@ -29,3 +34,5 @@ const String heart = 'assets/icons/Heart.png';
 const String bell = 'assets/icons/Bell.png';
 const String user = 'assets/icons/User.png';
 const String mapPin = 'assets/icons/MapPin.png';
+const String threeDots = 'assets/icons/ThreeDots.png';
+const String shareNetwork = 'assets/icons/ShareNetwork.png';
