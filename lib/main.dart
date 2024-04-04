@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
-import 'package:sizer/sizer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/home/home_page.dart';
 import 'package:template/pages/login/login_page.dart';
@@ -26,18 +26,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return Sizer(
-      builder: (BuildContext context, Orientation orientation,
-          DeviceType deviceType) {
+    return FlutterSizer(
+      builder: (context, orientation, screenType) {
         return GetMaterialApp(
+            defaultTransition: Transition.rightToLeft,
+            transitionDuration: const Duration(milliseconds: 600),
             debugShowCheckedModeBanner: false,
             initialRoute: splashPage,
             routes: {
-              splashPage: (context) => SplashPage(),
-              createAccount: (context) => CreateAccount(),
-              loginEmail: (context) => LoginEmail(),
-              loginPage: (context) => LoginPage(),
-              homePage: (context) => HomePage()
+              splashPage: (context) => const SplashPage(),
+              createAccount: (context) => const CreateAccount(),
+              loginEmail: (context) => const LoginEmail(),
+              loginPage: (context) => const LoginPage(),
+              homePage: (context) => const HomePage()
             });
       },
     );

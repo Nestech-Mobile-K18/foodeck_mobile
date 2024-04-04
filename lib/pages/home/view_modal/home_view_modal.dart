@@ -4,15 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/main.dart';
 import 'package:template/widgets/map/mapbox_config.dart';
 
 class HomeViewModel {
   Location location = Location();
 
   Function(String)? onAddressReceived;
-
-  final supabase = Supabase.instance.client;
 
   Future<void> updateAddressOnSupabase(String? address) async {
     if (address != null) {

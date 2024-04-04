@@ -83,7 +83,7 @@
       "name": "flutter",
       "rootUri": "file:///C:/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_dotenv",
@@ -102,6 +102,12 @@
       "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_map-6.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_sizer",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_sizer-1.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_test",
@@ -219,19 +225,19 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-10.0.3",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker-10.0.4",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.2",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_testing",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.0",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/leak_tracker_testing-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -291,7 +297,7 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.11.0",
+      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -482,12 +488,6 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "sizer",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/sizer-2.0.15",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "sky_engine",
       "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -558,12 +558,6 @@
       "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/unicode-0.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "universal_io",
-      "rootUri": "file:///C:/Users/LeQuocDat/AppData/Local/Pub/Cache/hosted/pub.dev/universal_io-2.2.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
     },
     {
       "name": "url_launcher",
@@ -668,7 +662,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-03-31T09:34:01.642745Z",
+  "generated": "2024-04-04T01:21:30.151460Z",
   "generator": "pub",
-  "generatorVersion": "3.4.0-99.1.beta"
+  "generatorVersion": "3.4.0-190.1.beta"
 }

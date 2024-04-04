@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:template/pages/explore/widget/bottom_list_shopping.dart';
+import 'package:template/pages/explore/widget/custom_search_delegate.dart';
 import 'package:template/pages/explore/widget/list_slide_banner.dart';
 import 'package:template/pages/explore/widget/middle_slide_list.dart';
 import 'package:template/pages/explore/widget/top_list_shopping.dart';
@@ -18,7 +20,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus();
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         appBar: AppBar(
@@ -30,43 +32,57 @@ class _ExplorePageState extends State<ExplorePage> {
               )),
           toolbarHeight: 142,
           automaticallyImplyLeading: false,
-          titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white70),
+          titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white),
           titleSpacing: 24,
           title: Column(
             children: [
-              Row(
+              const Row(
                 children: [
-                  Image.asset(mapPin),
-                  const SizedBox(
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
                     width: 12,
                   ),
-                  const Text('Block B Phase 2 Johar Town, Lahore')
+                  Text('Block B Phase 2 Johar Town, Lahore')
                 ],
               ),
               Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: TextFormField(
-                      style:
-                          inter.copyWith(fontSize: 17, color: Colors.grey[400]),
-                      decoration: InputDecoration(
-                          constraints: const BoxConstraints(
-                              maxWidth: 328, maxHeight: 54),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none),
-                          hintText: 'Search...',
-                          hintStyle: inter.copyWith(
-                              fontSize: 17, color: Colors.grey[400]),
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 16),
-                          prefixIcon: Padding(
-                              padding: const EdgeInsets.fromLTRB(24, 16, 8, 16),
-                              child: Image.asset(
-                                search,
-                                color: Colors.grey,
-                              )))))
+                  child: GestureDetector(
+                    onTap: () => Get.to(() => CustomSearchDelegate()),
+                    child: Container(
+                        height: 54,
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Colors.black26,
+                                  offset: Offset(4, 4),
+                                  blurRadius: 5,
+                                  spreadRadius: 1),
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 16),
+                          child: Row(
+                            children: [
+                              Image.asset(search, color: Colors.grey),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  'Search...',
+                                  style: inter.copyWith(
+                                      color: Colors.grey[400], fontSize: 17),
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                  ))
             ],
           ),
         ),
@@ -97,104 +113,3 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 }
-// import 'package:flutter/material.dart';
-// import 'package:my_app/pages/product1.dart';
-//
-// class CustomSearchDelegate extends SearchDelegate {
-//   List<String> searchTerms = [
-//     'Black Simple Lamp',
-//     'Coffee Chair',
-//     'Minimal Stand',
-//     'Simple Desk',
-//   ];
-//   @override
-//   List<Widget> buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         onPressed: () {
-//           if (query.isEmpty) {
-//             close(context, null);
-//           } else {
-//             query = '';
-//             showSuggestions(context);
-//           }
-//         },
-//         icon: Icon(Icons.clear),
-//       )
-//     ];
-//   }
-//
-//   @override
-//   Widget buildLeading(BuildContext context) {
-//     return IconButton(
-//         onPressed: () {
-//           close(context, null);
-//         },
-//         icon: Icon(Icons.arrow_back));
-//   }
-//
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     List<String> matchQuery = [];
-//     for (var items in searchTerms) {
-//       if (items.toLowerCase().contains(query.toUpperCase())) {
-//         matchQuery.add(items);
-//       }
-//     }
-//     return ListView.builder(
-//       itemBuilder: (context, index) {
-//         var result = matchQuery[index];
-//         return ListTile(
-//           title: Text(result),
-//         );
-//       },
-//       itemCount: matchQuery.length,
-//     );
-//   }
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     final suggestions = query.isEmpty
-//         ? searchTerms
-//         : searchTerms.where((searchTerm) {
-//       final searchTermLower = searchTerm.toLowerCase();
-//       final queryLower = query.toLowerCase();
-//
-//       return searchTermLower.startsWith(queryLower);
-//     }).toList();
-//     return buildSuggestionsSuccess(suggestions);
-//   }
-//
-//   Widget buildSuggestionsSuccess(List<String> suggestions) => ListView.builder(
-//     itemBuilder: (context, index) {
-//       var result = suggestions[index];
-//       final queryText = result.substring(0, query.length);
-//       final remainingText = result.substring(query.length);
-//       return ListTile(
-//         onTap: () {
-//           if (query.contains(result)) {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => Product1()));
-//           } else {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => Product1()));
-//           }
-//         },
-//         // title: Text(result),
-//         title: RichText(
-//             text: TextSpan(
-//                 text: queryText,
-//                 style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 18),
-//                 children: [
-//                   TextSpan(
-//                       text: remainingText,
-//                       style: TextStyle(fontSize: 18, color: Colors.grey))
-//                 ])),
-//       );
-//     },
-//     itemCount: suggestions.length,
-//   );
-// }
