@@ -6,31 +6,39 @@ class ExploreMoreItemInfo {
   final String title;
   final String location;
   final double star;
+  late bool like;
   ExploreMoreItemInfo(
       {required this.image,
       required this.time,
       required this.title,
       required this.location,
-      required this.star});
+      required this.star,
+      required this.like});
 }
 
 List<ExploreMoreItemInfo> exploreMoreItemInfo = [
   ExploreMoreItemInfo(
-      image: AppImage.jeanCake,
-      time: "40 min",
-      title: "Jean's Cakes",
-      location: "Johar Town",
-      star: 4.8),
+    image: AppImage.jeanCake,
+    time: "40 min",
+    title: "Jean's Cakes",
+    location: "Johar Town",
+    star: 4.8,
+    like: false,
+  ),
   ExploreMoreItemInfo(
-      image: AppImage.thiccShakes,
-      time: "20 min",
-      title: "Thicc Shakes",
-      location: "Wapda Town",
-      star: 4.5),
+    image: AppImage.thiccShakes,
+    time: "20 min",
+    title: "Thicc Shakes",
+    location: "Wapda Town",
+    star: 4.5,
+    like: false,
+  ),
   ExploreMoreItemInfo(
-      image: AppImage.dailyDeli2,
-      time: "30 min",
-      title: "Daily Deli",
-      location: "Garden Town",
-      star: 4.8),
+    image: AppImage.dailyDeli2,
+    time: "30 min",
+    title: "Daily Deli",
+    location: "Garden Town",
+    star: 4.8,
+    like: false,
+  ),
 ];

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/banner/list_banner.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/list_deals.dart';
-import 'package:foodeck_app/screens/explore_screen/dessert_card.dart';
+import 'package:foodeck_app/screens/explore_screen/dessert/dessert_card.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/list_explore_more.dart';
-import 'package:foodeck_app/screens/explore_screen/food_card.dart';
-import 'package:foodeck_app/screens/explore_screen/grocery_card.dart';
+import 'package:foodeck_app/screens/explore_screen/food/food_card.dart';
+import 'package:foodeck_app/screens/explore_screen/grocery/grocery_card.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+  const ExploreScreen({
+    super.key,
+  });
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -18,6 +20,8 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   //
   final TextEditingController searchController = TextEditingController();
+  //
+
   //
   @override
   Widget build(BuildContext context) {
@@ -52,39 +56,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
             const ListBanner(),
             const SizedBox(
               height: 40,
-            ),
-            SizedBox(
-              width: 328,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Deals",
-                    style: GoogleFonts.inter(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                      color: AppColor.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // setState(() {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => FoodMenuScreen(
-                      //               dealsItemInfo: dealsItemInfo[selected!])));
-                      // });
-                    },
-                    child: Icon(
-                      Icons.arrow_forward,
-                      size: 24,
-                      color: AppColor.black,
-                    ),
-                  ),
-                ],
-              ),
             ),
             const ListDeals(),
             const SizedBox(

@@ -43,7 +43,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     alignment: Alignment.center,
                     height: MediaQuery.sizeOf(context).height * 0.85,
                     child: Text(
-                      "You have no favorites yet!",
+                      "You have no favorite yet!",
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,

@@ -35,7 +35,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
           },
         ),
         title: Text(
-          "My location",
+          "My locations",
           style: GoogleFonts.inter(
             fontSize: 17,
             fontWeight: FontWeight.w700,

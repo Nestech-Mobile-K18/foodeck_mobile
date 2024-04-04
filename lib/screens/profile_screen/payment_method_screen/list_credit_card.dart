@@ -35,13 +35,17 @@ class _ListCreditCardState extends State<ListCreditCard> {
               ),
             ),
           )
-        : Center(
-            child: Text(
-              "You have no credit card for payment!",
-              style: GoogleFonts.inter(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: AppColor.black,
+        : SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.8,
+            width: MediaQuery.sizeOf(context).width * 0.8,
+            child: Center(
+              child: Text(
+                "You have no credit card for payment!",
+                style: GoogleFonts.inter(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: AppColor.primary,
+                ),
               ),
             ),
           );

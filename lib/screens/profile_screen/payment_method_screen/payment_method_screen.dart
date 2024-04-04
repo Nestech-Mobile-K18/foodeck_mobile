@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/routes/app_routes.dart';
+import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/list_credit_card.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/add_credit_card_tab.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
@@ -36,7 +37,10 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         leading: BackButton(
           onPressed: () {
             setState(() {
-              Navigator.pushNamed(context, AppRoutes.profileScreen);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HomeScreen(page: 3)));
             });
           },
         ),
