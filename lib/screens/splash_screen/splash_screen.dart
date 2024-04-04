@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/routes/app_routes.dart';
+import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_images.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
@@ -37,6 +39,11 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           fit: BoxFit.cover,
         ),
+      ),
+      child: CircularProgressIndicator(
+        backgroundColor: AppColor.grey6,
+        color: AppColor.yellow,
+        value: 0.5,
       ),
     );
   }

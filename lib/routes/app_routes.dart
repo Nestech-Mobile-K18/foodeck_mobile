@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/create_account/create_account_screen.dart';
 import 'package:foodeck_app/screens/create_account/otp_screen.dart';
+
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/screens/login_screen/forgot_password_screen.dart';
 import 'package:foodeck_app/screens/login_screen/login_screen.dart';
 import 'package:foodeck_app/screens/login_screen/login_via_email_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/edit_profile_screen/edit_profile_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/my_location/my_location_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/payment_method_screen.dart';
 import 'package:foodeck_app/screens/splash_screen/splash_screen.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_screen.dart';
@@ -27,6 +29,12 @@ class AppRoutes {
   static String profileScreen = "/profile_screen";
   static String editProfileScreen = "/edit_profile_screen";
   static String paymentMethodScreen = "/payment_method_screen";
+  static String myLocationScreen = "/my_location_screen";
+
+  ///
+  ///
+  ///
+  ///
   static Map<String, WidgetBuilder> routes = {
     splashScreen: (context) => const SplashScreen(),
     loginScreen: (context) => const LoginScreen(),
@@ -41,5 +49,6 @@ class AppRoutes {
     profileScreen: (context) => const ProfileScreen(),
     editProfileScreen: (context) => const EditProfileScreen(),
     paymentMethodScreen: (context) => const PaymentMethodScreen(),
+    myLocationScreen: (context) => const MyLocationScreen(),
   };
 }

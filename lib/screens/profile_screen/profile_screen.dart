@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
-  } //
+  }
 
   ///
   @override
@@ -267,7 +267,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            Navigator.pushNamed(
+                                context, AppRoutes.myLocationScreen);
+                          });
+                        },
                         child: Icon(
                           Icons.arrow_forward_ios,
                           size: 22,

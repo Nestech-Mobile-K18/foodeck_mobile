@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/credit_card_components/credit_card_info.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/payment_method_screen.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
@@ -55,6 +56,66 @@ class _TabCreditCardState extends State<TabCreditCard> {
   }
 
   //
+  //
+  List<TextInputFormatter> formatterNumberCard = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(16),
+    TextInputFormatter.withFunction(
+      (oldValue, newValue) {
+        if (newValue.selection.baseOffset == 0) {
+          return newValue;
+        }
+        String inputData = newValue.text;
+        StringBuffer buffer = StringBuffer();
+
+        for (var i = 0; i < inputData.length; i++) {
+          buffer.write(inputData[i]);
+          int index = i + 1;
+
+          if (index % 4 == 0 && inputData.length != index) {
+            buffer.write("  ");
+          }
+        }
+        return TextEditingValue(
+          text: buffer.toString(),
+          selection: TextSelection.collapsed(
+            offset: buffer.toString().length,
+          ),
+        );
+      },
+    ),
+  ];
+  List<TextInputFormatter> formatterCCV = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(3),
+  ];
+  List<TextInputFormatter> formatterExipryDate = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(4),
+    TextInputFormatter.withFunction(
+      (oldValue, newValue) {
+        var newText = newValue.text;
+        if (newValue.selection.baseOffset == 0) {
+          return newValue;
+        }
+        var buffer = StringBuffer();
+        for (int i = 0; i < newText.length; i++) {
+          buffer.write(newText[i]);
+          var nonZeroIndex = i + 1;
+          if (nonZeroIndex % 2 == 0 && nonZeroIndex != newText.length) {
+            buffer.write('/');
+          }
+        }
+        var string = buffer.toString();
+        return newValue.copyWith(
+            text: string,
+            selection: TextSelection.collapsed(offset: string.length));
+      },
+    ),
+  ];
+  //
+
+  //
   void _updateCreditCard() {
     creditCardInfo[creditCardInfo.indexWhere((creditCardInfo) =>
             widget.creditCardInfo.id == creditCardInfo.id)] =
@@ -104,7 +165,7 @@ class _TabCreditCardState extends State<TabCreditCard> {
                 top: 40,
                 right: 40,
                 child: Text(
-                  widget.creditCardInfo.cardNumber,
+                  "****${widget.creditCardInfo.cardNumber.substring(16)}",
                   style: GoogleFonts.inter(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
@@ -136,24 +197,68 @@ class _TabCreditCardState extends State<TabCreditCard> {
             label: "Card name",
             obscureText: false,
             errorText: '',
+            onChanged: (value) {
+              setState(() {
+                cardNameController.value = cardNameController.value.copyWith(
+                    text: value,
+                    selection: TextSelection.collapsed(offset: value.length),
+                    composing: TextRange.empty);
+              });
+            },
           ),
           CustomTextFormField(
-            controller: cardNumberController,
-            label: "Card number",
-            obscureText: false,
-            errorText: '',
-          ),
+              controller: cardNumberController,
+              label: "Card number",
+              obscureText: false,
+              errorText: '',
+              textInputFormatter: formatterNumberCard,
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
+                setState(() {
+                  cardNumberController.value = cardNumberController.value
+                      .copyWith(
+                          text: text,
+                          selection:
+                              TextSelection.collapsed(offset: text.length),
+                          composing: TextRange.empty);
+                });
+              }),
           CustomTextFormField(
             controller: expiryDateController,
             label: "Expiry date",
             obscureText: false,
             errorText: '',
+            textInputFormatter: formatterExipryDate,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
+              setState(() {
+                expiryDateController.value = expiryDateController.value
+                    .copyWith(
+                        text: text,
+                        selection: TextSelection.collapsed(offset: text.length),
+                        composing: TextRange.empty);
+              });
+            },
           ),
           CustomTextFormField(
             controller: cvcController,
             label: "CVC",
             obscureText: false,
             errorText: '',
+            textInputFormatter: formatterCCV,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              setState(() {
+                int length = value.length;
+                if (length == 4 || length == 9 || length == 14) {
+                  cardNumberController.text = '$value ';
+                  cardNumberController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: value.toString().length + 1));
+                }
+              });
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -21,18 +21,19 @@ class _ListCreditCardState extends State<ListCreditCard> {
             width: creditCardInfo.length * 328 + 30,
             height: 660,
             child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ListView.builder(
+                itemCount: creditCardInfo.length,
                 scrollDirection: Axis.horizontal,
-                child: ListView.builder(
-                  itemCount: creditCardInfo.length,
-                  scrollDirection: Axis.horizontal,
-                  reverse: true,
-                  dragStartBehavior: DragStartBehavior.start,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) => TabCreditCard(
-                    creditCardInfo: creditCardInfo[index],
-                  ),
-                )),
+                reverse: true,
+                dragStartBehavior: DragStartBehavior.start,
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) => TabCreditCard(
+                  creditCardInfo: creditCardInfo[index],
+                ),
+              ),
+            ),
           )
         : Center(
             child: Text(

@@ -6,43 +6,55 @@ class DealsItemInfo {
   final String title;
   final String location;
   final double star;
+  late bool like;
   DealsItemInfo(
       {required this.image,
       required this.time,
       required this.title,
       required this.location,
-      required this.star});
+      required this.star,
+      required this.like});
 }
 
 List<DealsItemInfo> dealsItemInfo = [
   DealsItemInfo(
-      image: AppImage.dailyDeli,
-      time: "40 min",
-      title: "Daily Deli",
-      location: "Johar Town",
-      star: 4.8),
+    image: AppImage.dailyDeli,
+    time: "40 min",
+    title: "Daily Deli",
+    location: "Johar Town",
+    star: 4.8,
+    like: false,
+  ),
   DealsItemInfo(
-      image: AppImage.riceBowl,
-      time: "12 min",
-      title: "Rice Bowl",
-      location: "Wapda Town",
-      star: 4.3),
+    image: AppImage.riceBowl,
+    time: "12 min",
+    title: "Rice Bowl",
+    location: "Wapda Town",
+    star: 4.3,
+    like: false,
+  ),
   DealsItemInfo(
-      image: AppImage.jeanCake,
-      time: "40 min",
-      title: "Jean's Cakes",
-      location: "Johar Town",
-      star: 4.8),
+    image: AppImage.jeanCake,
+    time: "40 min",
+    title: "Jean's Cakes",
+    location: "Johar Town",
+    star: 4.8,
+    like: false,
+  ),
   DealsItemInfo(
-      image: AppImage.thiccShakes,
-      time: "20 min",
-      title: "Thicc Shakes",
-      location: "Wapda Town",
-      star: 4.5),
+    image: AppImage.thiccShakes,
+    time: "20 min",
+    title: "Thicc Shakes",
+    location: "Wapda Town",
+    star: 4.5,
+    like: false,
+  ),
   DealsItemInfo(
-      image: AppImage.dailyDeli2,
-      time: "30 min",
-      title: "Daily Deli",
-      location: "Garden Town",
-      star: 4.8),
+    image: AppImage.dailyDeli2,
+    time: "30 min",
+    title: "Daily Deli",
+    location: "Garden Town",
+    star: 4.8,
+    like: false,
+  ),
 ];

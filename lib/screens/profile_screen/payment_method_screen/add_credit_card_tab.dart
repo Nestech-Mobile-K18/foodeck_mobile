@@ -40,6 +40,8 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
 
   //
   List<TextInputFormatter> formatterNumberCard = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(16),
     TextInputFormatter.withFunction(
       (oldValue, newValue) {
         if (newValue.selection.baseOffset == 0) {
@@ -64,14 +66,14 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
         );
       },
     ),
-    FilteringTextInputFormatter.digitsOnly,
-    LengthLimitingTextInputFormatter(16),
   ];
   List<TextInputFormatter> formatterCCV = [
     FilteringTextInputFormatter.digitsOnly,
     LengthLimitingTextInputFormatter(3),
   ];
   List<TextInputFormatter> formatterExipryDate = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(4),
     TextInputFormatter.withFunction(
       (oldValue, newValue) {
         var newText = newValue.text;
@@ -92,8 +94,6 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
             selection: TextSelection.collapsed(offset: string.length));
       },
     ),
-    FilteringTextInputFormatter.digitsOnly,
-    LengthLimitingTextInputFormatter(4),
   ];
   //
   void _addCreditCard() {
@@ -192,6 +192,7 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
               obscureText: false,
               errorText: '',
               textInputFormatter: formatterNumberCard,
+              keyboardType: TextInputType.number,
               onChanged: (value) {
                 var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
                 setState(() {
@@ -209,6 +210,7 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
             obscureText: false,
             errorText: '',
             textInputFormatter: formatterExipryDate,
+            keyboardType: TextInputType.number,
             onChanged: (value) {
               var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
               setState(() {
@@ -226,6 +228,7 @@ class _AddCreditCardTabState extends State<AddCreditCardTab> {
             obscureText: false,
             errorText: '',
             textInputFormatter: formatterCCV,
+            keyboardType: TextInputType.number,
             onChanged: (value) {
               setState(() {
                 int length = value.length;

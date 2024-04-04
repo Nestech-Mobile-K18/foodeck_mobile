@@ -11,6 +11,7 @@ class CustomTextFormField extends StatefulWidget {
   final dynamic onTapObscureText;
   final dynamic onChanged;
   final String? initialText;
+  final TextInputType? keyboardType;
   final List<TextInputFormatter>? textInputFormatter;
 
   const CustomTextFormField({
@@ -23,6 +24,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onChanged,
     this.initialText,
     this.textInputFormatter,
+    this.keyboardType,
   });
 
   @override
@@ -77,6 +79,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             controller: widget.controller,
             initialValue: widget.initialText,
             inputFormatters: widget.textInputFormatter,
+            keyboardType: widget.keyboardType,
             style: GoogleFonts.inter(
               fontSize: 17,
               fontWeight: FontWeight.w500,

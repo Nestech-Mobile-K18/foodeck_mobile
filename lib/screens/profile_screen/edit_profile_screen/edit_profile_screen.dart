@@ -115,6 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       profileInfo.clear();
       profileInfo.add(newProfile);
+
       //Navigation to HomeScreen when it updated
       setState(() {
         Navigator.push(context,
