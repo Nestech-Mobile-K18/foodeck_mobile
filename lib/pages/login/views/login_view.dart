@@ -86,10 +86,10 @@ class _LoginViewState extends State<LoginView> {
           border: 1,
           colorTitle: ColorsGlobal.globalGrey,
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        DeepLink()
+        const DeepLink()
       ],
     ));
   }
