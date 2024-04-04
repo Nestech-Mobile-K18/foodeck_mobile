@@ -80,7 +80,7 @@ class _CustomSearchDelegateState extends State<CustomSearchDelegate> {
                             shopAddress: middleList[index].place,
                             rateStar: middleList[index].vote,
                             action: () {},
-                            heartColor: Icon(Icons.confirmation_num_sharp)))),
+                            heartColor: false))),
           )
         ],
       ),
