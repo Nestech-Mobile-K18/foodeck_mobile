@@ -128,53 +128,37 @@ List<SlideBanner> slideBanner = [
               ]))),
 ];
 
-class MiddleList {
+class DesktopFood {
   final String foodOrder;
   final String time;
   final String shopName;
   final String place;
   final String vote;
+  final TitleFood titleFood;
 
-  MiddleList(this.foodOrder, this.time, this.shopName, this.place, this.vote);
+  DesktopFood(
+      {required this.foodOrder,
+      required this.time,
+      required this.shopName,
+      required this.place,
+      required this.vote,
+      required this.titleFood});
 }
 
-List<MiddleList> middleList = [
-  MiddleList(dailyDeli, '40 min', 'Daily Deli\n', 'Johar Town', '4.8'),
-  MiddleList(riceBowl, '12 min', 'Rice Bowl\n', 'Wapda Town', '4.8'),
-  MiddleList(healthyFood, '25 min', 'Healthy Food\n', 'Grand Town', '4.4'),
-  MiddleList(indonesianFood, '30 min', 'Indonesian Food\n', 'Rolan Town', '5'),
-  MiddleList(coffee, '15 min', 'Coffee\n', 'Mid Town', '4.7')
-];
-
-class BottomList {
-  final String bottomFood;
-  final String timeSend;
-  final String popular;
-  final String zone;
-  final String star;
-
-  BottomList(
-      this.bottomFood, this.timeSend, this.popular, this.zone, this.star);
-}
-
-List<BottomList> bottomList = [
-  BottomList(cake, '40 min', 'Jean’s Cakes\n', 'Johar Town', '4.8'),
-  BottomList(chocolate, '20 min', 'Thicc Shakes\n', 'Wapda Town', '4.5'),
-  BottomList(panCake, '30 min', 'Daily Deli\n', 'Garden Town', '4.8')
-];
+enum TitleFood { Deals, Explore }
 
 class FoodItems {
   final String picture;
   final String nameFood;
   final String detail;
   final String price;
-
+  final String place;
   final FoodCategory foodCategory;
 
-  //
   // List<Addon> availableAddons;
 
   FoodItems({
+    required this.place,
     required this.picture,
     required this.nameFood,
     required this.detail,
@@ -183,24 +167,6 @@ class FoodItems {
     // required this.availableAddons
   });
 }
-
-// List<FoodItems> popularItems = [
-//   FoodItems(
-//       picture: picture,
-//       nameFood: nameFood,
-//       detail: detail,
-//       price: price,
-//       foodCategory: foodCategory,
-//       availableAddons: availableAddons),
-//   FoodItems(friedChicken, 'Chicken Fajita Pizza\n',
-//       '8” pizza with regular soft drink\n', '\$10'),
-//   FoodItems(coffeeMilk, 'Deal 1\n',
-//       '1 regular burger with croquette and hot cocoa\n', '\$12'),
-//   FoodItems(
-//       hamburger, 'Deal 2\n', '1 regular burger with small fries\n', '\$6'),
-//   FoodItems(simpleDesert, 'Deal 3\n',
-//       '2 pieces of beef stew with homemade sauce\n', '\$23')
-// ];
 
 enum FoodCategory { Popular, Deals, Wraps, Beverages, Sandwiches }
 

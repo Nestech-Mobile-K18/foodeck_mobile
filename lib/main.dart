@@ -5,6 +5,7 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/models/desktop_food.dart';
 import 'package:template/models/restaurant.dart';
 import 'package:template/pages/home/home_page.dart';
 import 'package:template/pages/login/login_page.dart';
@@ -26,6 +27,9 @@ Future<void> main() async {
     ),
     ChangeNotifierProvider(
       create: (context) => Restaurant(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => TopFood(),
     )
   ], child: const MyApp()));
 }

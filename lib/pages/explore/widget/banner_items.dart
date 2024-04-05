@@ -17,7 +17,9 @@ class BannerItems extends StatefulWidget {
     required this.heartColor,
     this.icon,
     this.paddingImage,
+    this.onTap,
   });
+
   final EdgeInsets? paddingText;
   final EdgeInsets? paddingImage;
   final String foodImage;
@@ -29,6 +31,7 @@ class BannerItems extends StatefulWidget {
   final VoidCallback action;
   final bool heartColor;
   final Widget? icon;
+  final VoidCallback? onTap;
 
   @override
   State<BannerItems> createState() => _BannerItemsState();
@@ -41,21 +44,24 @@ class _BannerItemsState extends State<BannerItems> {
       padding: widget.paddingImage ?? EdgeInsets.zero,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Stack(alignment: Alignment.topRight, children: [
-          Card(
-            elevation: 10,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      widget.foodImage,
-                    ),
-                    fit: BoxFit.cover,
-                  )),
-              width: widget.widthImage ?? MediaQuery.of(context).size.width,
-              height: 160,
+          GestureDetector(
+            onTap: widget.onTap,
+            child: Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        widget.foodImage,
+                      ),
+                      fit: BoxFit.cover,
+                    )),
+                width: widget.widthImage ?? MediaQuery.of(context).size.width,
+                height: 160,
+              ),
             ),
           ),
           Positioned(
