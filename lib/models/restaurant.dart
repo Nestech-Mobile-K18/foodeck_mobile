@@ -25,7 +25,7 @@ class Restaurant extends ChangeNotifier {
     FoodItems(
         picture: hamburger,
         nameFood: 'Deal 2\n',
-        detail: '1 regular burger with small fries\n',
+        detail: '1 regular burger with\nsmall fries\n',
         price: '\$6',
         foodCategory: FoodCategory.Deals),
     FoodItems(
