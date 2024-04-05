@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/create_account/create_account_screen.dart';
 import 'package:foodeck_app/screens/create_account/otp_screen.dart';
+import 'package:foodeck_app/screens/food_variantions_screen/food_variations_screen.dart';
 
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/screens/login_screen/forgot_password_screen.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static String editProfileScreen = "/edit_profile_screen";
   static String paymentMethodScreen = "/payment_method_screen";
   static String myLocationScreen = "/my_location_screen";
+  static String foodVariantionsScreen = "/food_variantions_screen";
 
   ///
   ///
@@ -50,5 +52,11 @@ class AppRoutes {
     editProfileScreen: (context) => const EditProfileScreen(),
     paymentMethodScreen: (context) => const PaymentMethodScreen(),
     myLocationScreen: (context) => const MyLocationScreen(),
+    foodVariantionsScreen: (context) => const FoodVariantionsScreen(
+          dealsItemInfo: null,
+          exploreMoreItemInfo: null,
+          dealsItemInfomation: null,
+          location: '',
+        ),
   };
 }

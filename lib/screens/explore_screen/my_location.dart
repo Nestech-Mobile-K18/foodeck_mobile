@@ -78,8 +78,6 @@ class _MyLocationState extends State<MyLocation> {
     }).catchError((e) {
       debugPrint(e);
     });
-    print(_currentPosition!.latitude.toString());
-    print(_currentPosition!.longitude.toString());
   }
 
   ///

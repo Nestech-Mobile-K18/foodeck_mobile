@@ -5,19 +5,20 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final TextEditingController controller;
-  final String label;
+  final String? label;
   final bool obscureText;
   final String errorText;
   final dynamic onTapObscureText;
   final dynamic onChanged;
   final String? initialText;
+  final String? hintText;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? textInputFormatter;
 
   const CustomTextFormField({
     super.key,
     required this.controller,
-    required this.label,
+    this.label,
     required this.obscureText,
     required this.errorText,
     this.onTapObscureText,
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatefulWidget {
     this.initialText,
     this.textInputFormatter,
     this.keyboardType,
+    this.hintText,
   });
 
   @override
@@ -95,6 +97,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 labelStyle: GoogleFonts.inter(
                   color: _focusColor,
                 ),
+                hintText: widget.hintText,
                 suffixIcon: widget.label == "Password" &&
                         widget.controller.text.isNotEmpty
                     ? InkWell(

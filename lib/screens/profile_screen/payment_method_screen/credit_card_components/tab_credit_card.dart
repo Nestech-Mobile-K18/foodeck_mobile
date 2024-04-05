@@ -51,8 +51,6 @@ class _TabCreditCardState extends State<TabCreditCard> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const PaymentMethodScreen()));
     });
-    print(cardNumberController.text);
-    print(widget.creditCardInfo.cardNumber);
   }
 
   //
@@ -129,8 +127,6 @@ class _TabCreditCardState extends State<TabCreditCard> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const PaymentMethodScreen()));
     });
-    print(cardNumberController.text);
-    print(widget.creditCardInfo.cardNumber);
   }
 
   //

@@ -76,7 +76,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
           style: TextStyle(color: AppColor.white),
         ),
         icon: Icon(
-          Icons.location_on,
+          Icons.my_location_outlined,
           color: AppColor.white,
         ),
       ),

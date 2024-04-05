@@ -4,12 +4,12 @@ import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 
-class DealsItemCard extends StatefulWidget {
+class DealsCard extends StatefulWidget {
   final dynamic onTapChooseDeal;
   final bool selectedDeal;
   final DealsItemInfo dealsItemInfo;
 
-  const DealsItemCard({
+  const DealsCard({
     super.key,
     required this.dealsItemInfo,
     required this.onTapChooseDeal,
@@ -17,10 +17,10 @@ class DealsItemCard extends StatefulWidget {
   });
 
   @override
-  State<DealsItemCard> createState() => _DealsItemCardState();
+  State<DealsCard> createState() => _DealsCardState();
 }
 
-class _DealsItemCardState extends State<DealsItemCard> {
+class _DealsCardState extends State<DealsCard> {
   //
 
 //

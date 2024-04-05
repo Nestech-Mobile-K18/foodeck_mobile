@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:foodeck_app/screens/explore_screen/deals/deals_item_card.dart';
+import 'package:foodeck_app/screens/explore_screen/deals/deals_card.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
 import 'package:foodeck_app/screens/food_menu_screen/food_menu_screen.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
@@ -73,13 +73,12 @@ class _ListDealsState extends State<ListDeals> {
               dragStartBehavior: DragStartBehavior.start,
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              itemBuilder: (context, index) => DealsItemCard(
+              itemBuilder: (context, index) => DealsCard(
                 dealsItemInfo: dealsItemInfo[index],
                 selectedDeal: selectedDeal == index,
                 onTapChooseDeal: (value) {
                   setState(() {
                     selectedDeal = index;
-                    print(selectedDeal);
                   });
                 },
 
