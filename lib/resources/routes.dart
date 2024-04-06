@@ -7,5 +7,4 @@ class RouteName {
   static const home = '/home';
   static const loginEmail = '/login-email';
   static const signup = '/sign-up';
-  
 }

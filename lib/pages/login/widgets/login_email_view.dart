@@ -34,7 +34,7 @@ class _LoginEmailViewState extends State<LoginEmailView> {
       final session = event.session;
       if (session != null) {
         Navigator.of(context, rootNavigator: true)
-            .pushReplacementNamed('/home');
+            .pushReplacementNamed(RouteName.home);
       }
     });
     super.initState();

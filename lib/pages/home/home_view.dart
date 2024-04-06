@@ -57,17 +57,18 @@ class _HomePageState extends State<HomePage> {
               width: 328,
               height: 62,
               onPressed: () async {
-                // TH login with Gooogle
-                if (_type == 'google') {
-                  var isSignedIn = await GoogleSignIn().isSignedIn();
-                  if (isSignedIn) await GoogleSignIn().signOut();
-                }
-
                 if (_type == 'facebook') {
+                  print('logout FB');
                   await FacebookLogin().logOut();
                   // ignore: use_build_context_synchronously
                   Navigator.of(context, rootNavigator: true)
                       .pushReplacementNamed('/login');
+                } // TH login with Gooogle
+                else {
+                  print('logout gmail gg');
+
+                  var isSignedIn = await GoogleSignIn().isSignedIn();
+                  if (isSignedIn) await GoogleSignIn().signOut();
                 }
 
                 // TH login with Facebook

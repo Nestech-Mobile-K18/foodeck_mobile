@@ -97,16 +97,18 @@ class _LoginViewState extends State<LoginView> {
         );
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Check your email for a login link!')),
-          );
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Login success')));
+          }
         }
       } on AuthException catch (error) {
+        print(error);
         SnackBar(
           content: Text(error.message),
           backgroundColor: Theme.of(context).colorScheme.error,
         );
-      } catch (error) {
+      } catch (error) {print(error);
         SnackBar(
           content: const Text('Unexpected error occurred'),
           backgroundColor: Theme.of(context).colorScheme.error,
@@ -127,21 +129,36 @@ class _LoginViewState extends State<LoginView> {
                     .getUserData(fields: "email, name")
                     .then((userData) async {
                   setState(() {
+                    // luu thong tin user FB login
                     _isLogin = true;
                     _userData = {...userData, 'provider': 'facebook'};
                     print('user login: $userData');
                     Navigator.of(context)
-                        .pushNamed('/home', arguments: _userData);
+                        .pushNamed(RouteName.home, arguments: _userData);
                   });
                 })
               });
     } catch (e) {
       print(e);
+      SnackBar(
+        content: Text(e.toString()),
+        backgroundColor: Theme.of(context).colorScheme.error,
+      );
     }
   }
 
   Future<void> signInWithEmail() async {
     Navigator.of(context).pushNamed(RouteName.loginEmail);
+  }
+
+  Future<void> handleSignUp() async {
+    Navigator.of(context).pushNamed(RouteName.signup);
+  }
+
+  Future<void> signInWithApple() async {
+    const SnackBar(
+        content: Text('The feature is being developed'),
+        backgroundColor: Colors.blue);
   }
 
   @override
@@ -179,13 +196,13 @@ class _LoginViewState extends State<LoginView> {
                       height: 62,
                       onPressed: () => signInWithFacebook()),
                   Button(
-                    label: 'Login via Apple',
-                    colorBackgroud: ColorsGlobal.black,
-                    colorLabel: Colors.white,
-                    icon: MediaRes.icApple,
-                    width: 328,
-                    height: 62,
-                  ),
+                      label: 'Login via Apple',
+                      colorBackgroud: ColorsGlobal.black,
+                      colorLabel: Colors.white,
+                      icon: MediaRes.icApple,
+                      width: 328,
+                      height: 62,
+                      onPressed: () => signInWithApple()),
                   Button(
                       label: 'Login via Email',
                       colorLabel: Colors.white,
@@ -195,14 +212,14 @@ class _LoginViewState extends State<LoginView> {
                       height: 62,
                       onPressed: () => signInWithEmail()),
                   Button(
-                    label: 'Create an account',
-                    colorLabel: ColorsGlobal.grey,
-                    colorBorder: ColorsGlobal.grey,
-                    colorBackgroud: Colors.white,
-                    width: 328,
-                    height: 62,
-                  ),
-                  Padding(
+                      label: 'Create an account',
+                      colorLabel: ColorsGlobal.grey,
+                      colorBorder: ColorsGlobal.grey,
+                      colorBackgroud: Colors.white,
+                      width: 328,
+                      height: 62,
+                      onPressed: () => handleSignUp()),
+                  const Padding(
                     padding: EdgeInsets.only(top: 32.0),
                     child: Text(
                       'By signing up, you are agreeing to our Terms & Conditions',
