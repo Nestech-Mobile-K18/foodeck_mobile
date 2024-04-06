@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:template/pages/map/widget/show_map.dart';
+import 'package:template/pages/export.dart';
+
 
 class MapBoxView extends StatelessWidget {
   const MapBoxView({super.key});

@@ -1,14 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/resources/colors.dart';
-import 'package:template/resources/routes.dart';
-import 'package:template/widgets/button.dart';
-import 'package:template/widgets/input_text.dart';
+import 'package:template/pages/export.dart';
 
 class LoginEmailView extends StatefulWidget {
   const LoginEmailView({Key? key}) : super(key: key);
@@ -57,8 +48,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
         final pass = _passController.text.trim();
         await supabase.auth.signInWithPassword(email: mail, password: pass);
         if (mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Login success')));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Login success'), backgroundColor: Colors.green));
         }
       } on AuthException catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -82,12 +73,15 @@ class _LoginEmailViewState extends State<LoginEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Login via Email', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+          title: Text(
+            'Login via Email',
+            style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.bold),
+          ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(8),
+            preferredSize: Size.fromHeight(8.dp),
             child: Divider(
-              thickness: 8,
-              height: 0,
+              thickness: 8.dp,
+              height: 0.dp,
               color: Colors.grey.shade100,
             ),
           ),
@@ -99,15 +93,16 @@ class _LoginEmailViewState extends State<LoginEmailView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Input your credentials',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.dp),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
                   child: InputText(
                     title: 'Email',
                     controller: _mailController,
@@ -127,7 +122,7 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16.dp),
                   child: InputText(
                     title: 'Password',
                     controller: _passController,
@@ -150,7 +145,7 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(bottom: 40),
+                  padding: EdgeInsets.only(bottom: 40.dp),
                   child: Text(
                     'Forgot Password?',
                     style: TextStyle(color: Colors.grey.shade500),
@@ -158,8 +153,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                 ),
                 Button(
                   label: 'Login',
-                  width: 328,
-                  height: 62,
+                  width: 328.dp,
+                  height: 62.dp,
                   colorBackgroud: ColorsGlobal.globalPink,
                   colorLabel: Colors.white,
                   onPressed: () => loginEmail(),
@@ -169,8 +164,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                   colorLabel: ColorsGlobal.grey,
                   colorBorder: ColorsGlobal.grey,
                   colorBackgroud: Colors.white,
-                  width: 328,
-                  height: 62,
+                  width: 328.dp,
+                  height: 62.dp,
                   onPressed: () => signupEmail(),
                 ),
               ],

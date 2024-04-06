@@ -1,17 +1,6 @@
 import 'dart:collection';
+import 'package:template/pages/export.dart';
 
-import 'package:template/pages/home/home_view.dart';
-import 'package:template/pages/login/widgets/otp.dart';
-import 'package:template/pages/login/widgets/sign_up.dart';
-import 'package:template/pages/login/widgets/login_email_view.dart';
-import 'package:template/pages/map/map_view.dart';
-
-import '../resources/routes.dart';
-import 'package:flutter/material.dart';
-import '../pages/login/login_view.dart';
-import '../pages/splash/splash_view.dart';
-import '../common/view/page_under_construction.dart';
-import '../pages/create_account/create_account_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -45,7 +34,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case RouteName.loginEmail:
       return _pageBuilder((_) => const LoginEmailView(), settings: settings);
     case RouteName.signup:
-      return _pageBuilder((_) => const SignUp(), settings: settings);
+      return _pageBuilder((_) => const CreateAccountView(), settings: settings);
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),
           settings: settings);

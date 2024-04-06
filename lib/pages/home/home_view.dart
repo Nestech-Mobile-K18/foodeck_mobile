@@ -1,12 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/resources/colors.dart';
-import 'package:template/widgets/button.dart';
+import 'package:template/pages/export.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.userData});
@@ -54,8 +47,8 @@ class _HomePageState extends State<HomePage> {
               label: 'LogOut',
               colorBackgroud: ColorsGlobal.red,
               colorLabel: Colors.white,
-              width: 328,
-              height: 62,
+              width: 328.dp,
+              height: 62.dp,
               onPressed: () async {
                 if (_type == 'facebook') {
                   print('logout FB');

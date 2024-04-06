@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:template/resources/media_res.dart';
-import 'package:template/pages/login/login_view.dart';
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:template/pages/export.dart';
+
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
