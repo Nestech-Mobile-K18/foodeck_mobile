@@ -100,7 +100,8 @@ class _PoppularsTabState extends State<PoppularsTab> {
                                     )));
                       },
                       child: DealsItemCard(
-                          dealsItemInfomation: dealsItemInfomation[index]),
+                        dealsItemInfomation: dealsItemInfomation[index],
+                      ),
                     )),
           ),
         ],

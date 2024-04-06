@@ -3,10 +3,11 @@ import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Header extends StatelessWidget {
+  final dynamic onBack;
   final String headerTitle;
 
   //
-  const Header({super.key, required this.headerTitle});
+  const Header({super.key, required this.headerTitle, this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class Header extends StatelessWidget {
       elevation: 0,
       leading: BackButton(
         color: AppColor.black,
-        onPressed: onPressedBackButton,
+        onPressed: onBack ?? onPressedBackButton,
       ),
       leadingWidth: 32,
       title: Text(

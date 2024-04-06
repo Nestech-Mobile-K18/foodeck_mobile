@@ -4,7 +4,7 @@ import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String? label;
   final bool obscureText;
   final String errorText;
@@ -13,11 +13,15 @@ class CustomTextFormField extends StatefulWidget {
   final String? initialText;
   final String? hintText;
   final TextInputType? keyboardType;
+  final double? width;
+  final double? height;
+  final BoxBorder? border;
+
   final List<TextInputFormatter>? textInputFormatter;
 
   const CustomTextFormField({
     super.key,
-    required this.controller,
+    this.controller,
     this.label,
     required this.obscureText,
     required this.errorText,
@@ -27,6 +31,9 @@ class CustomTextFormField extends StatefulWidget {
     this.textInputFormatter,
     this.keyboardType,
     this.hintText,
+    this.width,
+    this.height,
+    this.border,
   });
 
   @override
@@ -67,13 +74,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 328,
-          height: 74,
+          width: widget.width ?? 328,
+          height: widget.height ?? 74,
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: AppColor.white,
-            border: Border.all(width: 1, color: _focusColor),
+            border: widget.border ?? Border.all(width: 1, color: _focusColor),
           ),
           child: TextFormField(
             focusNode: _focusNode,
@@ -99,7 +106,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 ),
                 hintText: widget.hintText,
                 suffixIcon: widget.label == "Password" &&
-                        widget.controller.text.isNotEmpty
+                        widget.controller!.text.isNotEmpty
                     ? InkWell(
                         onTap: widget.onTapObscureText,
                         child: const Icon(Icons.remove_red_eye_outlined))

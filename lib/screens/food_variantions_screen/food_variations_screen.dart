@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:foodeck_app/screens/cart_screen/cart_item_info.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_item_info.dart';
 import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_item_infomation.dart';
 import 'package:foodeck_app/screens/food_menu_screen/populars_tab/populars_item_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
+import 'package:foodeck_app/utils/app_icons.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -90,26 +94,39 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
   void _incrementCounter() {
     setState(() {
       _counter++;
+
+      _counter == 0
+          ? quantityControler.text = "0"
+          : _counter < 10
+              ? quantityControler.text = "0$_counter"
+              : quantityControler.text = _counter.toString();
     });
   }
 
   void _decrementCounter() {
     setState(() {
       _counter--;
+      _counter == 0
+          ? quantityControler.text = "0"
+          : _counter < 10
+              ? quantityControler.text = "0$_counter"
+              : quantityControler.text = _counter.toString();
     });
   }
 
   //
   TextEditingController intructionController = TextEditingController();
+  TextEditingController quantityControler = TextEditingController();
   @override
   void initState() {
     intructionController;
+    quantityControler;
     super.initState();
   }
 
   @override
   void dispose() {
-    intructionController.dispose();
+    quantityControler.dispose();
     super.dispose();
   }
 
@@ -120,7 +137,46 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
   int texasSaucePrice = 6;
   int charSaucePrice = 8;
   //
-  String exceptionText = "";
+  String exceptionText = "Remove it from my order";
+  //
+  void _addCart() {
+    final newItemCart = CartItemInfo(
+      id: DateTime.now().toString(),
+      image: widget.dealsItemInfomation != null
+          ? widget.dealsItemInfomation!.image
+          : widget.popularsItemInfo != null
+              ? widget.popularsItemInfo!.image
+              : "",
+      name: widget.dealsItemInfomation != null
+          ? widget.dealsItemInfomation!.name
+          : widget.popularsItemInfo != null
+              ? widget.popularsItemInfo!.name
+              : "",
+      size: isSelected8 == true
+          ? "8\""
+          : isSelected10 == true
+              ? "10\""
+              : isSelected12 == true
+                  ? "12\""
+                  : "",
+      sauce: texasBarbequeSauceSelected && charDonaySauceSelected == true
+          ? "Texas Barbeque + Char Doney"
+          : texasBarbequeSauceSelected == true
+              ? "Texas Barbeque"
+              : charDonaySauceSelected == true
+                  ? "Char Doney"
+                  : "",
+      price:
+          "\$${(isSelected8 == true ? _counter * price8 : isSelected10 == true ? _counter * price10 : isSelected12 == true ? _counter * price12 : 0) + (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) + (charDonaySauceSelected == true ? charSaucePrice : 0)}",
+      quantity: _counter,
+    );
+    setState(() {
+      cartItemInfo.add(newItemCart);
+    });
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const CartScreen()));
+    print(newItemCart.sauce);
+  }
 
   //
   @override
@@ -485,10 +541,20 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
             const SizedBox(
               height: 16,
             ),
-            SizedBox(
+            Container(
               width: 328,
+              height: 66,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  width: 1,
+                  color: AppColor.grey6,
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
                     onPressed: () {
@@ -500,14 +566,30 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
                       color: AppColor.grey1,
                     ),
                   ),
-                  Text(
-                    '$_counter',
-                    style: GoogleFonts.inter(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.black,
+                  SizedBox(
+                    height: 30,
+                    width: 100,
+                    child: TextFormField(
+                      controller: quantityControler,
+                      onChanged: (value) {
+                        int value = int.parse(quantityControler.text);
+                        setState(() {
+                          _counter = value;
+                        });
+                      },
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.black,
+                      ),
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        hintText: "0",
+                        border: InputBorder.none,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   IconButton(
                     onPressed: _incrementCounter,
@@ -519,6 +601,9 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 24,
             ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 0),
@@ -681,6 +766,12 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
               height: 16,
             ),
             CustomTextFormField(
+              width: 328,
+              height: 54,
+              border: Border.all(
+                width: 1,
+                color: AppColor.grey6,
+              ),
               controller: intructionController,
               obscureText: false,
               errorText: "",
@@ -716,42 +807,50 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
               height: 54,
               width: 328,
               alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 20,
+              ),
               decoration: BoxDecoration(
                 color: AppColor.white,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   width: 1,
-                  color: AppColor.grey1,
+                  color: AppColor.grey6,
                 ),
               ),
-              child: SizedBox(
-                child: DropdownButton<String>(
-                  value: exceptionText,
-                  underline: Container(
-                    color: Colors.transparent,
-                  ),
-                  style: GoogleFonts.inter(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.black,
-                  ),
-                  items: <String>[
-                    'Remove it from my order',
-                    'Take my oder to waiting list',
-                    'Call hotline'
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      exceptionText = value!.toString().trim();
-                    });
-                  },
+              child: DropdownButton<String>(
+                isExpanded: true,
+                value: exceptionText.toString().isEmpty ? null : exceptionText,
+                icon: Image.asset(
+                  AppIcon.arrowDropdown,
+                  height: 12,
+                  width: 20,
+                  fit: BoxFit.cover,
                 ),
+                underline: Container(
+                  color: Colors.transparent,
+                ),
+                style: GoogleFonts.inter(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.black,
+                ),
+                items: <String>[
+                  'Remove it from my order',
+                  'Take my order to waiting list',
+                  'Call hotline'
+                ].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    exceptionText = value!;
+                  });
+                },
               ),
             ),
             const SizedBox(
@@ -775,10 +874,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartScreen()));
+                        _addCart();
                       });
                     },
                     style: ElevatedButton.styleFrom(
