@@ -1,47 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
+import 'package:template/resources/colors.dart';
 
 import '../../../services/mapbox_config.dart';
 
-class ShowMap extends StatelessWidget {
-  const ShowMap({super.key});
+class ShowMap extends StatefulWidget {
+  const ShowMap({Key? key}) : super(key: key);
 
-  ///  This is the Map Display Widget used for MapBoxView
+  @override
+  State<ShowMap> createState() => _ShowMapState();
+}
+
+class _ShowMapState extends State<ShowMap> {
+  late MapController _mapController;
+
+  @override
+  void initState() {
+    super.initState();
+    _mapController = MapController();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Returns a Flutter Map
-    return FlutterMap(
-      options: const MapOptions(
-        // Configure where the location will display on the map
-        // ignore: deprecated_member_use
-        center: MapBoxConfig
-            .MY_POSITION, // Get the coordinates and longitude through the myPosition variable of the MapBoxConfig class
-        minZoom: 5,
-        maxZoom: 25,
-        // ignore: deprecated_member_use
-        zoom: 18,
-      ),
+    return Stack(
       children: [
-        // These are the configuration components of MapBox created on the website https://studio.mapbox.com/
-        TileLayer(
-          // This is the accessToken, you can get it by selecting Studio -> Styles -> select map style -> Share your style -> ThirdParty -> select CARTO format -> copy the Integration URL
-          urlTemplate: MapBoxConfig.URL_TEMPLATE,
-          additionalOptions: const {
-            // This is the Token key of the account that you must provide -> Account -> copy the Default public token link
-            'accessToken': MapBoxConfig.MAPBOX_ACCESS_TOKEN,
-          },
+        FlutterMap(
+          mapController: _mapController, // Pass mapController here
+          options: MapOptions(
+            center: MapBoxConfig.MY_POSITION,
+            minZoom: 5,
+            maxZoom: 25,
+            zoom: 18,
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: MapBoxConfig.URL_TEMPLATE,
+              additionalOptions: {
+                'accessToken': MapBoxConfig.MAPBOX_ACCESS_TOKEN,
+              },
+            ),
+            const MarkerLayer(markers: [
+              Marker(
+                  point: MapBoxConfig.MY_POSITION,
+                  child: Icon(
+                    Icons.person_pin,
+                    color: Colors.blueAccent,
+                    size: 40,
+                  ))
+            ])
+          ],
         ),
-        // Maker is the current coordinates the user is displaying on the map. You can customize the properties
-        const MarkerLayer(markers: [
-          Marker(
-              point: MapBoxConfig.MY_POSITION,
-              child: Icon(
-                Icons.person_pin,
-                color: Colors.blueAccent,
-                size: 40,
-              ))
-        ])
+        Positioned(
+          bottom: 150,
+          right: 25,
+          child: FloatingActionButton(
+            onPressed: () {
+              _targetUserLocation();
+            },
+            tooltip: 'Target User Location',
+            backgroundColor: ColorsGlobal.globalPink,
+            shape: CircleBorder(),
+            child:
+                Icon(Icons.my_location_sharp, color: ColorsGlobal.globalWhite),
+          ),
+        ),
       ],
     );
+  }
+
+  void _targetUserLocation() async {
+    var location = Location();
+    LocationData? locationData = await location.getLocation();
+    if (locationData != null) {
+      _mapController.move(
+        LatLng(locationData.latitude!, locationData.longitude!),
+        18,
+      );
+    }
   }
 }

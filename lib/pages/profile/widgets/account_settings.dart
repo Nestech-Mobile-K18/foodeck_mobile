@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/pages/map/map_view.dart';
 import 'package:template/pages/profile/widgets/components/function_header.dart';
 import 'package:template/pages/profile/widgets/components/function_items.dart';
 import 'package:template/resources/const.dart';
@@ -31,7 +32,8 @@ class _AccountSettingsState extends State<AccountSettings> {
             imgString: MediaRes.myLocation,
             isDividers: true,
             onTap: () {
-              // Navigates to edit profile screen
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => MapBoxView()));
             }),
         FunctionItems(
             functionName: StringExtensions.myOrders,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:template/pages/map/widget/show_map.dart';
+import 'package:template/resources/colors.dart';
 
 class MapBoxView extends StatelessWidget {
   const MapBoxView({super.key});
@@ -8,9 +9,8 @@ class MapBoxView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Map Direction'),
-        backgroundColor: Colors.blueAccent,
+        centerTitle: false,
+        title: const Text('My Locations (3)'),
       ),
       body: const ShowMap(),
     );
