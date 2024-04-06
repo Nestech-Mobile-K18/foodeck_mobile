@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:template/pages/create_account/views/create_account_view.dart';
 import 'package:template/pages/login/login_via_email/models/login_via_email_model.dart';
 import 'package:template/pages/login/login_via_email/vm/login_via_email_view_model.dart';
+import 'package:template/resources/error_strings.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_button.dart';
@@ -112,30 +113,15 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   MethodButton(
                       onTap: () {
-                        if (!_validation.isEmailValid(emailController.text)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('Email không hợp lệ'),
-                          ));
-                        } else if (!_validation
-                            .isPasswordValid(passwordController.text)) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text(
-                                'Mật khẩu không hợp lệ, Phải ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự đặc biệt'),
-                          ));
-                        } else {
-                          LoginViaEmailModel loginRequest = LoginViaEmailModel(
+                        LoginViaEmailModel inputLogin = LoginViaEmailModel(
                             email: emailController.text,
-                            password: passwordController.text,
-                          );
-                          _viewModel.signInWithEmail(loginRequest, context);
-                        }
+                            password: passwordController.text);
+                        _viewModel.loginAuthen(context, inputLogin);
                       },
                       color: ColorsGlobal.globalPink,
                       title: StringExtensions.login),

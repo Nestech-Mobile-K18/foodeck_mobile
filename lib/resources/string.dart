@@ -29,4 +29,15 @@ class StringExtensions {
   static const code = "Code : CVB25";
   static const deals = "Deals";
   static const exploreMore = "Explore More";
+
+  // profile
+  static const accountSettings = 'Account Settings';
+  static const editAccount = 'Edit Account';
+  static const myLocation = 'My locations';
+  static const myOrders = 'My Orders';
+  static const paymentMethods = 'Payment Methods';
+  static const myReviews = 'My Reviews';
+  static const generalSettings = 'General Settings';
+  static const aboutUs = 'About us';
+  static const dataUsage = 'Data usage';
 }

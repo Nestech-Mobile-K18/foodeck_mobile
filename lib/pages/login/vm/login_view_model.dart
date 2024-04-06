@@ -1,21 +1,19 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
+import 'package:template/services/table_supbase.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/home/view/home_view.dart';
 import 'package:template/resources/error_strings.dart';
 import 'package:template/services/errror.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../services/api.dart';
 import '../../application/views/application_view.dart';
 
 class LoginViewModel {
-  final supabase = Supabase.instance.client;
   final fb = FacebookAuth.instance;
   final ErrorDialog showError = ErrorDialog();
-  late Map<dynamic, dynamic> _userData;
+  final API _api = API();
 
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,48 +38,54 @@ class LoginViewModel {
     }
   }
 
-  Future<AuthResponse> googleSignIn(BuildContext context) async {
-    /// TODO: update the Web client ID with your own.
-    ///
-    /// Web Client ID that you registered with Google Cloud.
+  Future<AuthResponse?> googleSignIn(BuildContext context) async {
     const webClientId =
         '547586025833-sp8945f1cgsf64u3jecq1id14i7gheka.apps.googleusercontent.com';
-    // Google sign in on Android will work without providing the Android
-    // Client ID registered on Google Cloud.
 
     final GoogleSignIn googleSignIn = GoogleSignIn(
-      // clientId: iosClientId,
       serverClientId: webClientId,
     );
     final googleUser = await googleSignIn.signIn();
-    final googleAuth = await googleUser!.authentication;
-    final accessToken = googleAuth.accessToken;
-    final idToken = googleAuth.idToken;
 
-    if (accessToken == null) {
-      throw ErrorString.errorNoAccessTokenFound;
-    }
-    if (idToken == null) {
-      throw ErrorString.errorNoIDTokenFound;
-    }
-    final response = supabase.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: idToken,
-      accessToken: accessToken,
-    );
-    Map<String, dynamic> userData = {
-      'email': googleUser.email,
-      'name': googleUser.displayName,
-    };
-    if (userData.isNotEmpty) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/application', (route) => false);
-    }
-    await supabase.from('users').upsert(userData);
+    if (googleUser != null) {
+      final googleAuth = await googleUser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
 
-    await handleSuccessfulLogin();
+      if (accessToken == null) {
+        throw ErrorString.errorNoAccessTokenFound;
+      }
+      if (idToken == null) {
+        throw ErrorString.errorNoIDTokenFound;
+      }
 
-    return response;
+      // Kiểm tra xem email đã tồn tại trong danh sách đăng ký hay không
+      final email = googleUser.email;
+      final isEmailRegistered = await _api.isEmailRegistered(email);
+
+      if (isEmailRegistered) {
+        // Hiển thị thông báo rằng email đã được đăng ký
+        showError.showError(context, ErrorString.emailAlreadyRegistered);
+      } else {
+        // Tiếp tục xử lý đăng nhập
+        final response = _api.requestSignInWithIdToken(
+            OAuthProvider.google, idToken, accessToken);
+        Map<String, dynamic> userData = {
+          'email': email,
+          'name': googleUser.displayName,
+        };
+
+        if (userData.isNotEmpty) {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/application', (route) => false);
+        }
+        _api.requestUpSert(userData, TableSupabase.usersTable);
+
+        await handleSuccessfulLogin();
+
+        return response;
+      }
+    }
   }
 
   Future<void> facebookSignIn(BuildContext context) async {
@@ -92,27 +96,29 @@ class LoginViewModel {
       if (result.status == LoginStatus.success) {
         final requestData =
             await FacebookAuth.i.getUserData(fields: "email, name");
-        _userData = {
+
+        Map<String, dynamic> userData = {
           'email': requestData['email'],
           'name': requestData['name'],
         };
-        final AccessToken? accessToken = result.accessToken;
-        await supabase.auth.signInWithOAuth(
-          OAuthProvider.facebook,
-        );
-        await supabase.from('users').upsert(_userData);
-        if (_userData.isNotEmpty) {
+
+        _api.requestSignInWithOAuth(OAuthProvider.facebook);
+        _api.requestUpSert(userData, TableSupabase.usersTable);
+        if (userData.isNotEmpty) {
           await handleSuccessfulLogin();
+          // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => ApplicationView()));
         }
       } else if (result.status == LoginStatus.cancelled) {
+        // ignore: use_build_context_synchronously
         showError.showError(context, ErrorString.errorCancelLoginFacebook);
       } else {
+        // ignore: use_build_context_synchronously
         showError.showError(context, ErrorString.cantAccessFacebook);
       }
     } catch (e) {
-      print(e);
+      // ignore: use_build_context_synchronously
       showError.showError(context, ErrorString.errorOccurredLogIn);
     }
   }

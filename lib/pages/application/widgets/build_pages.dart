@@ -16,9 +16,9 @@ class PageBuilder extends StatelessWidget {
   Widget buildPage(int index) {
     List<Widget> _widget = [
       const HomeView(),
+      Container(),
+      Container(),
       const ProfileView(),
-      Container(),
-      Container(),
     ];
 
     return _widget[index];

@@ -25,15 +25,18 @@ class _OtpViewState extends State<OtpView> {
   @override
   void initState() {
     super.initState();
+    if (_viewModel.timer?.isActive == true) {
+      _viewModel.timer?.cancel();
+    }
     _otpModel = OTPModel(otpValues: otpValues, email: widget.email!);
   }
 
   @override
   void dispose() {
-    if (_viewModel.timer.isActive) {
-      _viewModel.timer.cancel();
-    }
     super.dispose();
+    if (_viewModel.timer?.isActive == true) {
+      _viewModel.timer?.cancel();
+    }
   }
 
   @override

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/home/view/home_view.dart';
+import 'package:template/resources/error_strings.dart';
 import 'package:template/resources/validation.dart';
 import 'package:template/pages/login/login_via_email/models/login_via_email_model.dart';
+import 'package:template/services/api.dart';
 
-import '../../../application/views/application_view.dart';
+import '../../../../services/errror.dart';
 
 class LogInViaEmailViewModel {
-  final supabase = Supabase.instance.client;
   final Validation _validation = Validation();
+  final ErrorDialog _showError = ErrorDialog();
+  final API _api = API();
 
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -34,51 +36,34 @@ class LogInViaEmailViewModel {
     }
   }
 
-  Future<AuthResponse?> signInWithEmail(
+  Future<void> signInWithEmail(
       LoginViaEmailModel loginRequest, BuildContext context) async {
-    AuthResponse res;
     try {
-      res = await supabase.auth.signInWithPassword(
-        email: loginRequest.email.toString(),
-        password: loginRequest.password.toString(),
-      );
+      _api.requestSignInWithEmail(
+          loginRequest.email.toString(), loginRequest.password.toString());
 
-      if (res.user != null) {
-        await handleSuccessfulLogin();
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/application', (route) => false);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('email or password is incorrect'),
-          ),
-        );
-      }
+      await handleSuccessfulLogin();
+      // ignore: use_build_context_synchronously
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/application', (route) => false);
     } catch (error) {
-      // Xử lý lỗi ở đây
       String errorMessage = 'An error occurred during sign-in';
-      print('Error during sign-in: $error');
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
         ),
       );
-      // Trả về một AuthResponse với trường error được gán giá trị từ ngoại lệ
-      return null;
     }
-    return res;
   }
 
   void loginAuthen(BuildContext context, LoginViaEmailModel input) {
     if (!_validation.isEmailValid(input.email)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Email không hợp lệ'),
-      ));
+      _showError.showError(context, ErrorString.invalidEmail);
     } else if (!_validation.isPasswordValid(input.password)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-            'Mật khẩu không hợp lệ, Phải ít nhất 1 chữ hoa, 1 chữ thường và 1 kí tự đặc biệt'),
-      ));
+      _showError.showError(context, ErrorString.invalidPassword);
+    } else {
+      signInWithEmail(input, context);
     }
   }
 }

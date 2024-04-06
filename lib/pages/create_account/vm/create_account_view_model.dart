@@ -3,22 +3,34 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/create_account/models/create_account_model.dart';
 import 'package:template/pages/otp/views/otp_view.dart';
 import 'package:template/resources/const.dart';
+import 'package:template/services/api.dart';
+import 'package:template/services/table_supbase.dart';
 
 import '../../../services/errror.dart';
 
 class CreateAccountViewModel {
-  final supabase = Supabase.instance.client;
   final Validation _validation = Validation();
   final ErrorDialog _showError = ErrorDialog();
+  final API _api = API();
 
-  Future<void> signUpNewUser(String emailController, String passwordController,
-      BuildContext context) async {
+  Future<AuthResponse?> signUpNewUser(String emailController,
+      String passwordController, BuildContext context) async {
     try {
-      await supabase.auth
-          .signUp(email: emailController, password: passwordController);
+      final res = _api.requestSignUp(
+          email: emailController, password: passwordController);
+
+      res.then((value) {
+        if (value?.session?.user.id == null) {
+          _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');
+        } else {
+          _showError.showError(context, 'Đăng kí thành công');
+        }
+      });
+      return res;
     } catch (e) {
       // ignore: use_build_context_synchronously
       _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');
+      return null;
     }
   }
 
@@ -33,7 +45,8 @@ class CreateAccountViewModel {
       };
 
       signUpNewUser(signUpModel.email, signUpModel.password, context);
-      await supabase.from('users').insert(userData);
+      _api.requestInsert(
+          tableSupabase: TableSupabase.usersTable, userData: userData);
     } catch (e) {
       // ignore: use_build_context_synchronously
       _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');

@@ -6,6 +6,7 @@ import 'package:template/pages/home/widgets/home_deals.dart';
 import 'package:template/pages/home/widgets/home_card.dart';
 import 'package:template/resources/const.dart';
 import 'package:template/widgets/custom_floating_action_button_location.dart';
+import 'package:template/widgets/loading_indicator.dart';
 
 import '../widgets/home_categories.dart';
 import '../widgets/home_explore.dart';
@@ -30,7 +31,6 @@ class _HomeViewState extends State<HomeView> {
 
   void _updateAddress(String? address) {
     if (mounted) {
-      // Kiểm tra xem widget có còn được mounted không trước khi gọi setState
       setState(() {
         _address = address ?? 'Unknown';
       });

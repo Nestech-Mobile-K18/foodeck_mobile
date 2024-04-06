@@ -38,4 +38,13 @@ class MediaRes {
   // profile
 
   static const avatar = '$_baseImage/ic_avatar.png';
+
+  static const editAccount = '$_baseIcon/ic_edit_account.png';
+  static const myLocation = '$_baseIcon/ic_my_locations.png';
+  static const myOrders = '$_baseIcon/ic_my_orders.png';
+  static const paymentMethos = '$_baseIcon/ic_payment_methods.png';
+  static const myReviews = '$_baseIcon/ic_my_reviews.png';
+
+  static const aboutUs = '$_baseIcon/ic_about_us.png';
+  static const dataUsage = '$_baseIcon/ic_data_usage.png';
 }

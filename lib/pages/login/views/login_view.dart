@@ -30,67 +30,68 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Image.asset(image.MediaRes.backgroundLogin),
-        const SizedBox(
-          height: 10,
-        ),
-        MethodButton(
-          onTap: () async {
-            await _viewModel.googleSignIn(context);
-          },
-          isIcon: true,
-          color: ColorsGlobal.globalRed,
-          title: StringExtensions.loginViaGoogle,
-          assetIcon: image.MediaRes.logoGoogle,
-        ),
-        MethodButton(
-          onTap: () async {
-            await _viewModel.facebookSignIn(context);
-          },
-          isIcon: true,
-          color: ColorsGlobal.globalBlue,
-          title: StringExtensions.loginViaFacebook,
-          assetIcon: image.MediaRes.logoFacebook,
-        ),
-        MethodButton(
-          onTap: () async {
-            await _viewModel.appleSignIn(context);
-          },
-          isIcon: true,
-          color: ColorsGlobal.globalBlack,
-          title: StringExtensions.loginViaApple,
-          assetIcon: image.MediaRes.logoApple,
-        ),
-        MethodButton(
-          isIcon: true,
-          color: ColorsGlobal.globalPink,
-          title: StringExtensions.loginViaEmail,
-          assetIcon: image.MediaRes.logoMail,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const LoginViaEmailView(),
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(image.MediaRes.backgroundLogin),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ),
-        CustomButton(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const CreateAccountView(),
+            MethodButton(
+              onTap: () async {
+                await _viewModel.googleSignIn(context);
+              },
+              isIcon: true,
+              color: ColorsGlobal.globalRed,
+              title: StringExtensions.loginViaGoogle,
+              assetIcon: image.MediaRes.logoGoogle,
             ),
-          ),
-          color: ColorsGlobal.globalWhite,
-          title: StringExtensions.createAnAccount,
-          border: 1,
-          colorTitle: ColorsGlobal.globalGrey,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const DeepLink()
-      ],
-    ));
+            MethodButton(
+              onTap: () async {
+                await _viewModel.facebookSignIn(context);
+              },
+              isIcon: true,
+              color: ColorsGlobal.globalBlue,
+              title: StringExtensions.loginViaFacebook,
+              assetIcon: image.MediaRes.logoFacebook,
+            ),
+            MethodButton(
+              onTap: () async {
+                await _viewModel.appleSignIn(context);
+              },
+              isIcon: true,
+              color: ColorsGlobal.globalBlack,
+              title: StringExtensions.loginViaApple,
+              assetIcon: image.MediaRes.logoApple,
+            ),
+            MethodButton(
+              isIcon: true,
+              color: ColorsGlobal.globalPink,
+              title: StringExtensions.loginViaEmail,
+              assetIcon: image.MediaRes.logoMail,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const LoginViaEmailView(),
+                ),
+              ),
+            ),
+            CustomButton(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const CreateAccountView(),
+                ),
+              ),
+              color: ColorsGlobal.globalWhite,
+              title: StringExtensions.createAnAccount,
+              border: 1,
+              colorTitle: ColorsGlobal.globalGrey,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const DeepLink()
+          ],
+        ));
   }
 }
