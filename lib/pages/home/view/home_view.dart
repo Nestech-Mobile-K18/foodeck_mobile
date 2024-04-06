@@ -32,7 +32,7 @@ class _HomeViewState extends State<HomeView> {
   void _updateAddress(String? address) {
     if (mounted) {
       setState(() {
-        _address = address ?? 'Unknown';
+        _address = address ?? '';
       });
     }
   }
