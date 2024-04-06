@@ -28,16 +28,18 @@ AppBar HomeBar(BuildContext context, String? address) {
             SizedBox(
               width: 5,
             ),
-            Flexible(
-              child: CustomText(
-                title: address,
-                size: 18,
-                softWrap: true,
-                maxLine: 2,
-                textAlign: TextAlign.center,
-                color: ColorsGlobal.globalWhite,
-              ),
-            )
+            address == ""
+                ? CircularProgressIndicator()
+                : Flexible(
+                    child: CustomText(
+                      title: address,
+                      size: 18,
+                      softWrap: true,
+                      maxLine: 2,
+                      textAlign: TextAlign.center,
+                      color: ColorsGlobal.globalWhite,
+                    ),
+                  )
           ],
         ),
         Padding(
