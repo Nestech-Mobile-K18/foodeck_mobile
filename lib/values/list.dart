@@ -151,28 +151,27 @@ class FoodItems {
   final String picture;
   final String nameFood;
   final String detail;
-  final String price;
+  final int price;
   final String place;
   final FoodCategory foodCategory;
 
-  // List<Addon> availableAddons;
+  List<Addon> availableAddons;
 
-  FoodItems({
-    required this.place,
-    required this.picture,
-    required this.nameFood,
-    required this.detail,
-    required this.price,
-    required this.foodCategory,
-    // required this.availableAddons
-  });
+  FoodItems(
+      {required this.place,
+      required this.picture,
+      required this.nameFood,
+      required this.detail,
+      required this.price,
+      required this.foodCategory,
+      required this.availableAddons});
 }
 
 enum FoodCategory { Popular, Deals, Wraps, Beverages, Sandwiches }
 
 class Addon {
   final String addonName;
-  final String price;
+  final int price;
 
   Addon(this.addonName, this.price);
 }

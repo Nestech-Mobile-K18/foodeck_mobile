@@ -8,13 +8,13 @@ class ListFood extends StatefulWidget {
       required this.nameFood,
       required this.detail,
       required this.price,
-      required this.voidCallback});
+      this.voidCallback});
 
   final String picture;
   final String nameFood;
   final String detail;
   final String price;
-  final VoidCallback voidCallback;
+  final VoidCallback? voidCallback;
 
   @override
   State<ListFood> createState() => _ListFoodState();

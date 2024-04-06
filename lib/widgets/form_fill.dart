@@ -25,7 +25,9 @@ class CustomFormFill extends StatefulWidget {
       this.inputColor,
       this.boxShadow,
       this.heightBoxShadow,
-      this.widthBoxShadow});
+      this.widthBoxShadow,
+      this.hintColor});
+
   final TextInputType? textInputType;
   final Function(String)? function;
   final TextEditingController? textEditingController;
@@ -46,6 +48,8 @@ class CustomFormFill extends StatefulWidget {
   final Color? boxShadow;
   final double? heightBoxShadow;
   final double? widthBoxShadow;
+  final Color? hintColor;
+
   @override
   State<CustomFormFill> createState() => _CustomFormFillState();
 }
@@ -106,7 +110,8 @@ class _CustomFormFillState extends State<CustomFormFill> {
                       color: widget.focusErrorBorderColor ?? globalPink),
                   borderRadius: BorderRadius.circular(16)),
               hintText: widget.hintText,
-              hintStyle: inter.copyWith(fontSize: 17, color: globalPinkShadow),
+              hintStyle: inter.copyWith(
+                  fontSize: 17, color: widget.hintColor ?? globalPinkShadow),
               helperText: widget.exampleText ?? '',
               helperStyle: const TextStyle(color: buttonShadowBlack),
               errorStyle: const TextStyle(color: Colors.red)),

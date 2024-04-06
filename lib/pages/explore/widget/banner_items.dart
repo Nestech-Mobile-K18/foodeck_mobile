@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:template/values/colors.dart';
 import 'package:template/values/images.dart';
 import 'package:template/values/text_styles.dart';
 
@@ -14,10 +13,11 @@ class BannerItems extends StatefulWidget {
     required this.rateStar,
     this.paddingText,
     required this.action,
-    required this.heartColor,
+    this.heartColor,
     this.icon,
     this.paddingImage,
     this.onTap,
+    this.iconShape,
   });
 
   final EdgeInsets? paddingText;
@@ -29,7 +29,8 @@ class BannerItems extends StatefulWidget {
   final String shopAddress;
   final String rateStar;
   final VoidCallback action;
-  final bool heartColor;
+  final Color? heartColor;
+  final IconData? iconShape;
   final Widget? icon;
   final VoidCallback? onTap;
 
@@ -87,10 +88,8 @@ class _BannerItemsState extends State<BannerItems> {
                   height: 24,
                   child: widget.icon ??
                       Icon(
-                        widget.heartColor
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: widget.heartColor ? globalPink : Colors.white,
+                        widget.iconShape,
+                        color: widget.heartColor,
                       ),
                 ),
               ))
