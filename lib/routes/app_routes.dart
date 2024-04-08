@@ -57,6 +57,7 @@ class AppRoutes {
           exploreMoreItemInfo: null,
           dealsItemInfomation: null,
           location: '',
+          popularsItemInfo: null,
         ),
   };
 }

@@ -42,13 +42,16 @@ class _ListDealsState extends State<ListDeals> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FoodMenuScreen(
-                                  dealsItemInfo: dealsItemInfo[selectedDeal!],
-                                  exploreMoreItemInfo: null,
-                                )));
+                    selectedDeal == null
+                        ? null
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FoodMenuScreen(
+                                      dealsItemInfo:
+                                          dealsItemInfo[selectedDeal!],
+                                      exploreMoreItemInfo: null,
+                                    )));
                   });
                 },
                 child: Icon(
@@ -74,7 +77,7 @@ class _ListDealsState extends State<ListDeals> {
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) => DealsCard(
-                dealsItemInfo: dealsItemInfo[index],
+                dealItemInfo: dealsItemInfo[index],
                 selectedDeal: selectedDeal == index,
                 onTapChooseDeal: (value) {
                   setState(() {

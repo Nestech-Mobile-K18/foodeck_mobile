@@ -16,6 +16,8 @@ class CustomTextFormField extends StatefulWidget {
   final double? width;
   final double? height;
   final BoxBorder? border;
+  final Widget? suffixIcon;
+  final dynamic onFieldSubmitted;
 
   final List<TextInputFormatter>? textInputFormatter;
 
@@ -34,6 +36,8 @@ class CustomTextFormField extends StatefulWidget {
     this.width,
     this.height,
     this.border,
+    this.suffixIcon,
+    this.onFieldSubmitted,
   });
 
   @override
@@ -83,6 +87,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             border: widget.border ?? Border.all(width: 1, color: _focusColor),
           ),
           child: TextFormField(
+            onFieldSubmitted: widget.onFieldSubmitted,
             focusNode: _focusNode,
             obscureText: widget.obscureText,
             controller: widget.controller,
@@ -105,12 +110,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   color: _focusColor,
                 ),
                 hintText: widget.hintText,
-                suffixIcon: widget.label == "Password" &&
-                        widget.controller!.text.isNotEmpty
-                    ? InkWell(
-                        onTap: widget.onTapObscureText,
-                        child: const Icon(Icons.remove_red_eye_outlined))
-                    : null,
+                suffixIcon: widget.suffixIcon,
+
+                // widget.label == "Password" &&
+                //         widget.controller!.text.isNotEmpty
+                //     ? InkWell(
+                //         onTap: widget.onTapObscureText,
+                //         child: const Icon(Icons.remove_red_eye_outlined))
+                //     : null,
                 suffixIconColor: AppColor.grey1,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 20,

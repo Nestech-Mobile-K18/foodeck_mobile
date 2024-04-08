@@ -1,13 +1,13 @@
 import 'package:foodeck_app/utils/app_images.dart';
 
-class DealsItemInfo {
+class DealItemInfo {
   final String image;
   final String time;
   final String title;
   final String location;
   final double star;
   late bool like;
-  DealsItemInfo(
+  DealItemInfo(
       {required this.image,
       required this.time,
       required this.title,
@@ -16,8 +16,8 @@ class DealsItemInfo {
       required this.like});
 }
 
-List<DealsItemInfo> dealsItemInfo = [
-  DealsItemInfo(
+List<DealItemInfo> dealsItemInfo = [
+  DealItemInfo(
     image: AppImage.dailyDeli,
     time: "40 min",
     title: "Daily Deli",
@@ -25,7 +25,7 @@ List<DealsItemInfo> dealsItemInfo = [
     star: 4.8,
     like: false,
   ),
-  DealsItemInfo(
+  DealItemInfo(
     image: AppImage.riceBowl,
     time: "12 min",
     title: "Rice Bowl",
@@ -33,7 +33,7 @@ List<DealsItemInfo> dealsItemInfo = [
     star: 4.3,
     like: false,
   ),
-  DealsItemInfo(
+  DealItemInfo(
     image: AppImage.jeanCake,
     time: "40 min",
     title: "Jean's Cakes",
@@ -41,7 +41,7 @@ List<DealsItemInfo> dealsItemInfo = [
     star: 4.8,
     like: false,
   ),
-  DealsItemInfo(
+  DealItemInfo(
     image: AppImage.thiccShakes,
     time: "20 min",
     title: "Thicc Shakes",
@@ -49,7 +49,7 @@ List<DealsItemInfo> dealsItemInfo = [
     star: 4.5,
     like: false,
   ),
-  DealsItemInfo(
+  DealItemInfo(
     image: AppImage.dailyDeli2,
     time: "30 min",
     title: "Daily Deli",

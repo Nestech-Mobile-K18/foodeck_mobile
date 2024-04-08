@@ -7,13 +7,13 @@ import 'package:foodeck_app/utils/app_colors.dart';
 class DealsCard extends StatefulWidget {
   final dynamic onTapChooseDeal;
   final bool selectedDeal;
-  final DealsItemInfo dealsItemInfo;
+  final DealItemInfo dealItemInfo;
 
   const DealsCard({
     super.key,
-    required this.dealsItemInfo,
     required this.onTapChooseDeal,
     required this.selectedDeal,
+    required this.dealItemInfo,
   });
 
   @override
@@ -24,27 +24,27 @@ class _DealsCardState extends State<DealsCard> {
   //
 
 //
-  void savedDealItem() {
+  void _savedItem() {
     final newSavedDealItem = SavedItemInfo(
-      image: widget.dealsItemInfo.image,
-      time: widget.dealsItemInfo.time,
-      title: widget.dealsItemInfo.title,
-      location: widget.dealsItemInfo.location,
-      star: widget.dealsItemInfo.star,
+      image: widget.dealItemInfo.image,
+      time: widget.dealItemInfo.time,
+      title: widget.dealItemInfo.title,
+      location: widget.dealItemInfo.location,
+      star: widget.dealItemInfo.star,
+      like: true,
     );
-    widget.dealsItemInfo.like == true
+    widget.dealItemInfo.like == true
         ? setState(() {
             savedItems.add(newSavedDealItem);
-            widget.dealsItemInfo.like = true;
           })
         : null;
   }
 
-  void unsavedDealItem() {
-    widget.dealsItemInfo.like == false
+  void _unsavedItem() {
+    widget.dealItemInfo.like == false
         ? setState(() {
             savedItems.removeWhere(
-                (savedItems) => savedItems.title == widget.dealsItemInfo.title);
+                (savedItems) => savedItems.title == widget.dealItemInfo.title);
           })
         : null;
   }
@@ -73,7 +73,7 @@ class _DealsCardState extends State<DealsCard> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                          image: AssetImage(widget.dealsItemInfo.image),
+                          image: AssetImage(widget.dealItemInfo.image),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -89,7 +89,7 @@ class _DealsCardState extends State<DealsCard> {
                               color: AppColor.white,
                             ),
                             child: Text(
-                              widget.dealsItemInfo.time,
+                              widget.dealItemInfo.time,
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -113,7 +113,7 @@ class _DealsCardState extends State<DealsCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.dealsItemInfo.title,
+                                widget.dealItemInfo.title,
                                 style: GoogleFonts.inter(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w700,
@@ -121,7 +121,7 @@ class _DealsCardState extends State<DealsCard> {
                                 ),
                               ),
                               Text(
-                                widget.dealsItemInfo.location,
+                                widget.dealItemInfo.location,
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -142,7 +142,7 @@ class _DealsCardState extends State<DealsCard> {
                                 width: 3,
                               ),
                               Text(
-                                widget.dealsItemInfo.star.toString(),
+                                widget.dealItemInfo.star.toString(),
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
@@ -168,19 +168,19 @@ class _DealsCardState extends State<DealsCard> {
               width: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: widget.dealsItemInfo.like == false
+                color: widget.dealItemInfo.like == false
                     ? AppColor.white.withOpacity(0.3)
                     : AppColor.primary.withOpacity(0.3),
               ),
               child: IconButton(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(5),
-                isSelected: widget.dealsItemInfo.like,
+                isSelected: widget.dealItemInfo.like,
                 onPressed: () {
                   setState(() {
-                    widget.dealsItemInfo.like = !widget.dealsItemInfo.like;
-                    savedDealItem();
-                    unsavedDealItem();
+                    widget.dealItemInfo.like = !widget.dealItemInfo.like;
+                    _savedItem();
+                    _unsavedItem();
                   });
                 },
                 icon: Icon(

@@ -6,12 +6,13 @@ import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_tab.dart';
 import 'package:foodeck_app/screens/food_menu_screen/populars_tab/populars_tab.dart';
 import 'package:foodeck_app/screens/food_menu_screen/sandwiches_tab/sandwiches_tab.dart';
 import 'package:foodeck_app/screens/food_menu_screen/wraps_tab/wraps_tab.dart';
+import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class FoodMenuScreen extends StatefulWidget {
-  final DealsItemInfo? dealsItemInfo;
+  final DealItemInfo? dealsItemInfo;
   final ExploreMoreItemInfo? exploreMoreItemInfo;
   const FoodMenuScreen(
       {super.key,
@@ -26,16 +27,17 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
   bool savedDeals = false;
 //
   void savedDealItem() {
-    final newSavedDealItem = SavedItemInfo(
+    final newSavedDealItem = DealItemInfo(
       image: widget.dealsItemInfo!.image,
       time: widget.dealsItemInfo!.time,
       title: widget.dealsItemInfo!.title,
       location: widget.dealsItemInfo!.location,
       star: widget.dealsItemInfo!.star,
+      like: false,
     );
     savedDeals == true
         ? setState(() {
-            savedItems.add(newSavedDealItem);
+            dealsItemInfo.add(newSavedDealItem);
           })
         : null;
   }
@@ -129,7 +131,10 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
                 leading: BackButton(
                   onPressed: () {
                     setState(() {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen(page: 0)));
                     });
                   },
                   color: AppColor.white,

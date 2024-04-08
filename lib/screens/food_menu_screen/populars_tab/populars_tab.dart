@@ -27,7 +27,7 @@ class _PoppularsTabState extends State<PoppularsTab> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 48,
+            height: 24,
             width: double.infinity,
           ),
           SizedBox(
@@ -77,6 +77,21 @@ class _PoppularsTabState extends State<PoppularsTab> {
             margin: const EdgeInsets.symmetric(vertical: 0),
             height: 8,
             color: AppColor.grey6,
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          SizedBox(
+            width: 328,
+            child: Text(
+              "Deals",
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
+                color: AppColor.black,
+              ),
+              textAlign: TextAlign.left,
+            ),
           ),
           SizedBox(
             width: double.infinity,

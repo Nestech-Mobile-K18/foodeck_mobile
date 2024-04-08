@@ -1,62 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
-import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_item_info.dart';
-import 'package:foodeck_app/screens/home_screen/home_screen.dart';
-import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
+import 'package:foodeck_app/screens/cart_screen/drinks/drinks_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SavedItemCard extends StatefulWidget {
-  final ExploreMoreItemInfo? exploreMoreItemInfo;
-  final DealItemInfo? dealsItemInfo;
-  final SavedItemInfo savedItems;
-
-  const SavedItemCard({
-    super.key,
-    required this.savedItems,
-    this.exploreMoreItemInfo,
-    this.dealsItemInfo,
-  });
+class DrinksCard extends StatefulWidget {
+  final DrinksInfo drinksInfo;
+  const DrinksCard({super.key, required this.drinksInfo});
 
   @override
-  State<SavedItemCard> createState() => _SavedItemCardState();
+  State<DrinksCard> createState() => _DrinksCardState();
 }
 
-class _SavedItemCardState extends State<SavedItemCard> {
+class _DrinksCardState extends State<DrinksCard> {
   //
-  bool savedItem = true;
+  void _savedItem() {}
   //
-  int currentIndexPage = 1;
-  void unsavedDealItem() {
-    savedItem == false
-        ? setState(() {
-            savedItems.removeWhere(
-                (savedItems) => savedItems.title == widget.savedItems.title);
-            //
-            dealsItemInfo[dealsItemInfo.indexWhere((dealsItemInfo) =>
-                    dealsItemInfo.title.contains(widget.savedItems.title))]
-                .like = false;
-            //
-            exploreMoreItemInfo[exploreMoreItemInfo.indexWhere(
-                    (exploreMoreItemInfo) => exploreMoreItemInfo.title
-                        .contains(widget.savedItems.title))]
-                .like = false;
-          })
-        : null;
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) {
-        return const HomeScreen(page: 1);
-      },
-    ));
-  }
+  void _unsavedItem() {}
+  //
+  void _addDrink() {}
 
   //
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
-      width: 328,
-      margin: const EdgeInsets.all(10),
+      height: 160,
+      width: 240,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
           Container(
@@ -65,7 +34,7 @@ class _SavedItemCardState extends State<SavedItemCard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(
-                image: AssetImage(widget.savedItems.image),
+                image: AssetImage(widget.drinksInfo.image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -74,14 +43,14 @@ class _SavedItemCardState extends State<SavedItemCard> {
                 Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.only(left: 20, top: 120),
-                  width: 57,
+                  width: 38,
                   height: 24,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     color: AppColor.white,
                   ),
                   child: Text(
-                    widget.savedItems.time,
+                    "\$${widget.drinksInfo.price.toStringAsFixed(0)}",
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
@@ -98,18 +67,19 @@ class _SavedItemCardState extends State<SavedItemCard> {
                     width: 24,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: savedItem == false
+                      color: widget.drinksInfo.like == false
                           ? AppColor.white.withOpacity(0.3)
                           : AppColor.primary.withOpacity(0.3),
                     ),
                     child: IconButton(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(5),
-                      isSelected: savedItem,
+                      isSelected: widget.drinksInfo.like,
                       onPressed: () {
                         setState(() {
-                          savedItem = !savedItem;
-                          unsavedDealItem();
+                          widget.drinksInfo.like = !widget.drinksInfo.like;
+                          _savedItem();
+                          _unsavedItem();
                         });
                       },
                       icon: Icon(
@@ -132,7 +102,7 @@ class _SavedItemCardState extends State<SavedItemCard> {
             margin: const EdgeInsets.only(
               top: 5,
             ),
-            width: 240,
+            width: 328,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,7 +111,7 @@ class _SavedItemCardState extends State<SavedItemCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.savedItems.title,
+                      widget.drinksInfo.title,
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
@@ -149,35 +119,22 @@ class _SavedItemCardState extends State<SavedItemCard> {
                       ),
                     ),
                     Text(
-                      widget.savedItems.location,
+                      widget.drinksInfo.location,
                       style: GoogleFonts.inter(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: AppColor.grey2,
+                        color: AppColor.grey1,
                       ),
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.star,
-                      size: 18,
-                      color: AppColor.yellow,
-                    ),
-                    const SizedBox(
-                      width: 3,
-                    ),
-                    Text(
-                      widget.savedItems.star.toString(),
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: AppColor.black,
-                      ),
-                    ),
-                  ],
+                InkWell(
+                  onTap: _addDrink,
+                  child: Icon(
+                    Icons.add,
+                    size: 24,
+                    color: AppColor.grey1,
+                  ),
                 ),
               ],
             ),

@@ -4,7 +4,7 @@ class CartItemInfo {
   final String name;
   final String size;
   final String sauce;
-  final String price;
+  final int price;
   final int quantity;
 
   CartItemInfo({

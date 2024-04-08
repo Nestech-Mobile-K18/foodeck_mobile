@@ -16,23 +16,23 @@ class ExploreMoreItemCard extends StatefulWidget {
 
 class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
   //
-  void savedDealItem() {
-    final newSavedDealItem = SavedItemInfo(
+  void _savedItem() {
+    final newSavedItem = SavedItemInfo(
       image: widget.exploreMoreItemInfo.image,
       time: widget.exploreMoreItemInfo.time,
       title: widget.exploreMoreItemInfo.title,
       location: widget.exploreMoreItemInfo.location,
       star: widget.exploreMoreItemInfo.star,
+      like: true,
     );
     widget.exploreMoreItemInfo.like == true
         ? setState(() {
-            savedItems.add(newSavedDealItem);
-            widget.exploreMoreItemInfo.like = true;
+            savedItems.add(newSavedItem);
           })
         : null;
   }
 
-  void unsavedDealItem() {
+  void _unsavedItem() {
     widget.exploreMoreItemInfo.like == false
         ? setState(() {
             savedItems.removeWhere((savedItems) =>
@@ -103,8 +103,8 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
                           setState(() {
                             widget.exploreMoreItemInfo.like =
                                 !widget.exploreMoreItemInfo.like;
-                            savedDealItem();
-                            unsavedDealItem();
+                            _savedItem();
+                            _unsavedItem();
                           });
                         },
                         icon: Icon(

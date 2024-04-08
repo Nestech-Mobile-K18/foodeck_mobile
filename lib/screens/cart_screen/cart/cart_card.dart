@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foodeck_app/screens/cart_screen/cart_item_info.dart';
+import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/screens/cart_screen/cart_screen.dart';
+import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,9 +19,72 @@ class _CartCardState extends State<CartCard> {
     setState(() {
       cartItemInfo.removeWhere(
           (cartItemInfo) => widget.cartItemInfo.id == cartItemInfo.id);
+
+      //
+      cartItemInfo.isEmpty
+          ? showDialog(
+              context: context,
+              builder: (context) => Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  height: 120,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: AppColor.grey1.withOpacity(0.5),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const SizedBox(
+                        width: double.infinity,
+                      ),
+                      Icon(
+                        Icons.remove_shopping_cart,
+                        size: 24,
+                        color: AppColor.red,
+                      ),
+                      Text(
+                        "Item is empty!",
+                        style: GoogleFonts.inter(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: AppColor.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "Please add the items to continue shopping",
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColor.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ).timeout(
+              const Duration(seconds: 1),
+              onTimeout: () {
+                setState(() {
+                  Navigator.pop(context);
+                  Future.delayed(const Duration(seconds: 2), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen(page: 0)));
+                  });
+                });
+              },
+            )
+          //
+          : Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const CartScreen()));
     });
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const CartScreen()));
   }
 
   //
@@ -110,7 +174,9 @@ class _CartCardState extends State<CartCard> {
                       ),
                     ),
                     Text(
-                      "${widget.cartItemInfo.size}•${widget.cartItemInfo.sauce}",
+                      widget.cartItemInfo.sauce.isEmpty
+                          ? "${widget.cartItemInfo.size}•No sauce"
+                          : "${widget.cartItemInfo.size}•${widget.cartItemInfo.sauce}",
                       style: GoogleFonts.inter(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
@@ -118,7 +184,7 @@ class _CartCardState extends State<CartCard> {
                       ),
                     ),
                     Text(
-                      widget.cartItemInfo.price,
+                      "\$${widget.cartItemInfo.price}",
                       style: GoogleFonts.inter(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -132,7 +198,6 @@ class _CartCardState extends State<CartCard> {
                 onTap: () {
                   setState(() {
                     _deletedCart();
-                    print(widget.cartItemInfo.id);
                   });
                 },
                 child: Container(

@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:foodeck_app/screens/cart_screen/cart_item_info.dart';
+import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_item_info.dart';
 import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_item_infomation.dart';
+import 'package:foodeck_app/screens/food_menu_screen/food_menu_screen.dart';
 import 'package:foodeck_app/screens/food_menu_screen/populars_tab/populars_item_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
@@ -12,11 +11,9 @@ import 'package:foodeck_app/utils/app_icons.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../cart_screen/cart_screen.dart';
-
 class FoodVariantionsScreen extends StatefulWidget {
   final String location;
-  final DealsItemInfo? dealsItemInfo;
+  final DealItemInfo? dealsItemInfo;
   final ExploreMoreItemInfo? exploreMoreItemInfo;
   final DealsItemInfomation? dealsItemInfomation;
   final PopularsItemInfo? popularsItemInfo;
@@ -25,7 +22,7 @@ class FoodVariantionsScreen extends StatefulWidget {
     required this.dealsItemInfo,
     required this.exploreMoreItemInfo,
     required this.dealsItemInfomation,
-    this.popularsItemInfo,
+    required this.popularsItemInfo,
     required this.location,
   });
 
@@ -38,16 +35,17 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
   bool savedDeals = false;
 //
   void savedDealItem() {
-    final newSavedDealItem = SavedItemInfo(
+    final newSavedDealItem = DealItemInfo(
       image: widget.dealsItemInfo!.image,
       time: widget.dealsItemInfo!.time,
       title: widget.dealsItemInfo!.title,
       location: widget.dealsItemInfo!.location,
       star: widget.dealsItemInfo!.star,
+      like: false,
     );
     savedDeals == true
         ? setState(() {
-            savedItems.add(newSavedDealItem);
+            dealsItemInfo.add(newSavedDealItem);
           })
         : null;
   }
@@ -126,6 +124,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
 
   @override
   void dispose() {
+    intructionController.dispose();
     quantityControler.dispose();
     super.dispose();
   }
@@ -166,15 +165,92 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
               : charDonaySauceSelected == true
                   ? "Char Doney"
                   : "",
-      price:
-          "\$${(isSelected8 == true ? _counter * price8 : isSelected10 == true ? _counter * price10 : isSelected12 == true ? _counter * price12 : 0) + (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) + (charDonaySauceSelected == true ? charSaucePrice : 0)}",
+      price: (isSelected8 == true
+              ? _counter * price8
+              : isSelected10 == true
+                  ? _counter * price10
+                  : isSelected12 == true
+                      ? _counter * price12
+                      : 0) +
+          (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) +
+          (charDonaySauceSelected == true ? charSaucePrice : 0),
       quantity: _counter,
     );
-    setState(() {
-      cartItemInfo.add(newItemCart);
-    });
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const CartScreen()));
+
+    //
+    (isSelected8 == true
+                    ? _counter * price8
+                    : isSelected10 == true
+                        ? _counter * price10
+                        : isSelected12 == true
+                            ? _counter * price12
+                            : 0) +
+                (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) +
+                (charDonaySauceSelected == true ? charSaucePrice : 0) >
+            0
+        ? setState(
+            () {
+              //
+
+              cartItemInfo.add(newItemCart);
+              //
+              showDialog(
+                context: context,
+                builder: (context) => Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    height: 100,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: AppColor.grey1.withOpacity(0.5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const SizedBox(
+                          width: double.infinity,
+                        ),
+                        Icon(
+                          Icons.check_circle,
+                          size: 24,
+                          color: AppColor.green,
+                        ),
+                        Text(
+                          "Items saved!",
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ).timeout(
+                const Duration(seconds: 1),
+                onTimeout: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              );
+              //
+              Future.delayed(const Duration(seconds: 2), () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FoodMenuScreen(
+                              dealsItemInfo: widget.dealsItemInfo,
+                              exploreMoreItemInfo: widget.exploreMoreItemInfo,
+                            )));
+              });
+            },
+          )
+        : null;
+
     print(newItemCart.sauce);
   }
 

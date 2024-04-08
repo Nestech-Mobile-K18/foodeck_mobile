@@ -87,31 +87,31 @@ class _MyLocationState extends State<MyLocation> {
       width: 328,
       margin: const EdgeInsets.only(top: 30),
       alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: _getCurrentPosition,
-            child: Icon(
+      child: InkWell(
+        onTap: _getCurrentPosition,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
               Icons.location_on_outlined,
               size: 24,
               color: AppColor.white,
             ),
-          ),
-          SizedBox(
-            height: 24,
-            width: 300,
-            child: Text(
-              "  ${_currentAddress ?? "Unknow address"}",
-              style: GoogleFonts.inter(
-                fontSize: 17,
-                fontWeight: FontWeight.w400,
-                color: AppColor.white,
+            SizedBox(
+              height: 24,
+              width: 300,
+              child: Text(
+                "  ${_currentAddress ?? "Unknow address"}",
+                style: GoogleFonts.inter(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w400,
+                  color: AppColor.white,
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.left,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

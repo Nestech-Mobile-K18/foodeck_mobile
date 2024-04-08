@@ -74,6 +74,7 @@ flutter:
     - assets/images/
     - assets/images/populars/
     - assets/images/deals/
+    - assets/images/drinks/
     - assets/icons/
     - .env
   # assets:
