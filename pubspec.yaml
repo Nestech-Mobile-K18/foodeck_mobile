@@ -40,6 +40,7 @@ dependencies:
   mask_text_input_formatter: ^2.9.0
   pinput: ^4.0.0
   flutter_sizer: ^1.0.5
+  carousel_slider: ^4.2.1
 
 
 dev_dependencies:

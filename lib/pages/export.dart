@@ -28,6 +28,13 @@ export 'package:google_sign_in/google_sign_in.dart';
 export 'package:pinput/pinput.dart';
 export 'package:template/widgets/input_text.dart';
 export 'package:flutter_login_facebook/flutter_login_facebook.dart';
+export 'package:template/widgets/category.dart';
+export 'package:template/widgets/search_bar.dart';
+// export 'package:easy_search_bar/easy_search_bar.dart';
+// export 'package:getwidget/getwidget.dart';
+export 'package:carousel_slider/carousel_slider.dart';
+export 'package:template/widgets/carousel_with_indicator.dart';
+export 'package:template/widgets/item.dart';
 
 
 
