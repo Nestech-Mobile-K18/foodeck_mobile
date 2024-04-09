@@ -113,13 +113,9 @@ class _SavedPageState extends State<SavedPage> {
                                                       TextButton(
                                                           onPressed: () {
                                                             deleteBanner(index);
-                                                            Future.delayed(
-                                                                Duration(
-                                                                    milliseconds:
-                                                                        1000),
-                                                                () => value.removeFromList(
-                                                                    value.saveFood[
-                                                                        index]));
+                                                            value.removeFromList(
+                                                                value.saveFood[
+                                                                    index]);
                                                             Navigator.pop(
                                                                 context);
                                                           },

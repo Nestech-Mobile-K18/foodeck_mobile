@@ -23,6 +23,8 @@ const String friedChicken = 'assets/images/FriedChicken.png';
 const String hamburger = 'assets/images/Hamburger.png';
 const String pizza = 'assets/images/Pizza.png';
 const String simpleDesert = 'assets/images/SimpleDesert.png';
+const String lemonade = 'assets/images/Lemonade.png';
+const String redGrape = 'assets/images/RedGrape.png';
 // Icons
 const String appleLogo = 'assets/icons/AppleLogo.png';
 const String emailLogo = 'assets/icons/EmailLogo.png';

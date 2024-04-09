@@ -103,7 +103,7 @@ class _DealsPageState extends State<DealsPage> {
                 NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) =>
                         [const CustomSliverBar()],
-                    body: TabBarView(children: value.sortFood(value.menu))),
+                    body: TabBarView(children: value.sortFood(foodItems))),
           ),
         ),
       ),

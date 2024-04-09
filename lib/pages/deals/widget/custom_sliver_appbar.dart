@@ -8,6 +8,7 @@ class CustomSliverBar extends StatelessWidget {
     super.key,
   });
 
+  // phân loại tabs theo danh sách enum
   List<Tab> _buildCategoryTabs() {
     return FoodCategory.values.map((category) {
       return Tab(

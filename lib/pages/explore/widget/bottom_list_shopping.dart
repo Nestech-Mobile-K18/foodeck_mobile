@@ -28,12 +28,13 @@ class _BottomListShoppingState extends State<BottomListShopping> {
         try {
           await supabase.from('banners').upsert({
             'food':
-                value.kindFood(TitleFood.Deals, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Deals, desktopFood)[index].time,
+                value.kindFood(TitleFood.Explore, desktopFood)[index].foodOrder,
+            'time': value.kindFood(TitleFood.Explore, desktopFood)[index].time,
             'shop_name':
-                value.kindFood(TitleFood.Deals, desktopFood)[index].shopName,
-            'place': value.kindFood(TitleFood.Deals, desktopFood)[index].place,
-            'vote': value.kindFood(TitleFood.Deals, desktopFood)[index].vote
+                value.kindFood(TitleFood.Explore, desktopFood)[index].shopName,
+            'place':
+                value.kindFood(TitleFood.Explore, desktopFood)[index].place,
+            'vote': value.kindFood(TitleFood.Explore, desktopFood)[index].vote
           }).then((value) => ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                   duration: Duration(milliseconds: 1500),
@@ -56,12 +57,13 @@ class _BottomListShoppingState extends State<BottomListShopping> {
         try {
           await supabase.from('banners').delete().match({
             'food':
-                value.kindFood(TitleFood.Deals, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Deals, desktopFood)[index].time,
+                value.kindFood(TitleFood.Explore, desktopFood)[index].foodOrder,
+            'time': value.kindFood(TitleFood.Explore, desktopFood)[index].time,
             'shop_name':
-                value.kindFood(TitleFood.Deals, desktopFood)[index].shopName,
-            'place': value.kindFood(TitleFood.Deals, desktopFood)[index].place,
-            'vote': value.kindFood(TitleFood.Deals, desktopFood)[index].vote
+                value.kindFood(TitleFood.Explore, desktopFood)[index].shopName,
+            'place':
+                value.kindFood(TitleFood.Explore, desktopFood)[index].place,
+            'vote': value.kindFood(TitleFood.Explore, desktopFood)[index].vote
           }).then((value) => ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                   duration: Duration(milliseconds: 1500),

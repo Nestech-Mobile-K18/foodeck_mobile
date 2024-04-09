@@ -82,36 +82,18 @@ final List<DesktopFood> desktopFood = [
       place: 'Garden Town',
       vote: '4.8',
       titleFood: TitleFood.Explore),
+  DesktopFood(
+      foodOrder: redGrape,
+      time: '\$18',
+      shopName: 'Red Grape Margarita\n',
+      place: 'Daily Deli',
+      vote: '4.8',
+      titleFood: TitleFood.Popular),
+  DesktopFood(
+      foodOrder: lemonade,
+      time: '\$12',
+      shopName: 'Lemon Pina Colada\n',
+      place: 'Arfan Juices',
+      vote: '4.8',
+      titleFood: TitleFood.Popular),
 ];
-// List<Widget> sortFood(List<DesktopFood> fullMenu) {
-//   return TitleFood.values.map((category) {
-//     List<DesktopFood> categoryMenu = kindFood(category, fullMenu);
-//     return ListView.builder(
-//         physics: const NeverScrollableScrollPhysics(),
-//         itemCount: categoryMenu.length,
-//         scrollDirection: Axis.vertical,
-//         clipBehavior: Clip.none,
-//         itemBuilder: (context, index) => Padding(
-//             padding: const EdgeInsets.only(bottom: 16),
-//             child: BannerItems(
-//                 onTap: () => Get.to(() => DealsPage(
-//                       desktopFood: categoryMenu[index],
-//                     )),
-//                 foodImage: categoryMenu[index].foodOrder,
-//                 deliveryTime: categoryMenu[index].time,
-//                 shopName: categoryMenu[index].shopName,
-//                 shopAddress: categoryMenu[index].place,
-//                 rateStar: categoryMenu[index].vote,
-//                 action: () {
-//                   !saveFood.contains(categoryMenu[index])
-//                       ? addToList(categoryMenu[index])
-//                       : removeFromList(categoryMenu[index]);
-//                 },
-//                 iconShape: saveFood.contains(categoryMenu[index])
-//                     ? Icons.favorite
-//                     : Icons.favorite_border,
-//                 heartColor: saveFood.contains(categoryMenu[index])
-//                     ? globalPink
-//                     : Colors.white)));
-//   }).toList();
-// }

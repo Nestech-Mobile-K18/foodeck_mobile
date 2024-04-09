@@ -145,7 +145,7 @@ class DesktopFood {
       required this.titleFood});
 }
 
-enum TitleFood { Deals, Explore }
+enum TitleFood { Deals, Explore, Popular }
 
 class FoodItems {
   final String picture;
@@ -153,12 +153,15 @@ class FoodItems {
   final String detail;
   final int price;
   final String place;
+  int quantityFood;
+
   final FoodCategory foodCategory;
 
   List<Addon> availableAddons;
 
   FoodItems(
-      {required this.place,
+      {this.quantityFood = 1,
+      required this.place,
       required this.picture,
       required this.nameFood,
       required this.detail,
@@ -171,7 +174,17 @@ enum FoodCategory { Popular, Deals, Wraps, Beverages, Sandwiches }
 
 class Addon {
   final String addonName;
+  final String size;
+  final int priceSize;
   final int price;
+  RadioType radio;
 
-  Addon(this.addonName, this.price);
+  Addon(
+      {required this.radio,
+      required this.addonName,
+      required this.size,
+      required this.priceSize,
+      required this.price});
 }
+
+enum RadioType { a, b, c }
