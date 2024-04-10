@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:template/pages/export.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,107 +58,132 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Container(
-            width: 328.dp,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.location_on,
-                        color: Colors.white,
-                        size: 17.dp,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        'Block B Phase 2 Johar Town, Lahore',
-                        softWrap: true,
-                        style: TextStyle(fontSize: 22.dp, color: Colors.white),
-                      ),
-                    )
-                  ],
-                ),
-                SearchItemBar(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                ),
-              ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(168.dp),
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            const Image(
+              image: AssetImage(MediaRes.imgHome),
+              fit: BoxFit.cover,
             ),
-          ),
-          flexibleSpace: const Image(
-            image: AssetImage(MediaRes.imgHome),
-            fit: BoxFit.cover,
-          ),
-          backgroundColor: Colors.transparent,
-          toolbarHeight: 168.dp,
-          automaticallyImplyLeading: false),
+            Positioned(
+              left: 24.dp,
+              right: 24.dp,
+              bottom: 80.dp,
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 17.dp,
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      'Block B Phase 2 Johar Town, Lahore', //hard code
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 22.dp, color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 16,
+              left: 24.dp,
+              right: 24.dp,
+              child: SearchItemBar(
+                controller: _controller,
+                focusNode: _focusNode,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // categories
             Container(
+              width: MediaQuery.of(context).size.height - 24.dp * 2,
               padding: EdgeInsets.all(24.dp),
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Category(
-                    height: 160.dp,
-                    width: 328.dp,
-                    title: 'Food',
-                    decription: 'Order food you love',
-                    img: MediaRes.img1,
-                    bottom: 16.dp,
-                  ),
                   Row(
                     children: [
-                      Category(
-                        height: 160.dp,
-                        width: 154.dp,
-                        title: 'Grocery',
-                        decription: 'Shop daily life items',
-                        img: MediaRes.img3,
-                        right: 8.dp,
+                      Expanded(
+                        flex: 1,
+                        child: Category(
+                          height: 160.dp,
+                          title: 'Food',
+                          decription: 'Order food you love',
+                          img: MediaRes.img1,
+                          bottom: 16.dp,
+                        ),
                       ),
-                      Category(
-                        height: 160.dp,
-                        width: 154.dp,
-                        title: 'Deserts',
-                        decription: 'Something Sweet',
-                        img: MediaRes.img2,
-                        left: 8.dp,
-                      )
                     ],
+                  ),
+                  IntrinsicHeight(
+                    //IntrinsicHeight đảm bảo các item trong cùng dòng có cùng chiều cao
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Category(
+                            height: 160.dp,
+                            title: 'Grocery',
+                            decription: 'Shop daily life items',
+                            img: MediaRes.img3,
+                            right: 8.dp,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16.dp,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Category(
+                            height: 160.dp,
+                            title: 'Deserts',
+                            decription: 'Something Sweet',
+                            img: MediaRes.img2,
+                            left: 8.dp,
+                          ),
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
 
-            // list sale- dang hard code img
+            // list sale
             Padding(
               padding: EdgeInsets.only(top: 48.dp, bottom: 60.dp),
               child: const CarouselWithIndicator(),
             ),
 
-            //Deals //chưa code
-            // Item(
-            //   height: 160.dp,
-            //   width: 320.dp,
-            //   title: 'Pizza',
-            //   shopName: 'ABC s1133',
-            //   img: MediaRes.img4,
-            //   isLike: false,
-            //   isMoney: false,
-            //   rate: 3.0, value: '40',unit: 'min',
-            // ),
+            //Deals 
+            Item(
+              height: 160.dp,
+              width: 320.dp,
+              title: 'Pizza',
+              shopName: 'ABC s1133',
+              img: MediaRes.img4,
+              isLike: false,
+              isMoney: false,
+              rate: 3.0,
+              value: '40',
+              unit: 'min',
+            ),
           ],
         ),
       ),
     );
+
     // return Container(
     //   child: Column(
     //     mainAxisAlignment: MainAxisAlignment.center,

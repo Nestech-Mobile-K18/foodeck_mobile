@@ -3,8 +3,8 @@ import 'package:template/pages/export.dart';
 class Category extends StatelessWidget {
   const Category(
       {Key? key,
-      required this.height,
-      required this.width,
+       this.height,
+       this.width,
       required this.img,
       required this.title,
       this.decription,
@@ -13,8 +13,8 @@ class Category extends StatelessWidget {
       this.bottom,
       this.top})
       : super(key: key);
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final String img;
   final String title;
   final String? decription;
