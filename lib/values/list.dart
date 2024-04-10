@@ -188,3 +188,23 @@ class Addon {
 }
 
 enum RadioType { a, b, c }
+
+class ProfileButtons {
+  final String icon;
+  final String info;
+  final KindSetting kindSetting;
+
+  ProfileButtons(this.icon, this.info, this.kindSetting);
+}
+
+List<ProfileButtons> profileButtons = [
+  ProfileButtons(userCircle, 'Edit Account', KindSetting.account),
+  ProfileButtons(mapPin, 'Edit Account', KindSetting.account),
+  ProfileButtons(package, 'Edit Account', KindSetting.account),
+  ProfileButtons(creditCard, 'Edit Account', KindSetting.account),
+  ProfileButtons(starBorder, 'Edit Account', KindSetting.account),
+  ProfileButtons(info, 'Edit Account', KindSetting.general),
+  ProfileButtons(database, 'Edit Account', KindSetting.general),
+];
+
+enum KindSetting { account, general }

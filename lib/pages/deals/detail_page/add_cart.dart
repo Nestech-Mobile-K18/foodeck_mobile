@@ -139,8 +139,14 @@ class _AddCartState extends State<AddCart> {
                                       ),
                                       trailing: IconButton(
                                           onPressed: () {
-                                            value.removeFromList(
-                                                value.cartItems[index]);
+                                            if (value.cartItems.length == 1) {
+                                              value.removeFromList(
+                                                  value.cartItems[index]);
+                                              Navigator.pop(context);
+                                            } else {
+                                              value.removeFromList(
+                                                  value.cartItems[index]);
+                                            }
                                           },
                                           icon: const Icon(
                                               Icons.highlight_remove,
