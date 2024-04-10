@@ -8,7 +8,7 @@ import 'package:template/services/table_supbase.dart';
 
 import '../../../services/errror.dart';
 
-class CreateAccountViewModel {
+class CreateAccountViewModel extends ChangeNotifier {
   final Validation _validation = Validation();
   final ErrorDialog _showError = ErrorDialog();
   final API _api = API();

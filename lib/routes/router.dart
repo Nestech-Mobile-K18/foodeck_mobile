@@ -1,6 +1,6 @@
 import 'package:template/pages/application/views/application_view.dart';
 import 'package:template/pages/home/view/home_view.dart';
-import 'package:template/pages/map/map_view.dart';
+import 'package:template/pages/map/views/map_view.dart';
 
 import '../pages/forgot_password/views/forgot_password_view.dart';
 import '../pages/forgot_password/views/new_password_view.dart';

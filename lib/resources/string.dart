@@ -40,4 +40,9 @@ class StringExtensions {
   static const generalSettings = 'General Settings';
   static const aboutUs = 'About us';
   static const dataUsage = 'Data usage';
+
+  // map
+  static const myLocations = 'My Locations';
+  static const add = 'Add';
+  static const addLocation = 'Add Location';
 }

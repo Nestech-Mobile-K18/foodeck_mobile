@@ -17,7 +17,7 @@ class ProfileViewModel {
     return getUserId;
   }
 
-  Future<List<dynamic>?> getUserDataById() async {
+  Future<Map<String, dynamic>?> getUserDataById() async {
     // Make sure to await the responseUserId to get the actual ID
     final String? getUserId = await responseUserId();
     if (getUserId == null) {
@@ -25,11 +25,26 @@ class ProfileViewModel {
 
       return null;
     }
-    final response = await supabaseClient
+    final userResponse = await supabaseClient
         .from('users')
-        .select('email, name, phone, address, password')
-        .eq('id', getUserId);
+        .select('email, name, phone, password')
+        .eq('id', getUserId)
+        .single();
+    final addressResponse = await supabaseClient
+        .from('location_user')
+        .select('address_1')
+        .eq('user_id', getUserId)
+        .single();
 
-    return response;
+    Map<String, dynamic> joinedData = joinMaps(userResponse, addressResponse);
+    return joinedData;
+  }
+
+  Map<String, dynamic> joinMaps(
+      Map<String, dynamic> map1, Map<String, dynamic> map2) {
+    Map<String, dynamic> result = {};
+    result.addAll(map1);
+    result.addAll(map2);
+    return result;
   }
 }

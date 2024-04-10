@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/api.dart';
 import '../../application/views/application_view.dart';
 
-class LoginViewModel {
+class LoginViewModel extends ChangeNotifier {
   final fb = FacebookAuth.instance;
   final ErrorDialog showError = ErrorDialog();
   final API _api = API();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/map/map_view.dart';
+import 'package:template/pages/map/views/map_view.dart';
 import 'package:template/pages/profile/widgets/components/function_header.dart';
 import 'package:template/pages/profile/widgets/components/function_items.dart';
 import 'package:template/resources/const.dart';

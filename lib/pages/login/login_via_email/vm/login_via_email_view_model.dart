@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'package:template/resources/error_strings.dart';
 import 'package:template/resources/validation.dart';
 import 'package:template/pages/login/login_via_email/models/login_via_email_model.dart';
@@ -8,7 +8,7 @@ import 'package:template/services/api.dart';
 
 import '../../../../services/errror.dart';
 
-class LogInViaEmailViewModel {
+class LogInViaEmailViewModel extends ChangeNotifier {
   final Validation _validation = Validation();
   final ErrorDialog _showError = ErrorDialog();
   final API _api = API();

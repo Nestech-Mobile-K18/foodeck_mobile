@@ -6,7 +6,7 @@ import 'package:template/pages/profile/widgets/general_settings.dart';
 import 'package:template/resources/colors.dart';
 
 class ProfileView extends StatefulWidget {
-  const ProfileView({super.key});
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -25,23 +25,22 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FutureBuilder<List<dynamic>?>(
+              FutureBuilder<Map<String, dynamic>?>(
                 future: _viewModel.getUserDataById(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Display loader while loading
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    return Text(
-                        "Error: ${snapshot.error}"); // Display errors if any
+                    return Text("Error: ${snapshot.error}");
                   } else if (snapshot.hasData) {
-                    // Assuming the returned data is not empty and has at least one record
-                    var userData = snapshot.data?.first; // Get the first record
+                    var userData = snapshot.data!;
                     return AvatarAndName(
-                      name: userData?['name'] ?? 'N/A',
-                      address: userData?['address'] ?? 'N/A',
+                      name: userData['name'] ?? 'N/A',
+                      address: userData['address_1'] ??
+                          'N/A', // Thay đổi 'address' thành 'address_1'
                     );
                   } else {
-                    return Text("No data"); // Displayed when there is no data
+                    return Text("No data");
                   }
                 },
               ),

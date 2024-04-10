@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:template/pages/create_account/views/create_account_view.dart';
 import 'package:template/pages/login/login_via_email/models/login_via_email_model.dart';
 import 'package:template/pages/login/login_via_email/vm/login_via_email_view_model.dart';
-import 'package:template/resources/error_strings.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_button.dart';

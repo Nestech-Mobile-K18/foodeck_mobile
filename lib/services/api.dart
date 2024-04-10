@@ -50,6 +50,22 @@ class API {
     return response;
   }
 
+  Future<List<Map<String, dynamic>>> requestSelectedByQuery(
+      String tableSupabase,
+      List<String> columnNames,
+      String columnQuery,
+      Object value) async {
+    var response = await supabase
+        .from(tableSupabase)
+        .select(columnNames.join(", "))
+        .eq(columnQuery, value);
+
+    // Chuyển dữ liệu phản hồi thành List<Map<String, dynamic>>
+    List<Map<String, dynamic>> dataList =
+        List<Map<String, dynamic>>.from(response);
+    return dataList;
+  }
+
   Future<void> requestUpdate(
       {required String tableSupabase,
       required Map<String, String> updateData,

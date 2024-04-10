@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/login/login_via_email/views/login_via_email_view.dart';
 import 'package:template/resources/validation.dart';
 import 'package:template/services/api.dart';
@@ -8,7 +7,7 @@ import 'package:template/services/table_supbase.dart';
 
 import '../../otp/views/otp_view.dart';
 
-class ForgotPasswordViewModel {
+class ForgotPasswordViewModel extends ChangeNotifier {
   final API _api = API();
   final Validation _validation = Validation();
   final ErrorDialog _showError = ErrorDialog();

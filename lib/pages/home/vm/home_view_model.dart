@@ -8,14 +8,15 @@ import 'package:template/widgets/loading_indicator.dart';
 
 import '../../../services/mapbox_config.dart';
 
-class HomeViewModel {
+class HomeViewModel extends ChangeNotifier {
   Location location = Location();
 
   Function(String)? onAddressReceived;
 
   final supabase = Supabase.instance.client;
 
-  Future<void> updateAddressOnSupabase(String? address) async {
+  Future<void> updateAddressOnSupabase(
+      String? address, String? type_address) async {
     if (address != null) {
       // Perform a SELECT query to get the ID from the data table
       var response = await supabase
@@ -29,9 +30,19 @@ class HomeViewModel {
         // Get the ID from the current record
         var userId = record['id'];
         // Continue with the information update operations using this ID
-        var updateResponse = await supabase
-            .from('users')
-            .update({'address': address}).eq('id', userId);
+        if (userId != null) {
+          var locationResponse = await supabase
+              .from('location_user')
+              .select('id_location')
+              .eq('user_id', userId);
+          if (locationResponse.isEmpty) {
+            await supabase.from('location_user').upsert({
+              'user_id': userId,
+              'address_1': address,
+              'type_address_1': type_address
+            });
+          }
+        }
       }
     }
   }
@@ -52,9 +63,13 @@ class HomeViewModel {
         var response = await http.get(Uri.parse(apiUrl));
         if (response.statusCode == 200) {
           var data = json.decode(response.body);
-          String? address = data['features'][0]['place_name'];
 
-          updateAddressOnSupabase(address);
+          var firstFeature = data['features'][0];
+          String? address = firstFeature['place_name'];
+
+          String? type = firstFeature['text'];
+
+          updateAddressOnSupabase(address, type);
 
           if (onAddressReceived != null) {
             onAddressReceived!(address!);
