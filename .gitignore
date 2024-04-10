@@ -131,7 +131,3 @@ web/
 windows/
 .dart_tool
 .idea
-pubspec.lock
-.dart_tool
-
-macos/
