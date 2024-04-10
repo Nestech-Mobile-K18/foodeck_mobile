@@ -77,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(profileButtons[index].info),
-                leading: Image.asset(name),
+                leading: Image.asset(userCircle),
               );
             },
           ),
