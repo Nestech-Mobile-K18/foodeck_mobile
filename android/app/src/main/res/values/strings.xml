@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Food Deck</string>
+    <string name="facebook_app_id">727176522920527</string>
+    <string name="fb_login_protocol_scheme">fb727176522920527</string>
+    <string name="facebook_client_token">5ed74a050f2f937d07a29e4d98d9e439</string>
+</resources>

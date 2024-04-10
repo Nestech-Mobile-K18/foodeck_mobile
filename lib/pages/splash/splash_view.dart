@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:template/resources/media_res.dart';
-import 'package:template/pages/login/login_view.dart';
+import 'package:template/pages/login/views/login_view.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 
 class SplashView extends StatefulWidget {

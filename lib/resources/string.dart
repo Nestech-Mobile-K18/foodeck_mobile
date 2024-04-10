@@ -1,0 +1,31 @@
+class StringExtensions {
+  static const loginViaGoogle = "Login via Google";
+  static const loginViaFacebook = "Login via Facebook";
+  static const loginViaApple = "Login via Apple";
+  static const loginViaEmail = "Login via Email";
+  static const createAnAccount = "Create an account";
+  static const createAnAccountInstead = "Create an account instead";
+  static const privacyAndPolicy = "By signing up, you are agreeing to our";
+  static const termsAndConditions = "Terms & Conditions";
+  static const email = "Email";
+  static const password = "Password";
+  static const login = "Login";
+  static const name = "Name";
+  static const phone = "Phone No.";
+  static const inputYourCredentials = "Input your credentials";
+  static const forgotPassword = "Forgot Password";
+  static const newPassword = "New Password";
+  static const loginInstead = "Login instead";
+  static const otp = "OTP";
+  static const titleConfirmOTP = "Confirm the code we sent you";
+  static const resend = "Resend";
+  static const confirm = "Confirm";
+  static const reset = "Reset";
+  static const food = "Food";
+  static const contentFood = "Order food you love";
+  static const address = 'Block B Phase 2 Johar Town, Lahore';
+  static const showNow = "Show Now";
+  static const code = "Code : CVB25";
+  static const deals = "Deals";
+  static const exploreMore = "Explore More";
+}
