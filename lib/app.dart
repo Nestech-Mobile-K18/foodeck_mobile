@@ -1,10 +1,7 @@
 import 'package:device_preview/device_preview.dart';
-// import 'package:flutter/material.dart';
 import 'package:template/pages/export.dart';
 import 'package:template/resources/fonts.dart';
-// import 'package:template/resources/routes.dart';
 import 'package:template/routes/router.dart';
-// import 'package:flutter_sizer/flutter_sizer.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -21,8 +18,6 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           locale: DevicePreview.locale(context),
           builder: DevicePreview.appBuilder,
-          // theme: ThemeData.light(),
-          // darkTheme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,
           title: 'My App',
           theme: ThemeData(
