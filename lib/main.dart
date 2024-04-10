@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,19 +21,28 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-      url: dotenv.env['URL'].toString(),
-      anonKey: dotenv.env['ANONKEY'].toString());
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    url: dotenv.env['URL'].toString(),
+    anonKey: dotenv.env['ANONKEY'].toString(),
+  );
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => Restaurant(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => TopFood(),
+          )
+        ],
+        child: const MyApp(),
+      ), // Wrap your app
     ),
-    ChangeNotifierProvider(
-      create: (context) => Restaurant(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => TopFood(),
-    )
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatelessWidget {

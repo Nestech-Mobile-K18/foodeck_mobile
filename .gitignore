@@ -126,8 +126,12 @@ app.*.map.json
 !.idea/dictionaries/
 !.idea/runConfigurations/
 
-test/
-web/
-windows/
+test/*
+web/*
+windows/*
 .dart_tool
-.idea
+.idea/*
+pubspec.lock
+macos/*
+linux/*
+.env
