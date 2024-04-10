@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,30 +17,32 @@ import 'package:template/pages/splash/splash_page.dart';
 import 'package:template/themes/theme_provider.dart';
 import 'package:template/values/route.dart';
 
-<<<<<<< HEAD
-import 'app.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-=======
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-      url: dotenv.env['URL'].toString(),
-      anonKey: dotenv.env['ANONKEY'].toString());
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    url: dotenv.env['URL'].toString(),
+    anonKey: dotenv.env['ANONKEY'].toString(),
+  );
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => Restaurant(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => TopFood(),
+          )
+        ],
+        child: const MyApp(),
+      ), // Wrap your app
     ),
-    ChangeNotifierProvider(
-      create: (context) => Restaurant(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => TopFood(),
-    )
-  ], child: const MyApp()));
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -73,4 +77,3 @@ RegExp emailRegex = RegExp(
     r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 RegExp passRegex = RegExp(
     r'^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$');
->>>>>>> Dat/17.03.24/init-page-welcome-login

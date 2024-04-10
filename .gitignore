@@ -126,15 +126,12 @@ app.*.map.json
 !.idea/dictionaries/
 !.idea/runConfigurations/
 
-test/
-web/
-windows/
+test/*
+web/*
+windows/*
 .dart_tool
-.idea
-<<<<<<< HEAD
-=======
+.idea/*
 pubspec.lock
-.dart_tool
-
-macos/
->>>>>>> Dat/17.03.24/init-page-welcome-login
+macos/*
+linux/*
+.env
