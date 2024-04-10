@@ -51,6 +51,20 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
     }
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file(System.getProperty("user.home") + '/.android/debug.keystore')
+            storePassword 'android'
+        }
+        release {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file(System.getProperty("user.home") + '/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
 
     buildTypes {
         release {
@@ -65,4 +79,4 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {implementation 'com.facebook.android:facebook-android-sdk:latest.release'}

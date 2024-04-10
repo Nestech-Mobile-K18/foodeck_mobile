@@ -131,3 +131,10 @@ web/
 windows/
 .dart_tool
 .idea
+<<<<<<< HEAD
+=======
+pubspec.lock
+.dart_tool
+
+macos/
+>>>>>>> Dat/17.03.24/init-page-welcome-login
