@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:template/resources/fonts.dart';
-import 'package:template/resources/routes.dart';
-import 'package:template/routes/router.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:provider/provider.dart';
+import 'package:template/pages/home/home_page.dart';
+import 'package:template/pages/login/login_page.dart';
+import 'package:template/pages/login/widgets/create_account.dart';
+import 'package:template/pages/login/widgets/login_email.dart';
+import 'package:template/pages/splash/splash_page.dart';
+import 'package:template/themes/theme_provider.dart';
+import 'package:template/values/route.dart';
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'My App',
-      theme: ThemeData(
-        useMaterial3: true,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: Fonts.inter,
-        appBarTheme: const AppBarTheme(color: Colors.transparent),
-      ),
-      onGenerateRoute: generateRoute,
-      initialRoute: RouteName.splash,
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    return FlutterSizer(
+      builder: (context, orientation, screenType) {
+        return GetMaterialApp(
+          theme: Provider.of<ThemeProvider>(context).themeData,
+          defaultTransition: Transition.rightToLeft,
+          transitionDuration: const Duration(milliseconds: 600),
+          debugShowCheckedModeBanner: false,
+          initialRoute: splashPage,
+          routes: {
+            splashPage: (context) => const SplashPage(),
+            createAccount: (context) => const CreateAccount(),
+            loginEmail: (context) => const LoginEmail(),
+            loginPage: (context) => const LoginPage(),
+            homePage: (context) => const HomePage()
+          },
+        );
+      },
     );
   }
 }
