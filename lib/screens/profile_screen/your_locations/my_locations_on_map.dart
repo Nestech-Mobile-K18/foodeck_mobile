@@ -4,14 +4,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MyLocationScreen extends StatefulWidget {
-  const MyLocationScreen({super.key});
+class MyLocationsOnMap extends StatefulWidget {
+  const MyLocationsOnMap({super.key});
 
   @override
-  State<MyLocationScreen> createState() => _MyLocationScreenState();
+  State<MyLocationsOnMap> createState() => _MyLocationsOnMapState();
 }
 
-class _MyLocationScreenState extends State<MyLocationScreen> {
+class _MyLocationsOnMapState extends State<MyLocationsOnMap> {
   //
 
   late GoogleMapController googleMapController;

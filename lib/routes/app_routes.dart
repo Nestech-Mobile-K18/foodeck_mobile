@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodeck_app/screens/checkout_screen/checkout_screen.dart';
 import 'package:foodeck_app/screens/create_account/create_account_screen.dart';
 import 'package:foodeck_app/screens/create_account/otp_screen.dart';
 import 'package:foodeck_app/screens/food_variantions_screen/food_variations_screen.dart';
@@ -8,7 +9,7 @@ import 'package:foodeck_app/screens/login_screen/forgot_password_screen.dart';
 import 'package:foodeck_app/screens/login_screen/login_screen.dart';
 import 'package:foodeck_app/screens/login_screen/login_via_email_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/edit_profile_screen/edit_profile_screen.dart';
-import 'package:foodeck_app/screens/profile_screen/my_location/my_location_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_on_map.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/payment_method_screen.dart';
 import 'package:foodeck_app/screens/splash_screen/splash_screen.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_screen.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
   static String paymentMethodScreen = "/payment_method_screen";
   static String myLocationScreen = "/my_location_screen";
   static String foodVariantionsScreen = "/food_variantions_screen";
+  static String checkOutScreen = "/checkout_screen";
 
   ///
   ///
@@ -51,7 +53,7 @@ class AppRoutes {
     profileScreen: (context) => const ProfileScreen(),
     editProfileScreen: (context) => const EditProfileScreen(),
     paymentMethodScreen: (context) => const PaymentMethodScreen(),
-    myLocationScreen: (context) => const MyLocationScreen(),
+    myLocationScreen: (context) => const MyLocationsOnMap(),
     foodVariantionsScreen: (context) => const FoodVariantionsScreen(
           dealsItemInfo: null,
           exploreMoreItemInfo: null,
@@ -59,5 +61,13 @@ class AppRoutes {
           location: '',
           popularsItemInfo: null,
         ),
+    checkOutScreen: (context) => const CheckOutScreen(
+      subtotal: '', 
+      deliverfee: '', 
+      vat: '', 
+      coupon: '',
+      total: '',
+     
+      ),
   };
 }

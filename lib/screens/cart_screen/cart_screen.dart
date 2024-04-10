@@ -3,6 +3,7 @@ import 'package:foodeck_app/screens/cart_screen/cart/cart_card.dart';
 import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/screens/cart_screen/coupon/coupon.dart';
 import 'package:foodeck_app/screens/cart_screen/drinks/list_drinks.dart';
+import 'package:foodeck_app/screens/checkout_screen/checkout_screen.dart';
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
@@ -333,7 +334,33 @@ class _CartScreenState extends State<CartScreen> {
                     textAlign: TextAlign.left,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CheckOutScreen(
+                                                                   //
+                                  subtotal: "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price))).toString()}",
+                                  //
+                                  deliverfee:"\$${deliveryFee.round()}",
+                                  //
+                                  vat:"\$${vat.round()}",
+                                  //
+                                  coupon: valueCoupon == 0 || valueCoupon > 1
+                        ? "-\$${valueCoupon.round()}"
+                        : "-${(valueCoupon * 100).round()}%",
+                                  //
+                                total:valueCoupon == 0
+                        ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat).toStringAsFixed(2)}"
+                        : valueCoupon < 1
+                            ? "\$${(((cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat) * valueCoupon)).toStringAsFixed(2)}"
+                            : valueCoupon >= 1
+                                ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat + valueCoupon).toString()}"
+                                : "",
+                              )));
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.primary,
                       padding: EdgeInsets.zero,

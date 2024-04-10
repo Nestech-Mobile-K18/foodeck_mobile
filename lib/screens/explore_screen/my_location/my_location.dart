@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -14,69 +15,56 @@ class MyLocation extends StatefulWidget {
 class _MyLocationState extends State<MyLocation> {
   ///
   String? _currentAddress;
-  Position? _currentPosition;
-
-  Future<bool> _handleLocationPermission() async {
+  //
+  Future<Object?> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (!serviceEnabled) {
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Location services are disabled. Please enable the services')));
-      });
-      return false;
+      return Future.error('Location services are disabled');
     }
+
     permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        setState(() {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Location permissions are denied')));
-        });
 
-        return false;
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
       }
     }
-    if (permission == LocationPermission.deniedForever) {
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                'Location permissions are permanently denied, we cannot request permissions.')));
-      });
 
-      return false;
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
     }
-    return true;
+
+    return _currentAddress;
   }
 
-  Future<void> _getCurrentPosition() async {
-    final hasPermission = await _handleLocationPermission();
+  Future<void> _addMyLocation() async {
+    
 
-    if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      getAddressFromLatLng(_currentPosition!);
+    Position position = await Geolocator.getCurrentPosition();
+
+    await placemarkFromCoordinates(position.latitude, position.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+
+      _currentAddress =
+          '${place.street}, ${place.subAdministrativeArea},${place.administrativeArea}, ${place.isoCountryCode}';
     }).catchError((e) {
       debugPrint(e);
     });
-  }
-
-  Future<void> getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subAdministrativeArea}, ${place.isoCountryCode}';
-      });
-    }).catchError((e) {
-      debugPrint(e);
+    final newMyLocation = YourLocationsInfo(
+      location: _currentAddress.toString().trim(),
+      kind: '',
+    );
+yourLocations.map((yourLocations) => yourLocations.location).contains(_currentAddress.toString())==true
+   ? null
+    :setState(() {
+      yourLocations.add(newMyLocation);
     });
   }
 
@@ -88,7 +76,12 @@ class _MyLocationState extends State<MyLocation> {
       margin: const EdgeInsets.only(top: 30),
       alignment: Alignment.center,
       child: InkWell(
-        onTap: _getCurrentPosition,
+        onTap: () {
+          setState(() {
+            _determinePosition();
+            _addMyLocation();
+          });
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -98,12 +91,11 @@ class _MyLocationState extends State<MyLocation> {
               color: AppColor.white,
             ),
             SizedBox(
-              height: 24,
               width: 300,
               child: Text(
                 "  ${_currentAddress ?? "Unknow address"}",
                 style: GoogleFonts.inter(
-                  fontSize: 17,
+                  fontSize: 15,
                   fontWeight: FontWeight.w400,
                   color: AppColor.white,
                 ),

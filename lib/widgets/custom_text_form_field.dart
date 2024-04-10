@@ -18,6 +18,7 @@ class CustomTextFormField extends StatefulWidget {
   final BoxBorder? border;
   final Widget? suffixIcon;
   final dynamic onFieldSubmitted;
+  final EdgeInsetsGeometry? contentPadding;
 
   final List<TextInputFormatter>? textInputFormatter;
 
@@ -38,6 +39,7 @@ class CustomTextFormField extends StatefulWidget {
     this.border,
     this.suffixIcon,
     this.onFieldSubmitted,
+    this.contentPadding,
   });
 
   @override
@@ -110,6 +112,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   color: _focusColor,
                 ),
                 hintText: widget.hintText,
+                hintStyle: TextStyle(color: AppColor.grey2),
                 suffixIcon: widget.suffixIcon,
 
                 // widget.label == "Password" &&
@@ -119,10 +122,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 //         child: const Icon(Icons.remove_red_eye_outlined))
                 //     : null,
                 suffixIconColor: AppColor.grey1,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
+                contentPadding: widget.contentPadding ??
+                    const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
                 border: InputBorder.none),
           ),
         ),

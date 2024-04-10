@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_screen.dart';
-import 'package:foodeck_app/screens/explore_screen/my_location.dart';
+import 'package:foodeck_app/screens/explore_screen/my_location/my_location.dart';
 import 'package:foodeck_app/screens/notification_screen/notification_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/profile_screen.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_screen.dart';
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: widget.page == 1 & 2 & 3
           ? PreferredSize(
-              preferredSize: const Size.fromHeight(124),
+              preferredSize: const Size.fromHeight(140),
               child: AppBar(
                 automaticallyImplyLeading: false,
                 backgroundColor: AppColor.primary,

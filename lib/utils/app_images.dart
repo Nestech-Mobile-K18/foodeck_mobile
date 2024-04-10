@@ -18,4 +18,6 @@ class AppImage {
   static String dailyDeli2 = "$images/daily deli 2.png";
   static String profile = "$images/profile picture.jpg";
   static String creditCard = "$images/credit_card.png";
+  static String paySuccess = "$images/pay_success.png";
+  static String myLocation = "$images/my_location.jpg";
 }
