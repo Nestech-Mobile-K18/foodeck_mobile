@@ -40,11 +40,15 @@ class HomeCard extends StatelessWidget {
             CustomText(
               title: headerText ?? '',
               size: 20,
+              maxLine: 2,
+              overflow: TextOverflow.ellipsis,
               color: ColorsGlobal.globalWhite,
             ),
             CustomText(
               title: contentText ?? '',
               size: 16,
+              maxLine: 2,
+              overflow: TextOverflow.ellipsis,
               color: ColorsGlobal.globalWhite,
             ),
           ],

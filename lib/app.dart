@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:template/resources/fonts.dart';
+import 'package:template/resources/responsive.dart';
 import 'package:template/resources/routes.dart';
 import 'package:template/routes/router.dart';
 
@@ -15,6 +16,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: 1.0,
+          ),
+          child: child!,
+        );
+      },
       debugShowCheckedModeBanner: false,
       title: 'My App',
       theme: ThemeData(

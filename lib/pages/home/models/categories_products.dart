@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:template/resources/const.dart';
 
 class CategoriesProducts {

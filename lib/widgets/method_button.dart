@@ -7,7 +7,7 @@ class MethodButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool? isIcon;
   final double? widthButton;
-  final double? heightButton;
+
   final double? fontSizeTitle;
 
   const MethodButton(
@@ -18,7 +18,6 @@ class MethodButton extends StatelessWidget {
       this.isIcon,
       this.onTap,
       this.fontSizeTitle,
-      this.heightButton,
       this.widthButton});
 
   @override
@@ -30,7 +29,6 @@ class MethodButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 22),
         alignment: Alignment.center,
         width: widthButton ?? double.infinity,
-        height: heightButton,
         decoration: BoxDecoration(
           color: color,
           borderRadius: const BorderRadius.all(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/pages/application/vm/application_view_model.dart';
 import 'package:template/pages/home/view/home_view.dart';
+import 'package:template/resources/const.dart';
 
 import 'package:template/resources/export.dart';
 
@@ -26,7 +27,7 @@ class _ApplicationViewState extends State<ApplicationView> {
             body: PageBuilder(index: viewModel.selectedIndex),
             bottomNavigationBar: Container(
               width: double.infinity,
-              height: 60,
+              height: Responsive.screenHeight(context) * 0.12,
               decoration: BoxDecoration(
                 color: ColorsGlobal.globalWhite,
                 borderRadius: BorderRadius.only(

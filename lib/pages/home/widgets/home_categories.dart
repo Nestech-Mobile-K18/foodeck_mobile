@@ -21,19 +21,25 @@ class HomeCategories extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            HomeCard(
-              imgString: MediaRes.grocery,
-              headerText: StringExtensions.food,
-              contentText: StringExtensions.contentFood,
-              heightCard: 180,
-              widthCard: 180,
+            Expanded(
+              flex: 1,
+              child: HomeCard(
+                imgString: MediaRes.grocery,
+                headerText: StringExtensions.food,
+                contentText: StringExtensions.contentFood,
+                heightCard: 180,
+                widthCard: 180,
+              ),
             ),
-            HomeCard(
-              imgString: MediaRes.deserts,
-              headerText: StringExtensions.food,
-              contentText: StringExtensions.contentFood,
-              heightCard: 180,
-              widthCard: 180,
+            Expanded(
+              flex: 1,
+              child: HomeCard(
+                imgString: MediaRes.deserts,
+                headerText: StringExtensions.food,
+                contentText: StringExtensions.contentFood,
+                heightCard: 180,
+                widthCard: 180,
+              ),
             ),
           ],
         )

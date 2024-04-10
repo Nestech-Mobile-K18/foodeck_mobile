@@ -43,24 +43,10 @@ AppBar HomeBar(BuildContext context, String? address) {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: TextFormField(
-            decoration: InputDecoration(
-                constraints: const BoxConstraints(maxWidth: 328, maxHeight: 54),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none),
-                hintText: 'Search...',
-                contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.fromLTRB(24, 16, 8, 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                )),
+          padding: EdgeInsets.only(top: 10, bottom: 10),
+          child: ReSearchBar(
+            colorSearch: ColorsGlobal.globalWhite,
+            hintText: 'Search',
           ),
         )
       ],
