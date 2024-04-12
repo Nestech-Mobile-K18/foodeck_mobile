@@ -184,12 +184,12 @@ class _AddCartState extends State<AddCart> {
                                           TopFood drink, Widget? child) {
                                         Future saveBanner(index) async {
                                           try {
-                                            await supabase.from('banners').upsert({
+                                            await supabase.from('items').upsert({
                                               'food': drink
                                                   .kindFood(TitleFood.Popular,
                                                       desktopFood)[index]
                                                   .foodOrder,
-                                              'time': drink
+                                              'time_delivery': drink
                                                   .kindFood(TitleFood.Popular,
                                                       desktopFood)[index]
                                                   .time,
@@ -238,14 +238,14 @@ class _AddCartState extends State<AddCart> {
                                         Future deleteBanner(index) async {
                                           try {
                                             await supabase
-                                                .from('banners')
+                                                .from('items')
                                                 .delete()
                                                 .match({
                                               'food': drink
                                                   .kindFood(TitleFood.Popular,
                                                       desktopFood)[index]
                                                   .foodOrder,
-                                              'time': drink
+                                              'time_delivery': drink
                                                   .kindFood(TitleFood.Popular,
                                                       desktopFood)[index]
                                                   .time,
@@ -264,8 +264,10 @@ class _AddCartState extends State<AddCart> {
                                             }).then((value) => ScaffoldMessenger
                                                         .of(context)
                                                     .showSnackBar(const SnackBar(
-                                                        duration: Duration(
-                                                            milliseconds: 1500),
+                                                        duration:
+                                                            Duration(
+                                                                milliseconds:
+                                                                    1500),
                                                         backgroundColor:
                                                             buttonShadowBlack,
                                                         content: Text(

@@ -23,9 +23,9 @@ class _SavedPageState extends State<SavedPage> {
         builder: (BuildContext context, TopFood value, Widget? child) {
       Future deleteBanner(index) async {
         try {
-          await supabase.from('banners').delete().match({
+          await supabase.from('items').delete().match({
             'food': value.saveFood[index].foodOrder,
-            'time': value.saveFood[index].time,
+            'time_delivery': value.saveFood[index].time,
             'shop_name': value.saveFood[index].shopName,
             'place': value.saveFood[index].place,
             'vote': value.saveFood[index].vote

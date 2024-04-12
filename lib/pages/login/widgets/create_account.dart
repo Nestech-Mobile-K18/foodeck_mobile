@@ -29,22 +29,23 @@ class _CreateAccountState extends State<CreateAccount> {
   RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
   RegExp nameRegex = RegExp(
       r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
+
   Future signUpAndAddUsers() async {
     try {
       await supabase.auth.signUp(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+      await Future.delayed(const Duration(milliseconds: 200), () {
+        supabase.from('profiles').insert({
+          'email': emailController.text.trim(),
+          'full_name': nameController.text.trim(),
+          'phone': phoneController.text.trim(),
+          'password': passwordController.text.trim(),
+        });
+      });
       await Future.delayed(const Duration(milliseconds: 100), () {
         supabase.auth.signInWithOtp(
             shouldCreateUser: false, email: emailController.text.trim());
-      });
-      await Future.delayed(const Duration(milliseconds: 200), () {
-        supabase.from('users').insert({
-          'Email': emailController.text.trim(),
-          'Name': nameController.text.trim(),
-          'Phone No.': phoneController.text.trim(),
-          'Password': passwordController.text.trim(),
-        });
       });
       await Future.delayed(const Duration(milliseconds: 300), () {
         Get.to(() => Otp(email: emailController.text.trim()),

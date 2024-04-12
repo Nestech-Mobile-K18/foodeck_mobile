@@ -61,7 +61,8 @@ class _CustomFormFillState extends State<CustomFormFill> {
       children: [
         AnimatedContainer(
           width: widget.widthBoxShadow ?? 328,
-          height: widget.heightBoxShadow ?? 58,
+          height: widget.heightBoxShadow ??
+              MediaQuery.of(context).size.height * 0.0669,
           duration: const Duration(milliseconds: 1000),
           decoration: BoxDecoration(
               color: Colors.white,

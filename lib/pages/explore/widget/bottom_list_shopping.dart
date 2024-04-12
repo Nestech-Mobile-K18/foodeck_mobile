@@ -26,10 +26,11 @@ class _BottomListShoppingState extends State<BottomListShopping> {
         builder: (BuildContext context, value, Widget? child) {
       Future saveBanner(index) async {
         try {
-          await supabase.from('banners').upsert({
+          await supabase.from('items').upsert({
             'food':
                 value.kindFood(TitleFood.Explore, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Explore, desktopFood)[index].time,
+            'time_delivery':
+                value.kindFood(TitleFood.Explore, desktopFood)[index].time,
             'shop_name':
                 value.kindFood(TitleFood.Explore, desktopFood)[index].shopName,
             'place':
@@ -55,10 +56,11 @@ class _BottomListShoppingState extends State<BottomListShopping> {
 
       Future deleteBanner(index) async {
         try {
-          await supabase.from('banners').delete().match({
+          await supabase.from('items').delete().match({
             'food':
                 value.kindFood(TitleFood.Explore, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Explore, desktopFood)[index].time,
+            'time_delivery':
+                value.kindFood(TitleFood.Explore, desktopFood)[index].time,
             'shop_name':
                 value.kindFood(TitleFood.Explore, desktopFood)[index].shopName,
             'place':

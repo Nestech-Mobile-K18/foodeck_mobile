@@ -31,12 +31,13 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
         builder: (BuildContext context, TopFood value, Widget? child) {
       Future saveBanner(index) async {
         try {
-          await supabase.from('banners').upsert({
+          await supabase.from('items').insert({
             'food':
                 value.kindFood(TitleFood.Deals, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Deals, desktopFood)[index].time,
             'shop_name':
                 value.kindFood(TitleFood.Deals, desktopFood)[index].shopName,
+            'time_delivery':
+                value.kindFood(TitleFood.Deals, desktopFood)[index].time,
             'place': value.kindFood(TitleFood.Deals, desktopFood)[index].place,
             'vote': value.kindFood(TitleFood.Deals, desktopFood)[index].vote
           }).then((value) => ScaffoldMessenger.of(context).showSnackBar(
@@ -59,12 +60,13 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
 
       Future deleteBanner(index) async {
         try {
-          await supabase.from('banners').delete().match({
+          await supabase.from('items').delete().match({
             'food':
                 value.kindFood(TitleFood.Deals, desktopFood)[index].foodOrder,
-            'time': value.kindFood(TitleFood.Deals, desktopFood)[index].time,
             'shop_name':
                 value.kindFood(TitleFood.Deals, desktopFood)[index].shopName,
+            'time_delivery':
+                value.kindFood(TitleFood.Deals, desktopFood)[index].time,
             'place': value.kindFood(TitleFood.Deals, desktopFood)[index].place,
             'vote': value.kindFood(TitleFood.Deals, desktopFood)[index].vote
           }).then((value) => ScaffoldMessenger.of(context).showSnackBar(

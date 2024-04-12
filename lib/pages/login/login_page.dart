@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,15 +22,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   void loginEmail() {
-    Get.to(() => const LoginEmail(),
-        transition: Transition.rightToLeft,
-        duration: const Duration(milliseconds: 600));
+    Get.to(() => const LoginEmail());
   }
 
   void createAccount() {
-    Get.to(() => const CreateAccount(),
-        transition: Transition.rightToLeft,
-        duration: const Duration(milliseconds: 600));
+    Get.to(() => const CreateAccount());
   }
 
   Future _googleSignIn() async {
@@ -117,53 +111,27 @@ class _LoginPageState extends State<LoginPage> {
                         scrollDirection: Axis.vertical,
                         itemCount: loginButton.length,
                         itemBuilder: (context, index) {
-                          if (index == loginButton.length - 3) {
-                            return Platform.isAndroid
-                                ? const SizedBox()
-                                : CustomButton(
-                                    onPressed: () {
-                                      check(loginButton[index].loginText);
-                                    },
-                                    borderSide: index == loginButton.length - 1
-                                        ? const BorderSide(color: Colors.grey)
-                                        : null,
-                                    icons: index == loginButton.length - 1
-                                        ? null
-                                        : Image.asset(loginButton[index].type),
-                                    text: Text(
-                                      loginButton[index].loginText,
-                                      style: inter.copyWith(
-                                          color: index == loginButton.length - 1
-                                              ? Colors.grey
-                                              : Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    color: loginButton[index].backGroundColor,
-                                  );
-                          } else {
-                            return CustomButton(
-                              onPressed: () {
-                                check(loginButton[index].loginText);
-                              },
-                              borderSide: index == loginButton.length - 1
-                                  ? const BorderSide(color: Colors.grey)
-                                  : null,
-                              icons: index == loginButton.length - 1
-                                  ? null
-                                  : Image.asset(loginButton[index].type),
-                              text: Text(
-                                loginButton[index].loginText,
-                                style: inter.copyWith(
-                                    color: index == loginButton.length - 1
-                                        ? Colors.grey
-                                        : Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              color: loginButton[index].backGroundColor,
-                            );
-                          }
+                          return CustomButton(
+                            onPressed: () {
+                              check(loginButton[index].loginText);
+                            },
+                            borderSide: index == loginButton.length - 1
+                                ? const BorderSide(color: Colors.grey)
+                                : null,
+                            icons: index == loginButton.length - 1
+                                ? null
+                                : Image.asset(loginButton[index].type),
+                            text: Text(
+                              loginButton[index].loginText,
+                              style: inter.copyWith(
+                                  color: index == loginButton.length - 1
+                                      ? Colors.grey
+                                      : Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            color: loginButton[index].backGroundColor,
+                          );
                         },
                       ),
                     ),

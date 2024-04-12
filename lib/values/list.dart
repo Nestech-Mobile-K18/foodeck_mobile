@@ -199,12 +199,12 @@ class ProfileButtons {
 
 List<ProfileButtons> profileButtons = [
   ProfileButtons(userCircle, 'Edit Account', KindSetting.account),
-  ProfileButtons(mapPin, 'Edit Account', KindSetting.account),
-  ProfileButtons(package, 'Edit Account', KindSetting.account),
-  ProfileButtons(creditCard, 'Edit Account', KindSetting.account),
-  ProfileButtons(starBorder, 'Edit Account', KindSetting.account),
-  ProfileButtons(info, 'Edit Account', KindSetting.general),
-  ProfileButtons(database, 'Edit Account', KindSetting.general),
+  ProfileButtons(mapPin, 'My locations', KindSetting.account),
+  ProfileButtons(package, 'My Orders', KindSetting.account),
+  ProfileButtons(creditCard, 'Payment Methods', KindSetting.account),
+  ProfileButtons(starBorder, 'My reviews', KindSetting.account),
+  ProfileButtons(info, 'About us', KindSetting.general),
+  ProfileButtons(database, 'Data usage', KindSetting.general),
 ];
 
 enum KindSetting { account, general }
