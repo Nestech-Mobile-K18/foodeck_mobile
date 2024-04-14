@@ -35,23 +35,13 @@ class _CreateAccountState extends State<CreateAccount> {
       await supabase.auth.signUp(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
-      await Future.delayed(const Duration(milliseconds: 200), () {
-        supabase.from('profiles').insert({
-          'email': emailController.text.trim(),
-          'full_name': nameController.text.trim(),
-          'phone': phoneController.text.trim(),
-          'password': passwordController.text.trim(),
-        });
+      await supabase.from('users').insert({
+        'email': emailController.text.trim(),
+        'full_name': nameController.text.trim(),
+        'phone': phoneController.text.trim(),
+        'password': passwordController.text.trim(),
       });
-      await Future.delayed(const Duration(milliseconds: 100), () {
-        supabase.auth.signInWithOtp(
-            shouldCreateUser: false, email: emailController.text.trim());
-      });
-      await Future.delayed(const Duration(milliseconds: 300), () {
-        Get.to(() => Otp(email: emailController.text.trim()),
-            transition: Transition.leftToRight,
-            duration: const Duration(milliseconds: 600));
-      });
+      await Get.to(() => Otp(email: emailController.text.trim()));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: buttonShadowBlack, content: Text(error.message)));
@@ -295,8 +285,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         Get.to(() => const LoginEmail(),
-                            transition: Transition.upToDown,
-                            duration: const Duration(milliseconds: 600));
+                            transition: Transition.upToDown);
                       },
                       text: Text('Login instead',
                           style: inter.copyWith(

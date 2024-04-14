@@ -208,3 +208,11 @@ List<ProfileButtons> profileButtons = [
 ];
 
 enum KindSetting { account, general }
+
+class Payment {
+  final String type;
+
+  Payment(this.type);
+}
+
+List<Payment> payment = [Payment(masterCard), Payment(visaCard)];

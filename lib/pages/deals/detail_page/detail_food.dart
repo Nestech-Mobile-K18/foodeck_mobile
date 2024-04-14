@@ -296,7 +296,8 @@ class _DetailFoodState extends State<DetailFood> {
                                             },
                                             icon: const Icon(Icons.remove)),
                                       ),
-                                      Text('${widget.foodItems.quantityFood}'),
+                                      Text('${widget.foodItems.quantityFood}'
+                                          .padLeft(2, '0')),
                                       GestureDetector(
                                         onTapDown: (details) {
                                           holdPressButtonIncrease();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:template/pages/profile/widget/avatar.dart';
 import 'package:template/pages/profile/widget/edit_account.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/list.dart';
@@ -24,6 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   String? _imageUrl;
+  String? _name;
 
   @override
   void initState() {
@@ -32,12 +32,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _getInitialProfile() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data =
-        await supabase.from('profiles').select().eq('id', userId).single();
-    setState(() {
-      _imageUrl = data['avatar_url'];
-    });
+    var response = await supabase.from('users').select('id');
+    var records = response.toList() as List;
+    for (var record in records) {
+      var userId = record['id'];
+      final data =
+          await supabase.from('users').select().eq('id', userId).single();
+      setState(() {
+        _imageUrl = data['avatar_url'];
+        _name = data['full_name'];
+      });
+    }
   }
 
   void editAccount() {
@@ -82,45 +87,60 @@ class _ProfilePageState extends State<ProfilePage> {
               color: dividerGrey,
               child: Padding(
                 padding: const EdgeInsets.only(top: 68),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Avatar(
-                        imageUrl: _imageUrl,
-                        onUpload: (imageUrl) async {
-                          setState(() {
-                            _imageUrl = imageUrl;
-                          });
-                          final userId = supabase.auth.currentUser!.id;
-                          await supabase.from('profiles').update(
-                              {'avatar_url': imageUrl}).eq('id', userId);
-                        }),
-                    Text(
-                      'John Doe',
-                      style: inter.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Lahore, Pakistan',
-                      style: inter.copyWith(fontSize: 15, color: Colors.grey),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 24, top: 40, bottom: 8),
-                          child: Text(
-                            'Account Settings',
-                            style: inter.copyWith(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: globalPink),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _imageUrl != null
+                          ? Container(
+                              height: 88,
+                              width: 88,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(_imageUrl!),
+                                      fit: BoxFit.cover)),
+                            )
+                          : Container(
+                              width: 88,
+                              height: 88,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.grey),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.camera_alt),
+                                  Text('No Image'),
+                                ],
+                              ),
+                            ),
+                      Text(
+                        _name ?? 'No name',
+                        style: inter.copyWith(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Lahore, Pakistan',
+                        style: inter.copyWith(fontSize: 15, color: Colors.grey),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 24, top: 40, bottom: 8),
+                            child: Text(
+                              'Account Settings',
+                              style: inter.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: globalPink),
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

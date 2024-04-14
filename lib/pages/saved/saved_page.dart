@@ -7,6 +7,7 @@ import 'package:template/main.dart';
 import 'package:template/models/desktop_food.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
 import 'package:template/values/colors.dart';
+import 'package:template/values/images.dart';
 import 'package:template/values/text_styles.dart';
 
 class SavedPage extends StatefulWidget {
@@ -57,8 +58,7 @@ class _SavedPageState extends State<SavedPage> {
                           fontSize: 20, fontWeight: FontWeight.bold)))),
           body: value.saveFood.isEmpty
               ? Center(
-                  child: Lottie.network(
-                      'https://lottie.host/c8590a03-ef81-4c20-94eb-cca6c731a0ff/plYvp8aTL1.json'),
+                  child: Lottie.asset(shoppingCart),
                 )
               : Padding(
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 144),
@@ -142,8 +142,7 @@ class _SavedPageState extends State<SavedPage> {
                                       },
                                     );
                                   },
-                                  icon: Lottie.network(
-                                      'https://lottie.host/78d14af8-9bff-4958-a221-398c3dcb295f/vTYXHtUqlb.json')))))));
+                                  icon: Lottie.asset(heartBreak)))))));
     });
   }
 }

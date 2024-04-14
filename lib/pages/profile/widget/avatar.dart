@@ -41,25 +41,19 @@ class Avatar extends StatelessWidget {
       onTap: updatePicture,
       child: imageUrl != null
           ? Container(
-              width: 88,
-              height: 88,
+              width: 120,
+              height: 120,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
                       image: NetworkImage(imageUrl!), fit: BoxFit.cover)))
           : Container(
-              width: 88,
-              height: 88,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
+              width: 120,
+              height: 120,
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.grey),
               child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.camera_alt),
-                    Text('No Image'),
-                  ],
-                ),
+                child: Text('No Image'),
               ),
             ),
     );

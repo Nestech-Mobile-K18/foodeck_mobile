@@ -26,6 +26,9 @@ const String simpleDesert = 'assets/images/SimpleDesert.png';
 const String lemonade = 'assets/images/Lemonade.png';
 const String redGrape = 'assets/images/RedGrape.png';
 const String avatar = 'assets/images/Avatar.png';
+const String map = 'assets/images/Map.png';
+const String masterCard = 'assets/images/MasterCard.png';
+const String visaCard = 'assets/images/VisaCard.png';
 // Icons
 const String appleLogo = 'assets/icons/AppleLogo.png';
 const String emailLogo = 'assets/icons/EmailLogo.png';
@@ -45,3 +48,9 @@ const String info = 'assets/icons/Info.png';
 const String package = 'assets/icons/Package.png';
 const String starBorder = 'assets/icons/StarBorder.png';
 const String userCircle = 'assets/icons/UserCircle.png';
+const String pencil = 'assets/icons/Pencil.png';
+// Lotties
+const String done = 'assets/lotties/Done.json';
+const String heartBreak = 'assets/lotties/HeartBreak.json';
+const String shoppingCart = 'assets/lotties/ShoppingCart.json';
+const String delivery = 'assets/lotties/Delivery.json';

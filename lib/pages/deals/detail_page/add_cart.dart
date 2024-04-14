@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/main.dart';
 import 'package:template/models/desktop_food.dart';
 import 'package:template/models/restaurant.dart';
+import 'package:template/pages/deals/detail_page/check_out.dart';
 import 'package:template/pages/explore/widget/banner_items.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/list.dart';
@@ -516,7 +518,15 @@ class _AddCartState extends State<AddCart> {
                               heightBox: 54.dp,
                               widthBox: 172.dp,
                               paddingLeft: 8.dp,
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(() => CheckOut(
+                                      subPrice: totalPrice,
+                                      deliveryFee: deliveryFee,
+                                      vat: vat,
+                                      coupon: coupon,
+                                      totalPrice: bill,
+                                    ));
+                              },
                             )
                           ],
                         ),
