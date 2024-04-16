@@ -26,43 +26,54 @@ class _YourLocationsScreenState extends State<YourLocationsScreen> {
           headerTitle: "Your locations",
           onBack: () {
             setState(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen(page: 3,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HomeScreen(
+                            page: 3,
+                          )));
             });
           },
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            width: double.infinity,
-          ),
-          yourLocations.isEmpty
-              ? Container(
-                  alignment: Alignment.center,
-                  height: MediaQuery.sizeOf(context).height * 0.85,
-                  child: Text(
-                    "You have no Location yet!",
-                    style: GoogleFonts.inter(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                      color: AppColor.primary,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              width: double.infinity,
+            ),
+            yourLocations.isEmpty
+                ? Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.sizeOf(context).height * 0.85,
+                    child: Text(
+                      "You have no Location yet!",
+                      style: GoogleFonts.inter(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.primary,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              : SizedBox(
-                  width: 328,
-                  child: ListView.builder(
-                    itemCount: yourLocations.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => YourLocationsCard(
-                      myLocationInfo: yourLocations[index],
+                  )
+                : SizedBox(
+                    height: 160 * yourLocations.length.toDouble(),
+                    width: 328,
+                    child: ListView.builder(
+                      itemCount: yourLocations.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => YourLocationsCard(
+                        myLocationInfo: yourLocations[index],
+                      ),
                     ),
                   ),
-                ),
-        ],
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
       ),
     );
   }

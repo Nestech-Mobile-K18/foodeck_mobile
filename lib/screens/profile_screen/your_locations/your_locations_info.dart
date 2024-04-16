@@ -1,5 +1,5 @@
 class YourLocationsInfo {
-  final String location;
+  late String location;
   late String kind;
 
   YourLocationsInfo({
