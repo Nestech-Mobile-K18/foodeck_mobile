@@ -44,7 +44,12 @@ class AppRoutes {
     loginScreen: (context) => const LoginScreen(),
     loginViaEmail: (context) => const LoginViaEmailScreen(),
     createAccount: (context) => const CreateAccountScreen(),
-    otpScreen: (context) => const OTPScreen(email: ''),
+    otpScreen: (context) => const OTPScreen(
+          email: '',
+          name: '',
+          phone: '',
+          password: '',
+        ),
     forgotPassword: (context) => const ForgotPasswordScreen(),
     homeScreen: (context) => const HomeScreen(page: 0),
     exploreScreen: (context) => const ExploreScreen(),
@@ -62,12 +67,11 @@ class AppRoutes {
           popularsItemInfo: null,
         ),
     checkOutScreen: (context) => const CheckOutScreen(
-      subtotal: '', 
-      deliverfee: '', 
-      vat: '', 
-      coupon: '',
-      total: '',
-     
-      ),
+          subtotal: '',
+          deliverfee: '',
+          vat: '',
+          coupon: '',
+          total: '',
+        ),
   };
 }

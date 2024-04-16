@@ -48,6 +48,8 @@ class _TabCreditCardState extends State<TabCreditCard> {
     setState(() {
       creditCardInfo.removeWhere(
           (creditCardInfo) => widget.creditCardInfo.id == creditCardInfo.id);
+
+      //
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const PaymentMethodScreen()));
     });
@@ -116,13 +118,14 @@ class _TabCreditCardState extends State<TabCreditCard> {
   //
   void _updateCreditCard() {
     creditCardInfo[creditCardInfo.indexWhere((creditCardInfo) =>
-            widget.creditCardInfo.id == creditCardInfo.id)] =
-        CreditCardInfo(
-            id: widget.creditCardInfo.id,
-            cardName: cardNameController.text,
-            cardNumber: cardNumberController.text,
-            cardExpiryDate: expiryDateController.text,
-            cardCVC: cvcController.text);
+        widget.creditCardInfo.id == creditCardInfo.id)] = CreditCardInfo(
+      id: widget.creditCardInfo.id,
+      cardName: cardNameController.text,
+      cardNumber: cardNumberController.text,
+      cardExpiryDate: expiryDateController.text,
+      cardCVC: cvcController.text,
+      isSelected: false,
+    );
     setState(() {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const PaymentMethodScreen()));

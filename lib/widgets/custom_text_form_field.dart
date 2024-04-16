@@ -113,14 +113,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 ),
                 hintText: widget.hintText,
                 hintStyle: TextStyle(color: AppColor.grey2),
-                suffixIcon: widget.suffixIcon,
-
-                // widget.label == "Password" &&
-                //         widget.controller!.text.isNotEmpty
-                //     ? InkWell(
-                //         onTap: widget.onTapObscureText,
-                //         child: const Icon(Icons.remove_red_eye_outlined))
-                //     : null,
+                suffixIcon: widget.label == "Password" &&
+                        widget.controller!.text.isNotEmpty
+                    ? InkWell(
+                        onTap: widget.onTapObscureText,
+                        child: const Icon(Icons.remove_red_eye_outlined))
+                    : widget.suffixIcon,
                 suffixIconColor: AppColor.grey1,
                 contentPadding: widget.contentPadding ??
                     const EdgeInsets.symmetric(

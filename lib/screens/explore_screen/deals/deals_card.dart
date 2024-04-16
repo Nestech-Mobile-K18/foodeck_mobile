@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DealsCard extends StatefulWidget {
   final dynamic onTapChooseDeal;
@@ -21,10 +23,8 @@ class DealsCard extends StatefulWidget {
 }
 
 class _DealsCardState extends State<DealsCard> {
-  //
-
-//
-  void _savedItem() {
+  // add or delete saved item when user presses the like button
+  void _handleLikeDeal() {
     final newSavedDealItem = SavedItemInfo(
       image: widget.dealItemInfo.image,
       time: widget.dealItemInfo.time,
@@ -37,16 +37,57 @@ class _DealsCardState extends State<DealsCard> {
         ? setState(() {
             savedItems.add(newSavedDealItem);
           })
-        : null;
+        : widget.dealItemInfo.like == false
+            ? setState(() {
+                savedItems.removeWhere((savedItems) =>
+                    savedItems.image == widget.dealItemInfo.image);
+              })
+            : null;
   }
 
-  void _unsavedItem() {
-    widget.dealItemInfo.like == false
-        ? setState(() {
-            savedItems.removeWhere(
-                (savedItems) => savedItems.title == widget.dealItemInfo.title);
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    final userDeal = await supabase
+        .from("deals")
+        .select("image")
+        .filter(
+          "id_user",
+          "eq",
+          userID,
+        )
+        .match(
+      {"image": widget.dealItemInfo.image.toString()},
+    );
+
+    userDeal.isEmpty
+        ? await supabase.from("deals").insert({
+            "image": widget.dealItemInfo.image.toString(),
+            "time": widget.dealItemInfo.time.toString(),
+            "title": widget.dealItemInfo.title.toString(),
+            "location": widget.dealItemInfo.location.toString(),
+            "star": widget.dealItemInfo.star.toString(),
+            "like": "true",
+            "id_user": userID,
           })
-        : null;
+        : await supabase.from("deals").update({
+            "like": widget.dealItemInfo.like.toString(),
+            "time_updated": DateTime.now().toString(),
+          }).match({
+            "image": widget.dealItemInfo.image.toString(),
+            "id_user": userID,
+          });
   }
 
   //
@@ -179,8 +220,9 @@ class _DealsCardState extends State<DealsCard> {
                 onPressed: () {
                   setState(() {
                     widget.dealItemInfo.like = !widget.dealItemInfo.like;
-                    _savedItem();
-                    _unsavedItem();
+
+                    _handleLikeDeal();
+                    _updateDataSupabase();
                   });
                 },
                 icon: Icon(

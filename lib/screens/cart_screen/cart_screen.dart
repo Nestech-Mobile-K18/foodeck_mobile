@@ -324,7 +324,7 @@ class _CartScreenState extends State<CartScreen> {
                         : valueCoupon < 1
                             ? "\$${(((cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat) * valueCoupon)).toStringAsFixed(2)}"
                             : valueCoupon >= 1
-                                ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat + valueCoupon).toString()}"
+                                ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat - valueCoupon).toString()}"
                                 : "",
                     style: GoogleFonts.inter(
                       fontSize: 28,
@@ -340,25 +340,27 @@ class _CartScreenState extends State<CartScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CheckOutScreen(
-                                                                   //
-                                  subtotal: "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price))).toString()}",
-                                  //
-                                  deliverfee:"\$${deliveryFee.round()}",
-                                  //
-                                  vat:"\$${vat.round()}",
-                                  //
-                                  coupon: valueCoupon == 0 || valueCoupon > 1
-                        ? "-\$${valueCoupon.round()}"
-                        : "-${(valueCoupon * 100).round()}%",
-                                  //
-                                total:valueCoupon == 0
-                        ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat).toStringAsFixed(2)}"
-                        : valueCoupon < 1
-                            ? "\$${(((cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat) * valueCoupon)).toStringAsFixed(2)}"
-                            : valueCoupon >= 1
-                                ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat + valueCoupon).toString()}"
-                                : "",
-                              )));
+                                      //
+                                      subtotal:
+                                          "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price))).toString()}",
+                                      //
+                                      deliverfee: "\$${deliveryFee.round()}",
+                                      //
+                                      vat: "\$${vat.round()}",
+                                      //
+                                      coupon: valueCoupon == 0 ||
+                                              valueCoupon > 1
+                                          ? "-\$${valueCoupon.round()}"
+                                          : "-${(valueCoupon * 100).round()}%",
+                                      //
+                                      total: valueCoupon == 0
+                                          ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat).toStringAsFixed(2)}"
+                                          : valueCoupon < 1
+                                              ? "\$${(((cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat) * valueCoupon)).toStringAsFixed(2)}"
+                                              : valueCoupon >= 1
+                                                  ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat - valueCoupon).toString()}"
+                                                  : "",
+                                    )));
                       });
                     },
                     style: ElevatedButton.styleFrom(

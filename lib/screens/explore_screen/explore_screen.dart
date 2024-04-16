@@ -7,8 +7,10 @@ import 'package:foodeck_app/screens/explore_screen/dessert/dessert_card.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/list_explore_more.dart';
 import 'package:foodeck_app/screens/explore_screen/food/food_card.dart';
 import 'package:foodeck_app/screens/explore_screen/grocery/grocery_card.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExploreScreen extends StatefulWidget {
   final CartItemInfo? cartItemInfo;
@@ -24,7 +26,77 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   //
   final TextEditingController searchController = TextEditingController();
+
+  //show Dialog when cart is emty and user still press
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          height: 100,
+          width: 200,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: AppColor.grey1.withOpacity(0.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const SizedBox(
+                width: double.infinity,
+              ),
+              Icon(
+                Icons.no_food,
+                size: 24,
+                color: AppColor.red,
+              ),
+              Text(
+                "You have no item to buy today!",
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).timeout(
+      const Duration(seconds: 1),
+      onTimeout: () {
+        setState(() {
+          Navigator.pop(context);
+        });
+      },
+    );
+  }
+
   //
+  final supabase = Supabase.instance.client;
+  Future<void> _getinfo() async {
+    final res = await Supabase.instance.client
+        .from("deals")
+        .select("image")
+        .match({"id_user": 24});
+    for (var element in res) {
+      String image = element.values.single;
+    }
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    print(userID);
+  }
 
   //
   @override
@@ -92,60 +164,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
         onTap: () {
           setState(() {
             cartItemInfo.isEmpty
-                ? showDialog(
-                    context: context,
-                    builder: (context) => Dialog(
-                      backgroundColor: Colors.transparent,
-                      child: Container(
-                        height: 100,
-                        width: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: AppColor.grey1.withOpacity(0.5),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const SizedBox(
-                              width: double.infinity,
-                            ),
-                            Icon(
-                              Icons.no_food,
-                              size: 24,
-                              color: AppColor.red,
-                            ),
-                            Text(
-                              "You have no item to buy today!",
-                              style: GoogleFonts.inter(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: AppColor.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ).timeout(
-                    const Duration(seconds: 1),
-                    onTimeout: () {
-                      setState(() {
-                        Navigator.pop(context);
-                      });
-                    },
-                  )
+                ? _showDialog()
                 : Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const CartScreen()));
-
-            print((cartItemInfo.fold(
-                0,
-                (previousValue, element) =>
-                    (previousValue + element.quantity))).toString());
-            print(cartItemInfo.length);
           });
         },
         child: Stack(

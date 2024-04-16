@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/routes/app_routes.dart';
 import 'package:foodeck_app/screens/create_account/otp_screen.dart';
-import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/widgets/header.dart';
 import 'package:foodeck_app/widgets/custom_login_button.dart';
@@ -84,35 +83,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         .eq("email", emailController.text);
 
     if (emailUser.isEmpty) {
-      //update user account info
-      await supabase.from('user_account').insert({
-        "name": nameController.text.trim(),
-        "email": emailController.text.trim(),
-        "phone": phoneController.text.trim(),
-        "password": passwordController.text.trim(),
-      });
       //create new user
       await supabase.auth.signUp(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      //Create local profile info
-      final newProfile = ProfileInfo(
-        name: nameController.text,
-        email: emailController.text,
-        phone: phoneController.text,
-      );
-
-      profileInfo.clear();
-      profileInfo.add(newProfile);
 
       //Navigation to OTP screen
       await Future.delayed(const Duration(seconds: 1), () {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    OTPScreen(email: emailController.text.trim())));
+                builder: (context) => OTPScreen(
+                      email: emailController.text.trim(),
+                      name: nameController.text.trim(),
+                      phone: phoneController.text.trim(),
+                      password: passwordController.text.trim(),
+                    )));
       });
     } else {
       setState(() {

@@ -70,6 +70,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
       cardName: cardNameController.text,
       cardExpiryDate: expiryDateController.text,
       cardCVC: cvcController.text,
+      isSelected: false,
     );
     setState(() {
       creditCardInfo.add(newCreditCard);

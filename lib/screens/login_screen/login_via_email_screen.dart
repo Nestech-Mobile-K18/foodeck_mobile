@@ -67,13 +67,8 @@ class _LoginViaEmailScreenState extends State<LoginViaEmailScreen> {
         email: emailController.text,
         password: passwordController.text,
       );
-      // final data = await Supabase.instance.client.from('users').select('name');
+
       if (res.user != null) {
-        //   Navigator.of(context).pushReplacement(
-        //   MaterialPageRoute(
-        //     builder: (context) => HomeScreen(name: data.toString()),
-        //   ),
-        // );
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -106,7 +101,6 @@ class _LoginViaEmailScreenState extends State<LoginViaEmailScreen> {
     }
   }
 
-  String name = "";
   Future<void> _getinfoUser() async {
     final nameUser = await Supabase.instance.client
         .from("user_account")
@@ -205,6 +199,11 @@ class _LoginViaEmailScreenState extends State<LoginViaEmailScreen> {
             CustomTextFormField(
               controller: passwordController,
               onTapObscureText: _onTapObscureText,
+              suffixIcon: Icon(
+                Icons.remove_red_eye_outlined,
+                size: 22,
+                color: AppColor.grey2,
+              ),
               label: "Password",
               obscureText: _obscureText,
               errorText: _isValidatePassword == false

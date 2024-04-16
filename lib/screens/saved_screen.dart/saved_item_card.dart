@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_item_info.dart';
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SavedItemCard extends StatefulWidget {
   final ExploreMoreItemInfo? exploreMoreItemInfo;
@@ -27,7 +29,8 @@ class _SavedItemCardState extends State<SavedItemCard> {
   bool savedItem = true;
   //
   int currentIndexPage = 1;
-  void unsavedDealItem() {
+  //delete saved item when user unchecks the like button
+  void _unsavedDealItem() {
     savedItem == false
         ? setState(() {
             savedItems.removeWhere(
@@ -48,6 +51,37 @@ class _SavedItemCardState extends State<SavedItemCard> {
         return const HomeScreen(page: 1);
       },
     ));
+  }
+
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("deals").update({
+      "like": false.toString(),
+      "time_updated": DateTime.now().toString(),
+    }).match({
+      "image": widget.savedItems.image.toString(),
+      "id_user": userID,
+    });
+
+    await supabase.from("explore_more").update({
+      "like": false.toString(),
+      "time_updated": DateTime.now().toString(),
+    }).match({
+      "id_user": userID.toString(),
+      "image": widget.savedItems.image.toString()
+    });
   }
 
   //
@@ -109,7 +143,9 @@ class _SavedItemCardState extends State<SavedItemCard> {
                       onPressed: () {
                         setState(() {
                           savedItem = !savedItem;
-                          unsavedDealItem();
+
+                          _unsavedDealItem();
+                          _updateDataSupabase();
                         });
                       },
                       icon: Icon(

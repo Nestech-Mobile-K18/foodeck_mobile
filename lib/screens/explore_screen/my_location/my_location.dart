@@ -44,8 +44,6 @@ class _MyLocationState extends State<MyLocation> {
   }
 
   Future<void> _addMyLocation() async {
-    
-
     Position position = await Geolocator.getCurrentPosition();
 
     await placemarkFromCoordinates(position.latitude, position.longitude)
@@ -61,11 +59,15 @@ class _MyLocationState extends State<MyLocation> {
       location: _currentAddress.toString().trim(),
       kind: '',
     );
-yourLocations.map((yourLocations) => yourLocations.location).contains(_currentAddress.toString())==true
-   ? null
-    :setState(() {
-      yourLocations.add(newMyLocation);
-    });
+    //
+    yourLocations
+                .map((yourLocations) => yourLocations.location)
+                .contains(_currentAddress.toString()) ==
+            true
+        ? null
+        : setState(() {
+            yourLocations.add(newMyLocation);
+          });
   }
 
   ///
@@ -93,7 +95,9 @@ yourLocations.map((yourLocations) => yourLocations.location).contains(_currentAd
             SizedBox(
               width: 300,
               child: Text(
-                "  ${_currentAddress ?? "Unknow address"}",
+                yourLocations.isEmpty
+                    ? "Tap here to define your location!"
+                    : yourLocations.last.location.toString(),
                 style: GoogleFonts.inter(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,

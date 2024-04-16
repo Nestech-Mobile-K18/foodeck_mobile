@@ -5,13 +5,18 @@ import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SavedScreen extends StatefulWidget {
-  const SavedScreen({super.key});
+  const SavedScreen({
+    super.key,
+  });
 
   @override
   State<SavedScreen> createState() => _SavedScreenState();
 }
 
 class _SavedScreenState extends State<SavedScreen> {
+  //
+
+  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,10 +6,20 @@ import 'package:foodeck_app/widgets/custom_login_button.dart';
 import 'package:foodeck_app/widgets/custom_otp_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 
 class OTPScreen extends StatefulWidget {
+  final String name;
+
+  final String phone;
+  final String password;
   final String email;
-  const OTPScreen({super.key, required this.email});
+  const OTPScreen(
+      {super.key,
+      required this.email,
+      required this.name,
+      required this.phone,
+      required this.password});
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();
@@ -76,6 +86,24 @@ class _OTPScreenState extends State<OTPScreen> {
       await Future.delayed(const Duration(seconds: 5), () {
         Navigator.pushNamed(context, AppRoutes.loginScreen);
       });
+      //update user account info on supabase
+      await supabase.from('user_account').insert({
+        "name": widget.name.toString().trim(),
+        "email": widget.email.toString().trim(),
+        "phone": widget.phone.toString().trim(),
+        "password": widget.password.toString().trim(),
+        "provider": "Email",
+      });
+
+      //Create local profile info
+      final newProfile = ProfileInfo(
+        name: widget.name.toString(),
+        email: widget.email.toString().trim(),
+        phone: widget.phone.toString().trim(),
+      );
+
+      profileInfo.clear();
+      profileInfo.add(newProfile);
     } on AuthException catch (error) {
       setState(() {
         ScaffoldMessenger.of(context)

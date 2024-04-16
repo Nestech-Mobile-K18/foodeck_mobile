@@ -12,4 +12,11 @@ class ProfileInfo {
   });
 }
 
-List<ProfileInfo> profileInfo = [];
+List<ProfileInfo> profileInfo = [
+  ProfileInfo(
+    name: "Hai Nguyen",
+    email: "benandboo1988@gmail.com",
+    phone: "0902590980",
+    password: "0902590980",
+  ),
+];

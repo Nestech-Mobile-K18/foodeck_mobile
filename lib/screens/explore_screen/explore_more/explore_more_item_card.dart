@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_item_info.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExploreMoreItemCard extends StatefulWidget {
   final ExploreMoreItemInfo exploreMoreItemInfo;
@@ -16,8 +18,9 @@ class ExploreMoreItemCard extends StatefulWidget {
 
 class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
   //
-  void _savedItem() {
-    final newSavedItem = SavedItemInfo(
+  // add or delete saved item when user presses the like button
+  void _handleLikeDeal() {
+    final newSavedDealItem = SavedItemInfo(
       image: widget.exploreMoreItemInfo.image,
       time: widget.exploreMoreItemInfo.time,
       title: widget.exploreMoreItemInfo.title,
@@ -27,18 +30,59 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
     );
     widget.exploreMoreItemInfo.like == true
         ? setState(() {
-            savedItems.add(newSavedItem);
+            savedItems.add(newSavedDealItem);
           })
-        : null;
+        : widget.exploreMoreItemInfo.like == false
+            ? setState(() {
+                savedItems.removeWhere((savedItems) =>
+                    savedItems.image == widget.exploreMoreItemInfo.image);
+              })
+            : null;
   }
 
-  void _unsavedItem() {
-    widget.exploreMoreItemInfo.like == false
-        ? setState(() {
-            savedItems.removeWhere((savedItems) =>
-                savedItems.title == widget.exploreMoreItemInfo.title);
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    final userDeal = await supabase
+        .from("explore_more")
+        .select("image")
+        .filter(
+          "id_user",
+          "eq",
+          userID,
+        )
+        .match(
+      {"image": widget.exploreMoreItemInfo.image.toString()},
+    );
+
+    userDeal.isEmpty
+        ? await supabase.from("explore_more").insert({
+            "image": widget.exploreMoreItemInfo.image.toString(),
+            "time": widget.exploreMoreItemInfo.time.toString(),
+            "title": widget.exploreMoreItemInfo.title.toString(),
+            "location": widget.exploreMoreItemInfo.location.toString(),
+            "star": widget.exploreMoreItemInfo.star.toString(),
+            "like": "true",
+            "id_user": userID,
           })
-        : null;
+        : await supabase.from("explore_more").update({
+            "like": widget.exploreMoreItemInfo.like.toString(),
+            "time_updated": DateTime.now().toString(),
+          }).match({
+            "image": widget.exploreMoreItemInfo.image.toString(),
+            "id_user": userID,
+          });
   }
 
   //
@@ -103,8 +147,8 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
                           setState(() {
                             widget.exploreMoreItemInfo.like =
                                 !widget.exploreMoreItemInfo.like;
-                            _savedItem();
-                            _unsavedItem();
+                            _handleLikeDeal();
+                            _updateDataSupabase();
                           });
                         },
                         icon: Icon(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_screen.dart';
 import 'package:foodeck_app/screens/explore_screen/my_location/my_location.dart';
 import 'package:foodeck_app/screens/notification_screen/notification_screen.dart';
+
 import 'package:foodeck_app/screens/profile_screen/profile_screen.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_screen.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
@@ -25,11 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   //
 
   int currentIndexPage = 0;
-  List pages = const [
-    ExploreScreen(),
-    SavedScreen(),
-    NotificationScreen(),
-    ProfileScreen(),
+  List pages = [
+    const ExploreScreen(),
+    const SavedScreen(),
+    const NotificationScreen(),
+    const ProfileScreen(),
   ];
 
   //
