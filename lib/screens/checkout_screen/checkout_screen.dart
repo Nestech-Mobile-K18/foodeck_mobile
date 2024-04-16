@@ -6,12 +6,14 @@ import 'package:foodeck_app/screens/checkout_screen/credit_card.dart';
 import 'package:foodeck_app/screens/pay_success/pay_success.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/add_credit_card_tab.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/credit_card_components/credit_card_info.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_images.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
 import 'package:foodeck_app/widgets/header.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CheckOutScreen extends StatefulWidget {
   // final String priceItem;
@@ -81,7 +83,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               cardNumberController: cardNumberController,
               expiryDateController: expiryDateController,
               cvcController: cvcController,
-              addCard: _addCreditCard,
+              addCard: () {
+                setState(() {
+                  _addCreditCard();
+                  _updateDataSupabase();
+                });
+              },
             ),
           ),
         ),
@@ -116,6 +123,30 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           ),
         ),
       );
+    });
+  }
+
+  //
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("credit_card").insert({
+      "card_name": cardNameController.text,
+      "card_number": cardNumberController.text,
+      "card_expiry_date": expiryDateController.text,
+      "card_cvc": cvcController.text,
+      "user_id": userID,
     });
   }
 

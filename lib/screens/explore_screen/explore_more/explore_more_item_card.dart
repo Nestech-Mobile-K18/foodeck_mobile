@@ -58,7 +58,7 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
         .from("explore_more")
         .select("image")
         .filter(
-          "id_user",
+          "user_id",
           "eq",
           userID,
         )
@@ -74,14 +74,14 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
             "location": widget.exploreMoreItemInfo.location.toString(),
             "star": widget.exploreMoreItemInfo.star.toString(),
             "like": "true",
-            "id_user": userID,
+            "user_id": userID,
           })
         : await supabase.from("explore_more").update({
             "like": widget.exploreMoreItemInfo.like.toString(),
             "time_updated": DateTime.now().toString(),
           }).match({
             "image": widget.exploreMoreItemInfo.image.toString(),
-            "id_user": userID,
+            "user_id": userID,
           });
   }
 

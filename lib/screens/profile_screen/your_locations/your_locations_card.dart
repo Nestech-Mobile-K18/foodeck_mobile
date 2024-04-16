@@ -204,9 +204,8 @@ class _YourLocationsCardState extends State<YourLocationsCard> {
                 onTap: () {
                   setState(() {
                     _deleteLocation();
-                    Future.delayed(const Duration(seconds: 3), () {
-                      _updateDataSupabase();
-                    });
+
+                    _updateDataSupabase();
                   });
                 },
                 child: Container(

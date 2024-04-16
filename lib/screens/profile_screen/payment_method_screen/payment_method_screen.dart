@@ -3,8 +3,10 @@ import 'package:foodeck_app/screens/home_screen/home_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/credit_card_components/credit_card_info.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/list_credit_card.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/add_credit_card_tab.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
   const PaymentMethodScreen({super.key});
@@ -40,26 +42,77 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
 
 //show dialog when add new card
   void _showDialog() {
-    showDialog(
-      useSafeArea: true,
-      context: context,
-      builder: (context) => Align(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Dialog(
-            alignment: Alignment.center,
-            child: AddCreditCardTab(
-              cardNameController: cardNameController,
-              cardNumberController: cardNumberController,
-              expiryDateController: expiryDateController,
-              cvcController: cvcController,
-              addCard: _addCreditCard,
+    creditCardInfo.length > 5
+        ? showDialog(
+            context: context,
+            builder: (context) => Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                height: 150,
+                width: 200,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: AppColor.grey1.withOpacity(0.5),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(
+                      width: double.infinity,
+                    ),
+                    Icon(
+                      Icons.notifications,
+                      size: 24,
+                      color: AppColor.red,
+                    ),
+                    Text(
+                      "Your cards is overlimit.Please delete one of them for continuing add new card!",
+                      style: GoogleFonts.inter(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          ).timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              setState(() {
+                Navigator.pop(context);
+              });
+            },
+          )
+        : showDialog(
+            useSafeArea: true,
+            context: context,
+            builder: (context) => Align(
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Dialog(
+                  alignment: Alignment.center,
+                  child: AddCreditCardTab(
+                    cardNameController: cardNameController,
+                    cardNumberController: cardNumberController,
+                    expiryDateController: expiryDateController,
+                    cvcController: cvcController,
+                    addCard: () {
+                      setState(() {
+                        _addCreditCard();
+                        _insertDataSupabase();
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
   }
 
   //
@@ -79,6 +132,29 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     });
   }
 
+  //
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _insertDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("credit_card").insert({
+      "card_name": cardNameController.text,
+      "card_number": cardNumberController.text,
+      "card_expiry_date": expiryDateController.text,
+      "card_cvc": cvcController.text,
+      "user_id": userID,
+    });
+  }
   //
 
   //

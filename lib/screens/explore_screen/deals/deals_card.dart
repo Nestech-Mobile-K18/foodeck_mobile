@@ -63,7 +63,7 @@ class _DealsCardState extends State<DealsCard> {
         .from("deals")
         .select("image")
         .filter(
-          "id_user",
+          "user_id",
           "eq",
           userID,
         )
@@ -79,14 +79,14 @@ class _DealsCardState extends State<DealsCard> {
             "location": widget.dealItemInfo.location.toString(),
             "star": widget.dealItemInfo.star.toString(),
             "like": "true",
-            "id_user": userID,
+            "user_id": userID,
           })
         : await supabase.from("deals").update({
             "like": widget.dealItemInfo.like.toString(),
             "time_updated": DateTime.now().toString(),
           }).match({
             "image": widget.dealItemInfo.image.toString(),
-            "id_user": userID,
+            "user_id": userID,
           });
   }
 

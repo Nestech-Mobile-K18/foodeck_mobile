@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/credit_card_components/credit_card_info.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/payment_method_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_images.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TabCreditCard extends StatefulWidget {
   final CreditCardInfo creditCardInfo;
@@ -132,6 +134,51 @@ class _TabCreditCardState extends State<TabCreditCard> {
     });
   }
 
+  //update data on Supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("credit_card").update({
+      "card_name": cardNameController.value.text,
+      "card_number": cardNumberController.text,
+      "card_expiry_date": expiryDateController.text,
+      "card_cvc": cvcController.text,
+      "time_updated": DateTime.now().toString(),
+    }).match({
+      "user_id": userID,
+      "card_number": cardNumberController.text,
+    });
+  }
+
+  //
+  Future<void> _deleteDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("credit_card").delete().match({
+      "user_id": userID,
+      "card_number": cardNumberController.text,
+    });
+  }
+
   //
   @override
   Widget build(BuildContext context) {
@@ -213,7 +260,8 @@ class _TabCreditCardState extends State<TabCreditCard> {
               textInputFormatter: formatterNumberCard,
               keyboardType: TextInputType.number,
               onChanged: (value) {
-                var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
+                var text =
+                    value.toString().replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
                 setState(() {
                   cardNumberController.value = cardNumberController.value
                       .copyWith(
@@ -231,7 +279,8 @@ class _TabCreditCardState extends State<TabCreditCard> {
             textInputFormatter: formatterExipryDate,
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              var text = value.replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
+              var text =
+                  value.toString().replaceAll(RegExp(r'\s+\b|\b\s'), ' ');
               setState(() {
                 expiryDateController.value = expiryDateController.value
                     .copyWith(
@@ -250,7 +299,7 @@ class _TabCreditCardState extends State<TabCreditCard> {
             keyboardType: TextInputType.number,
             onChanged: (value) {
               setState(() {
-                int length = value.length;
+                int length = value.toString().length;
                 if (length == 4 || length == 9 || length == 14) {
                   cardNumberController.text = '$value ';
                   cardNumberController.selection = TextSelection.fromPosition(
@@ -263,7 +312,12 @@ class _TabCreditCardState extends State<TabCreditCard> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: _updateCreditCard,
+                onPressed: () {
+                  setState(() {
+                    _updateCreditCard();
+                    _updateDataSupabase();
+                  });
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primary,
                   fixedSize: const Size(150, 20),
@@ -281,7 +335,12 @@ class _TabCreditCardState extends State<TabCreditCard> {
                 ),
               ),
               ElevatedButton(
-                onPressed: _removeCreditCard,
+                onPressed: () {
+                  setState(() {
+                    _removeCreditCard();
+                    _deleteDataSupabase();
+                  });
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.grey1,
                   fixedSize: const Size(150, 20),
