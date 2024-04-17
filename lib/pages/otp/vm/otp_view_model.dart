@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:template/pages/otp/models/otp_model.dart';
@@ -10,13 +11,41 @@ import '../../../services/errror.dart';
 
 import '../../forgot_password/views/new_password_view.dart';
 
+/// A view model for managing OTP-related data and interactions.
 class OTPViewModel {
+  /// Timer object for handling OTP resend countdown.
   Timer? timer;
+
+  /// Time left for OTP resend countdown.
   int resendOTPTimer = 60;
+
+  /// Flag indicating whether OTP can be resent.
   bool canResend = true;
+
+  /// An instance of the API class for making API requests.
   final API _api = API();
+
+  /// An instance of the ErrorDialog class for displaying error messages.
   final ErrorDialog _showError = ErrorDialog();
 
+  Future<void> _saveUserIdToSharedPreferences(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId);
+  }
+
+  Future<String?> _getUserIdFromSupabase(String email) async {
+    var response = await _api.supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+    String? userId = response['id'];
+
+    return userId;
+  }
+
+  /// Verifies the OTP code entered by the user.
   Future<void> verifyOTP(BuildContext context, OTPModel _otpModel,
       {required bool fromHomeScreen}) async {
     try {
@@ -25,13 +54,20 @@ class OTPViewModel {
 
       final res = _api.requestVerifyOTP(
           token: token, otpType: OtpType.email, email: email);
-      res.then((value) {
+      res.then((value) async {
         final User? user = value?.user;
         if (user != null) {
-          // ignore: use_build_context_synchronously
           if (fromHomeScreen == true) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/application', (route) => false);
+            final String? userId = await _getUserIdFromSupabase(email);
+            if (userId != null) {
+              _saveUserIdToSharedPreferences(userId);
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/application', (route) => false);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('This user does not exist'),
+              ));
+            }
           } else {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
@@ -50,6 +86,7 @@ class OTPViewModel {
     }
   }
 
+  /// Starts the OTP resend countdown timer.
   void startResendOTPTimer(BuildContext context) {
     resendOTPTimer = 60;
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -62,11 +99,11 @@ class OTPViewModel {
     });
   }
 
+  /// Resends the OTP code to the user.
   Future<void> resendOTP(OTPModel _otpModel, BuildContext context) async {
     try {
       _api.requestResendOTP(_otpModel.email);
       // Start the countdown
-      // ignore: use_build_context_synchronously
       startResendOTPTimer(context);
     } catch (e) {
       _showError.showError(

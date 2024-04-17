@@ -116,11 +116,17 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
               child: Column(
                 children: [
                   MethodButton(
-                      onTap: () {
+                      onTap: () async {
                         LoginViaEmailModel inputLogin = LoginViaEmailModel(
                             email: emailController.text,
                             password: passwordController.text);
                         _viewModel.loginAuthen(context, inputLogin);
+                        final userId = await _viewModel
+                            .getUserIdFromSupabase(inputLogin.email);
+                        if (userId != null) {
+                          await _viewModel
+                              .saveUserIdToSharedPreferences(userId);
+                        }
                       },
                       color: ColorsGlobal.globalPink,
                       title: StringExtensions.login),

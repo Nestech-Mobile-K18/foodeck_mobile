@@ -12,7 +12,7 @@ import '../widgets/home_categories.dart';
 import '../widgets/home_explore.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -51,7 +51,6 @@ class _HomeViewState extends State<HomeView> {
       appBar: HomeBar(context, _address),
       floatingActionButton: FloatingActionButton(
         elevation: 10,
-
         onPressed: () {},
         // ignore: sort_child_properties_last
         child: Image.asset(

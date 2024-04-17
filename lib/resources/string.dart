@@ -24,7 +24,6 @@ class StringExtensions {
   static const food = "Food";
   static const contentFood = "Order food you love";
   // home
-  static const address = 'Block B Phase 2 Johar Town, Lahore';
   static const showNow = "Show Now";
   static const code = "Code : CVB25";
   static const deals = "Deals";
@@ -45,4 +44,15 @@ class StringExtensions {
   static const myLocations = 'My Locations';
   static const add = 'Add';
   static const addLocation = 'Add Location';
+  static const searchLocation = 'Search Location';
+  static const doYouWantDelete = 'Do you want deleting location';
+  static const areYouSure = "Are you sure ?";
+  static const oke = 'OK';
+  static const cancel = 'Cancel';
+  static const nameOfPlace = 'Name of place';
+  static const city = 'City';
+  static const area = 'Area';
+  static const address = 'Address';
+  static const addressInstructions = 'Address Instructions';
+  static const deleteLocation = 'Delete Location';
 }

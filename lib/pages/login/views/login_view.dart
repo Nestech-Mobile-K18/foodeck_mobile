@@ -6,10 +6,7 @@ import 'package:template/pages/login/widgets/deep_link.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/media_res.dart' as image;
 import 'package:template/widgets/custom_button.dart';
-import 'package:template/widgets/custom_text.dart';
 import 'package:template/resources/const.dart';
-
-import '../../home/view/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -30,68 +27,80 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(image.MediaRes.backgroundLogin),
-            const SizedBox(
-              height: 10,
-            ),
-            MethodButton(
-              onTap: () async {
-                await _viewModel.googleSignIn(context);
-              },
-              isIcon: true,
-              color: ColorsGlobal.globalRed,
-              title: StringExtensions.loginViaGoogle,
-              assetIcon: image.MediaRes.logoGoogle,
-            ),
-            MethodButton(
-              onTap: () async {
-                await _viewModel.facebookSignIn(context);
-              },
-              isIcon: true,
-              color: ColorsGlobal.globalBlue,
-              title: StringExtensions.loginViaFacebook,
-              assetIcon: image.MediaRes.logoFacebook,
-            ),
-            MethodButton(
-              onTap: () async {
-                await _viewModel.appleSignIn(context);
-              },
-              isIcon: true,
-              color: ColorsGlobal.globalBlack,
-              title: StringExtensions.loginViaApple,
-              assetIcon: image.MediaRes.logoApple,
-            ),
-            MethodButton(
-              isIcon: true,
-              color: ColorsGlobal.globalPink,
-              title: StringExtensions.loginViaEmail,
-              assetIcon: image.MediaRes.logoMail,
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const LoginViaEmailView(),
-                ),
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    image.MediaRes.backgroundLogin,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MethodButton(
+                    onTap: () async {
+                      final res = await _viewModel.googleSignIn(context);
+                      final userId = await _viewModel
+                          .getUserIdFromSupabase(res!.user!.email!);
+                      if (userId != null) {
+                        await _viewModel.saveUserIdToSharedPreferences(userId);
+                      }
+                    },
+                    isIcon: true,
+                    color: ColorsGlobal.globalRed,
+                    title: StringExtensions.loginViaGoogle,
+                    assetIcon: image.MediaRes.logoGoogle,
+                  ),
+                  MethodButton(
+                    onTap: () async {
+                      await _viewModel.facebookSignIn(context);
+                    },
+                    isIcon: true,
+                    color: ColorsGlobal.globalBlue,
+                    title: StringExtensions.loginViaFacebook,
+                    assetIcon: image.MediaRes.logoFacebook,
+                  ),
+                  MethodButton(
+                    onTap: () async {
+                      await _viewModel.appleSignIn(context);
+                    },
+                    isIcon: true,
+                    color: ColorsGlobal.globalBlack,
+                    title: StringExtensions.loginViaApple,
+                    assetIcon: image.MediaRes.logoApple,
+                  ),
+                  MethodButton(
+                    isIcon: true,
+                    color: ColorsGlobal.globalPink,
+                    title: StringExtensions.loginViaEmail,
+                    assetIcon: image.MediaRes.logoMail,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginViaEmailView(),
+                      ),
+                    ),
+                  ),
+                  CustomButton(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const CreateAccountView(),
+                      ),
+                    ),
+                    color: ColorsGlobal.globalWhite,
+                    title: StringExtensions.createAnAccount,
+                    border: 1,
+                    colorTitle: ColorsGlobal.globalGrey,
+                  ),
+                ],
               ),
-            ),
-            CustomButton(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const CreateAccountView(),
-                ),
-              ),
-              color: ColorsGlobal.globalWhite,
-              title: StringExtensions.createAnAccount,
-              border: 1,
-              colorTitle: ColorsGlobal.globalGrey,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const DeepLink()
-          ],
+              DeepLink()
+            ],
+          ),
         ));
   }
 }

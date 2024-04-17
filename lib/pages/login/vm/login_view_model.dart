@@ -8,6 +8,7 @@ import 'package:template/services/errror.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/api.dart';
+import '../../../services/auth_manager.dart';
 import '../../application/views/application_view.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -15,23 +16,8 @@ class LoginViewModel extends ChangeNotifier {
   final ErrorDialog showError = ErrorDialog();
   final API _api = API();
 
-  Future<bool> isLoggedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    return isLoggedIn;
-  }
-
-  Future<void> setLoggedIn(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', value);
-  }
-
-  Future<void> handleSuccessfulLogin() async {
-    await setLoggedIn(true);
-  }
-
   void checkLoggedIn(BuildContext context) async {
-    bool isLogged = await isLoggedIn();
+    bool isLogged = await AuthManager.isLoggedIn();
     if (isLogged) {
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/application', (route) => false);
@@ -59,20 +45,18 @@ class LoginViewModel extends ChangeNotifier {
         throw ErrorString.errorNoIDTokenFound;
       }
 
-      // Kiểm tra xem email đã tồn tại trong danh sách đăng ký hay không
       final email = googleUser.email;
-      final isEmailRegistered = await _api.isEmailRegistered(email);
+      final isEmailRegistered = await _api.isEmailRegisteredByEmail(email);
 
       if (isEmailRegistered) {
-        // Hiển thị thông báo rằng email đã được đăng ký
         showError.showError(context, ErrorString.emailAlreadyRegistered);
       } else {
-        // Tiếp tục xử lý đăng nhập
         final response = _api.requestSignInWithIdToken(
             OAuthProvider.google, idToken, accessToken);
         Map<String, dynamic> userData = {
           'email': email,
           'name': googleUser.displayName,
+          'provider': 'Google'
         };
 
         if (userData.isNotEmpty) {
@@ -81,11 +65,28 @@ class LoginViewModel extends ChangeNotifier {
         }
         _api.requestUpSert(userData, TableSupabase.usersTable);
 
-        await handleSuccessfulLogin();
+        await AuthManager.handleSuccessfulLogin();
 
         return response;
       }
     }
+  }
+
+  Future<void> saveUserIdToSharedPreferences(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId);
+  }
+
+  Future<String?> getUserIdFromSupabase(String email) async {
+    var response = await _api.supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+    String? userId = response['id'];
+
+    return userId;
   }
 
   Future<void> facebookSignIn(BuildContext context) async {
@@ -100,12 +101,13 @@ class LoginViewModel extends ChangeNotifier {
         Map<String, dynamic> userData = {
           'email': requestData['email'],
           'name': requestData['name'],
+          'provider': 'Facebook'
         };
 
         _api.requestSignInWithOAuth(OAuthProvider.facebook);
         _api.requestUpSert(userData, TableSupabase.usersTable);
         if (userData.isNotEmpty) {
-          await handleSuccessfulLogin();
+          await AuthManager.handleSuccessfulLogin();
           // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => ApplicationView()));

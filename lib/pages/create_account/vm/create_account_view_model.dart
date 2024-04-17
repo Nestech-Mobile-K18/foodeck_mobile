@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/create_account/models/create_account_model.dart';
 import 'package:template/pages/otp/views/otp_view.dart';
@@ -6,6 +7,7 @@ import 'package:template/resources/const.dart';
 import 'package:template/services/api.dart';
 import 'package:template/services/table_supbase.dart';
 
+import '../../../resources/error_strings.dart';
 import '../../../services/errror.dart';
 
 class CreateAccountViewModel extends ChangeNotifier {
@@ -16,6 +18,8 @@ class CreateAccountViewModel extends ChangeNotifier {
   Future<AuthResponse?> signUpNewUser(String emailController,
       String passwordController, BuildContext context) async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('isLoggedIn');
       final res = _api.requestSignUp(
           email: emailController, password: passwordController);
 
@@ -42,6 +46,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         'name': signUpModel.name,
         'phone': signUpModel.phone,
         'password': signUpModel.password,
+        'provider': 'Email'
       };
 
       signUpNewUser(signUpModel.email, signUpModel.password, context);
@@ -53,7 +58,7 @@ class CreateAccountViewModel extends ChangeNotifier {
     }
   }
 
-  void auththenSignUp(CreateAccountModel input, BuildContext context) {
+  void auththenSignUp(CreateAccountModel input, BuildContext context) async {
     if (input.name.isEmpty ||
         input.email.isEmpty ||
         input.phone.isEmpty ||
@@ -62,8 +67,8 @@ class CreateAccountViewModel extends ChangeNotifier {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Missing Information"),
-            content: Text("Please fill in all the fields."),
+            title: const Text("Missing Information"),
+            content: const Text("Please fill in all the fields."),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -94,13 +99,22 @@ class CreateAccountViewModel extends ChangeNotifier {
               'Invalid password, Must have at least 1 uppercase letter, 1 lowercase letter and 1 special character'),
         ));
       } else {
-        pushInformation(input, context);
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>
-                OtpView(email: input.email, fromHomeScreen: true),
-          ),
-        );
+        // Check if email has been registered or not
+        bool emailRegistered =
+            await _api.isEmailRegisteredByGoogle(input.email);
+        if (emailRegistered) {
+          // If email is already registered, display an error message
+          _showError.showError(context, ErrorString.emailAlreadyRegistered);
+        } else {
+          // If email is not registered, proceed with registration
+          pushInformation(input, context);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) =>
+                  OtpView(email: input.email, fromHomeScreen: true),
+            ),
+          );
+        }
       }
     }
   }

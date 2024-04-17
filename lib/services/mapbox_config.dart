@@ -7,4 +7,6 @@ class MapBoxConfig {
       'pk.eyJ1Ijoia3VuaGFuMTIxMiIsImEiOiJjbHJid2FkcGEwbW4zMmpwMXdyOG5yaWVyIn0.Gl4zaYhezd7U7Mhl7GoHNw';
   static const URL_TEMPLATE =
       'https://api.mapbox.com/styles/v1/kunhan1212/clm4cv8yt00t201r7e0vrchbt/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia3VuaGFuMTIxMiIsImEiOiJjbHJid2FkcGEwbW4zMmpwMXdyOG5yaWVyIn0.Gl4zaYhezd7U7Mhl7GoHNw';
+  static const BASE_URL_MAPBOX =
+      'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 }

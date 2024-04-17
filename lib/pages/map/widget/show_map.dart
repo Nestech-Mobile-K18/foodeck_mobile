@@ -1,19 +1,34 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 import 'package:template/pages/map/vm/map_view_model.dart';
 import 'package:template/pages/map/widget/location_card.dart';
 import 'package:template/resources/colors.dart';
+import 'package:template/resources/const.dart';
+import 'package:template/widgets/custom_text.dart';
 
 import '../../../services/mapbox_config.dart';
 
+/// Widget for displaying the map and user location.
 class ShowMap extends StatefulWidget {
-  final VoidCallback? onTap;
   final MapController? mapController;
   final bool? isShowLocationCard;
-  const ShowMap(
-      {Key? key, this.onTap, this.mapController, this.isShowLocationCard})
+  final LatLng? onMarkerSelected;
+  final LatLng? onTarget;
+
+  final Function(Map<String, String?>, int)?
+      onLongPressLocationCard; // Update the callback type
+
+  ShowMap(
+      {Key? key,
+      this.mapController,
+      this.isShowLocationCard,
+      this.onTarget,
+      this.onLongPressLocationCard, // Update the parameter type
+      this.onMarkerSelected})
       : super(key: key);
 
   @override
@@ -23,17 +38,67 @@ class ShowMap extends StatefulWidget {
 class _ShowMapState extends State<ShowMap> {
   final MapViewModel _vm = MapViewModel();
   late Future<LatLng?> _userLocation;
+  late Future<List<Map<String, String?>>> _locationData;
+  late Timer _pollingTimer;
+  late List<Map<String, String?>> _previousLocationData;
 
   @override
   void initState() {
     super.initState();
     _userLocation = _vm.setLocationUser();
+    _locationData = _vm
+        .convertLocationDataToList(); // _locationData retrieves data from the convertLocationDataToList function to retrieve all addresses to display on LocationCard
+    _previousLocationData = []; // Initialize the previous data as an empty list
+    _startLocationDataPolling();
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     super.deactivate();
+  }
+
+  void _startLocationDataPolling() {
+    const pollingInterval = Duration(seconds: 20);
+    _pollingTimer = Timer.periodic(pollingInterval, (Timer timer) {
+      _fetchLocationData(); // Call the fetch data function every 20 seconds
+    });
+  }
+
+  Future<void> _fetchLocationData() async {
+    final List<Map<String, String?>> newData =
+        await _vm.convertLocationDataToList();
+    if (!listEquals(_previousLocationData, newData)) {
+      // Compare new data and previous data
+      setState(() {
+        _locationData = Future.value(newData); // Updating data
+        _previousLocationData = newData; // Store the latest data
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant ShowMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.onMarkerSelected != oldWidget.onMarkerSelected) {
+      // If the marker receives a new LatLng, the camera will point to the marker with the new position
+      _moveCameraToSelectedMarker();
+    }
+  }
+
+  // The camera handler function runs to the marker
+  void _moveCameraToSelectedMarker() {
+    if (widget.onMarkerSelected != null) {
+      widget.mapController?.move(widget.onMarkerSelected!, 18);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_pollingTimer.isActive) {
+      _pollingTimer.cancel(); // Cancel the polling Timer action
+    }
+
+    super.dispose();
   }
 
   @override
@@ -48,13 +113,65 @@ class _ShowMapState extends State<ShowMap> {
             } else if (snapshot.hasError || snapshot.data == null) {
               return Text('Error or null data: ${snapshot.error}');
             } else {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (widget.onMarkerSelected == null) {
+                  _moveCameraToSelectedMarker();
+                }
+              });
               return FlutterMap(
                 mapController: widget.mapController,
                 options: MapOptions(
-                  center: snapshot.data!,
+                  center: widget.onMarkerSelected ?? snapshot.data!,
+                  //Pass onMarkerSelected to set the center camera location on the map in AddLocation or get the available location in LocationCard
                   minZoom: 5,
                   maxZoom: 25,
                   zoom: 18,
+                  onTap: widget.isShowLocationCard == false
+                      ? (tapPosition, point) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const CustomText(
+                                  title: StringExtensions.addLocation,
+                                  color: ColorsGlobal.globalBlack,
+                                  size: 20,
+                                ),
+                                content: const CustomText(
+                                  title: StringExtensions.areYouSure,
+                                  color: ColorsGlobal.globalBlack,
+                                  size: 17,
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      _vm.setAddressUser(point, context);
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const CustomText(
+                                      title: StringExtensions.oke,
+                                      color: ColorsGlobal.globalBlack,
+                                      size: 17,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const CustomText(
+                                      title: StringExtensions.cancel,
+                                      color: ColorsGlobal.globalBlack,
+                                      size: 17,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      : null,
                 ),
                 children: [
                   TileLayer(
@@ -66,7 +183,8 @@ class _ShowMapState extends State<ShowMap> {
                   MarkerLayer(
                     markers: [
                       Marker(
-                        point: snapshot.data!,
+                        point: widget.onMarkerSelected ?? snapshot.data!,
+                        //Pass onMarkerSelected to set the maker location on the map in AddLocation or get the available location in LocationCard
                         child: const Icon(
                           Icons.location_on_rounded,
                           color: ColorsGlobal.globalRed,
@@ -81,10 +199,19 @@ class _ShowMapState extends State<ShowMap> {
           },
         ),
         Positioned(
-          bottom: 200,
+          top: 350,
           right: 25,
           child: FloatingActionButton(
-            onPressed: widget.onTap,
+            onPressed: () async {
+              LatLng? userLocation = await _userLocation;
+              if (userLocation != null) {
+                // Do something with userLocation, e.g., move the map to user's location
+                widget.mapController?.move(userLocation, 18);
+              }
+              if (widget.onTarget != null) {
+                widget.mapController?.move(widget.onTarget!, 18);
+              }
+            },
             tooltip: 'Target User Location',
             backgroundColor: ColorsGlobal.globalPink,
             shape: const CircleBorder(),
@@ -94,30 +221,35 @@ class _ShowMapState extends State<ShowMap> {
         ),
         if (widget.isShowLocationCard == true)
           Positioned(
-            bottom: 20, // Adjust according to your UI needs
-            left: 0,
+            bottom: 20,
             right: 0,
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: _vm
-                  .responseLocation(), // This should now return a list of locations
+            left: 0,
+            child: FutureBuilder<List<Map<String, String?>>>(
+              future: _locationData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  // Use the length of data for itemCount
-                  return LocationCard(
-                    onLongPress: () {},
-                    itemCount: snapshot.data!
-                        .length, // Set itemCount to the number of locations
-                    nameOfPlace: snapshot.data![0]
-                        ["type_address_1"], // Example for the first location
-                    address: snapshot.data![0]
-                        ["address_1"], // Example for the first location
-                  );
                 } else {
-                  return const Text('No data');
+                  return LocationCard(
+                    locationData: snapshot.data,
+                    onItemSelected: (int index) async {
+                      LatLng? newLocation = await _vm.getLocationFromPlaceName(
+                          snapshot.data![index]['address']!);
+                      setState(() {
+                        _userLocation = Future<LatLng?>.value(newLocation);
+                      });
+                    },
+                    onLongPress: (int index) {
+                      if (widget.onLongPressLocationCard != null) {
+                        if (index >= 0 && index < snapshot.data!.length) {
+                          widget.onLongPressLocationCard!(
+                              snapshot.data![index], index);
+                        } // Pass data of selected item
+                      }
+                    },
+                  );
                 }
               },
             ),

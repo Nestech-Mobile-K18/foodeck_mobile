@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class MethodButton extends StatelessWidget {
@@ -22,11 +24,15 @@ class MethodButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    double verticalPadding = max(screenHeight * 0.03, 10.0);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        padding: const EdgeInsets.symmetric(vertical: 22),
+        padding: EdgeInsets.symmetric(vertical: verticalPadding),
         alignment: Alignment.center,
         width: widthButton ?? double.infinity,
         decoration: BoxDecoration(

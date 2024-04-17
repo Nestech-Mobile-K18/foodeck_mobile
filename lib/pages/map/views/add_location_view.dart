@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/map/widget/search_card.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:template/pages/map/widget/result_search_card.dart';
 import 'package:template/widgets/research_bar.dart';
 
 import '../../../resources/const.dart';
@@ -8,7 +9,7 @@ import '../vm/map_view_model.dart';
 import '../widget/show_map.dart';
 
 class AddLocationView extends StatefulWidget {
-  const AddLocationView({super.key});
+  const AddLocationView({Key? key});
 
   @override
   State<AddLocationView> createState() => _AddLocationViewState();
@@ -17,7 +18,11 @@ class AddLocationView extends StatefulWidget {
 class _AddLocationViewState extends State<AddLocationView> {
   final MapViewModel _viewModel = MapViewModel();
   bool _isLoadingMore = false;
-  ScrollController _scrollController = ScrollController();
+  LatLng? _onTarget;
+  final ScrollController _scrollController = ScrollController();
+  LatLng? selectedLocation;
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // Thêm biến này
 
   @override
   void initState() {
@@ -59,9 +64,10 @@ class _AddLocationViewState extends State<AddLocationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: false,
-        title: CustomText(
+        title: const CustomText(
           title: StringExtensions.addLocation,
           size: 17,
           fontWeight: FontWeight.w700,
@@ -69,15 +75,16 @@ class _AddLocationViewState extends State<AddLocationView> {
       ),
       body: ShowMap(
         mapController: _viewModel.mapController,
-        onTap: _viewModel.targetUserLocation,
         isShowLocationCard: false,
+        onMarkerSelected: selectedLocation,
+        onTarget: _onTarget,
       ),
       backgroundColor: ColorsGlobal.globalWhite,
       bottomSheet: Container(
-        padding: EdgeInsets.symmetric(vertical: 15),
-        height: Responsive.screenHeight(context) * 0.5,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        height: Responsive.screenHeight(context) * 0.4,
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: ColorsGlobal.globalWhite,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16),
@@ -88,9 +95,13 @@ class _AddLocationViewState extends State<AddLocationView> {
           children: [
             ReSearchBar(
               onChanged: (value) {
-                _viewModel.searchPlaces(value);
+                if (value.isNotEmpty) {
+                  _viewModel.searchPlaces(value);
+                } else {
+                  _viewModel.searchResults = [];
+                }
               },
-              hintText: 'Search Location',
+              hintText: StringExtensions.searchLocation,
             ),
             const SizedBox(height: 10),
             const Divider(
@@ -103,17 +114,19 @@ class _AddLocationViewState extends State<AddLocationView> {
                 controller: _scrollController,
                 itemCount: _viewModel.searchResults.length,
                 itemBuilder: (context, index) {
-                  if (!_viewModel.isLoading && !_viewModel.isSearching) {
-                    if (index < _viewModel.searchResults.length) {
-                      return SearchCard(
-                        address: _viewModel.searchResults[index]['place_name'],
-                        nameOfPlace: _viewModel.searchResults[index]
-                            ['place_type'],
-                      );
-                    }
-                  }
-
-                  return SizedBox.shrink();
+                  return ResultSearchCard(
+                    address: _viewModel.searchResults[index]['place_name'],
+                    nameOfPlace: _viewModel.searchResults[index]['place_type'],
+                    onTap: () async {
+                      LatLng? newLocation =
+                          await _viewModel.getLocationFromPlaceName(
+                              _viewModel.searchResults[index]['place_name']);
+                      setState(() {
+                        selectedLocation = newLocation; // Update new location
+                        _onTarget = newLocation;
+                      });
+                    },
+                  );
                 },
               ),
             ),

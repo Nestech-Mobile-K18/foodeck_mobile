@@ -36,7 +36,7 @@ class _ProfileViewState extends State<ProfileView> {
                     var userData = snapshot.data!;
                     return AvatarAndName(
                       name: userData['name'] ?? 'N/A',
-                      address: userData['address_1'] ??
+                      address: userData['address'] ??
                           'N/A', // Thay đổi 'address' thành 'address_1'
                     );
                   } else {

@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 import '../../../../resources/const.dart';
 import '../../../../widgets/custom_text.dart';
 
+/// A widget representing individual function items.
 class FunctionItems extends StatelessWidget {
+  /// The string representing the image asset path.
   final String? imgString;
+
+  /// The name of the function.
   final String? functionName;
+
+  /// Determines whether to display a divider after the item.
   final bool? isDividers;
+
+  /// Callback function triggered when the item is tapped.
   final VoidCallback? onTap;
-  const FunctionItems(
-      {super.key,
-      required this.functionName,
-      required this.imgString,
-      this.onTap,
-      this.isDividers});
+
+  /// Constructor for the FunctionItems widget.
+  const FunctionItems({
+    Key? key,
+    required this.functionName,
+    required this.imgString,
+    this.onTap,
+    this.isDividers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +42,10 @@ class FunctionItems extends StatelessWidget {
               fontWeight: FontWeight.w500,
               textAlign: TextAlign.start,
             ),
-            trailing: const Icon(Icons.arrow_forward_ios_outlined,
-                color: ColorsGlobal.globalGrey),
+            trailing: const Icon(
+              Icons.arrow_forward_ios_outlined,
+              color: ColorsGlobal.globalGrey,
+            ),
             leading: Image.asset(
               imgString ?? '',
               height: 25,

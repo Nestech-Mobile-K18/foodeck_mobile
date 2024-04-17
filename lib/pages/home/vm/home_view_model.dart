@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/widgets/loading_indicator.dart';
+import 'package:template/services/mapbox_config.dart';
+import 'package:template/services/table_supbase.dart';
 
-import '../../../services/mapbox_config.dart';
+import '../../../services/auth_manager.dart';
 
 class HomeViewModel extends ChangeNotifier {
   Location location = Location();
-
   Function(String)? onAddressReceived;
-
   final supabase = Supabase.instance.client;
+  static const String _baseUrl = MapBoxConfig.BASE_URL_MAPBOX;
+  static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
 
   Future<void> updateAddressOnSupabase(
       String? address, String? type_address) async {
@@ -24,7 +25,7 @@ class HomeViewModel extends ChangeNotifier {
           .select('id');
 
       // Get a list of records from query results
-      var records = response.toList() as List;
+      var records = response.toList();
       // Loop through the list of records and update the data for each record
       for (var record in records) {
         // Get the ID from the current record
@@ -37,14 +38,46 @@ class HomeViewModel extends ChangeNotifier {
               .eq('user_id', userId);
           if (locationResponse.isEmpty) {
             await supabase.from('location_user').upsert({
-              'user_id': userId,
-              'address_1': address,
-              'type_address_1': type_address
-            });
+              TableSupabase.userIdColumn: userId,
+              TableSupabase.addressColumn1: address,
+              TableSupabase.type_address_1_Column: type_address,
+              TableSupabase.address_instructions_1_Column: 'Near empty plot',
+            }).eq('user_id', userId);
           }
         }
       }
     }
+  }
+
+  Future<String?> getLocationDataById() async {
+    // Get the current user's ID
+    final String? userId = await AuthManager.getUserId();
+    if (userId == null) {
+      return null;
+    }
+
+    var locationColumns = [
+      'address_1',
+      'address_2',
+      'address_3',
+      'address_4',
+      'address_5'
+    ];
+
+    // Loop through the location columns to find the first non-null address
+    for (var addressColumn in locationColumns) {
+      var addressResponse = await supabase
+          .from('location_user')
+          .select(addressColumn)
+          .eq('user_id', userId)
+          .single();
+
+      var address = addressResponse[addressColumn];
+      if (address != null) {
+        return address;
+      }
+    }
+    return null;
   }
 
   Future<void> requestPermissionLocation(BuildContext context) async {
@@ -56,9 +89,8 @@ class HomeViewModel extends ChangeNotifier {
         double longitude = locationData.longitude!;
         print('Latitude: $latitude, Longitude: $longitude');
 
-        String accessToken = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
         String apiUrl =
-            'https://api.mapbox.com/geocoding/v5/mapbox.places/$longitude,$latitude.json?access_token=$accessToken';
+            '$_baseUrl$longitude,$latitude.json?access_token=$_apiKey';
 
         var response = await http.get(Uri.parse(apiUrl));
         if (response.statusCode == 200) {
@@ -69,10 +101,14 @@ class HomeViewModel extends ChangeNotifier {
 
           String? type = firstFeature['text'];
 
-          updateAddressOnSupabase(address, type);
+          await updateAddressOnSupabase(address, type);
 
+          // Call getLocationDataById to get address
+          String? receivedAddress = await getLocationDataById();
+
+          // Pass the received address to onAddressReceived
           if (onAddressReceived != null) {
-            onAddressReceived!(address!);
+            onAddressReceived!(receivedAddress!);
           }
         } else {
           ScaffoldMessenger.of(context)
