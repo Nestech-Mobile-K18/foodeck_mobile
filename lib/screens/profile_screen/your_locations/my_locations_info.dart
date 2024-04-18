@@ -1,11 +1,11 @@
-class YourLocationsInfo {
+class MyLocationsInfo {
   late String location;
   late String kind;
 
-  YourLocationsInfo({
+  MyLocationsInfo({
     required this.location,
     required this.kind,
   });
 }
 
-List<YourLocationsInfo> yourLocations = [];
+List<MyLocationsInfo> myLocations = [];

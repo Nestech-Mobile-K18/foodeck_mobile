@@ -7,10 +7,8 @@ import 'package:foodeck_app/screens/explore_screen/dessert/dessert_card.dart';
 import 'package:foodeck_app/screens/explore_screen/explore_more/list_explore_more.dart';
 import 'package:foodeck_app/screens/explore_screen/food/food_card.dart';
 import 'package:foodeck_app/screens/explore_screen/grocery/grocery_card.dart';
-import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ExploreScreen extends StatefulWidget {
   final CartItemInfo? cartItemInfo;
@@ -73,29 +71,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
         });
       },
     );
-  }
-
-  //
-  final supabase = Supabase.instance.client;
-  Future<void> _getinfo() async {
-    final res = await Supabase.instance.client
-        .from("deals")
-        .select("image")
-        .match({"id_user": 24});
-    for (var element in res) {
-      String image = element.values.single;
-    }
-    final userInfo = await supabase
-        .from("user_account")
-        .select("id")
-        .filter(
-          "email",
-          "eq",
-          profileInfo[0].email.toString(),
-        )
-        .single();
-    final userID = userInfo.entries.single.value;
-    print(userID);
   }
 
   //

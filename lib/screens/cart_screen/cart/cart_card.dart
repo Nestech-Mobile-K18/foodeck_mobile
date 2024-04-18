@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/screens/cart_screen/cart_screen.dart';
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CartCard extends StatefulWidget {
   final CartItemInfo cartItemInfo;
-  const CartCard({super.key, required this.cartItemInfo});
+  final int? indexItem;
+  const CartCard({super.key, required this.cartItemInfo, this.indexItem});
 
   @override
   State<CartCard> createState() => _CartCardState();
@@ -84,6 +87,26 @@ class _CartCardState extends State<CartCard> {
           //
           : Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CartScreen()));
+    });
+  }
+
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+
+    await supabase.from("user_cart").delete().match({
+      "image": widget.cartItemInfo.image.toString(),
+      "user_id": userID,
     });
   }
 
@@ -198,6 +221,8 @@ class _CartCardState extends State<CartCard> {
                 onTap: () {
                   setState(() {
                     _deletedCart();
+
+                    _updateDataSupabase();
                   });
                 },
                 child: Container(

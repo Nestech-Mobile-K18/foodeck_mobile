@@ -5,11 +5,13 @@ import 'package:foodeck_app/screens/explore_screen/explore_more/explore_more_ite
 import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_item_infomation.dart';
 import 'package:foodeck_app/screens/food_menu_screen/food_menu_screen.dart';
 import 'package:foodeck_app/screens/food_menu_screen/populars_tab/populars_item_info.dart';
+import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/screens/saved_screen.dart/saved_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_icons.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FoodVariantionsScreen extends StatefulWidget {
   final String location;
@@ -38,7 +40,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
     final newSavedDealItem = DealItemInfo(
       image: widget.dealsItemInfo!.image,
       time: widget.dealsItemInfo!.time,
-      title: widget.dealsItemInfo!.title,
+      store: widget.dealsItemInfo!.store,
       location: widget.dealsItemInfo!.location,
       star: widget.dealsItemInfo!.star,
       like: false,
@@ -54,7 +56,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
     savedDeals == false
         ? setState(() {
             savedItems.removeWhere((savedItems) =>
-                savedItems.title == widget.dealsItemInfo!.title);
+                savedItems.store == widget.dealsItemInfo!.store);
           })
         : null;
   }
@@ -141,16 +143,27 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
   void _addCart() {
     final newItemCart = CartItemInfo(
       id: DateTime.now().toString(),
+      //
+      store: widget.dealsItemInfomation != null
+          ? widget.dealsItemInfomation!.store
+          : widget.popularsItemInfo != null
+              ? widget.popularsItemInfo!.store
+              : "",
+      //
+      location: widget.location,
+      //
       image: widget.dealsItemInfomation != null
           ? widget.dealsItemInfomation!.image
           : widget.popularsItemInfo != null
               ? widget.popularsItemInfo!.image
               : "",
+      //
       name: widget.dealsItemInfomation != null
           ? widget.dealsItemInfomation!.name
           : widget.popularsItemInfo != null
               ? widget.popularsItemInfo!.name
               : "",
+      //
       size: isSelected8 == true
           ? "8\""
           : isSelected10 == true
@@ -158,6 +171,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
               : isSelected12 == true
                   ? "12\""
                   : "",
+      //
       sauce: texasBarbequeSauceSelected && charDonaySauceSelected == true
           ? "Texas Barbeque + Char Doney"
           : texasBarbequeSauceSelected == true
@@ -165,6 +179,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
               : charDonaySauceSelected == true
                   ? "Char Doney"
                   : "",
+      //
       price: (isSelected8 == true
               ? _counter * price8
               : isSelected10 == true
@@ -174,6 +189,7 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
                       : 0) +
           (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) +
           (charDonaySauceSelected == true ? charSaucePrice : 0),
+      //
       quantity: _counter,
     );
 
@@ -250,8 +266,115 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
             },
           )
         : null;
+  }
 
-    print(newItemCart.sauce);
+  //
+  //update data on supabase
+  final supabase = Supabase.instance.client;
+  Future<void> _updateDataSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+    //
+    await supabase.from("user_cart").insert({
+      "created_at": DateTime.now().toString(),
+
+      "image": widget.dealsItemInfomation != null
+          ? dealsItemInfomation[dealsItemInfomation.indexWhere(
+                  (dealsItemInfomation) =>
+                      dealsItemInfomation.image ==
+                      widget.dealsItemInfomation!.image)]
+              .image
+              .toString()
+          : widget.popularsItemInfo != null
+              ? popularsItemInfo[popularsItemInfo.indexWhere(
+                      (popularsItemInfo) =>
+                          popularsItemInfo.image ==
+                          widget.popularsItemInfo!.image)]
+                  .image
+                  .toString()
+              : "",
+      //
+      "store": widget.dealsItemInfomation != null
+          ? dealsItemInfomation[dealsItemInfomation.indexWhere(
+                  (dealsItemInfomation) =>
+                      dealsItemInfomation.image ==
+                      widget.dealsItemInfomation!.image)]
+              .store
+              .toString()
+          : widget.popularsItemInfo != null
+              ? popularsItemInfo[popularsItemInfo.indexWhere(
+                      (popularsItemInfo) =>
+                          popularsItemInfo.image ==
+                          widget.popularsItemInfo!.image)]
+                  .store
+                  .toString()
+              : "",
+      //
+      "location": widget.dealsItemInfomation != null
+          ? dealsItemInfomation[dealsItemInfomation.indexWhere(
+                  (dealsItemInfomation) =>
+                      dealsItemInfomation.image ==
+                      widget.dealsItemInfomation!.image)]
+              .location
+              .toString()
+          : widget.popularsItemInfo != null
+              ? popularsItemInfo[popularsItemInfo.indexWhere(
+                      (popularsItemInfo) =>
+                          popularsItemInfo.image ==
+                          widget.popularsItemInfo!.image)]
+                  .location
+                  .toString()
+              : "",
+      //
+      "dish": widget.dealsItemInfomation != null
+          ? widget.dealsItemInfomation!.name.toString()
+          : widget.popularsItemInfo != null
+              ? widget.popularsItemInfo!.name.toString()
+              : "",
+      //
+      "size": isSelected8 == true
+          ? "8\""
+          : isSelected10 == true
+              ? "10\""
+              : isSelected12 == true
+                  ? "12\""
+                  : "",
+      //
+      "quantity": _counter.toString(),
+
+      "extra": texasBarbequeSauceSelected && charDonaySauceSelected == true
+          ? "Texas Barbeque + Char Doney"
+          : texasBarbequeSauceSelected == true
+              ? "Texas Barbeque"
+              : charDonaySauceSelected == true
+                  ? "Char Doney"
+                  : "",
+      //
+      "price": ((isSelected8 == true
+                  ? _counter * price8
+                  : isSelected10 == true
+                      ? _counter * price10
+                      : isSelected12 == true
+                          ? _counter * price12
+                          : 0) +
+              (texasBarbequeSauceSelected == true ? texasSaucePrice : 0) +
+              (charDonaySauceSelected == true ? charSaucePrice : 0))
+          .toString(),
+      //
+      "instructions": intructionController.text,
+      //
+      "if_not_available": exceptionText.toString(),
+      //
+      "user_id": userID,
+    });
   }
 
   //
@@ -951,6 +1074,8 @@ class _FoodVariantionsScreenState extends State<FoodVariantionsScreen> {
                     onPressed: () {
                       setState(() {
                         _addCart();
+
+                        _updateDataSupabase();
                       });
                     },
                     style: ElevatedButton.styleFrom(

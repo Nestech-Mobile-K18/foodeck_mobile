@@ -1,5 +1,7 @@
 class CartItemInfo {
   final String id;
+  final String store;
+  final String location;
   final String image;
   final String name;
   final String size;
@@ -15,6 +17,8 @@ class CartItemInfo {
     required this.sauce,
     required this.price,
     required this.quantity,
+    required this.store,
+    required this.location,
   });
 }
 

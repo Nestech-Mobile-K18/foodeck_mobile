@@ -30,7 +30,7 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
     final newSavedDealItem = DealItemInfo(
       image: widget.dealsItemInfo!.image,
       time: widget.dealsItemInfo!.time,
-      title: widget.dealsItemInfo!.title,
+      store: widget.dealsItemInfo!.store,
       location: widget.dealsItemInfo!.location,
       star: widget.dealsItemInfo!.star,
       like: false,
@@ -46,7 +46,7 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
     savedDeals == false
         ? setState(() {
             savedItems.removeWhere((savedItems) =>
-                savedItems.title == widget.dealsItemInfo!.title);
+                savedItems.store == widget.dealsItemInfo!.store);
           })
         : null;
   }
@@ -101,7 +101,7 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
                         children: [
                           Text(
                             widget.dealsItemInfo != null
-                                ? widget.dealsItemInfo!.title
+                                ? widget.dealsItemInfo!.store
                                 : widget.exploreMoreItemInfo != null
                                     ? widget.exploreMoreItemInfo!.title
                                     : "",
@@ -303,10 +303,10 @@ class _FoodMenuScreenState extends State<FoodMenuScreen> {
               children: [
                 PoppularsTab(
                     location:
-                        "${widget.dealsItemInfo!.title}-${widget.dealsItemInfo!.location}"),
+                        "${widget.dealsItemInfo!.store}-${widget.dealsItemInfo!.location}"),
                 DealsTab(
                     location:
-                        "${widget.dealsItemInfo!.title}-${widget.dealsItemInfo!.location}"),
+                        "${widget.dealsItemInfo!.store}-${widget.dealsItemInfo!.location}"),
                 const WrapsTab(),
                 const BeveragesTab(),
                 const SandwichesTab(),

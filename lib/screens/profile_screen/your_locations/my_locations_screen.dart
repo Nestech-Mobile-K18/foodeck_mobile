@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/home_screen/home_screen.dart';
-import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_card.dart';
-import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_info.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_card.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_info.dart';
 
 import 'package:foodeck_app/widgets/header.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class YourLocationsScreen extends StatefulWidget {
-  final YourLocationsInfo? myLocationInfo;
-  const YourLocationsScreen({super.key, this.myLocationInfo});
+class MyLocationsScreen extends StatefulWidget {
+  final MyLocationsInfo? myLocationInfo;
+  const MyLocationsScreen({super.key, this.myLocationInfo});
 
   @override
-  State<YourLocationsScreen> createState() => _YourLocationsScreenState();
+  State<MyLocationsScreen> createState() => _MyLocationsScreenState();
 }
 
-class _YourLocationsScreenState extends State<YourLocationsScreen> {
+class _MyLocationsScreenState extends State<MyLocationsScreen> {
   //
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _YourLocationsScreenState extends State<YourLocationsScreen> {
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 70),
         child: Header(
-          headerTitle: "Your locations",
+          headerTitle: "My locations",
           onBack: () {
             setState(() {
               Navigator.push(
@@ -44,7 +44,7 @@ class _YourLocationsScreenState extends State<YourLocationsScreen> {
             const SizedBox(
               width: double.infinity,
             ),
-            yourLocations.isEmpty
+            myLocations.isEmpty
                 ? Container(
                     alignment: Alignment.center,
                     height: MediaQuery.sizeOf(context).height * 0.85,
@@ -59,18 +59,18 @@ class _YourLocationsScreenState extends State<YourLocationsScreen> {
                     ),
                   )
                 : SizedBox(
-                    height: 160 * yourLocations.length.toDouble(),
+                    height: 160 * myLocations.length.toDouble() + 40,
                     width: 328,
                     child: ListView.builder(
-                      itemCount: yourLocations.length,
+                      itemCount: myLocations.length,
                       shrinkWrap: true,
-                      itemBuilder: (context, index) => YourLocationsCard(
-                        myLocationInfo: yourLocations[index],
+                      itemBuilder: (context, index) => MyLocationsCard(
+                        myLocationInfo: myLocations[index],
                       ),
                     ),
                   ),
             const SizedBox(
-              height: 40,
+              height: 100,
             ),
           ],
         ),

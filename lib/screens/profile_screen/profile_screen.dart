@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/routes/app_routes.dart';
 import 'package:foodeck_app/screens/login_screen/login_screen.dart';
-import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_screen.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_screen.dart';
 import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_images.dart';
@@ -274,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const YourLocationsScreen()));
+                                        const MyLocationsScreen()));
                           });
                         },
                         child: Icon(

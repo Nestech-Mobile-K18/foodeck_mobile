@@ -52,7 +52,7 @@ class PopularsItemCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      popularsItemInfo.size,
+                      popularsItemInfo.detail,
                       style: GoogleFonts.inter(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,

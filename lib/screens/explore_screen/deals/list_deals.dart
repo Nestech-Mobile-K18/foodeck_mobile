@@ -2,13 +2,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_card.dart';
 import 'package:foodeck_app/screens/explore_screen/deals/deals_item_info.dart';
+import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_item_infomation.dart';
 import 'package:foodeck_app/screens/food_menu_screen/food_menu_screen.dart';
+import 'package:foodeck_app/screens/food_menu_screen/populars_tab/populars_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ListDeals extends StatefulWidget {
+  final DealsItemInfomation? dealsItemInfomation;
+  final PopularsItemInfo? popularsItemInfo;
   const ListDeals({
     super.key,
+    this.dealsItemInfomation,
+    this.popularsItemInfo,
   });
 
   @override
@@ -52,6 +58,22 @@ class _ListDealsState extends State<ListDeals> {
                                           dealsItemInfo[selectedDeal!],
                                       exploreMoreItemInfo: null,
                                     )));
+                    //
+                    for (var element in dealsItemInfomation) {
+                      element.location = dealsItemInfo[selectedDeal!].location;
+                    }
+                    //
+                    for (var element in dealsItemInfomation) {
+                      element.store = dealsItemInfo[selectedDeal!].store;
+                    }
+                    //
+                    for (var element in popularsItemInfo) {
+                      element.store = dealsItemInfo[selectedDeal!].store;
+                    }
+                    //
+                    for (var element in popularsItemInfo) {
+                      element.location = dealsItemInfo[selectedDeal!].location;
+                    }
                   });
                 },
                 child: Icon(

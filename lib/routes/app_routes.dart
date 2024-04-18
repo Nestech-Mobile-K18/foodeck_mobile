@@ -72,6 +72,11 @@ class AppRoutes {
           vat: '',
           coupon: '',
           total: '',
+          detailCoupon: '',
+          extra: '',
+          dish: '',
+          size: '',
+          quantity: '',
         ),
   };
 }

@@ -3,10 +3,10 @@ import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CartItemChose extends StatelessWidget {
+class CartItemChosen extends StatelessWidget {
   final String price;
   final CartItemInfo cartItemInfo;
-  const CartItemChose(
+  const CartItemChosen(
       {super.key, required this.cartItemInfo, required this.price});
 
   @override

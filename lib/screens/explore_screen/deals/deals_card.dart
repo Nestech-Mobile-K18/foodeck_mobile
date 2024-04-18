@@ -28,7 +28,7 @@ class _DealsCardState extends State<DealsCard> {
     final newSavedDealItem = SavedItemInfo(
       image: widget.dealItemInfo.image,
       time: widget.dealItemInfo.time,
-      title: widget.dealItemInfo.title,
+      store: widget.dealItemInfo.store,
       location: widget.dealItemInfo.location,
       star: widget.dealItemInfo.star,
       like: true,
@@ -58,33 +58,18 @@ class _DealsCardState extends State<DealsCard> {
         )
         .single();
     final userID = userInfo.entries.single.value;
-    //
-    final userDeal = await supabase
-        .from("deals")
-        .select("image")
-        .filter(
-          "user_id",
-          "eq",
-          userID,
-        )
-        .match(
-      {"image": widget.dealItemInfo.image.toString()},
-    );
 
-    userDeal.isEmpty
+    widget.dealItemInfo.like == true
         ? await supabase.from("deals").insert({
+            "created_at": DateTime.now().toString(),
             "image": widget.dealItemInfo.image.toString(),
             "time": widget.dealItemInfo.time.toString(),
-            "title": widget.dealItemInfo.title.toString(),
+            "store": widget.dealItemInfo.store.toString(),
             "location": widget.dealItemInfo.location.toString(),
             "star": widget.dealItemInfo.star.toString(),
-            "like": "true",
             "user_id": userID,
           })
-        : await supabase.from("deals").update({
-            "like": widget.dealItemInfo.like.toString(),
-            "time_updated": DateTime.now().toString(),
-          }).match({
+        : await supabase.from("deals").delete().match({
             "image": widget.dealItemInfo.image.toString(),
             "user_id": userID,
           });
@@ -154,7 +139,7 @@ class _DealsCardState extends State<DealsCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.dealItemInfo.title,
+                                widget.dealItemInfo.store,
                                 style: GoogleFonts.inter(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w700,

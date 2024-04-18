@@ -23,7 +23,7 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
     final newSavedDealItem = SavedItemInfo(
       image: widget.exploreMoreItemInfo.image,
       time: widget.exploreMoreItemInfo.time,
-      title: widget.exploreMoreItemInfo.title,
+      store: widget.exploreMoreItemInfo.title,
       location: widget.exploreMoreItemInfo.location,
       star: widget.exploreMoreItemInfo.star,
       like: true,
@@ -54,32 +54,17 @@ class _ExploreMoreItemCardState extends State<ExploreMoreItemCard> {
         .single();
     final userID = userInfo.entries.single.value;
     //
-    final userDeal = await supabase
-        .from("explore_more")
-        .select("image")
-        .filter(
-          "user_id",
-          "eq",
-          userID,
-        )
-        .match(
-      {"image": widget.exploreMoreItemInfo.image.toString()},
-    );
-
-    userDeal.isEmpty
+    widget.exploreMoreItemInfo.like == true
         ? await supabase.from("explore_more").insert({
+            "created_at": DateTime.now().toString(),
             "image": widget.exploreMoreItemInfo.image.toString(),
             "time": widget.exploreMoreItemInfo.time.toString(),
-            "title": widget.exploreMoreItemInfo.title.toString(),
+            "store": widget.exploreMoreItemInfo.title.toString(),
             "location": widget.exploreMoreItemInfo.location.toString(),
             "star": widget.exploreMoreItemInfo.star.toString(),
-            "like": "true",
             "user_id": userID,
           })
-        : await supabase.from("explore_more").update({
-            "like": widget.exploreMoreItemInfo.like.toString(),
-            "time_updated": DateTime.now().toString(),
-          }).match({
+        : await supabase.from("explore_more").delete().match({
             "image": widget.exploreMoreItemInfo.image.toString(),
             "user_id": userID,
           });

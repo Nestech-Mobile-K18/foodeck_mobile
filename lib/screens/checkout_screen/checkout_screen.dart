@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/cart_screen/cart/cart_item_info.dart';
 import 'package:foodeck_app/screens/cart_screen/cart_screen.dart';
-import 'package:foodeck_app/screens/checkout_screen/cart_item_chose.dart';
+import 'package:foodeck_app/screens/checkout_screen/cart_item_chosen.dart';
 import 'package:foodeck_app/screens/checkout_screen/credit_card.dart';
+import 'package:foodeck_app/screens/food_menu_screen/deals_tab/deals_item_infomation.dart';
 import 'package:foodeck_app/screens/pay_success/pay_success.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/add_credit_card_tab.dart';
 import 'package:foodeck_app/screens/profile_screen/payment_method_screen/credit_card_components/credit_card_info.dart';
 import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
-import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_info.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:foodeck_app/utils/app_images.dart';
 import 'package:foodeck_app/widgets/custom_text_form_field.dart';
@@ -16,12 +17,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CheckOutScreen extends StatefulWidget {
-  // final String priceItem;
   final String subtotal;
   final String deliverfee;
   final String vat;
   final String coupon;
+  final String detailCoupon;
   final String total;
+  final String extra;
+  final String dish;
+  final String size;
+  final String quantity;
+
   const CheckOutScreen({
     super.key,
     required this.subtotal,
@@ -29,7 +35,11 @@ class CheckOutScreen extends StatefulWidget {
     required this.vat,
     required this.coupon,
     required this.total,
-    //  required this.priceItem,
+    required this.detailCoupon,
+    required this.extra,
+    required this.dish,
+    required this.size,
+    required this.quantity,
   });
 
   @override
@@ -86,7 +96,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               addCard: () {
                 setState(() {
                   _addCreditCard();
-                  _updateDataSupabase();
+                  _updateCardOnSupabase();
                 });
               },
             ),
@@ -120,16 +130,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             vat: widget.vat,
             coupon: widget.coupon,
             total: widget.total,
+            detailCoupon: widget.detailCoupon,
+            extra: widget.extra,
+            dish: widget.dish,
+            size: widget.size,
+            quantity: widget.quantity,
           ),
         ),
       );
     });
   }
 
-  //
-  //update data on supabase
+  //update data credit card on supabase
   final supabase = Supabase.instance.client;
-  Future<void> _updateDataSupabase() async {
+  Future<void> _updateCardOnSupabase() async {
     final userInfo = await supabase
         .from("user_account")
         .select("id")
@@ -152,7 +166,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   //
   void _checkCard() {
-    //notification when there is no cardf for paying
+    //notification when there is no card for paying
     creditCardInfo.isEmpty
         ? showDialog(
             context: context,
@@ -224,6 +238,47 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               )
             : null;
   }
+  //update data user's ordering on supabase
+
+  Future<void> _updateUserOrderingOnSupabase() async {
+    final userInfo = await supabase
+        .from("user_account")
+        .select("id")
+        .filter(
+          "email",
+          "eq",
+          profileInfo[0].email.toString(),
+        )
+        .single();
+    final userID = userInfo.entries.single.value;
+
+    //
+    await supabase.from("user_ordering").insert({
+      "created_at": DateTime.now().toString(),
+      "store": dealsItemInfomation.first.store.toString(),
+      "location": dealsItemInfomation.first.location.toString(),
+      "dish": widget.dish.toString(),
+      "size": widget.size.toString(),
+      "quantity": widget.quantity.toString(),
+      "extra": widget.extra.toString(),
+      "drinks": "",
+      "coupon_code": widget.detailCoupon.toString(),
+      "delivery_fee": widget.deliverfee.toString(),
+      "VAT": widget.vat.toString(),
+      "coupon_price": widget.coupon.toString(),
+      "subtotal_price": widget.subtotal.toString(),
+      "total_price": widget.total.toString(),
+      "user_location": myLocations.last.location.toString(),
+      "card_number": creditCardInfo[creditCardInfo.indexWhere(
+              (creditCardInfo) => creditCardInfo.isSelected == true)]
+          .cardNumber
+          .toString(),
+      "delivery_intruction": "",
+      "dish_intructions": "",
+      "not_available_intruction": "",
+      "user_id": userID,
+    });
+  }
 
   //
   @override
@@ -273,9 +328,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       SizedBox(
                         width: 300,
                         child: Text(
-                          yourLocations.isEmpty
+                          myLocations.isEmpty
                               ? "Add your location for shipping"
-                              : yourLocations[0].location,
+                              : myLocations[0].location,
                           style: GoogleFonts.inter(
                             fontSize: 17,
                             fontWeight: FontWeight.w500,
@@ -482,7 +537,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 itemCount: cartItemInfo.length,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemBuilder: (context, index) => CartItemChose(
+                itemBuilder: (context, index) => CartItemChosen(
                     cartItemInfo: cartItemInfo[index],
                     price: "\$${cartItemInfo[index].price}"),
               ),
@@ -642,6 +697,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     onPressed: () {
                       setState(() {
                         _checkCard();
+
+                        _updateUserOrderingOnSupabase();
 
                         creditCardInfo
                                     .map((creditCardInfo) =>

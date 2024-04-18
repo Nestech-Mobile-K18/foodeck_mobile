@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodeck_app/screens/profile_screen/profile_info.dart';
-import 'package:foodeck_app/screens/profile_screen/your_locations/your_locations_info.dart';
+import 'package:foodeck_app/screens/profile_screen/your_locations/my_locations_info.dart';
 import 'package:foodeck_app/utils/app_colors.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -57,20 +57,20 @@ class _MyLocationState extends State<MyLocation> {
     }).catchError((e) {
       debugPrint(e);
     });
-    final newMyLocation = YourLocationsInfo(
+    final newMyLocation = MyLocationsInfo(
       location: _currentAddress.toString().trim(),
       kind: '',
     );
     //
-    yourLocations
-                .map((yourLocations) => yourLocations.location)
+    myLocations
+                .map((myLocations) => myLocations.location)
                 .contains(_currentAddress.toString()) ==
             true
         ? null
-        : yourLocations.length == 5
+        : myLocations.length == 5
             ? _showDialog()
             : setState(() {
-                yourLocations.add(newMyLocation);
+                myLocations.add(newMyLocation);
               });
   }
 
@@ -137,85 +137,17 @@ class _MyLocationState extends State<MyLocation> {
         .single();
     final userID = userInfo.entries.single.value;
     //
-    final userLocations =
-        await supabase.from("locations").select("user_id").match(
-      {"user_id": userID},
-    );
-
-    userLocations.isEmpty
+    final newLocation = await supabase
+        .from("locations")
+        .select("location")
+        .eq("location", _currentAddress.toString());
+    //
+    newLocation.isEmpty
         ? await supabase.from("locations").insert({
-            "location_1": yourLocations[0].location.toString(),
+            "location": myLocations.last.location.toString(),
             "user_id": userID.toString(),
           })
-        : userLocations.single.entries.single.value == userID
-            ? await supabase
-                .from("locations")
-                .update(yourLocations.length == 1
-                    ? {
-                        "location_1": yourLocations[0].location.toString(),
-                        "time_updated": DateTime.now().toString(),
-                      }
-                    : yourLocations.length == 2
-                        ? {
-                            "location_1": yourLocations[0].location.toString(),
-                            "location_2": yourLocations[1].location.toString(),
-                            "time_updated": DateTime.now().toString(),
-                          }
-                        : yourLocations.length == 3
-                            ? {
-                                "location_1":
-                                    yourLocations[0].location.toString(),
-                                "location_2":
-                                    yourLocations[1].location.toString(),
-                                "location_3":
-                                    yourLocations[2].location.toString(),
-                                "time_updated": DateTime.now().toString(),
-                              }
-                            : yourLocations.length == 4
-                                ? {
-                                    "location_1":
-                                        yourLocations[0].location.toString(),
-                                    "location_2":
-                                        yourLocations[1].location.toString(),
-                                    "location_3":
-                                        yourLocations[2].location.toString(),
-                                    "location_4":
-                                        yourLocations[3].location.toString(),
-                                    "time_updated": DateTime.now().toString(),
-                                  }
-                                : yourLocations.length == 5
-                                    ? {
-                                        "location_1": yourLocations[0]
-                                            .location
-                                            .toString(),
-                                        "location_2": yourLocations[1]
-                                            .location
-                                            .toString(),
-                                        "location_3": yourLocations[2]
-                                            .location
-                                            .toString(),
-                                        "location_4": yourLocations[3]
-                                            .location
-                                            .toString(),
-                                        "location_5": yourLocations[4]
-                                            .location
-                                            .toString(),
-                                        "time_updated":
-                                            DateTime.now().toString(),
-                                      }
-                                    : {
-                                        "location_1": "",
-                                        "location_2": "",
-                                        "location_3": "",
-                                        "location_4": "",
-                                        "location_5": "",
-                                        "time_updated":
-                                            DateTime.now().toString(),
-                                      })
-                .match({
-                "user_id": userID,
-              })
-            : null;
+        : null;
   }
 
   ///
@@ -243,9 +175,9 @@ class _MyLocationState extends State<MyLocation> {
             SizedBox(
               width: 300,
               child: Text(
-                yourLocations.isEmpty
+                myLocations.isEmpty
                     ? "Tap here to define your location!"
-                    : yourLocations.last.location.toString(),
+                    : myLocations.last.location.toString(),
                 style: GoogleFonts.inter(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,

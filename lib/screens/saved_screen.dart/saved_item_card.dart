@@ -34,15 +34,15 @@ class _SavedItemCardState extends State<SavedItemCard> {
     savedItem == false
         ? setState(() {
             savedItems.removeWhere(
-                (savedItems) => savedItems.title == widget.savedItems.title);
+                (savedItems) => savedItems.store == widget.savedItems.store);
             //
             dealsItemInfo[dealsItemInfo.indexWhere((dealsItemInfo) =>
-                    dealsItemInfo.title.contains(widget.savedItems.title))]
+                    dealsItemInfo.store.contains(widget.savedItems.store))]
                 .like = false;
             //
             exploreMoreItemInfo[exploreMoreItemInfo.indexWhere(
                     (exploreMoreItemInfo) => exploreMoreItemInfo.title
-                        .contains(widget.savedItems.title))]
+                        .contains(widget.savedItems.store))]
                 .like = false;
           })
         : null;
@@ -67,19 +67,13 @@ class _SavedItemCardState extends State<SavedItemCard> {
         .single();
     final userID = userInfo.entries.single.value;
     //
-    await supabase.from("deals").update({
-      "like": false.toString(),
-      "time_updated": DateTime.now().toString(),
-    }).match({
+    await supabase.from("deals").delete().match({
       "image": widget.savedItems.image.toString(),
-      "id_user": userID,
+      "user_id": userID,
     });
 
-    await supabase.from("explore_more").update({
-      "like": false.toString(),
-      "time_updated": DateTime.now().toString(),
-    }).match({
-      "id_user": userID.toString(),
+    await supabase.from("explore_more").delete().match({
+      "user_id": userID.toString(),
       "image": widget.savedItems.image.toString()
     });
   }
@@ -177,7 +171,7 @@ class _SavedItemCardState extends State<SavedItemCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.savedItems.title,
+                      widget.savedItems.store,
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,

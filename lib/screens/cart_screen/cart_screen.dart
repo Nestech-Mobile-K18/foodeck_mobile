@@ -11,9 +11,9 @@ import 'package:foodeck_app/widgets/header.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends StatefulWidget {
-  final CartItemInfo? cartItemInfo;
-  final Coupon? coupon;
-  const CartScreen({super.key, this.coupon, this.cartItemInfo});
+  const CartScreen({
+    super.key,
+  });
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -63,6 +63,9 @@ class _CartScreenState extends State<CartScreen> {
   //
   String errorText = "";
   //
+  int indexItem = 0;
+  String dish = "";
+  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +99,7 @@ class _CartScreenState extends State<CartScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => CartCard(
                   cartItemInfo: cartItemInfo[index],
+                  indexItem: index,
                 ),
               ),
             ),
@@ -348,6 +352,8 @@ class _CartScreenState extends State<CartScreen> {
                                       //
                                       vat: "\$${vat.round()}",
                                       //
+                                      detailCoupon: couponController.text,
+                                      //
                                       coupon: valueCoupon == 0 ||
                                               valueCoupon > 1
                                           ? "-\$${valueCoupon.round()}"
@@ -360,8 +366,25 @@ class _CartScreenState extends State<CartScreen> {
                                               : valueCoupon >= 1
                                                   ? "\$${(cartItemInfo.fold(0, (previousValue, element) => (previousValue + element.price)) + deliveryFee + vat - valueCoupon).toString()}"
                                                   : "",
+                                      extra: cartItemInfo[indexItem]
+                                          .sauce
+                                          .toString(),
+                                      dish: dish.toString(),
+                                      size: cartItemInfo[indexItem]
+                                          .size
+                                          .toString(),
+                                      quantity: cartItemInfo[indexItem]
+                                          .quantity
+                                          .toString(),
+                                      //
                                     )));
                       });
+
+                      //
+                      for (var cartItemInfo in cartItemInfo) {
+                        setState(() {});
+                        dish = cartItemInfo.name;
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.primary,
