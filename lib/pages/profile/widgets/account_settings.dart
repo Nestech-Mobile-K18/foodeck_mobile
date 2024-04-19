@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/pages/edit_account/views/edit_account_view.dart';
 import 'package:template/pages/map/views/map_view.dart';
 import 'package:template/pages/profile/widgets/components/function_header.dart';
 import 'package:template/pages/profile/widgets/components/function_items.dart';
@@ -26,6 +27,8 @@ class _AccountSettingsState extends State<AccountSettings> {
             isDividers: true,
             onTap: () {
               // Navigates to edit profile screen
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => EditAccountView()));
             }),
         FunctionItems(
             functionName: StringExtensions.myLocation,

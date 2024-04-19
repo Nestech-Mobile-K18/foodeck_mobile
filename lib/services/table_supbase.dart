@@ -5,6 +5,7 @@ class TableSupabase {
   static const emailColumn = "email";
   static const nameColumn = "name";
   static const phoneColumn = "phone";
+  static const passwordColumn = "password";
   static const addressColumn1 = "address_1";
   static const addressColumn2 = "address_2";
   static const addressColumn3 = "address_3";

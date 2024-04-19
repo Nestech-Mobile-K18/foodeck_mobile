@@ -1,62 +1,80 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/services/api.dart';
+import 'package:template/services/table_supbase.dart';
 
 import '../../../services/auth_manager.dart';
 
 /// A view model for managing profile-related data and interactions.
 class ProfileViewModel {
-  /// The Supabase client instance.
-  final supabaseClient = Supabase.instance.client;
+  final API _api = API();
 
-  /// Retrieves user data from the 'users' and 'location_user' tables based on the user ID.
-  Future<Map<String, dynamic>?> getUserDataById() async {
+  // Retrieves user data from the 'users' and 'location_user' tables based on the user ID.
+  Stream<Map<String, dynamic>?> getUserDataByIdStream() async* {
     final String? getUserId = await AuthManager.getUserId();
     if (getUserId == null) {
-      return null;
+      yield null;
+      return;
     }
 
-    var locationColumns = [
-      'address_1',
-      'address_2',
-      'address_3',
-      'address_4',
-      'address_5'
-    ];
-    var userResponse;
-    Map<String, String?> addressResponse = {};
+    while (true) {
+      var locationColumns = [
+        TableSupabase.addressColumn1,
+        TableSupabase.addressColumn2,
+        TableSupabase.addressColumn3,
+        TableSupabase.addressColumn4,
+        TableSupabase.addressColumn5
+      ];
+      var userResponse;
+      Map<String, String?> addressResponse = {};
 
-    for (var addressColumn in locationColumns) {
-      var response = await supabaseClient
-          .from('location_user')
-          .select(addressColumn)
-          .eq('user_id', getUserId)
-          .single();
-
-      var address = response[addressColumn] as String?;
-      if (address != null) {
-        userResponse = await supabaseClient
-            .from('users')
-            .select('email, name, phone, password')
-            .eq('id', getUserId)
+      for (var addressColumn in locationColumns) {
+        var response = await _api.supabase
+            .from(TableSupabase.localUserTable)
+            .select(addressColumn)
+            .eq(TableSupabase.userIdColumn, getUserId)
             .single();
-        addressResponse['address'] = address;
-        break;
+
+        var address = response[addressColumn] as String?;
+        if (address != null) {
+          userResponse = await _api.supabase
+              .from(TableSupabase.usersTable)
+              .select('email, name, phone, password, avatar')
+              .eq(TableSupabase.idColumn, getUserId)
+              .single();
+          addressResponse['address'] = address;
+          break;
+        }
       }
-    }
 
-    if (userResponse == null) {
-      return null;
-    }
+      if (userResponse == null) {
+        yield null;
+        return;
+      }
 
-    Map<String, dynamic> joinedData = joinMaps(userResponse, addressResponse);
-    return joinedData;
+      Map<String, dynamic> joinedData = joinMaps(userResponse, addressResponse);
+      yield joinedData;
+
+      await Future.delayed(
+          Duration(seconds: 10)); // Thời gian đợi trước khi lấy dữ liệu mới
+    }
   }
 
-  /// Joins two maps into a single map.
+  // Joins two maps into a single map.
   Map<String, dynamic> joinMaps(
       Map<String, dynamic> map1, Map<String, dynamic> map2) {
     Map<String, dynamic> result = {};
     result.addAll(map1);
     result.addAll(map2);
     return result;
+  }
+
+  XFile? convertAvatarToXFile(String? avatarPath) {
+    if (avatarPath == null) {
+      return null; // Trả về null nếu không có đường dẫn
+    } else {
+      // Thực hiện chuyển đổi từ String sang XFile
+      return XFile(avatarPath);
+    }
   }
 }

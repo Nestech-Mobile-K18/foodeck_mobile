@@ -1,6 +1,9 @@
 import 'package:template/pages/application/views/application_view.dart';
+import 'package:template/pages/edit_account/views/edit_account_view.dart';
 import 'package:template/pages/home/view/home_view.dart';
+import 'package:template/pages/map/views/add_location_view.dart';
 import 'package:template/pages/map/views/map_view.dart';
+import 'package:template/pages/profile/views/profile_view.dart';
 
 import '../pages/forgot_password/views/forgot_password_view.dart';
 import '../pages/forgot_password/views/new_password_view.dart';
@@ -36,9 +39,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _pageBuilder((_) => const NewPasswordView(), settings: settings);
     case RouteName.home:
       return _pageBuilder((_) => const HomeView(), settings: settings);
+    case RouteName.editAccount:
+      return _pageBuilder((_) => const EditAccountView(), settings: settings);
+    case RouteName.addLocation:
+      return _pageBuilder((_) => const AddLocationView(), settings: settings);
     case RouteName.application:
       return _pageBuilder((_) => const ApplicationView(), settings: settings);
-
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),
           settings: settings);

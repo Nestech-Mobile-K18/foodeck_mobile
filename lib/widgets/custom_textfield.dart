@@ -8,13 +8,17 @@ class CustomTextField extends StatefulWidget {
   final String? title;
   final bool? obscureText;
   final TextInputType? textInputType;
+  final Widget? iconSuffit;
+  final bool? readOnly;
 
   const CustomTextField(
       {super.key,
       this.hintText,
       this.controller,
       this.title,
+      this.readOnly,
       this.obscureText,
+      this.iconSuffit,
       this.textInputType});
 
   @override
@@ -74,11 +78,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               keyboardType: widget.textInputType ?? TextInputType.text,
               controller: widget.controller,
               textAlign: TextAlign.left,
+              readOnly: widget.readOnly ?? false,
               obscureText: widget.obscureText ?? false,
               decoration: InputDecoration(
-                hintText: widget.hintText ?? '',
-                border: InputBorder.none,
-              ),
+                  hintText: widget.hintText ?? '',
+                  border: InputBorder.none,
+                  suffixIcon: widget.iconSuffit),
             ),
           ],
         ),

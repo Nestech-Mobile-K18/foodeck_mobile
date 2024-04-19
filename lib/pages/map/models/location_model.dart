@@ -1,5 +1,3 @@
-import 'package:template/resources/const.dart';
-
 class LocationModel {
   final String? iconLocation;
   final String? nameOfPlace;

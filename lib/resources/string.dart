@@ -55,4 +55,7 @@ class StringExtensions {
   static const address = 'Address';
   static const addressInstructions = 'Address Instructions';
   static const deleteLocation = 'Delete Location';
+
+  // edit account
+  static const save = 'Save';
 }

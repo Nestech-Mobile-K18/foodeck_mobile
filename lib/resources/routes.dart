@@ -8,4 +8,7 @@ class RouteName {
   static const newPassword = '/new-password';
   static const home = '/home';
   static const application = '/application';
+  static const addLocation = '/add-location';
+  static const editAccount = '/edit-account';
+  static const profile = '/profile';
 }

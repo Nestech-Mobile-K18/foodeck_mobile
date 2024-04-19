@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class API {
   final supabase = Supabase.instance.client;
+  late final SupabaseClient supabaseClient;
 
   Future<String?> responseUserId() async {
     String? getUserId;
