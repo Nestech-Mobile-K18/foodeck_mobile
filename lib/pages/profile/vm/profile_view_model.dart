@@ -56,7 +56,7 @@ class ProfileViewModel {
       yield joinedData;
 
       await Future.delayed(
-          Duration(seconds: 10)); // Thời gian đợi trước khi lấy dữ liệu mới
+          Duration(seconds: 5)); // Waiting time before receiving new data
     }
   }
 
@@ -71,9 +71,9 @@ class ProfileViewModel {
 
   XFile? convertAvatarToXFile(String? avatarPath) {
     if (avatarPath == null) {
-      return null; // Trả về null nếu không có đường dẫn
+      return null; // Returns null if there is no path
     } else {
-      // Thực hiện chuyển đổi từ String sang XFile
+      // Perform conversion from String to XFile
       return XFile(avatarPath);
     }
   }

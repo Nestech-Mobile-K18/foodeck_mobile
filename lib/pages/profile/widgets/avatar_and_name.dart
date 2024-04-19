@@ -23,7 +23,7 @@ class _AvatarAndNameState extends State<AvatarAndName> {
     if (widget.imgFile != null) {
       imageProvider = FileImage(File(widget.imgFile!.path));
     } else {
-      imageProvider = AssetImage(MediaRes.avatar);
+      imageProvider = const AssetImage(MediaRes.avatar);
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

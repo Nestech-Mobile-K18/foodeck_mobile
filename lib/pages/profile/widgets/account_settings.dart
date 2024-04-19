@@ -4,7 +4,6 @@ import 'package:template/pages/map/views/map_view.dart';
 import 'package:template/pages/profile/widgets/components/function_header.dart';
 import 'package:template/pages/profile/widgets/components/function_items.dart';
 import 'package:template/resources/const.dart';
-import 'package:template/widgets/custom_text.dart';
 
 class AccountSettings extends StatefulWidget {
   const AccountSettings({super.key});

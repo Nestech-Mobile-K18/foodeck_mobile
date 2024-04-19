@@ -28,7 +28,7 @@ class _EditAccountViewState extends State<EditAccountView> {
   @override
   void initState() {
     super.initState();
-    // Gọi hàm responseProfile và gắn giá trị vào các controller khi nhận được kết quả
+    // Call the responseProfile function and attach values ​​to controllers when receiving results
     _viewModel.responseProfile().then((response) {
       if (response != null) {
         setState(() {
@@ -37,9 +37,9 @@ class _EditAccountViewState extends State<EditAccountView> {
           phoneController?.text = response[TableSupabase.phoneColumn] ?? '';
           passwordController?.text =
               response[TableSupabase.passwordColumn] ?? '';
-          // Kiểm tra xem cột avatar có giá trị không
+          // Check if the avatar column has a value
           if (response['avatar'] != null) {
-            // Tạo một XFile mới từ đường dẫn chuỗi
+            // Create a new XFile from the string path
             _selectedImageFile = XFile(response['avatar']);
           }
         });

@@ -30,16 +30,16 @@ class _ProfileViewState extends State<ProfileView> {
                 stream: _viewModel.getUserDataByIdStream(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else {
                     var userData = snapshot.data!;
                     String? avatarPath =
-                        userData['avatar']; // Lấy đường dẫn avatar từ userData
+                        userData['avatar']; // Get avatar path from userData
                     XFile? avatarFile = _viewModel.convertAvatarToXFile(
-                        avatarPath); // Chuyển đổi từ String sang XFile
+                        avatarPath); // Convert from String to XFile
                     return AvatarAndName(
                       imgFile:
-                          avatarFile, // Truyền XFile avatar vào widget AvatarAndName
+                          avatarFile, // Pass XFile avatar to AvatarAndName widget
                       name: userData['name'] ?? 'N/A',
                       address: userData['address'] ?? 'N/A',
                     );
