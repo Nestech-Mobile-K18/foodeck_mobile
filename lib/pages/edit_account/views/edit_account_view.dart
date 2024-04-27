@@ -25,6 +25,7 @@ class _EditAccountViewState extends State<EditAccountView> {
   final TextEditingController? passwordController = TextEditingController();
   final EditAccountViewModel _viewModel = EditAccountViewModel();
   XFile? _selectedImageFile;
+  String? _selectedImageURL;
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class _EditAccountViewState extends State<EditAccountView> {
           // Check if the avatar column has a value
           if (response['avatar'] != null) {
             // Create a new XFile from the string path
-            _selectedImageFile = XFile(response['avatar']);
+            _selectedImageURL = response['avatar'];
           }
         });
       }
@@ -68,6 +69,7 @@ class _EditAccountViewState extends State<EditAccountView> {
               CrossBar(height: 10),
               ChooseAvatar(
                 imgFile: _selectedImageFile,
+                imgUrl: _selectedImageURL,
                 chooseAvatar: () async {
                   final imageFile =
                       await _viewModel.requestStoragePermission(context);

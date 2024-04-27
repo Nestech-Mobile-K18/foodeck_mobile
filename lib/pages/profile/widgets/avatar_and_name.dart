@@ -9,8 +9,8 @@ import '../../../widgets/custom_text.dart';
 class AvatarAndName extends StatefulWidget {
   final String? name;
   final String? address;
-  final XFile? imgFile;
-  const AvatarAndName({super.key, this.name, this.address, this.imgFile});
+  final String? imgUrl;
+  const AvatarAndName({super.key, this.name, this.address, this.imgUrl});
 
   @override
   State<AvatarAndName> createState() => _AvatarAndNameState();
@@ -20,8 +20,8 @@ class _AvatarAndNameState extends State<AvatarAndName> {
   @override
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
-    if (widget.imgFile != null) {
-      imageProvider = FileImage(File(widget.imgFile!.path));
+    if (widget.imgUrl != null) {
+      imageProvider = NetworkImage(widget.imgUrl!);
     } else {
       imageProvider = const AssetImage(MediaRes.avatar);
     }

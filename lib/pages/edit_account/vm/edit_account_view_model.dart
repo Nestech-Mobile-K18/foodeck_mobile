@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ import '../../../services/auth_manager.dart';
 import '../../../services/errror.dart';
 import '../../../services/table_supbase.dart';
 import '../models/edit_profile_model.dart';
+import 'package:crypto/crypto.dart';
 
 class EditAccountViewModel extends ChangeNotifier {
   final API _api = API();
@@ -33,12 +36,41 @@ class EditAccountViewModel extends ChangeNotifier {
     }
   }
 
+  Future<String?> uploadAvatarToStorage(XFile file, String userId) async {
+    // Lấy đường dẫn của file từ XFile
+    String filePath = file.path;
+
+    // Tạo một đối tượng File từ đường dẫn
+    File imageFile = File(filePath);
+
+    // Tạo một chuỗi duy nhất bằng cách kết hợp userId và thời gian hiện tại
+    String uniqueId = '${userId}_${DateTime.now().millisecondsSinceEpoch}';
+
+    // Băm chuỗi duy nhất để tạo tên file duy nhất
+    String fileName = md5.convert(utf8.encode(uniqueId)).toString() + '.jpg';
+
+    // Thực hiện đẩy file lên Supabase Storage
+    final response =
+        await _api.supabase.storage.from('users').upload(fileName, imageFile);
+
+    final res = _api.supabase.storage.from('users').getPublicUrl('$fileName');
+    return res;
+  }
+
   Future<void> requestUpdateProfile(
       EditProfileModel model, BuildContext context) async {
     final String? getUserId = await AuthManager.getUserId();
     if (getUserId == null) {
       return;
     } else {
+      // Khai báo và khởi tạo userdata
+      Map<String, dynamic> userdata = {
+        TableSupabase.nameColumn: model.name,
+        TableSupabase.emailColumn: model.email,
+        TableSupabase.phoneColumn: model.phone,
+        TableSupabase.passwordColumn: model.password,
+      };
+
       // Get current user information
       Map<String, dynamic>? currentUser = await responseProfile();
       if (currentUser == null) {
@@ -48,13 +80,25 @@ class EditAccountViewModel extends ChangeNotifier {
       // Check if the new password is different from the old password
       bool newPasswordDifferent = model.password != currentUser['password'];
 
-      Map<String, dynamic> userdata = {
-        TableSupabase.nameColumn: model.name,
-        TableSupabase.emailColumn: model.email,
-        TableSupabase.phoneColumn: model.phone,
-        TableSupabase.passwordColumn: model.password,
-        'avatar': model.avatarPath
-      };
+      // Check if avatarPath is provided and it's not null
+      if (model.avatarPath != null) {
+        XFile? imageFile = XFile(model.avatarPath!);
+        // Upload avatar to Supabase Storage
+        String? avatarUrl = await uploadAvatarToStorage(imageFile, getUserId);
+        if (avatarUrl != null) {
+          // If upload is successful, update userdata with avatar URL
+          userdata['avatar'] = avatarUrl;
+        } else {
+          // Handle error if avatar upload fails
+          // For example, show a message to the user
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to upload avatar.'),
+            ),
+          );
+          return;
+        }
+      }
 
       // Update user data in Supabase Users table
       await _api.supabase

@@ -47,4 +47,6 @@ class MediaRes {
 
   static const aboutUs = '$_baseIcon/ic_about_us.png';
   static const dataUsage = '$_baseIcon/ic_data_usage.png';
+  // menu
+  static const bannerMenu = '$_baseImage/banner_menu.png';
 }

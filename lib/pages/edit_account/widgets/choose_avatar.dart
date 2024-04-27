@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:template/resources/const.dart';
@@ -7,7 +6,8 @@ import 'package:template/resources/const.dart';
 class ChooseAvatar extends StatefulWidget {
   final VoidCallback? chooseAvatar;
   final XFile? imgFile;
-  const ChooseAvatar({Key? key, this.chooseAvatar, this.imgFile})
+  final String? imgUrl;
+  const ChooseAvatar({Key? key, this.chooseAvatar, this.imgFile, this.imgUrl})
       : super(key: key);
 
   @override
@@ -18,8 +18,15 @@ class _ChooseAvatarState extends State<ChooseAvatar> {
   @override
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
-    if (widget.imgFile != null) {
-      imageProvider = FileImage(File(widget.imgFile!.path));
+    if (widget.imgFile != null || widget.imgUrl != null) {
+      // Kiểm tra cả imgFile và imgUrl
+      if (widget.imgFile is XFile) {
+        imageProvider = FileImage(File(widget.imgFile!.path));
+      } else if (widget.imgUrl is String) {
+        imageProvider = NetworkImage(widget.imgUrl!);
+      } else {
+        imageProvider = AssetImage(MediaRes.avatar);
+      }
     } else {
       imageProvider = AssetImage(MediaRes.avatar);
     }

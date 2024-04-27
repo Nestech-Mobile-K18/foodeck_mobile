@@ -20,7 +20,7 @@ class MapViewModel extends ChangeNotifier {
   static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
   static const String _baseUrl = MapBoxConfig.BASE_URL_MAPBOX;
   String currentQuery = '';
-  late Timer _debounce = Timer(Duration(milliseconds: 0), () {});
+  late Timer _debounce = Timer(const Duration(milliseconds: 0), () {});
   List<Map<String, dynamic>> searchResults = [];
   bool _isLoading = false;
   final supabase = Supabase.instance.client;
@@ -315,43 +315,47 @@ class MapViewModel extends ChangeNotifier {
   /// Searches for places based on the given query.
   /// assigned to Nam Nguyen
   Future<void> searchPlaces(String query) async {
-    if (query.isEmpty) {
-      searchResults = [];
-      notifyListeners();
-      return;
-    }
-
-    currentQuery = query;
-    isSearching = true;
-    _isLoading = true;
-    notifyListeners();
-
     try {
-      String apiUrl =
-          '$_baseUrl${Uri.encodeFull(query)}.json?access_token=$_apiKey';
-      var response = await http.get(Uri.parse(apiUrl));
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        if (data['features'] is List) {
-          List<Map<String, dynamic>> results =
-              (data['features'] as List).map((feature) {
-            String placeName = feature['place_name'];
-            String placeType = (feature['place_type'] as List).join(', ');
-            return {'place_name': placeName, 'place_type': placeType};
-          }).toList();
+      // Set _isLoading to true when starting the search
+      _isLoading = true;
+      // Notify listeners that _isLoading has changed
+      notifyListeners();
 
-          searchResults = results;
+      // Cancel debounce timer before starting a new one
+      cancelDebounce();
+
+      // Start a new debounce timer
+      _debounce = Timer(Duration(milliseconds: 300), () async {
+        currentQuery = query;
+        String apiUrl =
+            '$_baseUrl${Uri.encodeFull(query)}.json?access_token=$_apiKey';
+        var response = await http.get(Uri.parse(apiUrl));
+        if (response.statusCode == 200) {
+          var data = json.decode(response.body);
+          if (data['features'] is List) {
+            List<Map<String, dynamic>> results =
+                (data['features'] as List).map((feature) {
+              String placeName = feature['place_name'];
+              String placeType = (feature['place_type'] as List).join(', ');
+              return {'place_name': placeName, 'place_type': placeType};
+            }).toList();
+
+            searchResults = results;
+          } else {
+            throw Exception('Invalid response format');
+          }
         } else {
-          throw Exception('Invalid response format');
+          throw Exception('Failed to search places');
         }
-      } else {
-        throw Exception('Failed to search places');
-      }
+        // Notify listeners after updating searchResults
+        notifyListeners();
+      });
     } catch (e) {
       print(e);
     } finally {
+      // Set _isLoading to false when the search is complete
       _isLoading = false;
-      isSearching = false;
+      // Notify listeners that _isLoading has changed
       notifyListeners();
     }
   }

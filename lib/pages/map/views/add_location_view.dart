@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:template/pages/map/widget/result_search_card.dart';
 import 'package:template/widgets/research_bar.dart';
-
-import '../../../resources/const.dart';
-import '../../../widgets/custom_text.dart';
 import '../vm/map_view_model.dart';
 import '../widget/show_map.dart';
 
@@ -18,11 +15,12 @@ class AddLocationView extends StatefulWidget {
 class _AddLocationViewState extends State<AddLocationView> {
   final MapViewModel _viewModel = MapViewModel();
   bool _isLoadingMore = false;
+  bool _hasMoreResults =
+      true; // Thêm biến này để kiểm tra xem còn kết quả nào nữa không
   LatLng? _onTarget;
   final ScrollController _scrollController = ScrollController();
   LatLng? selectedLocation;
-  final GlobalKey<ScaffoldState> _scaffoldKey =
-      GlobalKey<ScaffoldState>(); // Thêm biến này
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -45,7 +43,8 @@ class _AddLocationViewState extends State<AddLocationView> {
   }
 
   void _loadMore() async {
-    if (!_isLoadingMore) {
+    if (!_isLoadingMore && _hasMoreResults) {
+      // Thêm điều kiện `_hasMoreResults`
       setState(() {
         _isLoadingMore = true;
       });
@@ -56,6 +55,8 @@ class _AddLocationViewState extends State<AddLocationView> {
       } finally {
         setState(() {
           _isLoadingMore = false;
+          _hasMoreResults = _viewModel.searchResults.length >
+              5; // Cập nhật giá trị của _hasMoreResults
         });
       }
     }
@@ -67,10 +68,9 @@ class _AddLocationViewState extends State<AddLocationView> {
       key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: false,
-        title: const CustomText(
-          title: StringExtensions.addLocation,
-          size: 17,
-          fontWeight: FontWeight.w700,
+        title: const Text(
+          'Add Location',
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
         ),
       ),
       body: ShowMap(
@@ -79,13 +79,13 @@ class _AddLocationViewState extends State<AddLocationView> {
         onMarkerSelected: selectedLocation,
         onTarget: _onTarget,
       ),
-      backgroundColor: ColorsGlobal.globalWhite,
+      backgroundColor: Colors.white,
       bottomSheet: Container(
         padding: const EdgeInsets.symmetric(vertical: 15),
-        height: Responsive.screenHeight(context) * 0.4,
+        height: MediaQuery.of(context).size.height * 0.4,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: ColorsGlobal.globalWhite,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
@@ -95,24 +95,28 @@ class _AddLocationViewState extends State<AddLocationView> {
           children: [
             ReSearchBar(
               onChanged: (value) {
-                if (value.isNotEmpty) {
-                  _viewModel.searchPlaces(value);
-                } else {
-                  _viewModel.searchResults = [];
-                }
+                setState(() {
+                  if (value.isNotEmpty) {
+                    _viewModel.searchPlaces(value);
+                  } else {
+                    _viewModel.searchResults = [];
+                  }
+                });
               },
-              hintText: StringExtensions.searchLocation,
+              hintText: 'Search location',
             ),
             const SizedBox(height: 10),
             const Divider(
-              color: ColorsGlobal.dividerGrey,
+              color: Colors.grey,
               thickness: 10,
             ),
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: _viewModel.searchResults.length,
+                itemCount: _viewModel.searchResults.length > 5
+                    ? 5
+                    : _viewModel.searchResults.length,
                 itemBuilder: (context, index) {
                   return ResultSearchCard(
                     address: _viewModel.searchResults[index]['place_name'],
@@ -122,7 +126,7 @@ class _AddLocationViewState extends State<AddLocationView> {
                           await _viewModel.getLocationFromPlaceName(
                               _viewModel.searchResults[index]['place_name']);
                       setState(() {
-                        selectedLocation = newLocation; // Update new location
+                        selectedLocation = newLocation;
                         _onTarget = newLocation;
                       });
                     },
@@ -130,6 +134,10 @@ class _AddLocationViewState extends State<AddLocationView> {
                 },
               ),
             ),
+            if (_hasMoreResults)
+              _isLoadingMore
+                  ? CircularProgressIndicator()
+                  : SizedBox() // Hiển thị chỉ khi còn kết quả và đang tải
           ],
         ),
       ),

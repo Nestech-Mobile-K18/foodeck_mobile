@@ -35,11 +35,9 @@ class _ProfileViewState extends State<ProfileView> {
                     var userData = snapshot.data!;
                     String? avatarPath =
                         userData['avatar']; // Get avatar path from userData
-                    XFile? avatarFile = _viewModel.convertAvatarToXFile(
-                        avatarPath); // Convert from String to XFile
+
                     return AvatarAndName(
-                      imgFile:
-                          avatarFile, // Pass XFile avatar to AvatarAndName widget
+                      imgUrl: avatarPath,
                       name: userData['name'] ?? 'N/A',
                       address: userData['address'] ?? 'N/A',
                     );
