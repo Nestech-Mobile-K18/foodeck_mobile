@@ -5,6 +5,7 @@ import 'package:template/pages/food_menu/widgets/tab_bar_view_menu.dart';
 import 'package:template/resources/const.dart';
 import 'package:template/widgets/custom_text.dart';
 
+import '../../../services/auth_manager.dart';
 import '../../../widgets/loading_indicator.dart';
 
 class FoodMenuView extends StatefulWidget {
@@ -18,11 +19,13 @@ class FoodMenuView extends StatefulWidget {
 class _FoodMenuViewState extends State<FoodMenuView>
     with TickerProviderStateMixin {
   final FoodMenuViewModel _viewmodel = FoodMenuViewModel();
+
   Future<List<Map<String, dynamic>>?>? _listFoodsPopular;
   Future<List<Map<String, dynamic>>?>? _listFoodDeals;
   Future<List<Map<String, dynamic>>?>? _listFoodWraps;
   Future<List<Map<String, dynamic>>?>? _listFoodBeverages;
   Future<List<Map<String, dynamic>>?>? _listFoodSandwiches;
+  bool isLiked = false;
 
   @override
   void initState() {
@@ -33,6 +36,32 @@ class _FoodMenuViewState extends State<FoodMenuView>
     _listFoodWraps = _viewmodel.responseMenuWraps();
     _listFoodBeverages = _viewmodel.responseMenuBeverages();
     _listFoodSandwiches = _viewmodel.responseMenuSandwiches();
+    _checkIfLiked();
+  }
+
+  Future<void> _checkIfLiked() async {
+    final userId = await AuthManager.getUserId();
+    if (userId != null) {
+      final menuIds = await _viewmodel.getListLikeMenuIds(userId);
+      setState(() {
+        isLiked = menuIds.contains(widget.bindingData?['menu_id']);
+      });
+    }
+  }
+
+  Future<void> _toggleLike() async {
+    final userId = await AuthManager.getUserId();
+    if (userId != null) {
+      if (isLiked) {
+        await _viewmodel.requestDeleteIsLike(
+            userId, widget.bindingData?['menu_id']);
+      } else {
+        await _viewmodel.requestUpdateIsLike(widget.bindingData?['menu_id']);
+      }
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
   }
 
   @override
@@ -62,7 +91,7 @@ class _FoodMenuViewState extends State<FoodMenuView>
                     color: ColorsGlobal.globalWhite,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                 ),
               ),
@@ -93,12 +122,15 @@ class _FoodMenuViewState extends State<FoodMenuView>
                   ],
                 ),
               ),
-              const Positioned(
+              Positioned(
                 top: 45,
                 right: 70,
-                child: Icon(
-                  Icons.favorite_border_outlined,
-                  color: ColorsGlobal.globalWhite,
+                child: IconButton(
+                  icon: Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked ? Colors.pink : ColorsGlobal.globalWhite,
+                  ),
+                  onPressed: _toggleLike,
                 ),
               ),
               const Positioned(
@@ -200,7 +232,7 @@ class _FoodMenuViewState extends State<FoodMenuView>
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LoadingIndicator();
                 } else if (snapshot.hasError) {
-                  return Text('Lỗi: ${snapshot.error}');
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return TabBarViewMenu(
                     controller: tabController,

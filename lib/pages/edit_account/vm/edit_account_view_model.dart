@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,21 +36,21 @@ class EditAccountViewModel extends ChangeNotifier {
   }
 
   Future<String?> uploadAvatarToStorage(XFile file, String userId) async {
-    // Lấy đường dẫn của file từ XFile
+    // Get the file path from XFile
     String filePath = file.path;
 
-    // Tạo một đối tượng File từ đường dẫn
+    // Create a File object from the path
     File imageFile = File(filePath);
 
-    // Tạo một chuỗi duy nhất bằng cách kết hợp userId và thời gian hiện tại
+    // Create a unique string by combining userId and current time
     String uniqueId = '${userId}_${DateTime.now().millisecondsSinceEpoch}';
 
-    // Băm chuỗi duy nhất để tạo tên file duy nhất
-    String fileName = md5.convert(utf8.encode(uniqueId)).toString() + '.jpg';
+    // Hash the unique string to create a unique file name
+    String fileName = '${md5.convert(utf8.encode(uniqueId))}.jpg';
 
-    // Thực hiện đẩy file lên Supabase Storage
-    final response =
-        await _api.supabase.storage.from('users').upload(fileName, imageFile);
+    // Perform file push to Supabase Storage
+
+    await _api.supabase.storage.from('users').upload(fileName, imageFile);
 
     final res = _api.supabase.storage.from('users').getPublicUrl('$fileName');
     return res;
@@ -63,7 +62,7 @@ class EditAccountViewModel extends ChangeNotifier {
     if (getUserId == null) {
       return;
     } else {
-      // Khai báo và khởi tạo userdata
+      // Declare and initialize userdata
       Map<String, dynamic> userdata = {
         TableSupabase.nameColumn: model.name,
         TableSupabase.emailColumn: model.email,
@@ -91,6 +90,7 @@ class EditAccountViewModel extends ChangeNotifier {
         } else {
           // Handle error if avatar upload fails
           // For example, show a message to the user
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Failed to upload avatar.'),
@@ -149,7 +149,7 @@ class EditAccountViewModel extends ChangeNotifier {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(StringExtensions.oke))
+                  child: const Text(StringExtensions.oke))
             ],
           );
         },
@@ -166,10 +166,8 @@ class EditAccountViewModel extends ChangeNotifier {
         try {
           await requestUpdateProfile(input, context);
           // If there is no error during profile update, pop the context
-          if (context != null) {
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).pop();
-          }
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
         } on AuthApiException catch (e) {
           if (e.message ==
               'New password should be different from the old password.') {

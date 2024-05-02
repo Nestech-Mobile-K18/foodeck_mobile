@@ -25,6 +25,12 @@ class _ListMenuViewState extends State<ListMenuView> {
     menuData = _viewModel.responseListMenu();
   }
 
+  Future<void> _updateMenuData() async {
+    setState(() {
+      menuData = _viewModel.responseListMenu();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +57,7 @@ class _ListMenuViewState extends State<ListMenuView> {
                     color: ColorsGlobal.globalWhite,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
                   },
                 ),
               ),
@@ -71,12 +77,16 @@ class _ListMenuViewState extends State<ListMenuView> {
               return ItemMenu(
                 userAddress: widget.userAddress,
                 data: snapshot.data,
-                onDealSelected: (data) {
-                  Navigator.of(context).push(MaterialPageRoute(
+                onDealSelected: (data) async {
+                  bool shouldUpdateMenu =
+                      await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => FoodMenuView(
                       bindingData: data,
                     ),
                   ));
+                  if (shouldUpdateMenu == true) {
+                    _updateMenuData();
+                  }
                 },
               );
             }

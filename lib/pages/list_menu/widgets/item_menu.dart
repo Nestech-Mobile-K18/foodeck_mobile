@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/resources/const.dart';
 
+import '../../../services/auth_manager.dart';
 import '../../../widgets/custom_text.dart';
 import '../../../widgets/loading_indicator.dart';
 import '../vm/list_menu_view_model.dart';
@@ -27,19 +28,40 @@ class _ItemMenuState extends State<ItemMenu> {
   final currentCard = ValueNotifier(0);
   String? isTime;
   String? distance;
+  late List<bool> likeStatusList;
+  final Future<String?> userId = AuthManager.getUserId();
   final ListMenuViewModel _viewModel = ListMenuViewModel();
-  int numberOfItems = 0;
-  List<bool> like = [false, false, false, false, false, false];
+  String? currentUserId;
 
   @override
   void initState() {
     super.initState();
-    numberOfItems = widget.data!.length;
+
+    if (widget.data != null) {
+      // Initialize likeStatusList and call getListLikeMenuIds to get the list of liked menus
+      likeStatusList = List.filled(widget.data!.length, false);
+      _initLikeStatusList();
+    }
+    _initUserId();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> _initUserId() async {
+    currentUserId = await userId;
+  }
+
+  Future<void> _initLikeStatusList() async {
+    String? currentUserId = await userId;
+    if (currentUserId != null) {
+      List<String> likedMenuIds =
+          await _viewModel.getListLikeMenuIds(currentUserId);
+      for (int i = 0; i < widget.data!.length; i++) {
+        if (likedMenuIds.contains(widget.data![i]['id_menu'])) {
+          setState(() {
+            likeStatusList[i] = true;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -77,6 +99,8 @@ class _ItemMenuState extends State<ItemMenu> {
                             distance = dataDistance.toString();
                           });
                           widget.onDealSelected!({
+                            'user_id': currentUserId,
+                            'menu_id': widget.data?[index]['id_menu'],
                             'img_menu': widget.data?[index]['img_menu'],
                             'category': widget.data?[index]['category'],
                             'place': widget.data?[index]['place'],
@@ -140,15 +164,40 @@ class _ItemMenuState extends State<ItemMenu> {
                                   }
                                 }),
                             IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  like[index]
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: like[index]
-                                      ? ColorsGlobal.globalPink
-                                      : Colors.white,
-                                ))
+                              onPressed: () async {
+                                String? currentUserId = await userId;
+                                if (currentUserId != null) {
+                                  String menuId =
+                                      widget.data![index]['id_menu'];
+
+                                  // Check the current status of the menu item
+                                  bool currentLikeStatus =
+                                      likeStatusList[index];
+                                  if (currentLikeStatus == true) {
+                                    // If you have already "liked", delete the data of the is_Like column
+                                    await _viewModel.requestDeleteIsLike(
+                                        currentUserId, menuId);
+                                  } else if (currentLikeStatus == false) {
+                                    // If not "liked", update the is_Like status
+                                    await _viewModel
+                                        .requestUpdateIsLike(menuId);
+                                  }
+
+                                  // Update the state of the "like" icon based on the menu item's new state
+                                  setState(() {
+                                    likeStatusList[index] = !currentLikeStatus;
+                                  });
+                                }
+                              },
+                              icon: Icon(
+                                likeStatusList[index]
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: likeStatusList[index]
+                                    ? ColorsGlobal.globalPink
+                                    : Colors.white,
+                              ),
+                            )
                           ]),
                           Padding(
                             padding: const EdgeInsets.only(left: 8, right: 4),
@@ -167,7 +216,7 @@ class _ItemMenuState extends State<ItemMenu> {
                                     Container(
                                       constraints: const BoxConstraints(
                                           maxWidth:
-                                              280), // Đặt ràng buộc chiều rộng tối đa
+                                              280), // Set maximum width constraint
                                       child: CustomText(
                                         maxLine: 3,
                                         overflow: TextOverflow.ellipsis,

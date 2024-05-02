@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/services/api.dart';
-import 'package:template/services/table_supbase.dart';
-import 'package:http/http.dart' as http;
-
 import '../../../services/auth_manager.dart';
 import '../../../services/mapbox_config.dart';
+import 'package:http/http.dart' as http;
 
-class ListMenuViewModel extends ChangeNotifier {
-  final API _api = API();
+import '../../../services/table_supbase.dart';
+
+class SavedViewModel {
   final supabase = Supabase.instance.client;
   static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
 
@@ -81,76 +77,48 @@ class ListMenuViewModel extends ChangeNotifier {
       final duration = Duration(seconds: intDurationInSeconds);
       final hours = duration.inHours;
       final minutes = duration.inMinutes.remainder(60);
-
       return '$hours hour $minutes minutes';
     }
     return '0 seconds';
   }
 
-  Future<List<Map<String, dynamic>>?> responseListMenu() async {
-    final res = await _api.requestSelected(TableSupabase.mennuTable, '*');
-    final List<dynamic> data = res ?? [];
-    return List<Map<String, dynamic>>.from(data);
-  }
+  Future<List<Map<String, dynamic>>?> responseListMenuSaved() async {
+    final String? userId = await AuthManager.getUserId();
 
-  Future<List<String>> getListLikeMenuIds(String userId) async {
+    // Step 1: Query to get menu_id list from users table
     final userRecord = await supabase
         .from('users')
         .select('list_like')
-        .eq('id', userId)
+        .eq('id', userId!)
         .single();
+    final dynamic listLike = userRecord['list_like'];
 
-    final dynamic likedMenus = userRecord['list_like'];
-    List<String> menuIds = [];
-
-    if (likedMenus != null) {
-      if (likedMenus is List<dynamic>) {
-        menuIds.addAll(likedMenus.map((item) => item.toString()));
-      } else {
-        menuIds.add(likedMenus.toString());
-      }
-    }
-
-    return menuIds;
-  }
-
-  Future<void> requestUpdateIsLike(String menuId) async {
-    final String? userId = await AuthManager.getUserId();
-    if (userId != null) {
-      // Get the list of menus that have been liked by the user
-      final userRecord = await supabase
-          .from('users')
-          .select('list_like')
-          .eq('id', userId)
-          .single();
-
-      // Get the list of liked menus from the query results
-      final dynamic likedMenus = userRecord['list_like'];
-      List<String> updatedList = [];
-
-      if (likedMenus != null) {
-        if (likedMenus is List<dynamic>) {
-          // If likedMenus is a List, add all elements to the updatedList
-          updatedList.addAll(likedMenus.map((item) => item.toString()));
-        } else {
-          // If likedMenus is not a List, add it to updatedList
-          updatedList.add(likedMenus.toString());
-        }
-
-        // If menuId does not exist in the list, add it to the list
-        if (!updatedList.contains(menuId)) {
-          updatedList.add(menuId);
+    // Step 2: Query to get menu data from menu table based on list_like
+    if (listLike != null) {
+      final List<String> menuIds = [];
+      if (listLike is List<dynamic>) {
+        // Duyệt qua từng phần tử trong mảng và thêm vào danh sách menuIds
+        for (dynamic item in listLike) {
+          menuIds.add(item.toString());
         }
       } else {
-        // If the menu list is null, create a new list and add menuId
-        updatedList.add(menuId);
+        menuIds.add(listLike.toString());
       }
 
-      // Update the list of user's liked menus on the database
-      await supabase
-          .from('users')
-          .update({'list_like': updatedList}).eq('id', userId);
+      final List<Map<String, dynamic>> dataList = [];
+      // Duyệt qua từng uuid trong danh sách menuIds và thực hiện truy vấn
+      for (String menuId in menuIds) {
+        final res = await supabase
+            .from(TableSupabase.mennuTable)
+            .select('*')
+            .eq('id_menu', menuId)
+            .single();
+        dataList.add(res);
+      }
+      return dataList;
     }
+
+    return null;
   }
 
   Future<void> requestDeleteIsLike(String userId, String menuId) async {

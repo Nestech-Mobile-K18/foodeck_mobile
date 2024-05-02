@@ -12,7 +12,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   runApp(DevicePreview(
-    enabled: false,
+    enabled: true,
     builder: ((context) => const MyApp()),
   ));
 }

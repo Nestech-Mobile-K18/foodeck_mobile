@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:template/pages/forgot_password/vm/forgot_password_view_model.dart';
-import 'package:template/pages/otp/views/otp_view.dart';
 
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_text.dart';

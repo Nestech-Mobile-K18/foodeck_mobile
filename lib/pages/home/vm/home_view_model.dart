@@ -8,7 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/services/api.dart';
 import 'package:template/services/mapbox_config.dart';
 import 'package:template/services/table_supbase.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/auth_manager.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -55,7 +55,7 @@ class HomeViewModel extends ChangeNotifier {
 
   double _calculateDistance(
       List<double> userCoordinates, List<double> restaurantCoordinates) {
-    final earthRadius = 6371e3; // Earth radius in meters
+    const earthRadius = 6371e3; // Earth radius in meters
     final lat1 = userCoordinates[0] * (3.141592653589793 / 180);
     final lon1 = userCoordinates[1] * (3.141592653589793 / 180);
     final lat2 = restaurantCoordinates[0] * (3.141592653589793 / 180);
@@ -86,7 +86,7 @@ class HomeViewModel extends ChangeNotifier {
       final duration = Duration(seconds: intDurationInSeconds);
       final hours = duration.inHours;
       final minutes = duration.inMinutes.remainder(60);
-      final seconds = duration.inSeconds.remainder(60);
+
       return '$hours hour $minutes minutes';
     }
     return '0 seconds';
@@ -204,5 +204,102 @@ class HomeViewModel extends ChangeNotifier {
     final popularMenu =
         data.where((item) => item['recommended'] == true).toList();
     return List<Map<String, dynamic>>.from(popularMenu);
+  }
+
+  Future<List<String>> getListLikeMenuIds(String userId) async {
+    final userRecord = await supabase
+        .from('users')
+        .select('list_like')
+        .eq('id', userId)
+        .single();
+
+    final dynamic likedMenus = userRecord['list_like'];
+    List<String> menuIds = [];
+
+    if (likedMenus != null) {
+      if (likedMenus is List<dynamic>) {
+        menuIds.addAll(likedMenus.map((item) => item.toString()));
+      } else {
+        menuIds.add(likedMenus.toString());
+      }
+    }
+
+    return menuIds;
+  }
+
+  Future<void> requestUpdateIsLike(String menuId) async {
+    final String? userId = await AuthManager.getUserId();
+    if (userId != null) {
+      // Get the list of menus that have been liked by the user
+      final userRecord = await supabase
+          .from('users')
+          .select('list_like')
+          .eq('id', userId)
+          .single();
+
+      // Get the list of liked menus from the query results
+      final dynamic likedMenus = userRecord['list_like'];
+      List<String> updatedList = [];
+
+      if (likedMenus != null) {
+        if (likedMenus is List<dynamic>) {
+          // If likedMenus is a List, add all elements to the updatedList
+          updatedList.addAll(likedMenus.map((item) => item.toString()));
+        } else {
+          // If likedMenus is not a List, add it to updatedList
+          updatedList.add(likedMenus.toString());
+        }
+
+        // If menuId does not exist in the list, add it to the list
+        if (!updatedList.contains(menuId)) {
+          updatedList.add(menuId);
+        }
+      } else {
+        // If the menu list is null, create a new list and add menuId
+        updatedList.add(menuId);
+      }
+
+      // Update the list of user's liked menus on the database
+      await supabase
+          .from('users')
+          .update({'list_like': updatedList}).eq('id', userId);
+    }
+  }
+
+  Future<void> requestDeleteIsLike(String userId, String menuId) async {
+    // Get the list of menus that have been liked by the user
+    final userRecord = await supabase
+        .from('users')
+        .select('list_like')
+        .eq('id', userId)
+        .single();
+
+    // Get the list of liked menus from the query results
+    final dynamic likedMenus = userRecord['list_like'];
+    List<String> updatedList = [];
+
+    if (likedMenus != null) {
+      if (likedMenus is List<dynamic>) {
+        // If likedMenus is a List, add all elements to the updatedList
+        updatedList.addAll(likedMenus.map((item) => item.toString()));
+      } else {
+        // If likedMenus is not a List, add it to updatedList
+        updatedList.add(likedMenus.toString());
+      }
+
+      // Remove menuId from the list
+      updatedList.remove(menuId);
+    }
+
+    // Check if the list has become empty
+    if (updatedList.isEmpty) {
+      // If the list is empty, update the list_like column with the value of an empty list
+      await supabase.from('users').update({'list_like': []}).eq('id', userId);
+    } else {
+      // If the list is not empty, update the user's liked menu list on the database
+      await supabase
+          .from('users')
+          .update({'list_like': updatedList}).eq('id', userId);
+    }
   }
 }

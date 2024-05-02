@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:template/pages/home/vm/home_view_model.dart';
 import 'package:template/widgets/custom_text.dart';
 
 import '../../../resources/const.dart';
+import '../../../services/auth_manager.dart';
 import '../../../widgets/loading_indicator.dart';
 import '../models/categories_products.dart';
 
@@ -14,11 +13,12 @@ class HomeDeals extends StatefulWidget {
   final VoidCallback? onTapShowListMenu;
   final String? userAddress;
   const HomeDeals(
-      {super.key,
+      {Key? key,
       this.onDealSelected,
       this.data,
       this.onTapShowListMenu,
-      this.userAddress});
+      this.userAddress})
+      : super(key: key);
 
   @override
   State<HomeDeals> createState() => _HomeDealsState();
@@ -30,12 +30,53 @@ class _HomeDealsState extends State<HomeDeals> {
   final currentCard = ValueNotifier(0);
   String? isTime;
   String? distance;
-  List<bool> like = [false, false, false, false, false];
+  late List<bool> likeStatusList; // Declare variable likeStatusList
+  final Future<String?> userId = AuthManager.getUserId();
   final HomeViewModel _viewModel = HomeViewModel();
+  String? currentUserId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.data != null) {
+      // Initialize likeStatusList and call getListLikeMenuIds to get the list of liked menus
+      likeStatusList = List.filled(widget.data!.length, false);
+      _initLikeStatusList();
+    }
+    _initUserId();
+  }
+
+  Future<void> _initUserId() async {
+    currentUserId = await userId;
+  }
+
+  Future<void> _initLikeStatusList() async {
+    String? currentUserId = await userId;
+    if (currentUserId != null) {
+      List<String> likedMenuIds =
+          await _viewModel.getListLikeMenuIds(currentUserId ?? '');
+      if (mounted) {
+        // Check if the widget is mounted
+        setState(() {
+          for (int i = 0; i < widget.data!.length; i++) {
+            if (mounted) {
+              // Double check before calling setState()
+              if (likedMenuIds.contains(widget.data![i]['id_menu'])) {
+                likeStatusList[i] = true;
+              }
+            }
+          }
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
+    // TODO: implement dispose
     super.dispose();
+    _initLikeStatusList();
   }
 
   @override
@@ -85,7 +126,7 @@ class _HomeDealsState extends State<HomeDeals> {
                     if (widget.onDealSelected != null) {
                       _viewModel
                           .calculateDistanceAndTime(widget.userAddress ?? '',
-                              widget.data?[index]['place'])
+                              widget.data![index]['place'])
                           .then((snapshot) {
                         if (snapshot == null) {
                           return null;
@@ -96,7 +137,10 @@ class _HomeDealsState extends State<HomeDeals> {
                             isTime = dataTime.toString();
                             distance = dataDistance.toString();
                           });
+
                           widget.onDealSelected!({
+                            'user_id': currentUserId,
+                            'menu_id': widget.data?[index]['id_menu'],
                             'img_menu': widget.data?[index]['img_menu'],
                             'category': widget.data?[index]['category'],
                             'place': widget.data?[index]['place'],
@@ -122,7 +166,7 @@ class _HomeDealsState extends State<HomeDeals> {
                                   color: Colors.red,
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        widget.data?[index]['img_menu']),
+                                        widget.data![index]['img_menu']),
                                     fit: BoxFit.cover,
                                   )),
                               width: 250,
@@ -132,7 +176,7 @@ class _HomeDealsState extends State<HomeDeals> {
                           FutureBuilder(
                               future: _viewModel.calculateDistanceAndTime(
                                   widget.userAddress ?? '',
-                                  widget.data?[index]['place']),
+                                  widget.data![index]['place']),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -160,15 +204,37 @@ class _HomeDealsState extends State<HomeDeals> {
                                 }
                               }),
                           IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                like[index]
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: like[index]
-                                    ? ColorsGlobal.globalPink
-                                    : Colors.white,
-                              ))
+                            onPressed: () async {
+                              String? currentUserId = await userId;
+                              if (currentUserId != null) {
+                                String menuId = widget.data![index]['id_menu'];
+
+                                // Check the current status of the menu item
+                                bool currentLikeStatus = likeStatusList[index];
+                                if (currentLikeStatus == true) {
+                                  // If you have already "liked", delete the data of the is_Like column
+                                  await _viewModel.requestDeleteIsLike(
+                                      currentUserId, menuId);
+                                } else if (currentLikeStatus == false) {
+                                  // If not "liked", update the is_Like status
+                                  await _viewModel.requestUpdateIsLike(menuId);
+                                }
+
+                                // Update the state of the "like" icon based on the menu item's new state
+                                setState(() {
+                                  likeStatusList[index] = !currentLikeStatus;
+                                });
+                              }
+                            },
+                            icon: Icon(
+                              likeStatusList[index]
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: likeStatusList[index]
+                                  ? ColorsGlobal.globalPink
+                                  : Colors.white,
+                            ),
+                          )
                         ]),
                         Padding(
                           padding: const EdgeInsets.only(left: 8, right: 4),
@@ -180,7 +246,7 @@ class _HomeDealsState extends State<HomeDeals> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomText(
-                                    title: widget.data?[index]['category'],
+                                    title: widget.data![index]['category'],
                                     color: ColorsGlobal.globalBlack,
                                     size: 17,
                                   ),
@@ -205,7 +271,7 @@ class _HomeDealsState extends State<HomeDeals> {
                                         EdgeInsets.zero)),
                                 onPressed: null,
                                 label: CustomText(
-                                  title: widget.data?[index]['vote'].toString(),
+                                  title: widget.data![index]['vote'].toString(),
                                   color: ColorsGlobal.globalBlack,
                                 ),
                                 icon: const Icon(
