@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:template/pages/export.dart';
 
 class Item extends StatelessWidget {
   const Item(
@@ -8,83 +9,147 @@ class Item extends StatelessWidget {
       required this.rate,
       required this.img,
       required this.isMoney,
-      this.right,
-      this.left,
-      this.bottom,
-      this.top,
       required this.height,
-      required this.width,
       required this.title,
       required this.value,
       required this.unit,
-      required this.shopName})
+      required this.address,
+      required this.isTypeTime,
+      required this.id})
       : super(key: key);
+  final String id;
   final String title;
   final bool isLike;
   final double rate;
   final String value;
   final String unit;
-  final String shopName;
+  final String address;
   final String img;
   final bool isMoney;
-  final double? right;
-  final double? left;
-  final double? bottom;
-  final double? top;
   final double height;
-  final double width;
+  final bool isTypeTime;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.fromLTRB(left ?? 0, top ?? 0, right ?? 0, bottom ?? 0),
-      // padding: EdgeInsets.fromLTRB(left??0, top??0, right??0, bottom??0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.dp),
-        image: DecorationImage(
-          image: AssetImage(img),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(12.0.dp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 240.dp,
-              height: 57.dp,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(16.dp),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 4.dp,
-                    vertical: 8.dp,
-                  ),
-                  child:Text(value)
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          child: Container(
+            height: height,
+            width: double.infinity,
+            padding: EdgeInsets.all(12.dp),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.dp),
+              image: DecorationImage(
+                image: AssetImage(img),
+                fit: BoxFit.cover,
               ),
             ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        height: 24.dp,
+                        width: 24.dp,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.6),
+                          shape: BoxShape.circle,
+                        ),
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: IconButton(
+                              icon: Icon(
+                                isLike ? Icons.favorite : Icons.favorite_border,
+                                color: isLike
+                                    ? Colors.pink
+                                    : Colors.white.withOpacity(0.6),
+                              ),
+                              onPressed: () {},
+                            )))
+                  ],
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 57.dp,
+                      height: 24.dp,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.dp),
+                        ),
+                        child: Padding(
+                            padding:
+                                EdgeInsets.fromLTRB(8.dp, 4.dp, 8.dp, 4.dp),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.center,
+                              child: Text(
+                                isTypeTime
+                                    ? '${value} ${unit}'
+                                    : '${unit}${value}',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.dp,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            )),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 8.dp,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
             Text(
               title,
-              softWrap: true,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.dp,
-                  fontWeight: FontWeight.w400),
+                  fontSize: 17.dp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w800),
             ),
-            // Text(decription ?? '',
-            //     softWrap: true,
-            //     style: TextStyle(color: Colors.white, fontSize: 16.dp))
+            Spacer(),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.star_outlined,
+                      color: Colors.yellow.shade800,
+                    )),
+                Text(
+                  rate.toString(),
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 13.dp,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            )
           ],
         ),
-      ),
+        Text(
+          address,
+          textAlign: TextAlign.right,
+          style: TextStyle(
+              color: Colors.grey, fontSize: 15.dp, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(
+          height: 16.dp,
+        )
+      ],
     );
   }
 }

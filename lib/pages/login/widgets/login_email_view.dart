@@ -72,20 +72,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Login via Email',
-            style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.bold),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(8.dp),
-            child: Divider(
-              thickness: 8.dp,
-              height: 0.dp,
-              color: Colors.grey.shade100,
-            ),
-          ),
-        ),
+        appBar: const AppBarScreen(title: 'Login via Email',),
+       
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
           child: Form(

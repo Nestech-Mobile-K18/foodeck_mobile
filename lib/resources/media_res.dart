@@ -44,4 +44,9 @@ class MediaRes {
   static const sale1 = '$_baseImage/sale_1.jpeg';
   static const sale2 = '$_baseImage/sale_2.png';
   static const sale3 = '$_baseImage/sale_3.jpg';
+
+  static const card1 = '$_baseImage/img_card1.png';
+  static const card2 = '$_baseImage/img_card2.png';
+  static const card3 = '$_baseImage/img_card3.png';
+  static const card4 = '$_baseImage/img_card4.png';
 }

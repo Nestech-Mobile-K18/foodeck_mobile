@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:template/pages/export.dart';
+import 'package:template/pages/restaurant/restaurant_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.userData});
@@ -23,16 +22,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     _userId = _userId ?? widget.userData?['email'];
     _type = _type ?? widget.userData?['provider'];
 
-    print('user Data: ${widget.userData}');
+    // print('user Data: ${widget.userData}');
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((event) {
       _userId = event.session?.user.email ?? widget.userData?['email'];
 
       if (_userId == null) {
         Navigator.of(context, rootNavigator: true)
-            .pushReplacementNamed('/login');
+            .pushReplacementNamed(RouteName.login);
       }
     });
 
@@ -47,11 +49,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _handleRestaurant(String id) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => RestaurantView(id: id),
+          settings: RouteSettings(name: RouteName.restaurant, arguments: id)),
+    );
+  }
+
+  Future<void> _handleCart() async {
+    Navigator.of(context).pushNamed(RouteName.cart);
+  }
+
   @override
   void dispose() {
     _focusNode.dispose();
     _controller.dispose();
     _authStateSubscription.cancel();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 
@@ -105,6 +121,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // categories
             Container(
@@ -116,105 +133,109 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Category(
-                          height: 160.dp,
-                          title: 'Food',
-                          decription: 'Order food you love',
-                          img: MediaRes.img1,
-                          bottom: 16.dp,
-                        ),
+                        child: catefories[0],
                       ),
                     ],
                   ),
-                  IntrinsicHeight(
-                    //IntrinsicHeight đảm bảo các item trong cùng dòng có cùng chiều cao
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Category(
-                            height: 160.dp,
-                            title: 'Grocery',
-                            decription: 'Shop daily life items',
-                            img: MediaRes.img3,
-                            right: 8.dp,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16.dp,
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Category(
-                            height: 160.dp,
-                            title: 'Deserts',
-                            decription: 'Something Sweet',
-                            img: MediaRes.img2,
-                            left: 8.dp,
-                          ),
-                        )
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: catefories[1],
+                      ),
+                      SizedBox(
+                        width: 16.dp,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: catefories[2],
+                      )
+                    ],
                   )
                 ],
               ),
             ),
 
-            // list sale
+            // list deal
             Padding(
-              padding: EdgeInsets.only(top: 48.dp, bottom: 60.dp),
+              padding: EdgeInsets.symmetric(horizontal: 24.dp),
+              child: Text(
+                'Deal',
+                style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.w800),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.dp),
               child: const CarouselWithIndicator(),
             ),
-
-            //Deals 
-            Item(
-              height: 160.dp,
-              width: 320.dp,
-              title: 'Pizza',
-              shopName: 'ABC s1133',
-              img: MediaRes.img4,
-              isLike: false,
-              isMoney: false,
-              rate: 3.0,
-              value: '40',
-              unit: 'min',
+            //Deals
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+              child: Text(
+                'Explore More',
+                style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.w800),
+              ),
             ),
+
+            ListView.builder(
+                physics:
+                    const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: dealsHome.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                      onTap: () => _handleRestaurant(dealsHome[index].id),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.dp),
+                        child: dealsHome[index],
+                      ));
+                }),
+
+            // logout
+            // Container(
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text(_userId ?? 'Not sign in'),
+            //       Button(
+            //           label: 'LogOut',
+            //           colorBackgroud: ColorsGlobal.red,
+            //           colorLabel: Colors.white,
+            //           width: 328.dp,
+            //           height: 62.dp,
+            //           onPressed: () async {
+            //             if (_type == 'facebook') {
+            //               print('logout FB');
+            //               await FacebookLogin().logOut();
+            //               // ignore: use_build_context_synchronously
+            //               Navigator.of(context, rootNavigator: true)
+            //                   .pushReplacementNamed('/login');
+            //             } // TH login with Gooogle
+            //             else {
+            //               print('logout gmail gg');
+            //               var isSignedIn = await GoogleSignIn().isSignedIn();
+            //               if (isSignedIn) await GoogleSignIn().signOut();
+            //             }
+
+            //             // TH login with Facebook
+            //             await supabase.auth.signOut();
+            //           }),
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () => _handleCart(),
+        backgroundColor: ColorsGlobal.globalPink,
+        child: const Icon(
+          Icons.shopping_cart,
+          color: Colors.white,
+        ),
+      ),
     );
-
-    // return Container(
-    //   child: Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       Text(_userId ?? 'Not sign in'),
-    //       Button(
-    //           label: 'LogOut',
-    //           colorBackgroud: ColorsGlobal.red,
-    //           colorLabel: Colors.white,
-    //           width: 328.dp,
-    //           height: 62.dp,
-    //           onPressed: () async {
-    //             if (_type == 'facebook') {
-    //               print('logout FB');
-    //               await FacebookLogin().logOut();
-    //               // ignore: use_build_context_synchronously
-    //               Navigator.of(context, rootNavigator: true)
-    //                   .pushReplacementNamed('/login');
-    //             } // TH login with Gooogle
-    //             else {
-    //               print('logout gmail gg');
-
-    //               var isSignedIn = await GoogleSignIn().isSignedIn();
-    //               if (isSignedIn) await GoogleSignIn().signOut();
-    //             }
-
-    //             // TH login with Facebook
-    //             await supabase.auth.signOut();
-    //           }),
-    //     ],
-    //   ),
-    // );
   }
 }

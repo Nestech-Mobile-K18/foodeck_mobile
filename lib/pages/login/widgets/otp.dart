@@ -47,20 +47,8 @@ class Otp extends StatelessWidget {
       ),
     );
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'OTP',
-            style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.bold),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(8.dp),
-            child: Divider(
-              thickness: 8.dp,
-              height: 0.dp,
-              color: Colors.grey.shade100,
-            ),
-          ),
-        ),
+        appBar: const AppBarScreen(title: 'OTP',),
+        
         body: Padding(
           padding: EdgeInsets.all(24.dp),
           child: Column(

@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/material.dart';
 import 'package:template/pages/export.dart';
 import 'package:template/resources/fonts.dart';
@@ -16,11 +17,24 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setPreferredOrientations([
+    // DeviceOrientation.portraitUp,
+    //     // DeviceOrientation.portraitDown,
+    //   ]);
     return FlutterSizer(
       builder: (context, orientation, screenType) {
         return MaterialApp(
           locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
+          // không cho thay đổi size chữ khi thiết bị thay đổi
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaleFactor: 1.0,
+              ),
+              child: child!,
+            );
+          },
+          // builder: DevicePreview.appBuilder,
           // theme: ThemeData.light(),
           // darkTheme: ThemeData.dark(),
           debugShowCheckedModeBanner: false,

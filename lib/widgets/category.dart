@@ -3,8 +3,8 @@ import 'package:template/pages/export.dart';
 class Category extends StatelessWidget {
   const Category(
       {Key? key,
-       this.height,
-       this.width,
+      this.height,
+      this.width,
       required this.img,
       required this.title,
       this.decription,
@@ -28,7 +28,7 @@ class Category extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      margin: EdgeInsets.fromLTRB(left??0, top??0, right??0, bottom??0),
+      margin: EdgeInsets.fromLTRB(left ?? 0, top ?? 0, right ?? 0, bottom ?? 0),
       // padding: EdgeInsets.fromLTRB(left??0, top??0, right??0, bottom??0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.dp),
@@ -51,9 +51,14 @@ class Category extends StatelessWidget {
                   fontSize: 22.dp,
                   fontWeight: FontWeight.w400),
             ),
-            Text(decription ?? '',
-                softWrap: true,
-                style: TextStyle(color: Colors.white, fontSize: 16.dp))
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(decription ?? '',
+                  maxLines: 2,
+                  //     softWrap: true,
+
+                  style: TextStyle(color: Colors.white, fontSize: 16.dp)),
+            )
           ],
         ),
       ),

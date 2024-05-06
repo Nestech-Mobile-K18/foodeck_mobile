@@ -16,7 +16,6 @@ export 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 
 export 'package:template/pages/map/widget/show_map.dart';
 
-// export 'package:flutter/foundation.dart';
 export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 export 'package:flutter_sizer/flutter_sizer.dart';
 export 'package:shared_preferences/shared_preferences.dart';
@@ -30,11 +29,27 @@ export 'package:template/widgets/input_text.dart';
 export 'package:flutter_login_facebook/flutter_login_facebook.dart';
 export 'package:template/widgets/category.dart';
 export 'package:template/widgets/search_bar.dart';
-// export 'package:easy_search_bar/easy_search_bar.dart';
-// export 'package:getwidget/getwidget.dart';
 export 'package:carousel_slider/carousel_slider.dart';
 export 'package:template/widgets/carousel_with_indicator.dart';
 export 'package:template/widgets/item.dart';
+export 'package:template/pages/notification/notification_vew.dart';
+export 'package:template/pages/profile/profile_view.dart';
+export 'package:template/resources/data_screen.dart';
+export 'package:template/widgets/app_bar_restaurant.dart';
+export 'package:scrollable_list_tab_scroller/scrollable_list_tab_scroller.dart';
+export 'package:template/widgets/food.dart';
+export 'package:input_quantity/input_quantity.dart';
+export 'package:template/pages/order_info.dart/order_info_vew.dart';
 
-
-
+export 'package:template/widgets/bottom_checkout.dart';
+export 'package:template/pages/restaurant/model.dart';
+export 'package:template/pages/order_info.dart/model.dart';
+export 'package:template/pages/cart/cart_vew.dart';
+export 'package:template/pages/restaurant/restaurant_view.dart';
+export 'package:template/pages/checkout/checkout_view.dart';
+export 'package:template/widgets/app_bar_screen.dart';
+export 'package:template/pages/checkout/model.dart';
+export 'package:template/pages/checkout/widgets/wait_checkout_view.dart';
+export 'package:lottie/lottie.dart';
+export 'package:template/pages/save/save_view.dart';
+export 'package:template/pages/notification/model.dart';

@@ -79,20 +79,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Create an account',
-            style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.bold),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(8.dp),
-            child: Divider(
-              thickness: 8.dp,
-              height: 0.dp,
-              color: Colors.grey.shade100,
-            ),
-          ),
-        ),
+        appBar: const AppBarScreen(title: 'Create an account',),
+        
         body: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(24.dp, 24.dp, 24.dp, 24.dp),
           child: Form(

@@ -7,4 +7,13 @@ class RouteName {
   static const home = '/home';
   static const loginEmail = '/login-email';
   static const signup = '/sign-up';
+  static const restaurant='/restaurant';
+  static const orderInfo='/order-info';
+  static const cart='/cart';
+  static const checkout='/checkout';
+  static const checkoutWait='/checkout-wait';
+
+
+
+
 }
