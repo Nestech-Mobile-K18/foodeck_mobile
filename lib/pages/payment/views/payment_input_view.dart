@@ -77,7 +77,7 @@ class _PaymentInputViewState extends State<PaymentInputView> {
 
     // Check if month and year are valid
     if (month == null || yearPrefix == null) return false;
-    final year = 2000 + yearPrefix; // Chuyển đổi yearPrefix thành năm đầy đủ
+    final year = 2000 + yearPrefix; // Convert yearPrefix to full year
     if (year < now.year || (year == now.year && month < now.month)) {
       // Expiry date has passed
       return false;
@@ -225,7 +225,7 @@ class _PaymentInputViewState extends State<PaymentInputView> {
                             content: Text('You can register up to 5 accounts only.'),
                           ),
                         );
-                        return; // Ngừng thực thi nếu đã có 5 thẻ
+                        return; // Stop execution if there are already 5 tokens
                       }
 
                       final cardNumber = cardNumberController.text;
