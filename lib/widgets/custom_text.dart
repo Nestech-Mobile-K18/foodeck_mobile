@@ -1,0 +1,34 @@
+import 'package:template/source/export.dart';
+
+class AppText {
+  static TextStyle inter = GoogleFonts.inter();
+}
+
+class CustomText extends StatelessWidget {
+  const CustomText(
+      {super.key,
+      required this.content,
+      this.fontSize,
+      this.fontWeight,
+      this.color,
+      this.textDecoration,
+      this.textAlign});
+
+  final String content;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final Color? color;
+  final TextDecoration? textDecoration;
+  final TextAlign? textAlign;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(content,
+        textAlign: textAlign,
+        style: AppText.inter.copyWith(
+            fontSize: fontSize ?? 17,
+            fontWeight: fontWeight,
+            color: color,
+            decoration: textDecoration));
+  }
+}

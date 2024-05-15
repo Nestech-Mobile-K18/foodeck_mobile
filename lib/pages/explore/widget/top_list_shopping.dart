@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class TopListShopping extends StatelessWidget {
   const TopListShopping({
@@ -10,96 +8,42 @@ class TopListShopping extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Card(
-        elevation: 10,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Stack(children: [
-          Container(
-            height: 160,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(food), fit: BoxFit.cover)),
-          ),
-          Positioned(
-            left: 12,
-            bottom: 12,
-            child: RichText(
-                text: TextSpan(
-                    text: 'Food\n',
-                    style: inter.copyWith(fontSize: 17, color: Colors.white),
-                    children: [
-                  TextSpan(
-                      text: 'Order food you love',
-                      style: inter.copyWith(fontSize: 12))
-                ])),
-          )
-        ]),
-      ),
+      buildCard(Assets.food, 'Food', 'Order Food You Love', double.maxFinite),
       Padding(
         padding: const EdgeInsets.only(top: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              child: Stack(children: [
-                Container(
-                  height: 160,
-                  width: 156,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(grocery), fit: BoxFit.cover)),
-                ),
-                Positioned(
-                  left: 12,
-                  bottom: 12,
-                  child: RichText(
-                      text: TextSpan(
-                          text: 'Grocery\n',
-                          style:
-                              inter.copyWith(fontSize: 17, color: Colors.white),
-                          children: [
-                        TextSpan(
-                            text: 'Shop daily life items',
-                            style: inter.copyWith(fontSize: 12))
-                      ])),
-                )
-              ]),
-            ),
-            Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              child: Stack(children: [
-                Container(
-                  height: 160,
-                  width: 156,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(desert), fit: BoxFit.cover)),
-                ),
-                Positioned(
-                  left: 12,
-                  bottom: 12,
-                  child: RichText(
-                      text: TextSpan(
-                          text: 'Deserts\n',
-                          style:
-                              inter.copyWith(fontSize: 17, color: Colors.white),
-                          children: [
-                        TextSpan(
-                            text: 'Something Sweet',
-                            style: inter.copyWith(fontSize: 12))
-                      ])),
-                )
-              ]),
-            )
+            buildCard(Assets.grocery, 'Grocery', 'Shop daily life items', 156),
+            buildCard(Assets.desert, 'Deserts', 'Something Sweet', 156)
           ],
         ),
       )
     ]);
+  }
+
+  Card buildCard(String image, String tittle, String content, double width) {
+    return Card(
+      elevation: 10,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Stack(children: [
+        Container(
+          height: 160,
+          width: width,
+          decoration: BoxDecoration(
+              image:
+                  DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+        ),
+        Positioned(
+          left: 12,
+          bottom: 12,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            CustomText(content: tittle, color: Colors.white),
+            CustomText(content: content, fontSize: 12, color: Colors.white)
+          ]),
+        )
+      ]),
+    );
   }
 }

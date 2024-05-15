@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/models/desktop_food.dart';
-import 'package:template/pages/deals/deals_page.dart';
-import 'package:template/pages/explore/widget/banner_items.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/list.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class BottomListShopping extends StatefulWidget {
   const BottomListShopping({
@@ -85,10 +75,7 @@ class _BottomListShoppingState extends State<BottomListShopping> {
       }
 
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          'Explore More',
-          style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
-        ),
+        const CustomText(content: 'Explore More', fontWeight: FontWeight.bold),
         Padding(
             padding: const EdgeInsets.only(top: 12),
             child: SizedBox(
@@ -103,10 +90,13 @@ class _BottomListShoppingState extends State<BottomListShopping> {
                     itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: BannerItems(
-                            onTap: () => Get.to(() => DealsPage(
-                                  desktopFood: value.kindFood(
-                                      TitleFood.Explore, desktopFood)[index],
-                                )),
+                            onTap: () =>
+                                Navigator.pushNamed(context, AppRouter.dealPage,
+                                    arguments: DealsPage(
+                                      desktopFood: value.kindFood(
+                                          TitleFood.Explore,
+                                          desktopFood)[index],
+                                    )),
                             foodImage: value
                                 .kindFood(TitleFood.Explore, desktopFood)[index]
                                 .foodOrder,

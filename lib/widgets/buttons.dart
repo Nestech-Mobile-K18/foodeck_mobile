@@ -15,7 +15,7 @@ class CustomButton extends StatefulWidget {
 
   final VoidCallback? onPressed;
   final Widget? icons;
-  final Text text;
+  final Widget text;
   final Color color;
   final BorderSide? borderSide;
   final double? heightBox;
@@ -36,14 +36,14 @@ class _CustomButtonState extends State<CustomButton> {
         label: widget.text,
         icon: widget.icons ?? const SizedBox(),
         style: ButtonStyle(
-            padding: MaterialStatePropertyAll(
+            padding: WidgetStatePropertyAll(
                 EdgeInsets.only(right: widget.paddingLeft ?? 0)),
-            elevation: MaterialStatePropertyAll(10),
-            fixedSize: MaterialStatePropertyAll(
+            elevation: const WidgetStatePropertyAll(10),
+            fixedSize: WidgetStatePropertyAll(
                 Size(widget.widthBox ?? 328, widget.heightBox ?? 62)),
-            backgroundColor: MaterialStatePropertyAll(widget.color),
-            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+            backgroundColor: WidgetStatePropertyAll(widget.color),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
                 side: widget.borderSide ?? BorderSide.none))),
       ),
     );

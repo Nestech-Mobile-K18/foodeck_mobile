@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class BannerItems extends StatefulWidget {
   const BannerItems({
@@ -12,12 +10,15 @@ class BannerItems extends StatefulWidget {
     required this.shopAddress,
     required this.rateStar,
     this.paddingText,
-    required this.action,
+    this.action,
     this.heartColor,
     this.icon,
     this.paddingImage,
     this.onTap,
     this.iconShape,
+    this.heartIcon,
+    this.badge,
+    this.voteStar,
   });
 
   final EdgeInsets? paddingText;
@@ -28,11 +29,14 @@ class BannerItems extends StatefulWidget {
   final String shopName;
   final String shopAddress;
   final String rateStar;
-  final VoidCallback action;
+  final VoidCallback? action;
   final Color? heartColor;
   final IconData? iconShape;
   final Widget? icon;
   final VoidCallback? onTap;
+  final Widget? heartIcon;
+  final Widget? badge;
+  final Widget? voteStar;
 
   @override
   State<BannerItems> createState() => _BannerItemsState();
@@ -65,67 +69,56 @@ class _BannerItemsState extends State<BannerItems> {
               ),
             ),
           ),
-          Positioned(
-            left: 12,
-            bottom: 12,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Text(
-                  widget.deliveryTime,
-                  style:
-                      inter.copyWith(fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-              onTap: widget.action,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 12, top: 12),
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: widget.icon ??
-                      Icon(
-                        widget.iconShape,
-                        color: widget.heartColor,
-                      ),
-                ),
-              ))
+          widget.badge ??
+              Positioned(
+                  left: 12,
+                  bottom: 12,
+                  child: Card(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: CustomText(
+                              content: widget.deliveryTime,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold)))),
+          widget.heartIcon ??
+              GestureDetector(
+                  onTap: widget.action,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12, top: 12),
+                    child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: widget.icon ??
+                          Icon(
+                            widget.iconShape,
+                            color: widget.heartColor,
+                          ),
+                    ),
+                  ))
         ]),
         Padding(
-          padding: widget.paddingText ?? EdgeInsets.zero,
+          padding: widget.paddingText ?? const EdgeInsets.only(top: 8),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            RichText(
-                text: TextSpan(
-                    text: widget.shopName,
-                    style: inter.copyWith(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                    children: [
-                  TextSpan(
-                      text: widget.shopAddress,
-                      style: inter.copyWith(
-                          fontSize: 15,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.normal))
-                ])),
-            TextButton.icon(
-                style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(EdgeInsets.zero)),
-                onPressed: null,
-                label: Text(widget.rateStar,
-                    style: inter.copyWith(
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              CustomText(content: widget.shopName, fontWeight: FontWeight.bold),
+              CustomText(
+                  content: widget.shopAddress, fontSize: 15, color: Colors.grey)
+            ]),
+            widget.voteStar ??
+                TextButton.icon(
+                    style: const ButtonStyle(
+                        padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                    onPressed: null,
+                    label: CustomText(
+                        content: widget.rateStar,
                         fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-                icon: Image.asset(
-                  star,
-                  fit: BoxFit.cover,
-                ))
+                        fontWeight: FontWeight.bold),
+                    icon: Image.asset(
+                      Assets.star,
+                      fit: BoxFit.cover,
+                    ))
           ]),
         )
       ]),

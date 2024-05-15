@@ -1,16 +1,7 @@
-import 'dart:async';
+import 'package:template/pages/splash/bloc/splash_page_bloc.dart';
+import 'package:template/source/export.dart';
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/home/home_page.dart';
-import 'package:template/pages/login/login_page.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
-import 'package:template/widgets/loading_animation.dart';
-
-import '../../main.dart';
+part 'splash_page_extension_ui.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,107 +11,64 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  bool show = true;
-  bool showLoading = true;
-  bool showFinish = false;
-
-  late final StreamSubscription<AuthState> authSubscription;
+  final splashPageBloc = SplashPageBloc();
 
   @override
   void initState() {
-    startAnimation();
+    splashPageBloc.add(SplashPageInitialEvent());
     super.initState();
-  }
-
-  Future startAnimation() async {
-    await Future(() {
-      setState(() {
-        show = !show;
-      });
-    });
-    await Future.delayed(
-      const Duration(milliseconds: 2000),
-      () {
-        setState(() {
-          showLoading = !showLoading;
-        });
-      },
-    );
-    await Future.delayed(const Duration(milliseconds: 2500), () {
-      setState(() {
-        showFinish = !showFinish;
-      });
-    });
-    await Future.delayed(const Duration(milliseconds: 3000), () {
-      setState(() {
-        show = !show;
-      });
-    });
-    await Future.delayed(
-      const Duration(milliseconds: 3500),
-      () {
-        authSubscription = supabase.auth.onAuthStateChange.listen((event) {
-          final session = event.session;
-          if (session != null) {
-            Get.to(() => const HomePage());
-          } else if (session == null) {
-            Get.to(() => const LoginPage());
-          }
-        });
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedContainer(
-          duration: const Duration(milliseconds: 1500),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              image: show
-                  ? null
-                  : const DecorationImage(
-                      image: AssetImage(splashScreen), fit: BoxFit.cover)),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              AnimatedPositioned(
-                  duration: const Duration(milliseconds: 1500),
-                  top: show ? 0 : 170,
-                  child: Image.asset(foodDeck)),
-              AnimatedPositioned(
-                  duration: const Duration(milliseconds: 1500),
-                  top: 290,
-                  left: show ? 0 : 92,
-                  child: Text('Foodeck',
-                      style: inter.copyWith(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white))),
-              AnimatedPositioned(
-                  duration: const Duration(milliseconds: 1500),
-                  top: show ? 800 : 387,
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    'Aliquam commodo tortor lacinia lorem\naccumsan aliquam',
-                    style: inter.copyWith(fontSize: 17, color: Colors.white),
-                  )),
-              Positioned(
-                top: showFinish ? 450 : 500,
-                child: showFinish
-                    ? SizedBox(
-                        // height: MediaQuery.of(context).size.height * 0.2,
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: show ? null : Lottie.asset(done))
-                    : AnimatedOpacity(
-                        opacity: showLoading ? 0 : 1,
-                        duration: const Duration(milliseconds: 1500),
-                        child: const WaveDots(size: 36, color: Colors.white)),
-              )
-            ],
-          )),
+    return BlocConsumer<SplashPageBloc, SplashPageState>(
+      bloc: splashPageBloc,
+      listener: (context, state) {
+        if (state is SplashLoadedAnimationSuccessState) {
+          supabase.auth.onAuthStateChange.listen((event) {
+            final session = event.session;
+            if (session != null) {
+              Navigator.pushNamed(context, AppRouter.homePage);
+            } else if (session == null) {
+              Navigator.pushNamed(context, AppRouter.loginPage);
+            }
+          });
+        }
+      },
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case SplashPageInitial:
+            return const SplashPageAnimation(
+                animationFirstAndLast: true,
+                animation3: false,
+                animation2: true);
+          case SplashLoadingAnimationState:
+            return const SplashPageAnimation(
+                animationFirstAndLast: false,
+                animation3: false,
+                animation2: true);
+          case SplashLoadingAnimationSecondState:
+            return const SplashPageAnimation(
+                animationFirstAndLast: false,
+                animation3: false,
+                animation2: false);
+          case SplashLoadingAnimationThirdState:
+            return const SplashPageAnimation(
+                animationFirstAndLast: false,
+                animation3: true,
+                animation2: false);
+          case SplashLoadingAnimationFourthState:
+            return const SplashPageAnimation(
+                animationFirstAndLast: true,
+                animation3: true,
+                animation2: false);
+          default:
+            return const SplashPageAnimation(
+                animationFirstAndLast: true,
+                animation3: true,
+                animation2: false);
+        }
+      },
     );
   }
 }

@@ -1,17 +1,10 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/text_styles.dart';
-import 'package:template/widgets/form_fill.dart';
-
-import '../../../main.dart';
+import 'package:template/source/export.dart';
 
 class Otp extends StatefulWidget {
   const Otp({super.key, required this.email});
+
   final String email;
+
   @override
   State<Otp> createState() => _OtpState();
 }
@@ -19,19 +12,13 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   @override
   void initState() {
-    showSnackBar();
+    ShowBearSnackBar.showBearSnackBar(context, 'OTP in your email');
     super.initState();
   }
 
   final currentIndex = ValueNotifier(0);
 
   List<String> otpValues = List.filled(6, '');
-  Future showSnackBar() async {
-    await Future(() => ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            backgroundColor: buttonShadowBlack,
-            content: Text('Please check OTP in your email'))));
-  }
 
   Future checkOTP() async {
     String token = otpValues.join();
@@ -39,12 +26,9 @@ class _OtpState extends State<Otp> {
       await supabase.auth
           .verifyOTP(token: token, type: OtpType.email, email: widget.email);
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
+      ShowBearSnackBar.showBearSnackBar(context, error.message);
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
     }
   }
 
@@ -52,17 +36,12 @@ class _OtpState extends State<Otp> {
     try {
       await supabase.auth
           .signInWithOtp(shouldCreateUser: false, email: widget.email)
-          .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  backgroundColor: buttonShadowBlack,
-                  content: Text('Please check OTP in your email'))));
+          .then((value) =>
+              ShowBearSnackBar.showBearSnackBar(context, 'OTP in your email'));
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
+      ShowBearSnackBar.showBearSnackBar(context, error.message);
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
     }
   }
 
@@ -70,16 +49,14 @@ class _OtpState extends State<Otp> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+          unFocus;
         },
         child: Scaffold(
             appBar: AppBar(
-              shape: const UnderlineInputBorder(
-                  borderSide: BorderSide(width: 8, color: dividerGrey)),
-              title: Text('OTP',
-                  style: inter.copyWith(
-                      fontSize: 17, fontWeight: FontWeight.bold)),
-            ),
+                shape: const UnderlineInputBorder(
+                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                title: const CustomText(
+                    content: 'OTP', fontWeight: FontWeight.bold)),
             body: SingleChildScrollView(
                 child: Center(
               child: Padding(
@@ -87,9 +64,11 @@ class _OtpState extends State<Otp> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Confirm the code we sent to ${widget.email}',
-                            style: inter.copyWith(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        CustomText(
+                            content:
+                                'Confirm the code we sent to ${widget.email}',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: ValueListenableBuilder(
@@ -143,19 +122,15 @@ class _OtpState extends State<Otp> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 40),
-                          child: GestureDetector(
-                            onTap: () {
-                              resendOTP();
-                            },
-                            child: Text(
-                              'Resend',
-                              style: inter.copyWith(
-                                  fontSize: 13,
-                                  decoration: TextDecoration.underline),
-                            ),
-                          ),
-                        ),
+                            padding: const EdgeInsets.only(bottom: 40),
+                            child: GestureDetector(
+                                onTap: () {
+                                  resendOTP();
+                                },
+                                child: const CustomText(
+                                    content: 'Resend',
+                                    fontSize: 13,
+                                    textDecoration: TextDecoration.underline))),
                         ValueListenableBuilder(
                           valueListenable: currentIndex,
                           builder:
@@ -190,7 +165,7 @@ class _OtpState extends State<Otp> {
                                   duration: const Duration(seconds: 1),
                                   child: Center(
                                     child: AnimatedDefaultTextStyle(
-                                      style: inter.copyWith(
+                                      style: AppText.inter.copyWith(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),

@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/list.dart';
+import 'package:template/source/export.dart';
 
 class ListSlideBanner extends StatefulWidget {
   const ListSlideBanner({super.key});
@@ -15,7 +11,9 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
   PageController pageController =
       PageController(initialPage: 0, viewportFraction: 0.9);
   final currentCard = ValueNotifier(0);
+
   late Timer timer;
+
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 3), (timer) {

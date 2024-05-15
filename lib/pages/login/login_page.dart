@@ -1,17 +1,4 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/login/widgets/create_account.dart';
-import 'package:template/pages/login/widgets/login_email.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/list.dart';
-import 'package:template/values/text_styles.dart';
-import 'package:template/widgets/buttons.dart';
-
-import '../../main.dart';
+import 'package:template/source/export.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,14 +8,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  void loginEmail() {
-    Get.to(() => const LoginEmail());
-  }
-
-  void createAccount() {
-    Get.to(() => const CreateAccount());
-  }
-
   Future _googleSignIn() async {
     /// TODO: update the Web client ID with your own.
     ///
@@ -75,16 +54,21 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       switch (index) {
         case 'Login via Email':
-          loginEmail();
+          Navigator.pushNamed(context, AppRouter.loginOrRegister,
+              arguments: const LoginOrRegister(index: 0));
           break;
         case 'Create an account':
-          createAccount();
+          Navigator.pushNamed(context, AppRouter.loginOrRegister,
+              arguments: const LoginOrRegister(index: 1));
           break;
         case 'Login via Google':
           _googleSignIn();
           break;
         case 'Login via Facebook':
           facebookSignIn();
+          break;
+        case 'Login via Apple':
+          ShowBearSnackBar.showBearSnackBar(context, 'Updating...');
           break;
       }
     });
@@ -98,7 +82,8 @@ class _LoginPageState extends State<LoginPage> {
           Expanded(
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: Image.asset(loginBackGround, fit: BoxFit.cover))),
+                  child:
+                      Image.asset(Assets.loginBackGround, fit: BoxFit.cover))),
           Expanded(
               flex: 2,
               child: Padding(
@@ -121,37 +106,30 @@ class _LoginPageState extends State<LoginPage> {
                             icons: index == loginButton.length - 1
                                 ? null
                                 : Image.asset(loginButton[index].type),
-                            text: Text(
-                              loginButton[index].loginText,
-                              style: inter.copyWith(
-                                  color: index == loginButton.length - 1
-                                      ? Colors.grey
-                                      : Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            text: CustomText(
+                                content: loginButton[index].loginText,
+                                color: index == loginButton.length - 1
+                                    ? Colors.grey
+                                    : Colors.white,
+                                fontWeight: FontWeight.bold),
                             color: loginButton[index].backGroundColor,
                           );
                         },
                       ),
                     ),
-                    Expanded(
-                        child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text:
-                                    'By signing up, you are agreeing to our\n',
-                                style: inter.copyWith(
-                                    fontSize: 13, color: Colors.grey),
-                                children: [
-                                  WidgetSpan(child: Container()),
-                                  TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {},
-                                      text: 'Terms & Conditions',
-                                      style: inter.copyWith(
-                                          fontSize: 13, color: globalPink))
-                                ])))
+                    const Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          CustomText(
+                              content: 'By signing up, you are agreeing to our',
+                              fontSize: 13,
+                              color: Colors.grey),
+                          CustomText(
+                              content: 'Terms & Conditions',
+                              fontSize: 13,
+                              color: globalPink)
+                        ]))
                   ],
                 ),
               ))

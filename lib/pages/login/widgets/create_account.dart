@@ -1,20 +1,9 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/login/widgets/login_email.dart';
-import 'package:template/pages/login/widgets/otp.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/text_styles.dart';
-import 'package:template/widgets/buttons.dart';
-import 'package:template/widgets/form_fill.dart';
-
-import '../../../main.dart';
+import 'package:template/source/export.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({super.key});
+  const CreateAccount({super.key, this.onPressed});
+
+  final void Function()? onPressed;
 
   @override
   State<CreateAccount> createState() => _CreateAccountState();
@@ -32,23 +21,28 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Future signUpAndAddUsers() async {
     try {
-      await supabase.auth.signUp(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-      await supabase.from('users').insert({
-        'email': emailController.text.trim(),
-        'full_name': nameController.text.trim(),
-        'phone': phoneController.text.trim(),
-        'password': passwordController.text.trim(),
-      });
-      await Get.to(() => Otp(email: emailController.text.trim()));
+      if (emailRegex.hasMatch(emailController.text) &&
+          nameRegex.hasMatch(nameController.text) &&
+          phoneRegex.hasMatch(phoneController.text) &&
+          passRegex.hasMatch(passwordController.text)) {
+        await supabase.auth.signUp(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
+        await supabase.from('users').insert({
+          'email': emailController.text.trim(),
+          'full_name': nameController.text.trim(),
+          'phone': phoneController.text.trim(),
+          'password': passwordController.text.trim(),
+        });
+        Navigator.pushNamed(context, AppRouter.otp,
+            arguments: emailController.text.trim());
+      } else {
+        ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
+      }
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
+      ShowBearSnackBar.showBearSnackBar(context, error.message);
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
     }
   }
 
@@ -65,15 +59,14 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        unFocus;
       },
       child: Scaffold(
         appBar: AppBar(
-          shape: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 8, color: dividerGrey)),
-          title: Text('Create an account',
-              style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
-        ),
+            shape: const UnderlineInputBorder(
+                borderSide: BorderSide(width: 8, color: dividerGrey)),
+            title: const CustomText(
+                content: 'Create an account', fontWeight: FontWeight.bold)),
         body: SingleChildScrollView(
           child: Center(
             child: Padding(
@@ -81,9 +74,10 @@ class _CreateAccountState extends State<CreateAccount> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Input your credentials',
-                      style: inter.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  const CustomText(
+                      content: 'Input your credentials',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
@@ -271,27 +265,21 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                   CustomButton(
                       onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
+                        unFocus;
                         signUpAndAddUsers();
                       },
-                      text: Text('Create an account',
-                          style: inter.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                      text: const CustomText(
+                          content: 'Create an account',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                       color: globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Get.to(() => const LoginEmail(),
-                            transition: Transition.upToDown);
-                      },
-                      text: Text('Login instead',
-                          style: inter.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey)),
+                      onPressed: widget.onPressed,
+                      text: const CustomText(
+                          content: 'Login instead',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                       color: Colors.white)
                 ],
               ),

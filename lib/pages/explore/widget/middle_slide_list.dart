@@ -1,14 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/models/desktop_food.dart';
-import 'package:template/pages/deals/deals_page.dart';
-import 'package:template/pages/explore/widget/banner_items.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/list.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class MiddleSlideList extends StatefulWidget {
   const MiddleSlideList({
@@ -93,11 +83,7 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Deals',
-                style:
-                    inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
-              ),
+              const CustomText(content: 'Deals', fontWeight: FontWeight.bold),
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.arrow_forward))
             ],
@@ -120,9 +106,12 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) =>
                         BannerItems(
-                            onTap: () => Get.to(() => DealsPage(
-                                desktopFood: value.kindFood(
-                                    TitleFood.Deals, desktopFood)[index])),
+                            onTap: () =>
+                                Navigator.pushNamed(context, AppRouter.dealPage,
+                                    arguments: DealsPage(
+                                      desktopFood: value.kindFood(
+                                          TitleFood.Deals, desktopFood)[index],
+                                    )),
                             paddingImage: const EdgeInsets.only(right: 10),
                             paddingText: const EdgeInsets.only(left: 3),
                             foodImage: value
@@ -152,11 +141,12 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
                                 deleteBanner(index);
                               }
                             },
-                            iconShape: value.saveFood.contains(value.kindFood(TitleFood.Deals, desktopFood)[index])
+                            iconShape: value.saveFood.contains(value.kindFood(
+                                    TitleFood.Deals, desktopFood)[index])
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            heartColor: value.saveFood.contains(
-                                    value.kindFood(TitleFood.Deals, desktopFood)[index])
+                            heartColor: value.saveFood.contains(value.kindFood(
+                                    TitleFood.Deals, desktopFood)[index])
                                 ? globalPink
                                 : Colors.white))))
       ]);

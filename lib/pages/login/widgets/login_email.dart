@@ -1,19 +1,10 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/pages/login/widgets/create_account.dart';
-import 'package:template/pages/login/widgets/forgot_password.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/text_styles.dart';
-import 'package:template/widgets/buttons.dart';
-import 'package:template/widgets/form_fill.dart';
-
-import '../../../main.dart';
+import 'package:rive/rive.dart';
+import 'package:template/source/export.dart';
 
 class LoginEmail extends StatefulWidget {
-  const LoginEmail({super.key});
+  const LoginEmail({super.key, this.onPressed});
+
+  final void Function()? onPressed;
 
   @override
   State<LoginEmail> createState() => _LoginEmailState();
@@ -23,18 +14,72 @@ class _LoginEmailState extends State<LoginEmail> {
   bool showPass = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  Artboard? riveBearArtBoard;
+  SMITrigger? success;
+  SMITrigger? fail;
+  SMIBool? isCheck;
+  SMIBool? isHandsUp;
+  SMINumber? number;
+
+  @override
+  void initState() {
+    rootBundle.load('assets/rives/animated_login_character_.riv').then(
+      (data) {
+        final file = RiveFile.import(data);
+        final artBoard = file.mainArtboard;
+        var controller =
+            StateMachineController.fromArtboard(artBoard, 'Login Machine');
+        if (controller != null) {
+          artBoard.addController(controller);
+          success = controller.findSMI('trigSuccess');
+          fail = controller.findSMI('trigFail');
+          isCheck = controller.findSMI('isChecking');
+          isHandsUp = controller.findSMI('isHandsUp');
+          number = controller.findSMI('numLook');
+        }
+        setState(() => riveBearArtBoard = artBoard);
+      },
+    );
+    super.initState();
+  }
+
   Future login() async {
-    try {
-      await supabase.auth.signInWithPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-    } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+    setState(() {
+      isCheck!.value = false;
+      isHandsUp!.value = false;
+    });
+    if (emailRegex.hasMatch(emailController.text) &&
+        passRegex.hasMatch(passwordController.text)) {
+      Future.delayed(const Duration(milliseconds: 1600), () {
+        setState(() {
+          success!.value = true;
+        });
+      });
+      Future.delayed(const Duration(milliseconds: 2200), () {
+        try {
+          supabase.auth.signInWithPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim());
+        } on AuthException catch (error) {
+          setState(() {
+            isCheck!.value = false;
+            isHandsUp!.value = false;
+            fail!.value = true;
+          });
+          ShowBearSnackBar.showBearSnackBar(context, error.message);
+        } catch (error) {
+          setState(() {
+            fail!.value = true;
+          });
+          ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+        }
+      });
+    } else {
+      Future.delayed(
+          const Duration(milliseconds: 1600),
+          () => setState(() {
+                fail!.value = true;
+              }));
     }
   }
 
@@ -49,15 +94,18 @@ class _LoginEmailState extends State<LoginEmail> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        setState(() {
+          isCheck!.value = false;
+          isHandsUp!.value = false;
+        });
+        unFocus;
       },
       child: Scaffold(
         appBar: AppBar(
-          shape: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 8, color: dividerGrey)),
-          title: Text('Login via Email',
-              style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
-        ),
+            shape: const UnderlineInputBorder(
+                borderSide: BorderSide(width: 8, color: dividerGrey)),
+            title: const CustomText(
+                content: 'Login via Email', fontWeight: FontWeight.bold)),
         body: SingleChildScrollView(
           child: Center(
             child: Padding(
@@ -65,50 +113,63 @@ class _LoginEmailState extends State<LoginEmail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Input your credentials',
-                      style: inter.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: CustomFormFill(
-                      boxShadow: emailRegex.hasMatch(emailController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
-                      textInputType: TextInputType.emailAddress,
-                      labelText: 'Email',
-                      hintText: 'johndoe123@gmail.com',
-                      exampleText: emailRegex.hasMatch(emailController.text)
-                          ? null
-                          : 'Example: johndoe123@gmail.com',
-                      borderColor: emailController.text.isNotEmpty
-                          ? globalPink
-                          : Colors.grey,
-                      inputColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
-                          : Colors.red,
-                      labelColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
-                          : emailController.text.isEmpty
-                              ? globalPink
-                              : Colors.red,
-                      focusErrorBorderColor:
-                          emailRegex.hasMatch(emailController.text)
-                              ? globalPink
-                              : emailController.text.isEmpty
-                                  ? globalPink
-                                  : Colors.red,
-                      textEditingController: emailController,
-                      function: (value) {
-                        setState(() {
-                          emailRegex.hasMatch(emailController.text);
-                        });
-                      },
-                      errorText: emailRegex.hasMatch(emailController.text)
-                          ? null
-                          : emailController.text.isEmpty
-                              ? null
-                              : '${emailController.text} is not a valid email',
-                    ),
+                  const CustomText(
+                      content: 'Input your credentials',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  riveBearArtBoard == null
+                      ? const SizedBox()
+                      : SizedBox(
+                          height: 255,
+                          child: Rive(
+                            artboard: riveBearArtBoard!,
+                            fit: BoxFit.cover,
+                          )),
+                  CustomFormFill(
+                    boxShadow: emailRegex.hasMatch(emailController.text)
+                        ? Colors.pink.shade100
+                        : Colors.white,
+                    textInputType: TextInputType.emailAddress,
+                    labelText: 'Email',
+                    hintText: 'johndoe123@gmail.com',
+                    exampleText: emailRegex.hasMatch(emailController.text)
+                        ? null
+                        : 'Example: johndoe123@gmail.com',
+                    borderColor: emailController.text.isNotEmpty
+                        ? globalPink
+                        : Colors.grey,
+                    inputColor: emailRegex.hasMatch(emailController.text)
+                        ? globalPink
+                        : Colors.red,
+                    labelColor: emailRegex.hasMatch(emailController.text)
+                        ? globalPink
+                        : emailController.text.isEmpty
+                            ? globalPink
+                            : Colors.red,
+                    focusErrorBorderColor:
+                        emailRegex.hasMatch(emailController.text)
+                            ? globalPink
+                            : emailController.text.isEmpty
+                                ? globalPink
+                                : Colors.red,
+                    textEditingController: emailController,
+                    onTap: () {
+                      setState(() {
+                        isCheck!.value = true;
+                        isHandsUp!.value = false;
+                      });
+                    },
+                    function: (value) {
+                      setState(() {
+                        number!.value = value.length.toDouble();
+                        emailRegex.hasMatch(emailController.text);
+                      });
+                    },
+                    errorText: emailRegex.hasMatch(emailController.text)
+                        ? null
+                        : emailController.text.isEmpty
+                            ? null
+                            : '${emailController.text} is not a valid email',
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -155,6 +216,11 @@ class _LoginEmailState extends State<LoginEmail> {
                                         : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
+                      onTap: () {
+                        setState(() {
+                          isHandsUp!.value = true;
+                        });
+                      },
                       function: (value) {
                         setState(() {
                           passRegex.hasMatch(passwordController.text);
@@ -169,44 +235,33 @@ class _LoginEmailState extends State<LoginEmail> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 40, top: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Get.to(() => const ForgotPassword(),
-                            transition: Transition.rightToLeft,
-                            duration: const Duration(milliseconds: 600));
-                      },
-                      child: Text(
-                        'Forgot Password?',
-                        style: inter.copyWith(
-                            fontSize: 13, decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ),
+                      padding: const EdgeInsets.only(bottom: 40, top: 10),
+                      child: GestureDetector(
+                          onTap: () {
+                            unFocus;
+                            Navigator.pushNamed(
+                                context, AppRouter.forgotPassword);
+                          },
+                          child: const CustomText(
+                              content: 'Forgot Password?',
+                              fontSize: 13,
+                              textDecoration: TextDecoration.underline))),
                   CustomButton(
                       onPressed: () {
                         login();
                       },
-                      text: Text('Login',
-                          style: inter.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                      text: const CustomText(
+                          content: 'Login',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                       color: globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Get.to(() => const CreateAccount(),
-                            transition: Transition.downToUp,
-                            duration: const Duration(milliseconds: 600));
-                      },
-                      text: Text('Create an account instead',
-                          style: inter.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey)),
+                      onPressed: widget.onPressed,
+                      text: const CustomText(
+                          content: 'Create an account instead',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                       color: Colors.white)
                 ],
               ),

@@ -1,14 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/models/desktop_food.dart';
-import 'package:template/pages/explore/widget/banner_items.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class SavedPage extends StatefulWidget {
   const SavedPage({super.key});
@@ -53,13 +44,12 @@ class _SavedPageState extends State<SavedPage> {
               automaticallyImplyLeading: false,
               title: Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text('Saved (${value.saveFood.length})',
-                      style: inter.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold)))),
+                  child: CustomText(
+                      content: 'Saved (${value.saveFood.length})',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold))),
           body: value.saveFood.isEmpty
-              ? Center(
-                  child: Lottie.asset(shoppingCart),
-                )
+              ? Center(child: Lottie.asset(Assets.shoppingCart))
               : Padding(
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 144),
                   child: SizedBox(
@@ -96,10 +86,9 @@ class _SavedPageState extends State<SavedPage> {
                                                     begin: 0.5, end: 1)
                                                 .animate(animation),
                                             child: CupertinoAlertDialog(
-                                              title: Text(
-                                                'Do you want to remove this item from saved list?',
-                                                style: inter,
-                                              ),
+                                              title: const CustomText(
+                                                  content:
+                                                      'Do you want to remove this item from saved list?'),
                                               actions: [
                                                 Padding(
                                                   padding: const EdgeInsets
@@ -119,19 +108,22 @@ class _SavedPageState extends State<SavedPage> {
                                                             Navigator.pop(
                                                                 context);
                                                           },
-                                                          child: Text('Yes',
-                                                              style: inter.copyWith(
+                                                          child:
+                                                              const CustomText(
+                                                                  content:
+                                                                      'Yes',
                                                                   color: Colors
-                                                                      .red))),
+                                                                      .red)),
                                                       TextButton(
                                                           onPressed: () {
                                                             Navigator.pop(
                                                                 context);
                                                           },
-                                                          child: Text('No',
-                                                              style: inter.copyWith(
+                                                          child:
+                                                              const CustomText(
+                                                                  content: 'No',
                                                                   color: Colors
-                                                                      .blue)))
+                                                                      .blue))
                                                     ],
                                                   ),
                                                 )
@@ -142,7 +134,7 @@ class _SavedPageState extends State<SavedPage> {
                                       },
                                     );
                                   },
-                                  icon: Lottie.asset(heartBreak)))))));
+                                  icon: Lottie.asset(Assets.heartBreak)))))));
     });
   }
 }

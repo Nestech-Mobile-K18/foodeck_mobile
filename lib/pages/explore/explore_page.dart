@@ -1,12 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:template/pages/explore/widget/bottom_list_shopping.dart';
-import 'package:template/pages/explore/widget/custom_search_delegate.dart';
-import 'package:template/pages/explore/widget/list_slide_banner.dart';
-import 'package:template/pages/explore/widget/middle_slide_list.dart';
-import 'package:template/pages/explore/widget/top_list_shopping.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -16,42 +8,68 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  String _currentAddress = '';
+  String _currentAddress1 = '';
+
+  @override
+  void initState() {
+    setAddress();
+    super.initState();
+  }
+
+  void setAddress() async {
+    List<Placemark> placeMarks = await placemarkFromCoordinates(
+        getLatLngFromSharedPrefs().latitude,
+        getLatLngFromSharedPrefs().longitude);
+    Placemark place = placeMarks[0];
+    setState(() {
+      // Convert latitude and longitude to address
+      _currentAddress = '${place.street}, ${place.subAdministrativeArea}';
+      _currentAddress1 = '${place.administrativeArea}, ${place.country}';
+      sharedPreferences.setString('currentAddress', _currentAddress);
+      sharedPreferences.setString('currentAddress1', _currentAddress1);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        unFocus;
       },
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                homeBar,
+                Assets.homeBar,
                 fit: BoxFit.cover,
               )),
           toolbarHeight: 142,
           automaticallyImplyLeading: false,
-          titleTextStyle: inter.copyWith(fontSize: 17, color: Colors.white),
+          titleTextStyle:
+              AppText.inter.copyWith(fontSize: 17, color: Colors.white),
           titleSpacing: 24,
           title: Column(
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_on_outlined,
                     color: Colors.white,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 12,
                   ),
-                  Text('Block B Phase 2 Johar Town, Lahore')
+                  currentAddress(sharedPreferences.getString('currentAddress')!,
+                      sharedPreferences.getString('currentAddress1')!),
                 ],
               ),
               Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: GestureDetector(
-                    onTap: () => Get.to(() => CustomSearchDelegate()),
+                    onTap: () =>
+                        Navigator.pushNamed(context, AppRouter.searchPage),
                     child: Container(
                         height: 54,
                         width: double.maxFinite,
@@ -70,15 +88,12 @@ class _ExplorePageState extends State<ExplorePage> {
                               horizontal: 24, vertical: 16),
                           child: Row(
                             children: [
-                              Image.asset(search, color: Colors.grey),
+                              Image.asset(Assets.search, color: Colors.grey),
                               Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Text(
-                                  'Search...',
-                                  style: inter.copyWith(
-                                      color: Colors.grey[400], fontSize: 17),
-                                ),
-                              )
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: CustomText(
+                                      content: 'Search...',
+                                      color: Colors.grey[400]))
                             ],
                           ),
                         )),

@@ -1,14 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:template/pages/deals/detail_page/cart_items.dart';
-import 'package:template/pages/deals/detail_page/detail_food.dart';
-import 'package:template/pages/deals/widget/list_food.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/list.dart';
+import 'package:template/source/export.dart';
 
 class Restaurant extends ChangeNotifier {
   // phân loại thức ăn theo menu
-  List<FoodItems> _filterCategory(
+  List<FoodItems> filterCategory(
       FoodCategory foodCategory, List<FoodItems> fullMenu) {
     return fullMenu.where((food) => food.foodCategory == foodCategory).toList();
   }
@@ -19,22 +13,18 @@ class Restaurant extends ChangeNotifier {
   }
 
   //
-  List<Widget> sortFood(List<FoodItems> fullMenu) {
+  List<Widget> sortFood(List<FoodItems> fullMenu, DesktopFood desktopFood) {
     return FoodCategory.values.map((category) {
-      List<FoodItems> categoryMenu = _filterCategory(category, fullMenu);
+      List<FoodItems> categoryMenu = filterCategory(category, fullMenu);
       return ListView.builder(
         itemCount: categoryMenu.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => ListFood(
             voidCallback: () {
               final food = categoryMenu[index];
-              Get.to(
-                  () => DetailFood(
-                        foodItems: food,
-                        addon: addonItems[index],
-                      ),
-                  transition: Transition.rightToLeft,
-                  duration: const Duration(milliseconds: 600));
+              Navigator.pushNamed(context, AppRouter.detailFood,
+                  arguments:
+                      DetailFood(foodItems: food, desktopFood: desktopFood));
             },
             picture: categoryMenu[index].picture,
             nameFood: categoryMenu[index].nameFood,
@@ -47,65 +37,20 @@ class Restaurant extends ChangeNotifier {
   final List<CartItems> _cartItems = [];
 
   List<CartItems> get cartItems => _cartItems;
+  final List<OrderHistory> _orderComplete = [];
 
-  // add to cart
-  // void addToCart(
-  //     FoodItems foodItems, List<Addon> select, List<Addon> addon, double num) {
-  //   // CartItems? cartItem = _cartItems.firstWhereOrNull((element) {
-  //   //   bool isSameFood = element.foodItems == foodItems;
-  //   //   // use Collection package in here
-  //   //   bool isSameAddon =
-  //   //       const ListEquality().equals(element.selectAddon, select);
-  //   //   return isSameFood && isSameAddon;
-  //   // });
-  //   // if (cartItem != null) {
-  //   //   cartItem.quantity++;
-  //   // } else {
-  //   _cartItems.add(CartItems(
-  //       foodItems: foodItems, size: addon, price: num, selectAddon: select));
-  //   // }
-  //   notifyListeners();
-  // }
+  List<OrderHistory> get orderComplete => _orderComplete;
+
+  addToOrderComplete(int subPrice, int deliveryFee, int vat, int coupon,
+      int totalPrice, String date, String restaurantName) {
+    _orderComplete.add(OrderHistory(subPrice, deliveryFee, vat, coupon,
+        totalPrice, date, cartItems, restaurantName));
+  }
 
   void removeFromList(CartItems cartItems) {
     _cartItems.remove(cartItems);
     notifyListeners();
   }
-
-  // remove from cart
-  void removeFromCart(CartItems cart) {
-    int cartIndex = _cartItems.indexOf(cart);
-    if (cartIndex != -1) {
-      if (_cartItems[cartIndex].quantity > 1) {
-        _cartItems[cartIndex].quantity--;
-      } else {
-        _cartItems.removeAt(cartIndex);
-      }
-    }
-    notifyListeners();
-  }
-
-  // get total price from cart
-  // double totalPrice() {
-  //   double total = 0.0;
-  //   for (CartItems _cartItems in _cartItems) {
-  //     double itemTotal = _cartItems.foodItems.price.toDouble();
-  //     for (Addon addon in _cartItems.selectAddon) {
-  //       itemTotal += addon.price;
-  //     }
-  //     total += itemTotal * _cartItems.quantity;
-  //   }
-  //   return total;
-  // }
-
-  // get total number of items in the cart
-  // int getTotalItemCount() {
-  //   int total = 0;
-  //   for (CartItems _cartItems in _cartItems) {
-  //     total += _cartItems.quantity;
-  //   }
-  //   return total;
-  // }
 
   // clear cart
   void clearCart() {
@@ -135,44 +80,60 @@ class Restaurant extends ChangeNotifier {
 
 List<FoodItems> foodItems = [
   FoodItems(
-      picture: pizza,
-      nameFood: 'Chicken Fajita Pizza\n',
-      detail: '8” pizza with regular soft drink\n',
+      picture: Assets.pizza,
+      nameFood: 'Chicken Fajita Pizza',
+      detail: '8” pizza with regular soft drink',
       price: 10,
       place: 'Daily Deli - Johar Town',
       foodCategory: FoodCategory.Popular,
       availableAddons: addonItems),
   FoodItems(
-      picture: friedChicken,
-      nameFood: 'Chicken Fajita Pizza\n',
-      detail: '8” pizza with regular soft drink\n',
+      picture: Assets.friedChicken,
+      nameFood: 'Chicken Fajita Pizza',
+      detail: '8” pizza with regular soft drink',
       price: 10,
       place: 'Daily Deli - Johar Town',
       foodCategory: FoodCategory.Popular,
       availableAddons: addonItems),
   FoodItems(
-      picture: coffeeMilk,
-      nameFood: 'Deal 1\n',
-      detail: '1 regular burger with\ncroquette and hot cocoa\n',
+      picture: Assets.coffeeMilk,
+      nameFood: 'Deal 1',
+      detail: '1 regular burger with\ncroquette and hot cocoa',
       price: 12,
       place: 'Daily Deli - Johar Town',
       foodCategory: FoodCategory.Deals,
       availableAddons: addonItems),
   FoodItems(
-      picture: hamburger,
-      nameFood: 'Deal 2\n',
-      detail: '1 regular burger with\nsmall fries\n',
+      picture: Assets.hamburger,
+      nameFood: 'Deal 2',
+      detail: '1 regular burger with\nsmall fries',
       price: 6,
       place: 'Daily Deli - Johar Town',
       foodCategory: FoodCategory.Deals,
       availableAddons: addonItems),
   FoodItems(
-      picture: desert,
-      nameFood: 'Deal 3\n',
-      detail: '2 pieces of beef stew with\nhomemade sauce\n',
+      picture: Assets.desert,
+      nameFood: 'Deal 3',
+      detail: '2 pieces of beef stew with\nhomemade sauce',
       price: 23,
       place: 'Daily Deli - Johar Town',
       foodCategory: FoodCategory.Deals,
+      availableAddons: addonItems),
+  FoodItems(
+      picture: Assets.redGrape,
+      price: 18,
+      nameFood: 'Red Grape Margarita',
+      place: 'Daily Deli',
+      detail: '',
+      foodCategory: FoodCategory.Beverages,
+      availableAddons: addonItems),
+  FoodItems(
+      picture: Assets.lemonade,
+      price: 12,
+      nameFood: 'Lemon Pina Colada',
+      place: 'Arfan Juices',
+      detail: '',
+      foodCategory: FoodCategory.Beverages,
       availableAddons: addonItems),
 ];
 List<Addon> addonItems = [

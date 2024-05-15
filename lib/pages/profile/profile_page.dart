@@ -1,11 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:template/pages/profile/widget/edit_account.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/list.dart';
-import 'package:template/values/text_styles.dart';
-
-import '../../main.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:rive/rive.dart';
+import 'package:template/source/export.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,6 +10,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Artboard? switchButton;
+  SMIBool? isClick;
+
   List<ProfileButtons> kindSetting(
       KindSetting kindSetting, List<ProfileButtons> setting) {
     return setting
@@ -22,46 +20,41 @@ class _ProfilePageState extends State<ProfilePage> {
         .toList();
   }
 
-  String? _imageUrl;
-  String? _name;
-
   @override
   void initState() {
+    rootBundle.load('assets/rives/switch_button_day&night.riv').then(
+      (data) {
+        final file = RiveFile.import(data);
+        final artBoard = file.mainArtboard;
+        var controller =
+            StateMachineController.fromArtboard(artBoard, 'State Machine 1');
+        if (controller != null) {
+          artBoard.addController(controller);
+          isClick = controller.findSMI('IsPressed');
+        }
+        setState(() => switchButton = artBoard);
+      },
+    );
     super.initState();
-    _getInitialProfile();
-  }
-
-  Future<void> _getInitialProfile() async {
-    var response = await supabase.from('users').select('id');
-    var records = response.toList() as List;
-    for (var record in records) {
-      var userId = record['id'];
-      final data =
-          await supabase.from('users').select().eq('id', userId).single();
-      setState(() {
-        _imageUrl = data['avatar_url'];
-        _name = data['full_name'];
-      });
-    }
-  }
-
-  void editAccount() {
-    Get.to(() => EditAccount());
   }
 
   void check(String index) {
     setState(() {
       switch (index) {
         case 'Edit Account':
-          editAccount();
+          Navigator.pushNamed(context, AppRouter.editAccount);
           break;
         case 'My locations':
+          Navigator.pushNamed(context, AppRouter.myLocation);
           break;
         case 'My Orders':
+          Navigator.pushNamed(context, AppRouter.myOrders);
           break;
         case 'Payment Methods':
+          Navigator.pushNamed(context, AppRouter.paymentMethods);
           break;
         case 'My reviews':
+          Navigator.pushNamed(context, AppRouter.myReviews);
           break;
         case 'About us':
           break;
@@ -81,76 +74,70 @@ class _ProfilePageState extends State<ProfilePage> {
       width: fullWidth,
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: fullHeight * 0.35,
-              color: dividerGrey,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 68),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _imageUrl != null
-                          ? Container(
-                              height: 88,
-                              width: 88,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage(_imageUrl!),
-                                      fit: BoxFit.cover)),
-                            )
-                          : Container(
-                              width: 88,
-                              height: 88,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.grey),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.camera_alt),
-                                  Text('No Image'),
-                                ],
-                              ),
-                            ),
-                      Text(
-                        _name ?? 'No name',
-                        style: inter.copyWith(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Lahore, Pakistan',
-                        style: inter.copyWith(fontSize: 15, color: Colors.grey),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 24, top: 40, bottom: 8),
-                            child: Text(
-                              'Account Settings',
-                              style: inter.copyWith(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: globalPink),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                height: fullHeight * 0.35,
+                color: dividerGrey,
+                child: Padding(
+                    padding: const EdgeInsets.only(top: 68),
+                    child: SingleChildScrollView(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          sharedPreferences.getString('avatar') != null
+                              ? Container(
+                                  height: 88,
+                                  width: 88,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: NetworkImage(sharedPreferences
+                                              .getString('avatar')!),
+                                          fit: BoxFit.cover)),
+                                )
+                              : Container(
+                                  width: 88,
+                                  height: 88,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.camera_alt),
+                                      Text('No Image'),
+                                    ],
+                                  ),
+                                ),
+                          CustomText(
+                              content: sharedPreferences.getString('name') ??
+                                  'No name',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                          currentAddress(
+                              sharedPreferences.getString('currentAddress')!,
+                              sharedPreferences.getString('currentAddress1')!),
+                          const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 24, top: 40, bottom: 8),
+                                    child: CustomText(
+                                        content: 'Account Settings',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: globalPink))
+                              ])
+                        ])))),
             Column(
               children: [
                 SizedBox(
                   height: fullHeight * 0.425,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount:
                         kindSetting(KindSetting.account, profileButtons).length,
                     itemBuilder: (context, index) {
@@ -176,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     profileButtons)[index]
                                                 .icon),
                                             fit: BoxFit.cover))),
-                                trailing: Icon(Icons.arrow_forward_ios),
+                                trailing: const Icon(Icons.arrow_forward_ios),
                               ),
                             ),
                           ),
@@ -184,33 +171,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                           .length -
                                       1 ==
                                   index
-                              ? SizedBox()
-                              : Divider(
-                                  color: Colors.grey.shade300,
-                                )
+                              ? const SizedBox()
+                              : Divider(color: Colors.grey.shade300)
                         ],
                       );
                     },
                   ),
                 ),
                 Container(
-                  alignment: Alignment.bottomLeft,
-                  height: fullHeight * 0.09,
-                  color: dividerGrey,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 24, bottom: 8),
-                    child: Text('General Settings',
-                        style: inter.copyWith(
+                    alignment: Alignment.bottomLeft,
+                    height: fullHeight * 0.09,
+                    color: dividerGrey,
+                    child: const Padding(
+                        padding: EdgeInsets.only(left: 24, bottom: 8),
+                        child: CustomText(
+                            content: 'General Settings',
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: globalPink)),
-                  ),
-                ),
+                            color: globalPink))),
                 SizedBox(
                   height: fullHeight * 0.17,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount:
                         kindSetting(KindSetting.general, profileButtons).length,
                     itemBuilder: (context, index) => Column(
@@ -233,56 +216,62 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   profileButtons)[index]
                                               .icon),
                                           fit: BoxFit.cover))),
-                              trailing: Icon(Icons.arrow_forward_ios),
+                              trailing: const Icon(Icons.arrow_forward_ios),
                             ),
                           ),
                         ),
-                        kindSetting(KindSetting.general, profileButtons)
-                                        .length -
-                                    1 ==
-                                index
-                            ? SizedBox()
-                            : Divider(
-                                color: Colors.grey.shade300,
-                              )
+                        Divider(
+                          color: Colors.grey.shade300,
+                        )
                       ],
                     ),
                   ),
                 )
               ],
             ),
+            CustomWidget.lightOrDarkAnimation(context),
+            Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: TextButton.icon(
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: const Text('Are you sure want to logout?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  supabase.auth.signOut().then((value) =>
+                                      Navigator.pushNamed(
+                                          context, AppRouter.loginPage));
+                                },
+                                child: const CustomText(
+                                    content: 'Yes', color: Colors.red)),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const CustomText(
+                                    content: 'No', color: Colors.blue))
+                          ],
+                        ),
+                      );
+                    },
+                    label: const Padding(
+                        padding: EdgeInsets.only(left: 8),
+                        child: CustomText(
+                            content: 'Log Out', color: Colors.black)))),
             Container(
               height: fullHeight * 0.2,
               color: dividerGrey,
             )
-            // ElevatedButton(
-            //     onPressed: () {
-            //       supabase.auth.signOut();
-            //     },
-            //     child: Text('data'))
           ],
         ),
       ),
     ));
   }
 }
-// Center(
-// child: Column(
-// children: [
-// ElevatedButton(
-// onPressed: () {
-// supabase.auth
-//     .signOut()
-//     .then((value) => Get.to(() => LoginPage()));
-// },
-// child: Text('Logout')),
-// Switch.adaptive(
-// value:
-// Provider.of<ThemeProvider>(context, listen: true).isDarkMode,
-// onChanged: (value) =>
-// Provider.of<ThemeProvider>(context, listen: false)
-//     .toggleTheme(),
-// )
-// ],
-// ),
-// ),

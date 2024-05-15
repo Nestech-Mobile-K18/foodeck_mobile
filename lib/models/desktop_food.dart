@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:template/values/images.dart';
-import 'package:template/values/list.dart';
+import 'package:template/source/export.dart';
 
 class TopFood extends ChangeNotifier {
   List<DesktopFood> kindFood(TitleFood titleFood, List<DesktopFood> fullMenu) {
@@ -27,73 +25,73 @@ class TopFood extends ChangeNotifier {
 
 final List<DesktopFood> desktopFood = [
   DesktopFood(
-      foodOrder: dailyDeli,
+      foodOrder: Assets.dailyDeli,
       time: '40 min',
-      shopName: 'Daily Deli\n',
+      shopName: 'Daily Deli',
       place: 'Johar Town',
       vote: '4.8',
       titleFood: TitleFood.Deals),
   DesktopFood(
-      foodOrder: riceBowl,
+      foodOrder: Assets.riceBowl,
       time: '12 min',
-      shopName: 'Rice Bowl\n',
+      shopName: 'Rice Bowl',
       place: 'Wapda Town',
       vote: '4.8',
       titleFood: TitleFood.Deals),
   DesktopFood(
-      foodOrder: healthyFood,
+      foodOrder: Assets.healthyFood,
       time: '25 min',
-      shopName: 'Healthy Food\n',
+      shopName: 'Healthy Food',
       place: 'Grand Town',
       vote: '4.4',
       titleFood: TitleFood.Deals),
   DesktopFood(
-      foodOrder: indonesianFood,
+      foodOrder: Assets.indonesianFood,
       time: '30 min',
-      shopName: 'Indonesian Food\n',
+      shopName: 'Indonesian Food',
       place: 'Rolan Town',
       vote: '5',
       titleFood: TitleFood.Deals),
   DesktopFood(
-      foodOrder: coffee,
+      foodOrder: Assets.coffee,
       time: '15 min',
-      shopName: 'Coffee\n',
+      shopName: 'Coffee',
       place: 'Mid Town',
       vote: '4.7',
       titleFood: TitleFood.Deals),
   DesktopFood(
-      foodOrder: cake,
+      foodOrder: Assets.cake,
       time: '40 min',
-      shopName: 'Jean’s Cakes\n',
+      shopName: 'Jean’s Cakes',
       place: 'Johar Town',
       vote: '4.8',
       titleFood: TitleFood.Explore),
   DesktopFood(
-      foodOrder: chocolate,
+      foodOrder: Assets.chocolate,
       time: '20 min',
-      shopName: 'Thicc Shakes\n',
+      shopName: 'Thicc Shakes',
       place: 'Wapda Town',
       vote: '4.5',
       titleFood: TitleFood.Explore),
   DesktopFood(
-      foodOrder: panCake,
+      foodOrder: Assets.panCake,
       time: '30 min',
-      shopName: 'Daily Deli\n',
+      shopName: 'Daily Deli',
       place: 'Garden Town',
       vote: '4.8',
       titleFood: TitleFood.Explore),
   DesktopFood(
-      foodOrder: redGrape,
-      time: '\$18',
-      shopName: 'Red Grape Margarita\n',
-      place: 'Daily Deli',
-      vote: '4.8',
-      titleFood: TitleFood.Popular),
+      foodOrder: Assets.burger,
+      time: '',
+      shopName: 'Burger King',
+      place: '\$80',
+      vote: '',
+      titleFood: TitleFood.Recent),
   DesktopFood(
-      foodOrder: lemonade,
-      time: '\$12',
-      shopName: 'Lemon Pina Colada\n',
-      place: 'Arfan Juices',
-      vote: '4.8',
-      titleFood: TitleFood.Popular),
+      foodOrder: Assets.crepe,
+      time: '',
+      shopName: 'Wrap Factory',
+      place: '\$30',
+      vote: '',
+      titleFood: TitleFood.Recent),
 ];

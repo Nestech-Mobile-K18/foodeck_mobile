@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/values/colors.dart';
 import 'package:template/values/images.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/widgets/custom_text.dart';
 
 class LoginButton {
   final String type;
@@ -12,10 +12,10 @@ class LoginButton {
 }
 
 List<LoginButton> loginButton = [
-  LoginButton(googleLogo, 'Login via Google', buttonRed),
-  LoginButton(facebookLogo, 'Login via Facebook', buttonBlue),
-  LoginButton(appleLogo, 'Login via Apple', Colors.black),
-  LoginButton(emailLogo, 'Login via Email', globalPink),
+  LoginButton(Assets.googleLogo, 'Login via Google', buttonRed),
+  LoginButton(Assets.facebookLogo, 'Login via Facebook', buttonBlue),
+  LoginButton(Assets.appleLogo, 'Login via Apple', Colors.black),
+  LoginButton(Assets.emailLogo, 'Login via Email', globalPink),
   LoginButton('', 'Create an account', Colors.white)
 ];
 
@@ -28,104 +28,80 @@ class SlideBanner {
 
 List<SlideBanner> slideBanner = [
   SlideBanner(
-      firstBanner,
+      Assets.firstBanner,
       Positioned(
-        left: 24,
-        child: RichText(
-            text: TextSpan(
-                text: 'Get 25% Cashback',
-                style: inter.copyWith(fontSize: 15, color: globalPink),
-                children: [
-              TextSpan(
-                  text: ' on\ngrocery from our retailers\n',
-                  style: inter.copyWith(color: Colors.black)),
-              WidgetSpan(
-                  child: Padding(
+          left: 24,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomText(
+                  content: 'Get 25% Cashback', fontSize: 15, color: globalPink),
+              const CustomText(content: 'on grocery from our retailers\n'),
+              Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: Container(
-                  alignment: Alignment.center,
-                  height: 28,
-                  width: 90,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(800),
-                      color: globalPink),
-                  child: Text(
-                    'Code: CVB25',
-                    style: inter.copyWith(fontSize: 10, color: Colors.white),
-                  ),
-                ),
-              ))
-            ])),
-      )),
-  SlideBanner(
-      middleBanner,
-      Positioned(
-        left: 24,
-        child: RichText(
-            text: TextSpan(
-                text: 'Pizza Party\n',
-                style: inter.copyWith(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-                children: [
-              const WidgetSpan(
-                  child: SizedBox(
-                height: 20,
-              )),
-              TextSpan(
-                  text: 'Enjoy pizza from Johnny\nand get up to 30% off\n',
-                  style: inter.copyWith(
-                      fontSize: 12,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal)),
-              const WidgetSpan(
-                  child: SizedBox(
-                height: 20,
-              )),
-              TextSpan(
-                  text: '\nStarting from\n',
-                  style: inter.copyWith(
-                      fontSize: 10,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal)),
-              TextSpan(text: '\$10', style: inter.copyWith(color: globalPink))
-            ])),
-      )),
-  SlideBanner(
-      lastBanner,
-      RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-              text: '30% FLAT\n',
-              style: inter.copyWith(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-              children: [
-                TextSpan(
-                    text: 'on any IceCreams\n',
-                    style: inter.copyWith(
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.black)),
-                WidgetSpan(
-                    child: Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: Container(
                     alignment: Alignment.center,
                     height: 28,
                     width: 90,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(800),
-                        color: buttonShadowBlack),
-                    child: Text(
-                      'Shop Now',
-                      style: inter.copyWith(fontSize: 10, color: Colors.white),
-                    ),
-                  ),
-                ))
-              ]))),
+                        color: globalPink),
+                    child: const CustomText(
+                        content: 'Code: CVB25',
+                        fontSize: 10,
+                        color: Colors.white)),
+              )
+            ],
+          ))),
+  SlideBanner(
+      Assets.middleBanner,
+      const Positioned(
+          left: 24,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                  content: 'Pizza Party',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                  content: 'Enjoy pizza from Johnny\nand get up to 30% off',
+                  fontSize: 12,
+                  color: Colors.grey),
+              SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                  content: '\nStarting from\n',
+                  fontSize: 10,
+                  color: Colors.grey),
+              CustomText(content: '\$10', color: globalPink)
+            ],
+          ))),
+  SlideBanner(
+      Assets.lastBanner,
+      Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        const CustomText(
+            content: '30% FLAT',
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+            color: Colors.white),
+        const CustomText(content: 'on any IceCreams', fontSize: 12),
+        Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Container(
+                alignment: Alignment.center,
+                height: 28,
+                width: 90,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(800),
+                    color: buttonShadowBlack),
+                child: const CustomText(
+                    content: 'Shop Now', fontSize: 10, color: Colors.white)))
+      ])),
 ];
 
 class DesktopFood {
@@ -145,7 +121,7 @@ class DesktopFood {
       required this.titleFood});
 }
 
-enum TitleFood { Deals, Explore, Popular }
+enum TitleFood { Deals, Explore, Popular, Recent }
 
 class FoodItems {
   final String picture;
@@ -198,21 +174,13 @@ class ProfileButtons {
 }
 
 List<ProfileButtons> profileButtons = [
-  ProfileButtons(userCircle, 'Edit Account', KindSetting.account),
-  ProfileButtons(mapPin, 'My locations', KindSetting.account),
-  ProfileButtons(package, 'My Orders', KindSetting.account),
-  ProfileButtons(creditCard, 'Payment Methods', KindSetting.account),
-  ProfileButtons(starBorder, 'My reviews', KindSetting.account),
-  ProfileButtons(info, 'About us', KindSetting.general),
-  ProfileButtons(database, 'Data usage', KindSetting.general),
+  ProfileButtons(Assets.userCircle, 'Edit Account', KindSetting.account),
+  ProfileButtons(Assets.mapPin, 'My locations', KindSetting.account),
+  ProfileButtons(Assets.package, 'My Orders', KindSetting.account),
+  ProfileButtons(Assets.creditCardIcon, 'Payment Methods', KindSetting.account),
+  ProfileButtons(Assets.starBorder, 'My reviews', KindSetting.account),
+  ProfileButtons(Assets.info, 'About us', KindSetting.general),
+  ProfileButtons(Assets.database, 'Data usage', KindSetting.general),
 ];
 
 enum KindSetting { account, general }
-
-class Payment {
-  final String type;
-
-  Payment(this.type);
-}
-
-List<Payment> payment = [Payment(masterCard), Payment(visaCard)];

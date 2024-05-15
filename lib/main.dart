@@ -1,26 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_sizer/flutter_sizer.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/models/desktop_food.dart';
-import 'package:template/models/restaurant.dart';
-import 'package:template/pages/home/home_page.dart';
-import 'package:template/pages/login/login_page.dart';
-import 'package:template/pages/login/widgets/create_account.dart';
-import 'package:template/pages/login/widgets/login_email.dart';
-import 'package:template/pages/splash/splash_page.dart';
-import 'package:template/themes/theme_provider.dart';
-import 'package:template/values/route.dart';
+import 'package:template/source/export.dart';
+
+late SharedPreferences sharedPreferences;
 
 Future<void> main() async {
-  await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
+  sharedPreferences = await SharedPreferences.getInstance();
+  await dotenv.load(fileName: '.env');
   await Supabase.initialize(
       url: dotenv.env['URL'].toString(),
       anonKey: dotenv.env['ANONKEY'].toString());
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -34,34 +23,40 @@ Future<void> main() async {
   ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return FlutterSizer(
-      builder: (context, orientation, screenType) {
-        return GetMaterialApp(
-            theme: Provider.of<ThemeProvider>(context).themeData,
-            defaultTransition: Transition.rightToLeft,
-            transitionDuration: const Duration(milliseconds: 600),
-            debugShowCheckedModeBanner: false,
-            initialRoute: splashPage,
-            routes: {
-              splashPage: (context) => const SplashPage(),
-              createAccount: (context) => const CreateAccount(),
-              loginEmail: (context) => const LoginEmail(),
-              loginPage: (context) => const LoginPage(),
-              homePage: (context) => const HomePage()
-            });
-      },
-    );
+    return MaterialApp(
+        navigatorKey: AppRouter.navigatorKey,
+        theme: Provider.of<ThemeProvider>(context).themeData,
+        debugShowCheckedModeBanner: false,
+        initialRoute: AppRouter.splashPage,
+        onGenerateRoute: AppRouter.routes);
   }
 }
 
+final unFocus = FocusManager.instance.primaryFocus?.unfocus();
 final supabase = Supabase.instance.client;
-final data = supabase.from('banners').stream(primaryKey: ['id']);
+final dataReview = supabase.from('reviews').stream(primaryKey: ['id']);
+final dataOrderComplete =
+    supabase.from('order_complete').stream(primaryKey: ['id']);
+final dataRestaurants = supabase.from('restaurants').stream(primaryKey: ['id']);
 RegExp emailRegex = RegExp(
     r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 RegExp passRegex = RegExp(

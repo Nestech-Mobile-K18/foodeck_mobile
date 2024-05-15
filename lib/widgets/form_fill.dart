@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class CustomFormFill extends StatefulWidget {
   const CustomFormFill(
@@ -26,7 +23,8 @@ class CustomFormFill extends StatefulWidget {
       this.boxShadow,
       this.heightBoxShadow,
       this.widthBoxShadow,
-      this.hintColor});
+      this.hintColor,
+      this.onTap});
 
   final TextInputType? textInputType;
   final Function(String)? function;
@@ -49,6 +47,7 @@ class CustomFormFill extends StatefulWidget {
   final double? heightBoxShadow;
   final double? widthBoxShadow;
   final Color? hintColor;
+  final VoidCallback? onTap;
 
   @override
   State<CustomFormFill> createState() => _CustomFormFillState();
@@ -76,22 +75,24 @@ class _CustomFormFillState extends State<CustomFormFill> {
               ]),
         ),
         TextFormField(
+          onTap: widget.onTap,
           inputFormatters: widget.textInputFormatter,
           textAlign: widget.textAlign ?? TextAlign.start,
           obscureText: widget.obscureText ?? false,
           keyboardType: widget.textInputType,
           onChanged: widget.function,
-          style: inter.copyWith(
-              fontSize: 17, color: widget.inputColor ?? globalPink),
+          style: AppText.inter
+              .copyWith(fontSize: 17, color: widget.inputColor ?? globalPink),
           controller: widget.textEditingController,
           decoration: InputDecoration(
               suffixIcon: widget.icons,
               constraints:
                   widget.boxSize ?? const BoxConstraints(maxWidth: 328),
               labelText: widget.labelText,
-              labelStyle: inter.copyWith(fontSize: 12, color: Colors.grey),
-              floatingLabelStyle:
-                  inter.copyWith(fontSize: 12, color: widget.labelColor),
+              labelStyle:
+                  AppText.inter.copyWith(fontSize: 12, color: Colors.grey),
+              floatingLabelStyle: AppText.inter
+                  .copyWith(fontSize: 12, color: widget.labelColor),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               errorText: widget.errorText,
               errorBorder: OutlineInputBorder(
@@ -111,7 +112,7 @@ class _CustomFormFillState extends State<CustomFormFill> {
                       color: widget.focusErrorBorderColor ?? globalPink),
                   borderRadius: BorderRadius.circular(16)),
               hintText: widget.hintText,
-              hintStyle: inter.copyWith(
+              hintStyle: AppText.inter.copyWith(
                   fontSize: 17, color: widget.hintColor ?? globalPinkShadow),
               helperText: widget.exampleText ?? '',
               helperStyle: const TextStyle(color: buttonShadowBlack),

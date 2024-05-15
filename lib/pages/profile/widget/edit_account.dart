@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:template/main.dart';
-import 'package:template/pages/profile/widget/avatar.dart';
-import 'package:template/widgets/buttons.dart';
-import 'package:template/widgets/form_fill.dart';
-
-import '../../../values/colors.dart';
-import '../../../values/text_styles.dart';
+import 'package:template/source/export.dart';
 
 class EditAccount extends StatefulWidget {
   const EditAccount({super.key});
@@ -26,15 +17,11 @@ class _EditAccountState extends State<EditAccount> {
   RegExp nameRegex = RegExp(
       r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
   String? _imageUrl;
-  String? _name;
-  String? _email;
-  String? _phone;
-  String? _password;
 
   @override
   void initState() {
+    _imageUrl = sharedPreferences.getString('avatar');
     super.initState();
-    _getInitialProfile();
   }
 
   @override
@@ -46,45 +33,72 @@ class _EditAccountState extends State<EditAccount> {
     super.dispose();
   }
 
-  Future<void> _getInitialProfile() async {
-    var response = await supabase.from('users').select('id');
-    var records = response.toList() as List;
-    for (var record in records) {
-      var userId = record['id'];
-      final data =
-          await supabase.from('users').select().eq('id', userId).single();
-      setState(() {
-        _imageUrl = data['avatar_url'];
-        _name = data['full_name'];
-        _email = data['email'];
-        _phone = data['phone'];
-        _password = data['password'];
-      });
-    }
-  }
-
   void updateProfile() async {
     try {
       var response = await supabase.from('users').select('id');
       var records = response.toList() as List;
       for (var record in records) {
         var userId = record['id'];
-        await supabase.auth.updateUser(UserAttributes(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        ));
-        await supabase.from('users').update({
-          'email': emailController.text.trim(),
-          'full_name': nameController.text.trim(),
-          'phone': phoneController.text.trim(),
-          'password': passwordController.text.trim(),
-          'avatar_url': _imageUrl
-        }).eq('id', userId);
+        if (emailRegex.hasMatch(emailController.text) &&
+            nameRegex.hasMatch(nameController.text) &&
+            phoneRegex.hasMatch(phoneController.text) &&
+            passRegex.hasMatch(passwordController.text)) {
+          await supabase.auth.updateUser(UserAttributes(
+            email: emailController.text.isEmpty
+                ? sharedPreferences.getString('email')
+                : emailController.text,
+            password: passwordController.text.isEmpty
+                ? sharedPreferences.getString('email')
+                : passwordController.text,
+          ));
+          await supabase.from('users').update({
+            'email': emailController.text.isEmpty
+                ? sharedPreferences.getString('email')
+                : emailController.text,
+            'full_name': nameController.text.isEmpty
+                ? sharedPreferences.getString('name')
+                : nameController.text,
+            'phone': phoneController.text.isEmpty
+                ? sharedPreferences.getString('phone')
+                : phoneController.text,
+            'password': passwordController.text.isEmpty
+                ? sharedPreferences.getString('password')
+                : passwordController.text,
+            'avatar_url': _imageUrl
+          }).eq('id', userId);
+          setState(() {
+            sharedPreferences.setString('avatar', _imageUrl!);
+            sharedPreferences.setString(
+                'name',
+                nameController.text.isEmpty
+                    ? sharedPreferences.getString('name')!
+                    : nameController.text);
+            sharedPreferences.setString(
+                'email',
+                emailController.text.isEmpty
+                    ? sharedPreferences.getString('email')!
+                    : emailController.text);
+            sharedPreferences.setString(
+                'phone',
+                phoneController.text.isEmpty
+                    ? sharedPreferences.getString('phone')!
+                    : phoneController.text);
+            sharedPreferences.setString(
+                'password',
+                passwordController.text.isEmpty
+                    ? sharedPreferences.getString('password')!
+                    : passwordController.text);
+          });
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: globalPinkShadow,
+              duration: Duration(milliseconds: 1500),
+              content: Text('You just saved info')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              backgroundColor: buttonShadowBlack,
+              content: Text('Please make sure everything is corrected')));
+        }
       }
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: globalPinkShadow,
-          duration: Duration(milliseconds: 1500),
-          content: Text('You just saved info')));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: buttonShadowBlack, content: Text(error.message)));
@@ -99,15 +113,14 @@ class _EditAccountState extends State<EditAccount> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        unFocus;
       },
       child: Scaffold(
         appBar: AppBar(
-          shape: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 8, color: dividerGrey)),
-          title: Text('Edit Account',
-              style: inter.copyWith(fontSize: 17, fontWeight: FontWeight.bold)),
-        ),
+            shape: const UnderlineInputBorder(
+                borderSide: BorderSide(width: 8, color: dividerGrey)),
+            title: const CustomText(
+                content: 'Edit Account', fontWeight: FontWeight.bold)),
         body: Padding(
           padding: const EdgeInsets.all(24),
           child: SingleChildScrollView(
@@ -143,7 +156,7 @@ class _EditAccountState extends State<EditAccount> {
                             : Colors.white,
                         textInputType: TextInputType.name,
                         labelText: 'Full Name',
-                        hintText: _name ?? '',
+                        hintText: sharedPreferences.getString('name') ?? '',
                         exampleText: nameRegex.hasMatch(nameController.text)
                             ? null
                             : 'Example: John Doe',
@@ -184,7 +197,7 @@ class _EditAccountState extends State<EditAccount> {
                           : Colors.white,
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
-                      hintText: _email ?? '',
+                      hintText: sharedPreferences.getString('email') ?? '',
                       exampleText: emailRegex.hasMatch(emailController.text)
                           ? null
                           : 'Example: johndoe123@gmail.com',
@@ -226,7 +239,7 @@ class _EditAccountState extends State<EditAccount> {
                           : Colors.white,
                       textInputType: TextInputType.phone,
                       labelText: 'Phone No.',
-                      hintText: _phone ?? '',
+                      hintText: sharedPreferences.getString('phone') ?? '',
                       exampleText: phoneRegex.hasMatch(phoneController.text)
                           ? null
                           : 'Need correct number',
@@ -269,7 +282,7 @@ class _EditAccountState extends State<EditAccount> {
                           ? Colors.pink.shade100
                           : Colors.white,
                       labelText: 'Password',
-                      hintText: '**********',
+                      hintText: sharedPreferences.getString('password'),
                       exampleText: passRegex.hasMatch(passwordController.text)
                           ? null
                           : 'Example: Johndoe123!',
@@ -325,17 +338,11 @@ class _EditAccountState extends State<EditAccount> {
                       onPressed: () {
                         updateProfile();
                       },
-                      text: Text('Save',
-                          style: inter.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                      text: const CustomText(
+                          content: 'Save',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                       color: globalPink),
-                  ElevatedButton(
-                      onPressed: () {
-                        supabase.auth.signOut();
-                      },
-                      child: const Text('data'))
                 ],
               ),
             ),
