@@ -58,4 +58,12 @@ class StringExtensions {
 
   // edit account
   static const save = 'Save';
+
+  // payment
+ static const paymentMethod = 'Payment Method';
+ static const cardNumber = 'Card Number';
+ static const expiryDate = 'Expiry Date';
+ static const cvc = 'CVC';
+ static const cardName = 'Card Name';
+ static const confirmAdditionalCards = 'Confirm Additional Cards';
 }

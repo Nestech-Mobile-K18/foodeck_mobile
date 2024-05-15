@@ -83,17 +83,24 @@ class _LoginViaEmailViewState extends State<LoginViaEmailView> {
               ),
             ),
             const SizedBox(height: 10),
-            CustomTextField(
-              controller: emailController,
-              textInputType: TextInputType.emailAddress,
-              title: StringExtensions.email,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              controller: passwordController,
-              title: StringExtensions.password,
-              textInputType: TextInputType.visiblePassword,
-              obscureText: true,
+            Padding(
+              padding: const  EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  CustomTextField(
+                    controller: emailController,
+                    textInputType: TextInputType.emailAddress,
+                    title: StringExtensions.email,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: passwordController,
+                    title: StringExtensions.password,
+                    textInputType: TextInputType.visiblePassword,
+                    obscureText: true,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 15),
             Container(

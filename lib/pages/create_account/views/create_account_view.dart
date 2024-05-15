@@ -93,29 +93,36 @@ class _CreateAccountViewState extends State<CreateAccountView> {
               ),
             ),
             const SizedBox(height: 10),
-            CustomTextField(
-              controller: nameController,
-              title: StringExtensions.name,
-              textInputType: TextInputType.name,
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: emailController,
-              title: StringExtensions.email,
-              textInputType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              controller: phoneController,
-              title: StringExtensions.phone,
-              textInputType: TextInputType.phone,
-            ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              controller: passwordController,
-              title: StringExtensions.password,
-              textInputType: TextInputType.visiblePassword,
-              obscureText: true,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  CustomTextField(
+                    controller: nameController,
+                    title: StringExtensions.name,
+                    textInputType: TextInputType.name,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    controller: emailController,
+                    title: StringExtensions.email,
+                    textInputType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    controller: phoneController,
+                    title: StringExtensions.phone,
+                    textInputType: TextInputType.phone,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    controller: passwordController,
+                    title: StringExtensions.password,
+                    textInputType: TextInputType.visiblePassword,
+                    obscureText: true,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 15),
             Padding(

@@ -518,12 +518,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "libphonenumber",
-      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/libphonenumber-2.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "lints",
       "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/lints-3.0.0",
       "packageUri": "lib/",
@@ -1148,7 +1142,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-04-27T12:58:36.467726Z",
+  "generated": "2024-05-12T12:42:28.447528Z",
   "generator": "pub",
   "generatorVersion": "3.2.4"
 }

@@ -47,6 +47,12 @@ class MediaRes {
 
   static const aboutUs = '$_baseIcon/ic_about_us.png';
   static const dataUsage = '$_baseIcon/ic_data_usage.png';
+
   // menu
   static const bannerMenu = '$_baseImage/banner_menu.png';
+
+  // payment
+  static const creditCard = '$_baseImage/ic_credit_card.png';
+  static const masterCard = '$_baseIcon/ic_master_card.png';
+  static const visaCard = '$_baseIcon/ic_visa_card.png';
 }

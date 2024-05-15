@@ -70,11 +70,14 @@ class _NewPasswordViewState extends State<NewPasswordView> {
               ),
             ),
             const SizedBox(height: 10),
-            CustomTextField(
-              controller: newPasswordController,
-              title: StringExtensions.password,
-              textInputType: TextInputType.visiblePassword,
-              obscureText: true,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomTextField(
+                controller: newPasswordController,
+                title: StringExtensions.password,
+                textInputType: TextInputType.visiblePassword,
+                obscureText: true,
+              ),
             ),
             const SizedBox(height: 10),
             Padding(

@@ -1,4 +1,7 @@
+
 class Validation {
+
+
   bool isNameValid(String name) {
     return name.length >= 6;
   }
@@ -46,4 +49,5 @@ class Validation {
 
     return true;
   }
+
 }

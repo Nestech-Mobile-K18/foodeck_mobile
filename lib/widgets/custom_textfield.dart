@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:template/resources/colors.dart';
 import 'package:template/widgets/custom_text.dart';
 
@@ -10,7 +11,10 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? textInputType;
   final Widget? iconSuffit;
   final bool? readOnly;
-
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
+final Function()? onEditingComplete;
   const CustomTextField(
       {super.key,
       this.hintText,
@@ -19,6 +23,10 @@ class CustomTextField extends StatefulWidget {
       this.readOnly,
       this.obscureText,
       this.iconSuffit,
+        this.onChanged,
+        this.onSubmitted,
+        this.onEditingComplete,
+        this.inputFormatters,
       this.textInputType});
 
   @override
@@ -43,7 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+
       width: double.maxFinite,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -67,6 +75,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               fontWeight: FontWeight.w400,
             ),
             TextField(
+              onChanged: widget.onChanged,
+              onSubmitted: widget.onSubmitted,
+              onEditingComplete: widget.onEditingComplete,
               onTap: () {
                 setState(() {
                   // Set the current CustomTextField as selected
@@ -84,6 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   hintText: widget.hintText ?? '',
                   border: InputBorder.none,
                   suffixIcon: widget.iconSuffit),
+              inputFormatters: widget.inputFormatters,
             ),
           ],
         ),

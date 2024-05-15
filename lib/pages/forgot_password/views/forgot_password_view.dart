@@ -70,10 +70,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               ),
             ),
             const SizedBox(height: 10),
-            CustomTextField(
-              controller: emailController,
-              title: StringExtensions.email,
-              textInputType: TextInputType.emailAddress,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomTextField(
+                controller: emailController,
+                title: StringExtensions.email,
+                textInputType: TextInputType.emailAddress,
+              ),
             ),
             const SizedBox(height: 10),
             Padding(

@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../../services/table_supbase.dart';
 
 class SavedViewModel {
-  final supabase = Supabase.instance.client;
+  final _supabase = Supabase.instance.client;
   static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
 
   Future<Map<String, dynamic>> calculateDistanceAndTime(
@@ -86,7 +86,7 @@ class SavedViewModel {
     final String? userId = await AuthManager.getUserId();
 
     // Step 1: Query to get menu_id list from users table
-    final userRecord = await supabase
+    final userRecord = await _supabase
         .from('users')
         .select('list_like')
         .eq('id', userId!)
@@ -108,7 +108,7 @@ class SavedViewModel {
       final List<Map<String, dynamic>> dataList = [];
       // Duyệt qua từng uuid trong danh sách menuIds và thực hiện truy vấn
       for (String menuId in menuIds) {
-        final res = await supabase
+        final res = await _supabase
             .from(TableSupabase.mennuTable)
             .select('*')
             .eq('id_menu', menuId)
@@ -123,7 +123,7 @@ class SavedViewModel {
 
   Future<void> requestDeleteIsLike(String userId, String menuId) async {
     // Get the list of menus that have been liked by the user
-    final userRecord = await supabase
+    final userRecord = await _supabase
         .from('users')
         .select('list_like')
         .eq('id', userId)
@@ -149,10 +149,10 @@ class SavedViewModel {
     // Check if the list has become empty
     if (updatedList.isEmpty) {
       // If the list is empty, update the list_like column with the value of an empty list
-      await supabase.from('users').update({'list_like': []}).eq('id', userId);
+      await _supabase.from('users').update({'list_like': []}).eq('id', userId);
     } else {
       // If the list is not empty, update the user's liked menu list on the database
-      await supabase
+      await _supabase
           .from('users')
           .update({'list_like': updatedList}).eq('id', userId);
     }

@@ -30,48 +30,51 @@ class _FieldEditState extends State<FieldEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomTextField(
-          controller: widget.nameController,
-          textInputType: TextInputType.name,
-          title: StringExtensions.name,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: widget.emailController,
-          readOnly: true,
-          textInputType: TextInputType.emailAddress,
-          title: StringExtensions.email,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: widget.phoneController,
-          textInputType: TextInputType.phone,
-          title: StringExtensions.phone,
-        ),
-        const SizedBox(height: 20),
-        CustomTextField(
-          controller: widget.passwordController,
-          title: StringExtensions.password,
-          textInputType: TextInputType.visiblePassword,
-          obscureText: obscureText,
-          iconSuffit: GestureDetector(
-            onTap: () {
-              setState(() {
-                obscureText = !obscureText;
-              });
-            },
-            child: Icon(
-              obscureText
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-              color: Colors.grey,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextField(
+            controller: widget.nameController,
+            textInputType: TextInputType.name,
+            title: StringExtensions.name,
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: widget.emailController,
+            readOnly: true,
+            textInputType: TextInputType.emailAddress,
+            title: StringExtensions.email,
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: widget.phoneController,
+            textInputType: TextInputType.phone,
+            title: StringExtensions.phone,
+          ),
+          const SizedBox(height: 20),
+          CustomTextField(
+            controller: widget.passwordController,
+            title: StringExtensions.password,
+            textInputType: TextInputType.visiblePassword,
+            obscureText: obscureText,
+            iconSuffit: GestureDetector(
+              onTap: () {
+                setState(() {
+                  obscureText = !obscureText;
+                });
+              },
+              child: Icon(
+                obscureText
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
