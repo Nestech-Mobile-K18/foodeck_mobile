@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Container(
                 height: fullHeight * 0.35,
-                color: dividerGrey,
+                color: AppColor.dividerGrey,
                 child: Padding(
                     padding: const EdgeInsets.only(top: 68),
                     child: SingleChildScrollView(
@@ -115,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   'No name',
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
-                          currentAddress(
+                          CustomWidgets.currentAddress(
                               sharedPreferences.getString('currentAddress')!,
                               sharedPreferences.getString('currentAddress1')!),
                           const Row(
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         content: 'Account Settings',
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
-                                        color: globalPink))
+                                        color: AppColor.globalPink))
                               ])
                         ])))),
             Column(
@@ -138,8 +138,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        kindSetting(KindSetting.account, profileButtons).length,
+                    itemCount: kindSetting(
+                            KindSetting.account, ProfileButtons.profileButtons)
+                        .length,
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
@@ -147,11 +148,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: GestureDetector(
                               onTap: () {
-                                check(profileButtons[index].info);
+                                check(
+                                    ProfileButtons.profileButtons[index].info);
                               },
                               child: ListTile(
                                 title: Text(kindSetting(KindSetting.account,
-                                        profileButtons)[index]
+                                        ProfileButtons.profileButtons)[index]
                                     .info),
                                 leading: Container(
                                     width: 22,
@@ -160,14 +162,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                         image: DecorationImage(
                                             image: AssetImage(kindSetting(
                                                     KindSetting.account,
-                                                    profileButtons)[index]
+                                                    ProfileButtons
+                                                        .profileButtons)[index]
                                                 .icon),
                                             fit: BoxFit.cover))),
                                 trailing: const Icon(Icons.arrow_forward_ios),
                               ),
                             ),
                           ),
-                          kindSetting(KindSetting.account, profileButtons)
+                          kindSetting(KindSetting.account,
+                                              ProfileButtons.profileButtons)
                                           .length -
                                       1 ==
                                   index
@@ -181,21 +185,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                     alignment: Alignment.bottomLeft,
                     height: fullHeight * 0.09,
-                    color: dividerGrey,
+                    color: AppColor.dividerGrey,
                     child: const Padding(
                         padding: EdgeInsets.only(left: 24, bottom: 8),
                         child: CustomText(
                             content: 'General Settings',
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: globalPink))),
+                            color: AppColor.globalPink))),
                 SizedBox(
                   height: fullHeight * 0.17,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        kindSetting(KindSetting.general, profileButtons).length,
+                    itemCount: kindSetting(
+                            KindSetting.general, ProfileButtons.profileButtons)
+                        .length,
                     itemBuilder: (context, index) => Column(
                       children: [
                         GestureDetector(
@@ -204,7 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: ListTile(
                               title: Text(kindSetting(KindSetting.general,
-                                      profileButtons)[index]
+                                      ProfileButtons.profileButtons)[index]
                                   .info),
                               leading: Container(
                                   width: 22,
@@ -213,7 +218,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       image: DecorationImage(
                                           image: AssetImage(kindSetting(
                                                   KindSetting.general,
-                                                  profileButtons)[index]
+                                                  ProfileButtons
+                                                      .profileButtons)[index]
                                               .icon),
                                           fit: BoxFit.cover))),
                               trailing: const Icon(Icons.arrow_forward_ios),
@@ -229,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               ],
             ),
-            CustomWidget.lightOrDarkAnimation(context),
+            RiveAnimations.lightOrDarkAnimation(context),
             Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: TextButton.icon(
@@ -246,8 +252,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             TextButton(
                                 onPressed: () {
                                   supabase.auth.signOut().then((value) =>
-                                      Navigator.pushNamed(
-                                          context, AppRouter.loginPage));
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          AppRouter.loginPage,
+                                          (route) => false));
                                 },
                                 child: const CustomText(
                                     content: 'Yes', color: Colors.red)),
@@ -267,7 +275,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             content: 'Log Out', color: Colors.black)))),
             Container(
               height: fullHeight * 0.2,
-              color: dividerGrey,
+              color: AppColor.dividerGrey,
             )
           ],
         ),

@@ -1,5 +1,11 @@
 import 'package:template/source/export.dart';
 
+part 'explore_page_extension1.dart';
+part 'explore_page_extension2.dart';
+part 'explore_page_extension3.dart';
+part 'explore_page_extension4.dart';
+part 'explore_page_extension_ui.dart';
+
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
 
@@ -8,123 +14,55 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  String _currentAddress = '';
-  String _currentAddress1 = '';
+  final explorePageBloc = ExplorePageBloc();
 
   @override
   void initState() {
-    setAddress();
+    explorePageBloc.add(ExplorePageInitialEvent());
     super.initState();
   }
 
-  void setAddress() async {
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        getLatLngFromSharedPrefs().latitude,
-        getLatLngFromSharedPrefs().longitude);
-    Placemark place = placeMarks[0];
-    setState(() {
-      // Convert latitude and longitude to address
-      _currentAddress = '${place.street}, ${place.subAdministrativeArea}';
-      _currentAddress1 = '${place.administrativeArea}, ${place.country}';
-      sharedPreferences.setString('currentAddress', _currentAddress);
-      sharedPreferences.setString('currentAddress1', _currentAddress1);
-    });
+  void toggleLike(ExplorePageLikeState state, BuildContext context) {
+    if (!SavedListData.saveFood.contains(state.restaurantModel)) {
+      CustomWidgets.customSnackBar(
+          context, AppColor.buttonShadowBlack, 'You just unliked this item');
+    } else {
+      CustomWidgets.customSnackBar(
+          context, AppColor.globalPinkShadow, 'You just liked this item');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        unFocus;
+    return BlocConsumer<ExplorePageBloc, ExplorePageState>(
+      bloc: explorePageBloc,
+      listenWhen: (previous, current) => current is ExplorePageActionState,
+      buildWhen: (previous, current) => current is! ExplorePageActionState,
+      listener: (context, state) {
+        if (state is ExplorePageSearchNavigateActionState) {
+          Navigator.pushNamed(context, AppRouter.searchPage);
+        } else if (state is ExplorePageNavigateActionState) {
+          Navigator.pushNamed(context, AppRouter.dealPage,
+              arguments: DealsPage(restaurant: state.restaurantModel));
+        } else if (state is ExplorePageCartNavigateActionState) {
+          Navigator.pushNamed(context, AppRouter.addCart);
+        } else if (state is ExplorePageLikeState) {
+          toggleLike(state, context);
+        }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Image.asset(
-                Assets.homeBar,
-                fit: BoxFit.cover,
-              )),
-          toolbarHeight: 142,
-          automaticallyImplyLeading: false,
-          titleTextStyle:
-              AppText.inter.copyWith(fontSize: 17, color: Colors.white),
-          titleSpacing: 24,
-          title: Column(
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on_outlined,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(
-                    width: 12,
-                  ),
-                  currentAddress(sharedPreferences.getString('currentAddress')!,
-                      sharedPreferences.getString('currentAddress1')!),
-                ],
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: GestureDetector(
-                    onTap: () =>
-                        Navigator.pushNamed(context, AppRouter.searchPage),
-                    child: Container(
-                        height: 54,
-                        width: double.maxFinite,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black26,
-                                  offset: Offset(4, 4),
-                                  blurRadius: 5,
-                                  spreadRadius: 1),
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            children: [
-                              Image.asset(Assets.search, color: Colors.grey),
-                              Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: CustomText(
-                                      content: 'Search...',
-                                      color: Colors.grey[400]))
-                            ],
-                          ),
-                        )),
-                  ))
-            ],
-          ),
-        ),
-        body: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(24, 24, 24, 40),
-                child: TopListShopping(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 40),
-                child: ListSlideBanner(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 40),
-                child: MiddleSlideList(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-                child: BottomListShopping(),
-              )
-            ],
-          ),
-        ),
-      ),
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case ExplorePageInitial:
+            return const LoadingAnimationRive();
+          case ExplorePageLoadingState:
+            return const LoadingAnimationRive();
+          case ExplorePageLoadingSuccessState:
+            final successState = state as ExplorePageLoadingSuccessState;
+            return ExploreBody(
+                explorePageBloc: explorePageBloc, successState: successState);
+        }
+        return const SizedBox();
+      },
     );
   }
 }

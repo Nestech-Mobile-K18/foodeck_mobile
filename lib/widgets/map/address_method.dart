@@ -1,11 +1,9 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:template/main.dart';
 import 'package:template/values/images.dart';
-import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/map/dio_exception.dart';
 
 Dio _dio = Dio();
@@ -33,18 +31,6 @@ LatLng getLatLngFromSharedPrefs() {
 LatLng getAddress() {
   return LatLng(sharedPreferences.getDouble('latitudeAddress')!,
       sharedPreferences.getDouble('longitudeAddress')!);
-}
-
-Widget currentAddress(String address, String address1) {
-  return AnimatedTextKit(
-    repeatForever: true,
-    animatedTexts: [
-      TyperAnimatedText(address,
-          textStyle: AppText.inter.copyWith(fontSize: 17)),
-      TyperAnimatedText(address1,
-          textStyle: AppText.inter.copyWith(fontSize: 17)),
-    ],
-  );
 }
 
 late MapboxMapController mapController;

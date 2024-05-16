@@ -1,7 +1,7 @@
 import 'package:rive/rive.dart';
 import 'package:template/source/export.dart';
 
-class CustomWidget {
+class RiveAnimations {
   static Widget addToCartAnimation(VoidCallback onTap) {
     return Positioned(
       bottom: 0,
@@ -14,12 +14,12 @@ class CustomWidget {
           child: RiveAnimation.asset(
             alignment: Alignment.bottomCenter,
             fit: BoxFit.cover,
-            addToCartModel.src,
-            artboard: addToCartModel.artBoard,
+            RiveUtils.addToCartModel.src,
+            artboard: RiveUtils.addToCartModel.artBoard,
             onInit: (artBoard) {
-              addToCartModel.statusTrigger = RiveUtils.getRiveTrigger(
-                  artBoard, addToCartModel.action,
-                  stateMachineName: addToCartModel.stateMachineName);
+              RiveUtils.addToCartModel.statusTrigger = RiveUtils.getRiveTrigger(
+                  artBoard, RiveUtils.addToCartModel.action,
+                  stateMachineName: RiveUtils.addToCartModel.stateMachineName);
             },
           ),
         ),
@@ -34,12 +34,12 @@ class CustomWidget {
           height: 100,
           child: RiveAnimation.asset(
             fit: BoxFit.cover,
-            reviewModel.src,
-            artboard: reviewModel.artBoard,
+            RiveUtils.reviewModel.src,
+            artboard: RiveUtils.reviewModel.artBoard,
             onInit: (artBoard) {
-              reviewModel.statusTrigger = RiveUtils.getRiveTrigger(
-                  artBoard, reviewModel.action,
-                  stateMachineName: reviewModel.stateMachineName);
+              RiveUtils.reviewModel.statusTrigger = RiveUtils.getRiveTrigger(
+                  artBoard, RiveUtils.reviewModel.action,
+                  stateMachineName: RiveUtils.reviewModel.stateMachineName);
             },
           ),
         ));
@@ -48,16 +48,16 @@ class CustomWidget {
   static Widget pigeonAnimation() {
     return GestureDetector(
         onTap: () {
-          RiveUtils.changeSMITriggerState(pigeonModel.statusTrigger!);
+          RiveUtils.changeSMITriggerState(RiveUtils.pigeonModel.statusTrigger!);
         },
         child: RiveAnimation.asset(
           fit: BoxFit.cover,
-          pigeonModel.src,
-          artboard: pigeonModel.artBoard,
+          RiveUtils.pigeonModel.src,
+          artboard: RiveUtils.pigeonModel.artBoard,
           onInit: (artBoard) {
-            pigeonModel.statusTrigger = RiveUtils.getRiveTrigger(
-                artBoard, pigeonModel.action,
-                stateMachineName: pigeonModel.stateMachineName);
+            RiveUtils.pigeonModel.statusTrigger = RiveUtils.getRiveTrigger(
+                artBoard, RiveUtils.pigeonModel.action,
+                stateMachineName: RiveUtils.pigeonModel.stateMachineName);
           },
         ));
   }
@@ -75,17 +75,20 @@ class CustomWidget {
               height: 30,
               child: GestureDetector(
                   onTap: () {
-                    RiveUtils.changeSMIBoolState(lightOrDarkModel.statusBool!);
-                    context.read<ThemeProvider>().toggleTheme();
+                    RiveUtils.changeSMIBoolState(
+                        RiveUtils.lightOrDarkModel.statusBool!);
+                    ThemeProvider.toggleTheme();
                   },
                   child: RiveAnimation.asset(
                     fit: BoxFit.cover,
-                    lightOrDarkModel.src,
-                    artboard: lightOrDarkModel.artBoard,
+                    RiveUtils.lightOrDarkModel.src,
+                    artboard: RiveUtils.lightOrDarkModel.artBoard,
                     onInit: (artBoard) {
-                      lightOrDarkModel.statusBool = RiveUtils.getRiveBool(
-                          artBoard, lightOrDarkModel.action,
-                          stateMachineName: lightOrDarkModel.stateMachineName);
+                      RiveUtils.lightOrDarkModel.statusBool =
+                          RiveUtils.getRiveBool(
+                              artBoard, RiveUtils.lightOrDarkModel.action,
+                              stateMachineName:
+                                  RiveUtils.lightOrDarkModel.stateMachineName);
                     },
                   )),
             ),

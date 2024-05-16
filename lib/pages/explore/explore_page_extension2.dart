@@ -1,4 +1,4 @@
-import 'package:template/source/export.dart';
+part of 'explore_page.dart';
 
 class ListSlideBanner extends StatefulWidget {
   const ListSlideBanner({super.key});
@@ -18,7 +18,7 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       setState(() {
-        if (currentCard.value == slideBanner.length - 1) {
+        if (currentCard.value == SlideBanner.slideBanner.length - 1) {
           currentCard.value = 0;
         } else {
           currentCard.value = currentCard.value + 1;
@@ -53,7 +53,7 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
             },
             controller: pageController,
             clipBehavior: Clip.none,
-            itemCount: slideBanner.length,
+            itemCount: SlideBanner.slideBanner.length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
@@ -72,12 +72,12 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               image: DecorationImage(
-                                  image:
-                                      AssetImage(slideBanner[index].foodBanner),
+                                  image: AssetImage(SlideBanner
+                                      .slideBanner[index].foodBanner),
                                   fit: BoxFit.cover)),
                         ),
                       ),
-                      slideBanner[index].content
+                      SlideBanner.slideBanner[index].content
                     ]),
               );
             },
@@ -98,7 +98,9 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
                   height: 8,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: indexSlide == value ? globalPink : Colors.white,
+                      color: indexSlide == value
+                          ? AppColor.globalPink
+                          : Colors.white,
                       border: indexSlide == value
                           ? null
                           : Border.all(color: Colors.grey)),

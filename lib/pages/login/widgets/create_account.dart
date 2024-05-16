@@ -64,7 +64,7 @@ class _CreateAccountState extends State<CreateAccount> {
       child: Scaffold(
         appBar: AppBar(
             shape: const UnderlineInputBorder(
-                borderSide: BorderSide(width: 8, color: dividerGrey)),
+                borderSide: BorderSide(width: 8, color: AppColor.dividerGrey)),
             title: const CustomText(
                 content: 'Create an account', fontWeight: FontWeight.bold)),
         body: SingleChildScrollView(
@@ -91,21 +91,21 @@ class _CreateAccountState extends State<CreateAccount> {
                             ? null
                             : 'Example: John Doe',
                         labelColor: nameRegex.hasMatch(nameController.text)
-                            ? globalPink
+                            ? AppColor.globalPink
                             : nameController.text.isEmpty
-                                ? globalPink
+                                ? AppColor.globalPink
                                 : Colors.red,
                         borderColor: nameController.text.isNotEmpty
-                            ? globalPink
+                            ? AppColor.globalPink
                             : Colors.grey,
                         inputColor: nameRegex.hasMatch(nameController.text)
-                            ? globalPink
+                            ? AppColor.globalPink
                             : Colors.red,
                         focusErrorBorderColor:
                             nameRegex.hasMatch(nameController.text)
-                                ? globalPink
+                                ? AppColor.globalPink
                                 : nameController.text.isEmpty
-                                    ? globalPink
+                                    ? AppColor.globalPink
                                     : Colors.red,
                         textEditingController: nameController,
                         function: (value) {
@@ -132,21 +132,21 @@ class _CreateAccountState extends State<CreateAccount> {
                           ? null
                           : 'Example: johndoe123@gmail.com',
                       borderColor: emailController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       inputColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       labelColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : emailController.text.isEmpty
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       focusErrorBorderColor:
                           emailRegex.hasMatch(emailController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : emailController.text.isEmpty
-                                  ? globalPink
+                                  ? AppColor.globalPink
                                   : Colors.red,
                       textEditingController: emailController,
                       function: (value) {
@@ -177,20 +177,20 @@ class _CreateAccountState extends State<CreateAccount> {
                         LengthLimitingTextInputFormatter(13)
                       ],
                       labelColor: phoneController.text.isEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : phoneRegex.hasMatch(phoneController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       borderColor: phoneController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       inputColor: phoneRegex.hasMatch(phoneController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       focusErrorBorderColor: phoneController.text.isEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : phoneRegex.hasMatch(phoneController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       textEditingController: phoneController,
                       function: (value) {
@@ -216,21 +216,21 @@ class _CreateAccountState extends State<CreateAccount> {
                           ? null
                           : 'Example: Johndoe123!',
                       labelColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : passwordController.text.isEmpty
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       inputColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       borderColor: passwordController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       focusErrorBorderColor:
                           passRegex.hasMatch(passwordController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : passwordController.text.isEmpty
-                                  ? globalPink
+                                  ? AppColor.globalPink
                                   : Colors.red,
                       icons: passwordController.text.isEmpty
                           ? const SizedBox()
@@ -246,7 +246,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     : Icons.visibility_off,
                                 color:
                                     passRegex.hasMatch(passwordController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
@@ -272,7 +272,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           content: 'Create an account',
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
-                      color: globalPink),
+                      color: AppColor.globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: widget.onPressed,

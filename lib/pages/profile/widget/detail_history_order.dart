@@ -27,7 +27,8 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
           return Scaffold(
               appBar: AppBar(
                 shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                    borderSide:
+                        BorderSide(width: 8, color: AppColor.dividerGrey)),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -150,7 +151,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
                     ),
                     Padding(
@@ -165,7 +166,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                           const SizedBox(
                             height: 10,
                           ),
-                          currentAddress(
+                          CustomWidgets.currentAddress(
                               widget.res['address'], widget.res['address1'])
                         ],
                       ),
@@ -174,7 +175,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
                     ),
                     Padding(
@@ -198,7 +199,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
                     ),
                     Padding(
@@ -214,7 +215,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                             padding: const EdgeInsets.only(top: 24, bottom: 40),
                             child: CreditCardWidget(
                               padding: 0,
-                              cardBgColor: globalPink,
+                              cardBgColor: AppColor.globalPink,
                               labelCardHolder: '',
                               cardType: CardType.mastercard,
                               enableFloatingCard: true,
@@ -234,7 +235,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                                     content: 'Cancel Order',
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
-                                color: globalPink),
+                                color: AppColor.globalPink),
                           )
                         ],
                       ),

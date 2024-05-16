@@ -39,17 +39,17 @@ class _SearchModelState extends State<SearchModel> {
         'geometry': geometry
       });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: globalPinkShadow,
+          backgroundColor: AppColor.globalPinkShadow,
           content: Text('This location has been saved')));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           duration: Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
   }
@@ -115,7 +115,8 @@ class _SearchModelState extends State<SearchModel> {
                                                     },
                                                     child: const CustomText(
                                                         content: 'Save',
-                                                        color: globalPink)),
+                                                        color: AppColor
+                                                            .globalPink)),
                                                 TextButton(
                                                     onPressed: () {
                                                       widget

@@ -81,8 +81,8 @@ class _CustomFormFillState extends State<CustomFormFill> {
           obscureText: widget.obscureText ?? false,
           keyboardType: widget.textInputType,
           onChanged: widget.function,
-          style: AppText.inter
-              .copyWith(fontSize: 17, color: widget.inputColor ?? globalPink),
+          style: AppText.inter.copyWith(
+              fontSize: 17, color: widget.inputColor ?? AppColor.globalPink),
           controller: widget.textEditingController,
           decoration: InputDecoration(
               suffixIcon: widget.icons,
@@ -109,13 +109,15 @@ class _CustomFormFillState extends State<CustomFormFill> {
                   borderRadius: BorderRadius.circular(16)),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: widget.focusErrorBorderColor ?? globalPink),
+                      color:
+                          widget.focusErrorBorderColor ?? AppColor.globalPink),
                   borderRadius: BorderRadius.circular(16)),
               hintText: widget.hintText,
               hintStyle: AppText.inter.copyWith(
-                  fontSize: 17, color: widget.hintColor ?? globalPinkShadow),
+                  fontSize: 17,
+                  color: widget.hintColor ?? AppColor.globalPinkShadow),
               helperText: widget.exampleText ?? '',
-              helperStyle: const TextStyle(color: buttonShadowBlack),
+              helperStyle: const TextStyle(color: AppColor.buttonShadowBlack),
               errorStyle: const TextStyle(color: Colors.red)),
         ),
       ],

@@ -17,8 +17,10 @@ class _OrderCompleteState extends State<OrderComplete> {
   }
 
   Future backHome() async {
-    timer = Timer(const Duration(milliseconds: 5000),
-        () => Navigator.pushNamed(context, AppRouter.homePage));
+    timer = Timer(
+        const Duration(milliseconds: 5000),
+        () => Navigator.pushNamedAndRemoveUntil(
+            context, AppRouter.homePage, (route) => false));
   }
 
   @override
@@ -53,13 +55,14 @@ class _OrderCompleteState extends State<OrderComplete> {
             CustomButton(
                 onPressed: () {
                   timer.cancel();
-                  Navigator.pushNamed(context, AppRouter.homePage);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, AppRouter.homePage, (route) => false);
                 },
                 text: const CustomText(
                     content: 'Go Home',
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
-                color: globalPink)
+                color: AppColor.globalPink)
           ],
         ),
       ),

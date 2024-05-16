@@ -43,7 +43,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         child: Scaffold(
             appBar: AppBar(
                 shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                    borderSide:
+                        BorderSide(width: 8, color: AppColor.dividerGrey)),
                 title: const CustomText(
                     content: 'Forgot Password', fontWeight: FontWeight.bold)),
             body: SingleChildScrollView(
@@ -74,22 +75,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                         : 'Example: johndoe123@gmail.com',
                                     labelColor: emailRegex
                                             .hasMatch(emailController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : emailController.text.isEmpty
-                                            ? globalPink
+                                            ? AppColor.globalPink
                                             : Colors.red,
                                     borderColor: emailController.text.isNotEmpty
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.grey,
                                     inputColor: emailRegex
                                             .hasMatch(emailController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.red,
                                     focusErrorBorderColor: emailRegex
                                             .hasMatch(emailController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : emailController.text.isEmpty
-                                            ? globalPink
+                                            ? AppColor.globalPink
                                             : Colors.red,
                                     textEditingController: emailController,
                                     function: (value) {
@@ -113,7 +114,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       content: 'Login',
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
-                                  color: globalPink)
+                                  color: AppColor.globalPink)
                             ]))))));
   }
 }

@@ -11,6 +11,14 @@ class RestaurantPageActionState extends RestaurantPageState {}
 
 final class RestaurantPageInitial extends RestaurantPageState {}
 
+class RestaurantPageLoadingState extends RestaurantPageState {}
+
+class RestaurantPageLoadingSuccessState extends RestaurantPageState {
+  final List<RestaurantModel> restaurant;
+
+  const RestaurantPageLoadingSuccessState({required this.restaurant});
+}
+
 class RestaurantPageBackState extends RestaurantPageActionState {}
 
 class RestaurantPageShareState extends RestaurantPageActionState {}
@@ -21,10 +29,4 @@ class RestaurantPageReviewState extends RestaurantPageActionState {}
 
 class RestaurantPageMapState extends RestaurantPageActionState {}
 
-class RestaurantPageNavigateState extends RestaurantPageActionState {
-  final FoodItems foodItems;
-  final DesktopFood desktopFood;
-
-  RestaurantPageNavigateState(
-      {required this.foodItems, required this.desktopFood});
-}
+class RestaurantPageNavigateState extends RestaurantPageActionState {}

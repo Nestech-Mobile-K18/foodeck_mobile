@@ -94,25 +94,30 @@ class _LoginPageState extends State<LoginPage> {
                       flex: 5,
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
-                        itemCount: loginButton.length,
+                        itemCount: LoginButton.loginButton.length,
                         itemBuilder: (context, index) {
                           return CustomButton(
                             onPressed: () {
-                              check(loginButton[index].loginText);
+                              check(LoginButton.loginButton[index].loginText);
                             },
-                            borderSide: index == loginButton.length - 1
-                                ? const BorderSide(color: Colors.grey)
-                                : null,
-                            icons: index == loginButton.length - 1
+                            borderSide:
+                                index == LoginButton.loginButton.length - 1
+                                    ? const BorderSide(color: Colors.grey)
+                                    : null,
+                            icons: index == LoginButton.loginButton.length - 1
                                 ? null
-                                : Image.asset(loginButton[index].type),
+                                : Image.asset(
+                                    LoginButton.loginButton[index].type),
                             text: CustomText(
-                                content: loginButton[index].loginText,
-                                color: index == loginButton.length - 1
-                                    ? Colors.grey
-                                    : Colors.white,
+                                content:
+                                    LoginButton.loginButton[index].loginText,
+                                color:
+                                    index == LoginButton.loginButton.length - 1
+                                        ? Colors.grey
+                                        : Colors.white,
                                 fontWeight: FontWeight.bold),
-                            color: loginButton[index].backGroundColor,
+                            color:
+                                LoginButton.loginButton[index].backGroundColor,
                           );
                         },
                       ),
@@ -128,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                           CustomText(
                               content: 'Terms & Conditions',
                               fontSize: 13,
-                              color: globalPink)
+                              color: AppColor.globalPink)
                         ]))
                   ],
                 ),

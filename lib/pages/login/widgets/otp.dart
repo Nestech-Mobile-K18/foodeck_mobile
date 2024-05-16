@@ -54,7 +54,8 @@ class _OtpState extends State<Otp> {
         child: Scaffold(
             appBar: AppBar(
                 shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                    borderSide:
+                        BorderSide(width: 8, color: AppColor.dividerGrey)),
                 title: const CustomText(
                     content: 'OTP', fontWeight: FontWeight.bold)),
             body: SingleChildScrollView(
@@ -92,7 +93,7 @@ class _OtpState extends State<Otp> {
                                         maxWidth: 50, maxHeight: 76),
                                     textInputType: TextInputType.number,
                                     borderColor: currentIndex.value >= index
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.grey,
                                     textInputFormatter: [
                                       FilteringTextInputFormatter.digitsOnly,
@@ -145,7 +146,7 @@ class _OtpState extends State<Otp> {
                                   width: 328,
                                   decoration: BoxDecoration(
                                       color: currentIndex.value == 5
-                                          ? globalPink
+                                          ? AppColor.globalPink
                                           : Colors.white,
                                       borderRadius: BorderRadius.circular(16),
                                       boxShadow: currentIndex.value == 5

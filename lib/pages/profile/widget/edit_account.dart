@@ -90,21 +90,22 @@ class _EditAccountState extends State<EditAccount> {
                     : passwordController.text);
           });
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: globalPinkShadow,
+              backgroundColor: AppColor.globalPinkShadow,
               duration: Duration(milliseconds: 1500),
               content: Text('You just saved info')));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: buttonShadowBlack,
+              backgroundColor: AppColor.buttonShadowBlack,
               content: Text('Please make sure everything is corrected')));
         }
       }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
+          backgroundColor: AppColor.buttonShadowBlack,
+          content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
   }
@@ -118,7 +119,7 @@ class _EditAccountState extends State<EditAccount> {
       child: Scaffold(
         appBar: AppBar(
             shape: const UnderlineInputBorder(
-                borderSide: BorderSide(width: 8, color: dividerGrey)),
+                borderSide: BorderSide(width: 8, color: AppColor.dividerGrey)),
             title: const CustomText(
                 content: 'Edit Account', fontWeight: FontWeight.bold)),
         body: Padding(
@@ -137,7 +138,7 @@ class _EditAccountState extends State<EditAccount> {
                       Icons.camera_alt_outlined,
                       color: Colors.white,
                     ),
-                    backgroundColor: globalPink,
+                    backgroundColor: AppColor.globalPink,
                     largeSize: 50,
                     alignment: Alignment.bottomRight,
                     child: Avatar(
@@ -161,21 +162,21 @@ class _EditAccountState extends State<EditAccount> {
                             ? null
                             : 'Example: John Doe',
                         labelColor: nameRegex.hasMatch(nameController.text)
-                            ? globalPink
+                            ? AppColor.globalPink
                             : nameController.text.isEmpty
-                                ? globalPink
+                                ? AppColor.globalPink
                                 : Colors.red,
                         borderColor: nameController.text.isNotEmpty
-                            ? globalPink
+                            ? AppColor.globalPink
                             : Colors.grey,
                         inputColor: nameRegex.hasMatch(nameController.text)
-                            ? globalPink
+                            ? AppColor.globalPink
                             : Colors.red,
                         focusErrorBorderColor:
                             nameRegex.hasMatch(nameController.text)
-                                ? globalPink
+                                ? AppColor.globalPink
                                 : nameController.text.isEmpty
-                                    ? globalPink
+                                    ? AppColor.globalPink
                                     : Colors.red,
                         textEditingController: nameController,
                         function: (value) {
@@ -202,21 +203,21 @@ class _EditAccountState extends State<EditAccount> {
                           ? null
                           : 'Example: johndoe123@gmail.com',
                       borderColor: emailController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       inputColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       labelColor: emailRegex.hasMatch(emailController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : emailController.text.isEmpty
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       focusErrorBorderColor:
                           emailRegex.hasMatch(emailController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : emailController.text.isEmpty
-                                  ? globalPink
+                                  ? AppColor.globalPink
                                   : Colors.red,
                       textEditingController: emailController,
                       function: (value) {
@@ -247,20 +248,20 @@ class _EditAccountState extends State<EditAccount> {
                         LengthLimitingTextInputFormatter(13)
                       ],
                       labelColor: phoneController.text.isEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : phoneRegex.hasMatch(phoneController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       borderColor: phoneController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       inputColor: phoneRegex.hasMatch(phoneController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       focusErrorBorderColor: phoneController.text.isEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : phoneRegex.hasMatch(phoneController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       textEditingController: phoneController,
                       function: (value) {
@@ -287,21 +288,21 @@ class _EditAccountState extends State<EditAccount> {
                           ? null
                           : 'Example: Johndoe123!',
                       labelColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : passwordController.text.isEmpty
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       inputColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       borderColor: passwordController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       focusErrorBorderColor:
                           passRegex.hasMatch(passwordController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : passwordController.text.isEmpty
-                                  ? globalPink
+                                  ? AppColor.globalPink
                                   : Colors.red,
                       icons: passwordController.text.isEmpty
                           ? const SizedBox()
@@ -317,7 +318,7 @@ class _EditAccountState extends State<EditAccount> {
                                     : Icons.visibility_off,
                                 color:
                                     passRegex.hasMatch(passwordController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
@@ -342,7 +343,7 @@ class _EditAccountState extends State<EditAccount> {
                           content: 'Save',
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
-                      color: globalPink),
+                      color: AppColor.globalPink),
                 ],
               ),
             ),

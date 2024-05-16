@@ -8,15 +8,9 @@ class CheckOut extends StatefulWidget {
       required this.deliveryFee,
       required this.vat,
       required this.coupon,
-      required this.totalPrice,
-      required this.restaurantName});
+      required this.totalPrice});
 
-  final String restaurantName;
-  final int subPrice;
-  final int deliveryFee;
-  final int vat;
-  final int coupon;
-  final int totalPrice;
+  final int subPrice, deliveryFee, vat, coupon, totalPrice;
 
   @override
   State<CheckOut> createState() => _CheckOutState();
@@ -61,7 +55,7 @@ class _CheckOutState extends State<CheckOut> {
     });
     try {
       await supabase.from('order_complete').insert({
-        'restaurant_name': widget.restaurantName,
+        'restaurant_name': sharedPreferences.getString('restaurantName'),
         'sub_price': widget.subPrice,
         'delivery_fee': widget.deliveryFee,
         'vat': widget.vat,
@@ -84,14 +78,13 @@ class _CheckOutState extends State<CheckOut> {
           });
         }
         for (int index = 0;
-            index < context.read<Restaurant>().cartItems.length;
+            index < CartItemsListData.cartItems.length;
             index++) {
           await supabase.from('orders').insert({
-            'food_name':
-                context.read<Restaurant>().cartItems[index].foodItems.nameFood,
-            'price': context.read<Restaurant>().cartItems[index].price,
-            'quantity': context.read<Restaurant>().cartItems[index].quantity,
-            'note': context.read<Restaurant>().cartItems[index].note,
+            'food_name': CartItemsListData.cartItems[index].foodItems.nameFood,
+            'price': CartItemsListData.cartItems[index].price,
+            'quantity': CartItemsListData.cartItems[index].quantity,
+            'note': CartItemsListData.cartItems[index].note,
             'order_complete_id': id
           });
         }
@@ -99,14 +92,14 @@ class _CheckOutState extends State<CheckOut> {
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
-    context.read<Restaurant>().clearCart();
+    CartItemsListData.cartItems.clear();
   }
 
   @override
@@ -125,7 +118,7 @@ class _CheckOutState extends State<CheckOut> {
       child: Scaffold(
         appBar: AppBar(
             shape: const UnderlineInputBorder(
-                borderSide: BorderSide(width: 8, color: dividerGrey)),
+                borderSide: BorderSide(width: 8, color: AppColor.dividerGrey)),
             title: const CustomText(
                 content: 'Checkout', fontWeight: FontWeight.bold)),
         body: RefreshIndicator.adaptive(
@@ -158,7 +151,7 @@ class _CheckOutState extends State<CheckOut> {
                                             content: 'Delivery Address',
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
-                                        currentAddress(
+                                        CustomWidgets.currentAddress(
                                             sharedPreferences
                                                     .getString('address') ??
                                                 sharedPreferences.getString(
@@ -206,7 +199,7 @@ class _CheckOutState extends State<CheckOut> {
                       ),
                       const Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
                       SizedBox(
                         height: 230,
@@ -239,7 +232,7 @@ class _CheckOutState extends State<CheckOut> {
                       ),
                       const Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
                       SizedBox(
                         height: 288,
@@ -268,7 +261,7 @@ class _CheckOutState extends State<CheckOut> {
                               child: SizedBox(
                                 height: 210,
                                 child: CreditCardWidget(
-                                  cardBgColor: globalPink,
+                                  cardBgColor: AppColor.globalPink,
                                   labelCardHolder: '',
                                   cardType: CardType.mastercard,
                                   enableFloatingCard: true,
@@ -287,64 +280,60 @@ class _CheckOutState extends State<CheckOut> {
                       ),
                       const Divider(
                         thickness: 8,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                       ),
-                      Consumer<Restaurant>(builder: (BuildContext context,
-                          Restaurant value, Widget? child) {
-                        return SizedBox(
-                          height: (value.cartItems.length * 80) + 560,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 24),
-                            child: Column(
-                              children: [
-                                OrderSummary(
-                                    res: value.cartItems,
-                                    subPrice: widget.subPrice,
-                                    deliveryFee: widget.deliveryFee,
-                                    vat: widget.vat,
-                                    coupon: widget.coupon),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 34, horizontal: 24),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      CustomText(
-                                          content: '\$${widget.totalPrice}',
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold),
-                                      CustomButton(
-                                        text: const CustomText(
-                                            content: 'Pay Now',
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                        color: globalPink,
-                                        heightBox: 54,
-                                        widthBox: 172,
-                                        paddingLeft: 8,
-                                        onPressed: () {
-                                          addOrderToDatabase().whenComplete(
-                                            () {
-                                              setState(() {
-                                                loading = !loading;
-                                              });
-                                            },
-                                          ).whenComplete(() => Future.delayed(
-                                              const Duration(
-                                                  milliseconds: 1500),
-                                              () => Navigator.pushNamed(context,
-                                                  AppRouter.orderComplete)));
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                      SizedBox(
+                        height: (CartItemsListData.cartItems.length * 80) + 560,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Column(
+                            children: [
+                              OrderSummary(
+                                  res: CartItemsListData.cartItems,
+                                  subPrice: widget.subPrice,
+                                  deliveryFee: widget.deliveryFee,
+                                  vat: widget.vat,
+                                  coupon: widget.coupon),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 34, horizontal: 24),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    CustomText(
+                                        content: '\$${widget.totalPrice}',
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                    CustomButton(
+                                      text: const CustomText(
+                                          content: 'Pay Now',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                      color: AppColor.globalPink,
+                                      heightBox: 54,
+                                      widthBox: 172,
+                                      paddingLeft: 8,
+                                      onPressed: () {
+                                        addOrderToDatabase().whenComplete(
+                                          () {
+                                            setState(() {
+                                              loading = !loading;
+                                            });
+                                          },
+                                        ).whenComplete(() => Future.delayed(
+                                            const Duration(milliseconds: 1500),
+                                            () => Navigator.pushNamed(context,
+                                                AppRouter.orderComplete)));
+                                      },
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      }),
+                        ),
+                      )
                     ],
                   ),
                 ),

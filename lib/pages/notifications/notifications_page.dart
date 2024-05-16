@@ -65,7 +65,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             ])),
                     note.indexOf(note.first) == index
                         ? const LinearProgressIndicator(
-                            color: globalPink,
+                            color: AppColor.globalPink,
                           )
                         : const Divider()
                   ],

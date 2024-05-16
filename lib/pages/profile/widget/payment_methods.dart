@@ -20,7 +20,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     return Scaffold(
       appBar: AppBar(
         shape: const UnderlineInputBorder(
-            borderSide: BorderSide(width: 8, color: dividerGrey)),
+            borderSide: BorderSide(width: 8, color: AppColor.dividerGrey)),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -34,7 +34,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         child: Column(
           children: [
             CreditCardWidget(
-              cardBgColor: globalPink,
+              cardBgColor: AppColor.globalPink,
               labelCardHolder: '',
               cardType: CardType.mastercard,
               enableFloatingCard: true,

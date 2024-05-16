@@ -23,7 +23,8 @@ class _MyOrdersState extends State<MyOrders> {
           return Scaffold(
             appBar: AppBar(
                 shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                    borderSide:
+                        BorderSide(width: 8, color: AppColor.dividerGrey)),
                 title: const CustomText(
                     content: 'My Orders', fontWeight: FontWeight.bold)),
             body: SingleChildScrollView(
@@ -47,51 +48,43 @@ class _MyOrdersState extends State<MyOrders> {
                                 padding: const EdgeInsets.only(left: 15),
                                 child: SizedBox(
                                   width: 300,
-                                  child: Consumer<TopFood>(
-                                    builder: (BuildContext context,
-                                        TopFood drink, Widget? child) {
-                                      return PageView.builder(
-                                          scrollBehavior:
-                                              const ScrollBehavior(),
-                                          onPageChanged: (value) {
-                                            currentCard = value;
-                                          },
-                                          controller: pageController,
-                                          clipBehavior: Clip.none,
-                                          itemCount: drink
-                                              .kindFood(
-                                                  TitleFood.Recent, desktopFood)
-                                              .length,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder: (BuildContext context, int index) => BannerItems(
-                                              heartIcon: const SizedBox(),
-                                              badge: const SizedBox(),
-                                              voteStar: const SizedBox(),
-                                              onTap: () {},
-                                              paddingImage:
-                                                  const EdgeInsets.only(
-                                                      right: 10),
-                                              paddingText: const EdgeInsets.only(
-                                                  left: 3, top: 8),
-                                              foodImage: drink
-                                                  .kindFood(TitleFood.Recent,
-                                                      desktopFood)[index]
-                                                  .foodOrder,
-                                              deliveryTime: drink
-                                                  .kindFood(TitleFood.Recent,
-                                                      desktopFood)[index]
-                                                  .time,
-                                              shopName: drink
-                                                  .kindFood(TitleFood.Recent,
-                                                      desktopFood)[index]
-                                                  .shopName,
-                                              shopAddress: drink.kindFood(TitleFood.Recent, desktopFood)[index].place,
-                                              rateStar: drink.kindFood(TitleFood.Recent, desktopFood)[index].vote,
-                                              action: () {},
-                                              iconShape: drink.saveFood.contains(drink.kindFood(TitleFood.Recent, desktopFood)[index]) ? Icons.favorite : Icons.favorite_border,
-                                              heartColor: drink.saveFood.contains(drink.kindFood(TitleFood.Recent, desktopFood)[index]) ? globalPink : Colors.white));
-                                    },
-                                  ),
+                                  child: PageView.builder(
+                                      scrollBehavior: const ScrollBehavior(),
+                                      onPageChanged: (value) {
+                                        currentCard = value;
+                                      },
+                                      controller: pageController,
+                                      clipBehavior: Clip.none,
+                                      itemCount: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)
+                                          .length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (BuildContext context, int index) => BannerItems(
+                                          heartIcon: const SizedBox(),
+                                          badge: const SizedBox(),
+                                          voteStar: const SizedBox(),
+                                          onTap: () {},
+                                          paddingImage:
+                                              const EdgeInsets.only(right: 10),
+                                          paddingText: const EdgeInsets.only(
+                                              left: 3, top: 8),
+                                          foodImage: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
+                                              .image,
+                                          deliveryTime:
+                                              '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].deliveryTime} mins',
+                                          shopName: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
+                                              .shopName,
+                                          shopAddress:
+                                              RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
+                                                  .address,
+                                          rateStar:
+                                              '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].rate}',
+                                          action: () {},
+                                          iconShape: SavedListData.saveFood.contains(RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          heartColor: SavedListData.saveFood.contains(RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])
+                                              ? AppColor.globalPink
+                                              : Colors.white)),
                                 )),
                           )
                         ],
@@ -99,7 +92,7 @@ class _MyOrdersState extends State<MyOrders> {
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Divider(thickness: 8, color: dividerGrey),
+                      child: Divider(thickness: 8, color: AppColor.dividerGrey),
                     ),
                     Expanded(
                       child: ListView.builder(

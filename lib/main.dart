@@ -10,17 +10,7 @@ Future<void> main() async {
       url: dotenv.env['URL'].toString(),
       anonKey: dotenv.env['ANONKEY'].toString());
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => Restaurant(),
-    ),
-    ChangeNotifierProvider(
-      create: (context) => TopFood(),
-    )
-  ], child: const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -44,7 +34,7 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
         navigatorKey: AppRouter.navigatorKey,
-        theme: Provider.of<ThemeProvider>(context).themeData,
+        theme: ThemeProvider.themeData,
         debugShowCheckedModeBanner: false,
         initialRoute: AppRouter.splashPage,
         onGenerateRoute: AppRouter.routes);

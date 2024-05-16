@@ -62,17 +62,17 @@ class _BottomCardState extends State<BottomCard> {
         'city': widget.city
       });
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('This location has been deleted')));
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           duration: Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
   }
@@ -104,16 +104,17 @@ class _BottomCardState extends State<BottomCard> {
           'geometry': geometry
         }).eq('id', userId);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: globalPinkShadow,
+            backgroundColor: AppColor.globalPinkShadow,
             duration: Duration(milliseconds: 1500),
             content: Text('You just saved info')));
       }
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: buttonShadowBlack, content: Text(error.message)));
+          backgroundColor: AppColor.buttonShadowBlack,
+          content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
   }
@@ -300,7 +301,7 @@ class _BottomCardState extends State<BottomCard> {
                                             },
                                             child: const CustomText(
                                                 content: 'Save',
-                                                color: globalPink)),
+                                                color: AppColor.globalPink)),
                                         TextButton(
                                             onPressed: () {
                                               widget.textEditingController

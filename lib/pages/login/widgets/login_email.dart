@@ -103,7 +103,7 @@ class _LoginEmailState extends State<LoginEmail> {
       child: Scaffold(
         appBar: AppBar(
             shape: const UnderlineInputBorder(
-                borderSide: BorderSide(width: 8, color: dividerGrey)),
+                borderSide: BorderSide(width: 8, color: AppColor.dividerGrey)),
             title: const CustomText(
                 content: 'Login via Email', fontWeight: FontWeight.bold)),
         body: SingleChildScrollView(
@@ -136,21 +136,21 @@ class _LoginEmailState extends State<LoginEmail> {
                         ? null
                         : 'Example: johndoe123@gmail.com',
                     borderColor: emailController.text.isNotEmpty
-                        ? globalPink
+                        ? AppColor.globalPink
                         : Colors.grey,
                     inputColor: emailRegex.hasMatch(emailController.text)
-                        ? globalPink
+                        ? AppColor.globalPink
                         : Colors.red,
                     labelColor: emailRegex.hasMatch(emailController.text)
-                        ? globalPink
+                        ? AppColor.globalPink
                         : emailController.text.isEmpty
-                            ? globalPink
+                            ? AppColor.globalPink
                             : Colors.red,
                     focusErrorBorderColor:
                         emailRegex.hasMatch(emailController.text)
-                            ? globalPink
+                            ? AppColor.globalPink
                             : emailController.text.isEmpty
-                                ? globalPink
+                                ? AppColor.globalPink
                                 : Colors.red,
                     textEditingController: emailController,
                     onTap: () {
@@ -182,21 +182,21 @@ class _LoginEmailState extends State<LoginEmail> {
                           ? null
                           : 'Example: Johndoe123!',
                       labelColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : passwordController.text.isEmpty
-                              ? globalPink
+                              ? AppColor.globalPink
                               : Colors.red,
                       inputColor: passRegex.hasMatch(passwordController.text)
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.red,
                       borderColor: passwordController.text.isNotEmpty
-                          ? globalPink
+                          ? AppColor.globalPink
                           : Colors.grey,
                       focusErrorBorderColor:
                           passRegex.hasMatch(passwordController.text)
-                              ? globalPink
+                              ? AppColor.globalPink
                               : passwordController.text.isEmpty
-                                  ? globalPink
+                                  ? AppColor.globalPink
                                   : Colors.red,
                       icons: passwordController.text.isEmpty
                           ? const SizedBox()
@@ -212,7 +212,7 @@ class _LoginEmailState extends State<LoginEmail> {
                                     : Icons.visibility_off,
                                 color:
                                     passRegex.hasMatch(passwordController.text)
-                                        ? globalPink
+                                        ? AppColor.globalPink
                                         : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
@@ -254,7 +254,7 @@ class _LoginEmailState extends State<LoginEmail> {
                           content: 'Login',
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
-                      color: globalPink),
+                      color: AppColor.globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: widget.onPressed,

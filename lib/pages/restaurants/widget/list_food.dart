@@ -1,19 +1,10 @@
 import 'package:template/source/export.dart';
 
 class ListFood extends StatefulWidget {
-  const ListFood(
-      {super.key,
-      required this.picture,
-      required this.nameFood,
-      required this.detail,
-      required this.price,
-      this.voidCallback});
+  const ListFood({super.key, this.voidCallback, required this.foodItems});
 
-  final String picture;
-  final String nameFood;
-  final String detail;
-  final String price;
   final VoidCallback? voidCallback;
+  final FoodItems foodItems;
 
   @override
   State<ListFood> createState() => _ListFoodState();
@@ -38,20 +29,20 @@ class _ListFoodState extends State<ListFood> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             image: DecorationImage(
-                                image: AssetImage(widget.picture),
+                                image: AssetImage(widget.foodItems.picture),
                                 fit: BoxFit.cover))),
-                    SizedBox(width: 30),
+                    const SizedBox(width: 30),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(content: widget.nameFood),
+                          CustomText(content: widget.foodItems.nameFood),
                           CustomText(
-                              content: widget.detail,
+                              content: widget.foodItems.detail,
                               fontSize: 15,
                               color: Colors.grey),
                           const SizedBox(height: 20),
                           CustomText(
-                              content: widget.price,
+                              content: '\$${widget.foodItems.price}',
                               fontSize: 15,
                               fontWeight: FontWeight.bold)
                         ])

@@ -3,9 +3,9 @@ import 'package:template/source/export.dart';
 class DetailFood extends StatefulWidget {
   final FoodItems foodItems;
   final Map<Addon, bool> select = {};
-  final DesktopFood desktopFood;
+  final RestaurantModel restaurant;
 
-  DetailFood({super.key, required this.foodItems, required this.desktopFood}) {
+  DetailFood({super.key, required this.foodItems, required this.restaurant}) {
     for (Addon addon in foodItems.availableAddons) {
       select[addon] = false;
     }
@@ -21,7 +21,7 @@ class _DetailFoodState extends State<DetailFood> {
   final noteController = TextEditingController();
 
   void addToCart() {
-    RiveUtils.changeSMITriggerState(addToCartModel.statusTrigger!);
+    RiveUtils.changeSMITriggerState(RiveUtils.addToCartModel.statusTrigger!);
     FocusManager.instance.primaryFocus?.unfocus();
     List<String> currentSelect = [];
     for (Addon addon in widget.foodItems.availableAddons) {
@@ -33,18 +33,17 @@ class _DetailFoodState extends State<DetailFood> {
       }
     }
     List<String> currentSize = [];
-    currentSize.add(choseTopping(turnOn, addonItems).elementAt(0).size);
-    context.read<Restaurant>().cartItems.add(CartItems(
+    currentSize
+        .add(choseTopping(turnOn, RestaurantData.addonItems).elementAt(0).size);
+    CartItemsListData.cartItems.add(CartItems(
         note: noteController.text,
         foodItems: widget.foodItems,
         size: currentSize,
         price: totalPrice,
         selectAddon: currentSelect,
         quantity: widget.foodItems.quantityFood));
-    Future.delayed(
-        const Duration(milliseconds: 3300),
-        () => Navigator.pushNamed(context, AppRouter.addCart,
-            arguments: AddCart(restaurantName: widget.desktopFood.shopName)));
+    Future.delayed(const Duration(milliseconds: 3300),
+        () => Navigator.pushNamed(context, AppRouter.addCart));
   }
 
   void holdPressButtonDecrease() {
@@ -78,36 +77,28 @@ class _DetailFoodState extends State<DetailFood> {
     switch (index) {
       case 0:
         like[0] = !like[0];
-        like[0] ? slot[0] = addonItems[0].price : slot[0] = 0;
+        like[0] ? slot[0] = RestaurantData.addonItems[0].price : slot[0] = 0;
         break;
       case 1:
         like[1] = !like[1];
-        like[1] ? slot[1] = addonItems[1].price : slot[1] = 0;
+        like[1] ? slot[1] = RestaurantData.addonItems[1].price : slot[1] = 0;
         break;
     }
   }
 
   int get totalPrice {
-    int addonPriceSize = choseTopping(turnOn, addonItems)
+    int addonPriceSize = choseTopping(turnOn, RestaurantData.addonItems)
         .fold(0, (previousValue, element) => previousValue + element.priceSize);
     return (slot[0] + slot[1] + addonPriceSize) * widget.foodItems.quantityFood;
   }
 
   @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Consumer<Restaurant>(
-          builder: (BuildContext context, Restaurant value, Widget? child) {
-        return Scaffold(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
               automaticallyImplyLeading: false,
@@ -116,7 +107,7 @@ class _DetailFoodState extends State<DetailFood> {
                 image: widget.foodItems.picture,
                 name: widget.foodItems.nameFood,
                 place: widget.foodItems.place,
-                desktopFood: widget.desktopFood,
+                restaurant: widget.restaurant,
               )),
           body: SingleChildScrollView(
             child: SizedBox(
@@ -139,7 +130,7 @@ class _DetailFoodState extends State<DetailFood> {
                                     fontWeight: FontWeight.bold),
                                 CustomText(
                                   content: 'Required',
-                                  color: globalPink,
+                                  color: AppColor.globalPink,
                                 )
                               ],
                             ),
@@ -161,7 +152,7 @@ class _DetailFoodState extends State<DetailFood> {
                                               content: '\$${addon.priceSize}'),
                                           title:
                                               CustomText(content: addon.size),
-                                          activeColor: globalPink,
+                                          activeColor: AppColor.globalPink,
                                           value: addon.radio,
                                           groupValue: turnOn,
                                           onChanged: (value) {
@@ -170,7 +161,8 @@ class _DetailFoodState extends State<DetailFood> {
                                             });
                                           },
                                         ),
-                                        addonItems.length - 1 == index
+                                        RestaurantData.addonItems.length - 1 ==
+                                                index
                                             ? const SizedBox()
                                             : Divider(color: Colors.grey[300])
                                       ],
@@ -178,7 +170,7 @@ class _DetailFoodState extends State<DetailFood> {
                                   })),
                           const Divider(
                             thickness: 8,
-                            color: dividerGrey,
+                            color: AppColor.dividerGrey,
                           ),
                         ],
                       )),
@@ -219,8 +211,16 @@ class _DetailFoodState extends State<DetailFood> {
                                         },
                                         child: IconButton(
                                             onPressed: () {
-                                              value.removeQuantity(
-                                                  widget.foodItems);
+                                              setState(() {
+                                                if (widget.foodItems
+                                                        .quantityFood >
+                                                    1) {
+                                                  widget
+                                                      .foodItems.quantityFood--;
+                                                } else {
+                                                  null;
+                                                }
+                                              });
                                             },
                                             icon: const Icon(Icons.remove)),
                                       ),
@@ -237,8 +237,9 @@ class _DetailFoodState extends State<DetailFood> {
                                         },
                                         child: IconButton(
                                             onPressed: () {
-                                              value.addQuantity(
-                                                  widget.foodItems);
+                                              setState(() {
+                                                widget.foodItems.quantityFood++;
+                                              });
                                             },
                                             icon: const Icon(Icons.add)),
                                       )
@@ -253,7 +254,7 @@ class _DetailFoodState extends State<DetailFood> {
                           padding: EdgeInsets.only(top: 20),
                           child: Divider(
                             thickness: 8,
-                            color: dividerGrey,
+                            color: AppColor.dividerGrey,
                           ),
                         ),
                       ],
@@ -286,7 +287,7 @@ class _DetailFoodState extends State<DetailFood> {
                                         widget.foodItems.availableAddons[index];
                                     return CheckboxListTile.adaptive(
                                       checkColor: Colors.white,
-                                      activeColor: globalPink,
+                                      activeColor: AppColor.globalPink,
                                       controlAffinity:
                                           ListTileControlAffinity.leading,
                                       secondary: CustomText(
@@ -309,7 +310,7 @@ class _DetailFoodState extends State<DetailFood> {
                               padding: EdgeInsets.only(top: 20),
                               child: Divider(
                                 thickness: 8,
-                                color: dividerGrey,
+                                color: AppColor.dividerGrey,
                               ),
                             ),
                           ],
@@ -345,7 +346,7 @@ class _DetailFoodState extends State<DetailFood> {
                   ),
                   const Divider(
                     thickness: 8,
-                    color: dividerGrey,
+                    color: AppColor.dividerGrey,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -409,7 +410,7 @@ class _DetailFoodState extends State<DetailFood> {
                                 content: '\$$totalPrice',
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold)),
-                        CustomWidget.addToCartAnimation(addToCart)
+                        RiveAnimations.addToCartAnimation(addToCart)
                       ],
                     ),
                   )
@@ -417,8 +418,6 @@ class _DetailFoodState extends State<DetailFood> {
               ),
             ),
           ),
-        );
-      }),
-    );
+        ));
   }
 }

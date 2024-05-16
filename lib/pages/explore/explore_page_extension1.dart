@@ -1,4 +1,4 @@
-import 'package:template/source/export.dart';
+part of 'explore_page.dart';
 
 class TopListShopping extends StatelessWidget {
   const TopListShopping({

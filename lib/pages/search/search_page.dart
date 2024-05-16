@@ -1,21 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:template/models/desktop_food.dart';
-import 'package:template/pages/explore/widget/banner_items.dart';
-import 'package:template/values/colors.dart';
-import 'package:template/values/list.dart';
+import 'package:template/source/export.dart';
 
-class CustomSearchDelegate extends StatefulWidget {
-  const CustomSearchDelegate({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
   @override
-  State<CustomSearchDelegate> createState() => _CustomSearchDelegateState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _CustomSearchDelegateState extends State<CustomSearchDelegate> {
+class _SearchPageState extends State<SearchPage> {
   final searchController = TextEditingController();
   String searchText = '';
-  List<DesktopFood> filterItems = [];
+  List<RestaurantModel> filterItems = [];
 
   void search(String value) {
     setState(() {
@@ -28,7 +24,7 @@ class _CustomSearchDelegateState extends State<CustomSearchDelegate> {
     if (searchText.isEmpty) {
       filterItems = [];
     } else {
-      filterItems = desktopFood
+      filterItems = RestaurantData.restaurant
           .where((element) =>
               element.shopName.toLowerCase().contains(searchText.toLowerCase()))
           .toList();
@@ -45,7 +41,13 @@ class _CustomSearchDelegateState extends State<CustomSearchDelegate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: globalPink,
+        automaticallyImplyLeading: false,
+        leading: BackButton(
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: AppColor.globalPink,
         title: CupertinoSearchTextField(
           controller: searchController,
           backgroundColor: Colors.white,
@@ -63,11 +65,11 @@ class _CustomSearchDelegateState extends State<CustomSearchDelegate> {
                 onTap: () {
                   FocusManager.instance.primaryFocus?.unfocus();
                 },
-                foodImage: filterItems[index].foodOrder,
-                deliveryTime: filterItems[index].time,
+                foodImage: filterItems[index].image,
+                deliveryTime: '${filterItems[index].deliveryTime} mins',
                 shopName: filterItems[index].shopName,
-                shopAddress: filterItems[index].place,
-                rateStar: filterItems[index].vote,
+                shopAddress: filterItems[index].address,
+                rateStar: '${filterItems[index].rate}',
                 badge: const SizedBox(),
               ),
               filterItems.length - 1 == index

@@ -1,5 +1,4 @@
 import 'package:rive/rive.dart';
-import 'package:template/pages/home/bloc/home_page_bloc.dart';
 import 'package:template/source/export.dart';
 
 part 'home_page_extension_ui.dart';

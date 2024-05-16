@@ -8,6 +8,8 @@ sealed class RestaurantPageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class RestaurantPageInitialEvent extends RestaurantPageEvent {}
+
 class RestaurantPageBackEvent extends RestaurantPageEvent {}
 
 class RestaurantPageShareEvent extends RestaurantPageEvent {}
@@ -18,10 +20,4 @@ class RestaurantPageReviewEvent extends RestaurantPageEvent {}
 
 class RestaurantPageMapEvent extends RestaurantPageEvent {}
 
-class RestaurantPageNavigateEvent extends RestaurantPageEvent {
-  final FoodItems foodItems;
-  final DesktopFood desktopFood;
-
-  const RestaurantPageNavigateEvent(
-      {required this.foodItems, required this.desktopFood});
-}
+class RestaurantPageNavigateEvent extends RestaurantPageEvent {}

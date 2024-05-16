@@ -45,13 +45,13 @@ class AppRouter {
         final args = settings.arguments as DetailFood;
         return MaterialPageRoute(
             builder: (_) => DetailFood(
-                foodItems: args.foodItems, desktopFood: args.desktopFood));
+                foodItems: args.foodItems, restaurant: args.restaurant));
       case searchPage:
-        return MaterialPageRoute(builder: (_) => const CustomSearchDelegate());
+        return MaterialPageRoute(builder: (_) => const SearchPage());
       case dealPage:
         final args = settings.arguments as DealsPage;
         return MaterialPageRoute(
-            builder: (_) => DealsPage(desktopFood: args.desktopFood));
+            builder: (_) => DealsPage(restaurant: args.restaurant));
       case loginOrRegister:
         final args = settings.arguments as LoginOrRegister;
         return MaterialPageRoute(
@@ -78,14 +78,11 @@ class AppRouter {
                 deliveryFee: args.deliveryFee,
                 vat: args.vat,
                 coupon: args.coupon,
-                totalPrice: args.totalPrice,
-                restaurantName: args.restaurantName));
+                totalPrice: args.totalPrice));
       case orderComplete:
         return MaterialPageRoute(builder: (_) => const OrderComplete());
       case addCart:
-        final args = settings.arguments as AddCart;
-        return MaterialPageRoute(
-            builder: (_) => AddCart(restaurantName: args.restaurantName));
+        return MaterialPageRoute(builder: (_) => const AddCart());
       default:
         return errorRoute();
     }

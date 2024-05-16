@@ -22,7 +22,8 @@ class _MyReviewsState extends State<MyReviews> {
           return Scaffold(
             appBar: AppBar(
                 shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(width: 8, color: dividerGrey)),
+                    borderSide:
+                        BorderSide(width: 8, color: AppColor.dividerGrey)),
                 title: CustomText(
                     content: 'My Reviews (${snapshot.data!.length})',
                     fontWeight: FontWeight.bold)),
@@ -30,7 +31,7 @@ class _MyReviewsState extends State<MyReviews> {
                 ? Stack(
                     children: [
                       const Center(child: CustomText(content: 'No review')),
-                      CustomWidget.pigeonAnimation()
+                      RiveAnimations.pigeonAnimation()
                     ],
                   )
                 : Padding(
@@ -118,7 +119,8 @@ class _MyReviewsState extends State<MyReviews> {
                                                       const CustomText(
                                                           content: 'My Review',
                                                           fontSize: 12,
-                                                          color: globalPink),
+                                                          color: AppColor
+                                                              .globalPink),
                                                       const SizedBox(
                                                         height: 4,
                                                       ),

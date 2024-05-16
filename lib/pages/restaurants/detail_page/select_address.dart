@@ -95,7 +95,8 @@ class _SelectAddressState extends State<SelectAddress> {
                                                     },
                                                     child: const CustomText(
                                                         content: 'Save',
-                                                        color: globalPink)),
+                                                        color: AppColor
+                                                            .globalPink)),
                                                 TextButton(
                                                     onPressed: () {
                                                       widget

@@ -7,9 +7,9 @@ class DetailAppBar extends StatefulWidget {
       required this.image,
       required this.name,
       required this.place,
-      required this.desktopFood});
+      required this.restaurant});
 
-  final DesktopFood desktopFood;
+  final RestaurantModel restaurant;
   final String image, name, place;
 
   @override
@@ -28,7 +28,7 @@ class _DetailAppBarState extends State<DetailAppBar> {
 
   void sent() {
     if (reviewController.text.isNotEmpty) {
-      RiveUtils.changeSMITriggerState(reviewModel.statusTrigger!);
+      RiveUtils.changeSMITriggerState(RiveUtils.reviewModel.statusTrigger!);
       addReview();
       Future.delayed(
           const Duration(milliseconds: 3000), () => Navigator.pop(context));
@@ -43,11 +43,11 @@ class _DetailAppBarState extends State<DetailAppBar> {
         return null;
       } else {
         await supabase.from('reviews').insert({
-          'restaurant_image': widget.desktopFood.foodOrder,
-          'restaurant_name': widget.desktopFood.shopName,
-          'time': widget.desktopFood.time,
-          'place': widget.desktopFood.place,
-          'vote': widget.desktopFood.vote,
+          'restaurant_image': widget.restaurant.image,
+          'restaurant_name': widget.restaurant.shopName,
+          'time': widget.restaurant.deliveryTime,
+          'place': widget.restaurant.address,
+          'vote': widget.restaurant.rate,
           'my_vote': rate,
           'my_review': reviewController.text.trim()
         });
@@ -55,12 +55,12 @@ class _DetailAppBarState extends State<DetailAppBar> {
     } on AuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           duration: const Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text(error.message)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           duration: Duration(milliseconds: 1500),
-          backgroundColor: buttonShadowBlack,
+          backgroundColor: AppColor.buttonShadowBlack,
           content: Text('Error occurred, please retry')));
     }
   }
@@ -91,15 +91,12 @@ class _DetailAppBarState extends State<DetailAppBar> {
                   Row(
                     children: [
                       IconButton(
-                        color: globalPink,
+                        color: AppColor.globalPink,
                         onPressed: null,
-                        icon: context
-                                .watch<TopFood>()
-                                .saveFood
-                                .contains(widget.desktopFood)
+                        icon: SavedListData.saveFood.contains(widget.restaurant)
                             ? const Icon(
                                 Icons.favorite,
-                                color: globalPink,
+                                color: AppColor.globalPink,
                               )
                             : const Icon(
                                 Icons.favorite_border,
@@ -123,7 +120,7 @@ class _DetailAppBarState extends State<DetailAppBar> {
                       PopupMenuButton(
                         iconSize: 30,
                         iconColor: Colors.white,
-                        color: dividerGrey,
+                        color: AppColor.dividerGrey,
                         itemBuilder: (context) => [
                           PopupMenuItem(
                               onTap: () {},
@@ -185,7 +182,7 @@ class _DetailAppBarState extends State<DetailAppBar> {
                                                 },
                                               ),
                                             ),
-                                            CustomWidget.reviewAnimation(sent)
+                                            RiveAnimations.reviewAnimation(sent)
                                           ],
                                         ));
                               },

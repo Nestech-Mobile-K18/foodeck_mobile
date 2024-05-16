@@ -52,61 +52,65 @@ class RiveUtils {
   static void changeSMIBoolState(SMIBool input) {
     input.change(input.value);
   }
-}
 
-// Light And Dark Animation
-RiveModel lightOrDarkModel = RiveModel(
-    action: 'IsPressed',
-    src: 'assets/rives/switch_button_day&night.riv',
-    artBoard: 'New Artboard',
-    stateMachineName: 'State Machine 1');
+  // Light And Dark Animation
+  static RiveModel lightOrDarkModel = RiveModel(
+      action: 'IsPressed',
+      src: 'assets/rives/switch_button_day&night.riv',
+      artBoard: 'New Artboard',
+      stateMachineName: 'State Machine 1');
+
 // Pigeon Animation
-RiveModel pigeonModel = RiveModel(
-    action: 'hover',
-    src: 'assets/rives/pigeons.riv',
-    artBoard: 'New Artboard',
-    stateMachineName: 'State Machine 1');
+  static RiveModel pigeonModel = RiveModel(
+      action: 'hover',
+      src: 'assets/rives/pigeons.riv',
+      artBoard: 'New Artboard',
+      stateMachineName: 'State Machine 1');
+
 // Review Animation
-RiveModel reviewModel = RiveModel(
-    action: 'click',
-    src: 'assets/rives/review_button.riv',
-    artBoard: 'Publish Button',
-    stateMachineName: 'State Machine 1');
+  static RiveModel reviewModel = RiveModel(
+      action: 'click',
+      src: 'assets/rives/review_button.riv',
+      artBoard: 'Publish Button',
+      stateMachineName: 'State Machine 1');
+
 // AddToCart Animation
-RiveModel addToCartModel = RiveModel(
-    action: 'add',
-    src: 'assets/rives/add_to_cart.riv',
-    artBoard: 'Added to Cart',
-    stateMachineName: 'State Machine 1');
+  static RiveModel addToCartModel = RiveModel(
+      action: 'add',
+      src: 'assets/rives/add_to_cart.riv',
+      artBoard: 'Added to Cart',
+      stateMachineName: 'State Machine 1');
+
 // Bottom Animation Icons
-List<RiveModel> bottomModel = [
-  RiveModel(
-      src: 'assets/rives/animated_icon_set_-_1_color.riv',
-      artBoard: "SEARCH",
-      stateMachineName: "SEARCH_Interactivity",
-      label: 'Explore',
-      action: 'click'),
-  RiveModel(
-      src: 'assets/rives/heart.riv',
-      artBoard: 'hert Effect',
-      stateMachineName: 'switch',
-      label: 'Saved',
-      action: 'click'),
-  // RiveModel(
-  //     src: 'assets/rives/animated_icon_set_-_1_color.riv',
-  //     artBoard: "LIKE/STAR",
-  //     stateMachineName: "STAR_Interactivity",
-  //     label: ''),
-  RiveModel(
-      src: 'assets/rives/animated_icon_set_-_1_color.riv',
-      artBoard: "BELL",
-      stateMachineName: "BELL_Interactivity",
-      label: 'Notifications',
-      action: 'click'),
-  RiveModel(
-      src: 'assets/rives/animated_icon_set_-_1_color.riv',
-      artBoard: "USER",
-      stateMachineName: "USER_Interactivity",
-      label: 'Profile',
-      action: 'click'),
-];
+  static List<RiveModel> bottomModel = [
+    RiveModel(
+        src: 'assets/rives/animated_icon_set_-_1_color.riv',
+        artBoard: "SEARCH",
+        stateMachineName: "SEARCH_Interactivity",
+        label: 'Explore',
+        action: 'click'),
+    RiveModel(
+        src: 'assets/rives/heart.riv',
+        artBoard: 'hert Effect',
+        stateMachineName: 'switch',
+        label: 'Saved',
+        action: 'click'),
+    // RiveModel(
+    //     src: 'assets/rives/animated_icon_set_-_1_color.riv',
+    //     artBoard: "LIKE/STAR",
+    //     stateMachineName: "STAR_Interactivity",
+    //     label: ''),
+    RiveModel(
+        src: 'assets/rives/animated_icon_set_-_1_color.riv',
+        artBoard: "BELL",
+        stateMachineName: "BELL_Interactivity",
+        label: 'Notifications',
+        action: 'click'),
+    RiveModel(
+        src: 'assets/rives/animated_icon_set_-_1_color.riv',
+        artBoard: "USER",
+        stateMachineName: "USER_Interactivity",
+        label: 'Profile',
+        action: 'click'),
+  ];
+}

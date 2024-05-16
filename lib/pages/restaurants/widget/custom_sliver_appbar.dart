@@ -3,10 +3,10 @@ import 'package:template/source/export.dart';
 class CustomSliverBar extends StatelessWidget {
   const CustomSliverBar({
     super.key,
-    required this.desktopFood,
+    required this.restaurant,
   });
 
-  final DesktopFood desktopFood;
+  final RestaurantModel restaurant;
 
   // phân loại tabs theo danh sách enum
   List<Tab> _buildCategoryTabs() {
@@ -28,9 +28,9 @@ class CustomSliverBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
           title: TabBar(
               tabAlignment: TabAlignment.start,
-              indicatorColor: globalPink,
+              indicatorColor: AppColor.globalPink,
               dividerColor: Colors.grey[200],
-              labelColor: globalPink,
+              labelColor: AppColor.globalPink,
               unselectedLabelColor: Colors.grey,
               isScrollable: true,
               labelStyle: AppText.inter
@@ -49,13 +49,13 @@ class CustomSliverBar extends StatelessWidget {
                     Column(
                       children: [
                         const Icon(Icons.star_border),
-                        CustomText(content: desktopFood.vote)
+                        CustomText(content: restaurant.rate.toString())
                       ],
                     ),
                     Column(
                       children: [
                         const Icon(Icons.access_time_outlined),
-                        CustomText(content: desktopFood.time)
+                        CustomText(content: '${restaurant.deliveryTime} mins')
                       ],
                     ),
                     const Column(

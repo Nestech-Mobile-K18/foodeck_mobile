@@ -285,7 +285,7 @@ class _MyLocationState extends State<MyLocation> {
                             child: const CustomText(
                                 content: 'Add',
                                 fontSize: 13,
-                                color: globalPink)),
+                                color: AppColor.globalPink)),
                   ),
                 ),
               ],
@@ -296,7 +296,7 @@ class _MyLocationState extends State<MyLocation> {
                     padding: const EdgeInsets.only(right: 24, bottom: 180),
                     child: FloatingActionButton(
                       shape: const CircleBorder(),
-                      backgroundColor: globalPink,
+                      backgroundColor: AppColor.globalPink,
                       onPressed: () {
                         mapController.animateCamera(
                             CameraUpdate.newCameraPosition(
