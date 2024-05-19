@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:template/pages/export.dart';
 
 class ProfileView extends StatefulWidget {
@@ -19,19 +18,43 @@ class _ProfileViewState extends State<ProfileView> {
     // if (isSignedIn) await GoogleSignIn().signOut();
   }
 
+  Future<void> handleEditAccount() async {
+    Navigator.of(context).pushNamed(RouteName.editAccount);
+  }
+
+  Future<void> handleMyLocation() async {
+    Navigator.of(context).pushNamed(RouteName.myLocation);
+  }
+
+  Future<void> handleMyOrder() async {
+    Navigator.of(context).pushNamed(RouteName.history);
+  }
+
+  Future<void> handlePaymentMethod() async {
+    Navigator.of(context).pushNamed(RouteName.paymentMethod);
+  }
+
+  Future<void> handleMyReview() async {
+    Navigator.of(context).pushNamed(RouteName.review);
+  }
+
+  Future<void> handleAboutUs() async {
+    Navigator.of(context).pushNamed(RouteName.aboutUs);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 24.dp),
+        padding: EdgeInsets.symmetric(vertical: AppPadding.p24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 88.dp,
-                height: 88.dp,
+                width: AppSize.s88,
+                height: AppSize.s88,
                 // aspectRatio: 1,
                 child: const CircleAvatar(
                   backgroundImage:
@@ -39,28 +62,22 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
               ),
               SizedBox(
-                height: 5.dp,
+                height: AppSize.s5,
               ),
-              Text('John Doe',
-                  style:
-                      TextStyle(fontSize: 20.dp, fontWeight: FontWeight.w700)),
+              Text('John Doe', style: AppTextStyle.title),
               SizedBox(
-                height: 5.dp,
+                height: AppSize.s5,
               ),
-              Text('Lahore, Pakistan',
-                  style: TextStyle(fontSize: 17.dp, color: Colors.grey)),
+              Text('Lahore, Pakistan', style: AppTextStyle.decription),
               SizedBox(
-                height: 40.dp,
+                height: AppSize.s40,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 12.dp),
-                  child: Text('Account Settings',
-                      style: TextStyle(
-                          fontSize: 15.dp,
-                          fontWeight: FontWeight.bold,
-                          color: ColorsGlobal.globalPink)),
+                  padding: EdgeInsets.only(left: AppPadding.p12),
+                  child: Text(AppStrings.accountSettings,
+                      style: AppTextStyle.textPinkBold),
                 ),
               ),
               ListView(
@@ -73,19 +90,19 @@ class _ProfileViewState extends State<ProfileView> {
                       leading: const Icon(Icons.account_circle_outlined),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handleEditAccount(),
                       ),
-                      title: Text('Edit Account',
-                          style: TextStyle(fontSize: 17.dp))),
+                      title: Text(AppStrings.editAccount,
+                          style: AppTextStyle.label)),
                   const Divider(),
                   ListTile(
                       leading: const Icon(Icons.location_on_outlined),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handleMyLocation(),
                       ),
-                      title: Text('My locations',
-                          style: TextStyle(fontSize: 17.dp))),
+                      title: Text(AppStrings.myLocations,
+                          style: AppTextStyle.label)),
                   const Divider(),
                   ListTile(
                       leading: const Icon(
@@ -93,41 +110,41 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handleMyOrder(),
                       ),
                       title:
-                          Text('My Orders', style: TextStyle(fontSize: 17.dp))),
+                          Text(AppStrings.myOrders, style: AppTextStyle.label)),
                   const Divider(),
                   ListTile(
                       leading: const Icon(Icons.payment),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handlePaymentMethod(),
                       ),
-                      title: Text('Payment Methods',
-                          style: TextStyle(fontSize: 17.dp))),
+                      title: Text(AppStrings.paymentMethod,
+                          style: AppTextStyle.label)),
                   const Divider(),
                   ListTile(
                       leading: const Icon(Icons.star_outline_outlined),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handleMyReview(),
                       ),
-                      title: Text('My reviews',
-                          style: TextStyle(fontSize: 17.dp))),
+                      title: Text(AppStrings.myReviews,
+                          style: AppTextStyle.label)),
                   const Divider(),
                 ],
               ),
               SizedBox(
-                height: 40.dp,
+                height: AppSize.s40,
               ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 12.dp),
-                  child: Text('General Settings',
+                  padding: EdgeInsets.only(left: AppPadding.p12),
+                  child: Text(AppStrings.generalSettings,
                       style: TextStyle(
-                          fontSize: 15.dp,
+                          fontSize: AppSize.s15,
                           fontWeight: FontWeight.bold,
                           color: ColorsGlobal.globalPink)),
                 ),
@@ -143,10 +160,10 @@ class _ProfileViewState extends State<ProfileView> {
                           const Icon(CupertinoIcons.exclamationmark_circle),
                       trailing: IconButton(
                         icon: const Icon(Icons.navigate_next),
-                        onPressed: () {},
+                        onPressed: () => handleAboutUs(),
                       ),
                       title:
-                          Text('About us', style: TextStyle(fontSize: 17.dp))),
+                          Text(AppStrings.aboutUs, style: AppTextStyle.label)),
                   const Divider(),
                   ListTile(
                       leading: const Icon(Icons.logout),
@@ -155,7 +172,7 @@ class _ProfileViewState extends State<ProfileView> {
                         onPressed: () => logout(),
                       ),
                       title:
-                          Text('Log out', style: TextStyle(fontSize: 17.dp))),
+                          Text(AppStrings.logOut, style: AppTextStyle.label)),
                   const Divider(),
                 ],
               )

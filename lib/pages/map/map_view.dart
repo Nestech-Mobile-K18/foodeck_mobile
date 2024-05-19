@@ -10,7 +10,7 @@ class MapBoxView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Map Direction'),
-        backgroundColor: Colors.blueAccent,
+        // backgroundColor: ColorsGlobal.blue2Accent,
       ),
       body: const ShowMap(),
     );

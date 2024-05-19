@@ -1,25 +1,75 @@
 import 'package:template/pages/export.dart';
 
-class CartVew extends StatefulWidget {
-  const CartVew({Key? key}) : super(key: key);
+class CartView extends StatefulWidget {
+  const CartView({Key? key}) : super(key: key);
 
   @override
-  _CartVewState createState() => _CartVewState();
+  _CartViewState createState() => _CartViewState();
 }
 
-class _CartVewState extends State<CartVew> {
+class _CartViewState extends State<CartView> {
   late final List<Food> _cart;
   late final List<Item> _popularFood;
-
+  late final double total;
+  late final double fee;
+  late final double vat;
+  late final double coupon;
+  late final double subTotal;
   @override
   void initState() {
     _cart = cart;
     _popularFood = popularFood;
+    fee = getFee();
+    vat = getVAT();
+    coupon = getCoupon();
+    subTotal = getSubTotal(cart);
+    total = getTotal(subTotal, fee, vat, coupon);
+
     super.initState();
   }
 
+  double getFee() {
+    //hard code
+    return 10;
+  }
+
+  double getSubTotal(List<Food> cart) {
+    return cart.fold(0, (double subTotal, Food obj) => subTotal + obj.price);
+  }
+
+  double getVAT() {
+    //hard code
+    return 4;
+  }
+
+  double getCoupon() {
+    //hard code
+    return 4;
+  }
+
+  double getTotal(double subTotal, double fee, double vat, double coupon) {
+    return subTotal + fee + vat - coupon;
+  }
+
   Future<void> _handleCheckout() async {
-    Navigator.of(context).pushNamed(RouteName.checkout);
+    // create list order summary
+    List<OrderSummary> orderSummary = cart.map((item) {
+      return OrderSummary(item.foodName, item.price, item.quanity);
+    }).toList();
+
+    // Navigator.of(context).pushNamed(RouteName.checkout);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CheckoutView(
+                coupon: coupon,
+                fee: fee,
+                orderSummary: orderSummary,
+                total: total,
+                vat: vat,
+              ),
+          settings: const RouteSettings(name: RouteName.checkout)),
+    );
   }
 
   Future<void> _handleRestaurant(String id) async {
@@ -35,10 +85,9 @@ class _CartVewState extends State<CartVew> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarScreen(
-        title: 'Cart',
-      ),
+          title: AppStrings.titleCart, ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 12.dp),
+        padding: EdgeInsets.symmetric(vertical: AppPadding.p12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,24 +115,24 @@ class _CartVewState extends State<CartVew> {
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 24.dp, vertical: 12.dp),
+                        horizontal: AppPadding.p24, vertical: AppPadding.p12),
                     child: Text(
-                      'Popular with these',
-                      style: TextStyle(
-                          fontSize: 17.dp, fontWeight: FontWeight.bold),
+                      AppStrings.popularWithThese,
+                      style: AppTextStyle.titleSmall,
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 24.dp),
-                    height: 250.0.dp,
+                    padding: EdgeInsets.only(left: AppPadding.p24),
+                    height: AppSize.s250,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _popularFood.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
-                            width: 250.0.dp,
-                            padding: EdgeInsets.only(right: 24.dp),
-                            margin: EdgeInsets.symmetric(horizontal: 4.0.dp),
+                            width: AppSize.s250,
+                            padding: EdgeInsets.only(right: AppPadding.p24),
+                            margin:
+                                EdgeInsets.symmetric(horizontal: AppMargin.m4),
                             child: InkWell(
                                 onTap: () =>
                                     _handleRestaurant(_popularFood[index].id),
@@ -96,25 +145,25 @@ class _CartVewState extends State<CartVew> {
             ),
             //Coupon
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppPadding.p24, vertical: AppPadding.p12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Coupon',
-                    style:
-                        TextStyle(fontSize: 20.dp, fontWeight: FontWeight.bold),
+                    AppStrings.titleCoupon,
+                    style: AppTextStyle.title,
                   ),
                   SizedBox(
-                    height: 12.dp,
+                    height: AppSize.s12,
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.dp),
+                      borderRadius: BorderRadius.circular(AppRadius.r16),
                       border: Border.all(
-                        color: Colors.grey.shade200,
-                        width: 2.0.dp,
+                        color: ColorsGlobal.grey3,
+                        width: AppSize.s22,
                       ),
                     ),
                     child: Row(
@@ -132,43 +181,40 @@ class _CartVewState extends State<CartVew> {
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppPadding.p24, vertical: AppPadding.p12),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Subtotal',
-                        style: TextStyle(
-                            fontSize: 20.dp, fontWeight: FontWeight.w700),
+                        AppStrings.subtotal,
+                        style: AppTextStyle.title,
                       ),
                       Text(
-                        '\$50',
-                        style: TextStyle(
-                            fontSize: 17.dp,
-                            color: ColorsGlobal.globalPink,
-                            fontWeight: FontWeight.bold),
+                        '\$$subTotal',
+                        style: AppTextStyle.textPinkBold,
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 12.dp,
+                    height: AppSize.s12,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Delivery Fee',
-                        style: TextStyle(fontSize: 17),
+                        AppStrings.deliveryFee,
+                        style: AppTextStyle.label,
                       ),
                       Text(
-                        '\$10',
-                        style: TextStyle(fontSize: 17, color: Colors.grey),
+                        '\$$fee',
+                        style: AppTextStyle.value,
                       )
                     ],
                   ),
@@ -177,12 +223,12 @@ class _CartVewState extends State<CartVew> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'VAT',
-                        style: TextStyle(fontSize: 17),
+                        AppStrings.vat,
+                        style: AppTextStyle.label,
                       ),
                       Text(
-                        '\$4',
-                        style: TextStyle(fontSize: 17, color: Colors.grey),
+                        '\$$vat',
+                        style: AppTextStyle.value,
                       )
                     ],
                   ),
@@ -191,12 +237,12 @@ class _CartVewState extends State<CartVew> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Coupon',
-                        style: TextStyle(fontSize: 17),
+                        AppStrings.coupon,
+                        style: AppTextStyle.label,
                       ),
                       Text(
-                        '-\$4',
-                        style: TextStyle(fontSize: 17, color: Colors.green),
+                        '-\$$coupon',
+                        style: AppTextStyle.textGreen,
                       )
                     ],
                   ),
@@ -208,9 +254,9 @@ class _CartVewState extends State<CartVew> {
         ),
       ),
       bottomNavigationBar: BottomCheckout(
-        label: 'Go to Checkout',
-        price: 20,
-        width: 172.dp,
+        label: AppStrings.goToCheckout,
+        price: total,
+        width: AppSize.s172,
         onPressed: () => _handleCheckout(),
       ),
     );

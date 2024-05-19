@@ -7,12 +7,13 @@ class SearchItemBar extends StatelessWidget {
       required this.controller,
       required this.focusNode,
       this.width,
-      this.height})
+      this.height, this.onChanged})
       : super(key: key);
   final TextEditingController controller;
   final FocusNode focusNode;
   final double? width;
   final double? height;
+ final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,13 @@ class SearchItemBar extends StatelessWidget {
       height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.dp),
+          color: ColorsGlobal.white,
+          borderRadius: BorderRadius.circular(AppRadius.r16),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: 4.dp,
-            vertical: 8.dp,
+            horizontal: AppPadding.p4,
+            vertical: AppPadding.p8,
           ),
           child: Row(
             children: [
@@ -38,13 +39,13 @@ class SearchItemBar extends StatelessWidget {
               Expanded(
                 child: CupertinoTextField(
                   controller: controller,
-
+                  onChanged: onChanged,
                   focusNode: focusNode,
-                  placeholder: 'Search...',
+                  placeholder: AppStrings.search,
                   // style: Styles.searchText,
-                  cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.grey.shade500),
-                  decoration: BoxDecoration(color: Colors.white),
+                  cursorColor: ColorsGlobal.white,
+                  style: const TextStyle(color: ColorsGlobal.grey2),
+                  decoration: const BoxDecoration(color: ColorsGlobal.white),
                 ),
               ),
               GestureDetector(

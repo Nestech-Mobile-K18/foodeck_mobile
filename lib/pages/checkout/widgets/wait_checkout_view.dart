@@ -11,7 +11,8 @@ class WaitCheckoutView extends StatelessWidget {
 
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 80.dp, horizontal: 24.dp),
+        padding: EdgeInsets.symmetric(
+            vertical: AppPadding.p80, horizontal: AppPadding.p24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -19,28 +20,27 @@ class WaitCheckoutView extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundColor: Colors.green,
+                backgroundColor: ColorsGlobal.green,
                 child: IconButton(
                   icon: const Icon(
                     Icons.check,
-                    color: Colors.white,
+                    color: ColorsGlobal.white,
                   ),
                   onPressed: () {},
                 ),
               ),
               SizedBox(
-                height: 8.dp,
+                height: AppSize.s8,
               ),
-              Text('Thank you for placing the order',
-                  style:
-                      TextStyle(fontSize: 20.dp, fontWeight: FontWeight.w700)),
+              Text(AppStrings.thankYou,
+                  style: AppTextStyle.title),
               SizedBox(
-                height: 8.dp,
+                height: AppSize.s8,
               ),
-              Text('We’ll get to you as soon as possible',
-                  style: TextStyle(fontSize: 17.dp, color: Colors.grey)),
+              Text(AppStrings.weWillGetToYou,
+                  style: AppTextStyle.decription),
               SizedBox(
-                height: 110.dp,
+                height: AppSize.s12,
               ),
               // SizedBox(
               //   height: 220,
@@ -61,13 +61,13 @@ class WaitCheckoutView extends StatelessWidget {
               //       'https://lottie.host/a171524f-978f-43d2-b4a6-62ffe31b9c37/0tKHq4B10A.json'),
               // ),
               Lottie.asset('assets/images/wait.json'),
-              Spacer(),
+              const Spacer(),
               Button(
-                label: 'Go Home',
-                width: 328.dp,
-                height: 62.dp,
+                label: AppStrings.goHome,
+                width: AppSize.s328,
+                height: AppSize.s62,
                 colorBackgroud: ColorsGlobal.globalPink,
-                colorLabel: Colors.white,
+                colorLabel: ColorsGlobal.white,
                 onPressed: () => handleHome(),
               ),
             ],

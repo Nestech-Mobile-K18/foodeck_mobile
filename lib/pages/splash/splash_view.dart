@@ -21,7 +21,7 @@ class _SplashViewState extends State<SplashView> {
               image: AssetImage(MediaRes.backgroundSplash),
               fit: BoxFit.fill,
             ),
-            border: Border.all(width: 0, color: Colors.transparent),
+            border: Border.all(width: 0, color: ColorsGlobal.transparent),
           ),
           child: const Center(
             child: Image(

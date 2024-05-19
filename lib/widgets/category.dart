@@ -28,17 +28,17 @@ class Category extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      margin: EdgeInsets.fromLTRB(left ?? 0, top ?? 0, right ?? 0, bottom ?? 0),
-      // padding: EdgeInsets.fromLTRB(left??0, top??0, right??0, bottom??0),
+      margin: EdgeInsets.fromLTRB(left ?? AppMargin.m0, top ?? AppMargin.m0,
+          right ?? AppMargin.m0, bottom ?? AppMargin.m0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.dp),
+        borderRadius: BorderRadius.circular(AppRadius.r16),
         image: DecorationImage(
           image: AssetImage(img),
           fit: BoxFit.cover,
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(12.0.dp),
+        padding: EdgeInsets.all(AppPadding.p12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,17 +47,15 @@ class Category extends StatelessWidget {
               title,
               softWrap: true,
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.dp,
+                  color: ColorsGlobal.white,
+                  fontSize: AppSize.s22,
                   fontWeight: FontWeight.w400),
             ),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(decription ?? '',
                   maxLines: 2,
-                  //     softWrap: true,
-
-                  style: TextStyle(color: Colors.white, fontSize: 16.dp)),
+                  style: TextStyle(color: ColorsGlobal.white, fontSize: AppSize.s16)),
             )
           ],
         ),

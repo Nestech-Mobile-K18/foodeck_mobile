@@ -1,5 +1,3 @@
-import 'package:template/pages/profile/profile_view.dart';
-
 import 'pages/export.dart';
 
 class Home extends StatefulWidget {
@@ -12,11 +10,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 0;
 
-  List<Widget> _pages = [
-    HomePage(),
-    SaveView(),
-    NotificationVew(),
-    ProfileView(),
+  final List<Widget> _pages = [
+    const HomePage(),
+    const SaveView(),
+    const NotificationVew(),
+    const ProfileView(),
   ];
   void _onTabSelected(int index) {
     setState(() {
@@ -34,9 +32,9 @@ class _HomeState extends State<Home> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: ColorsGlobal.globalPink,
         selectedIconTheme:
-            IconThemeData(color: ColorsGlobal.globalPink, size: 18.dp),
-        unselectedIconTheme: IconThemeData(color: Colors.grey, size: 18.dp),
-        unselectedItemColor: Colors.grey,
+            IconThemeData(color: ColorsGlobal.globalPink, size: AppSize.s18),
+        unselectedIconTheme: IconThemeData(color: ColorsGlobal.grey, size: AppSize.s18),
+        unselectedItemColor: ColorsGlobal.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
@@ -60,25 +58,6 @@ class _HomeState extends State<Home> {
         onTap: _onTabSelected,
         currentIndex: _selectedIndex,
       ),
-
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onTabSelected,
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.search),
-      //       label: 'Search',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

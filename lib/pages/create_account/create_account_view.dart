@@ -79,10 +79,10 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppBarScreen(title: 'Create an account',),
-        
+        appBar: const AppBarScreen(
+            title: AppStrings.createAccount, ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(24.dp, 24.dp, 24.dp, 24.dp),
+          padding: EdgeInsets.all(AppPadding.p24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -91,15 +91,14 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Input your credentials',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.dp),
+                    AppStrings.inputYourCredentials,
+                    style: AppTextStyle.title,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p24),
                   child: InputText(
-                    title: 'Name',
+                    title: AppStrings.name,
                     controller: _nameController,
                     focusNode: _focusNodeName,
                     onTap: () {
@@ -116,9 +115,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p16),
                   child: InputText(
-                    title: 'Email',
+                    title: AppStrings.email,
                     controller: _mailController,
                     keyboardType: TextInputType.emailAddress,
                     focusNode: _focusNodeEmail,
@@ -136,9 +135,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p16),
                   child: InputText(
-                    title: 'Phone',
+                    title: AppStrings.phone,
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
                     focusNode: _focusNodePhone,
@@ -156,9 +155,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p16),
                   child: InputText(
-                    title: 'Password',
+                    title: AppStrings.password,
                     controller: _passController,
                     isPass: true,
                     focusNode: _focusNodePassword,
@@ -178,11 +177,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   ),
                 ),
                 Button(
-                  label: 'Create an account',
-                  width: 328.dp,
-                  height: 62.dp,
+                  label: AppStrings.createAccount,
+                  width: AppSize.s328,
+                  height: AppSize.s62,
                   colorBackgroud: ColorsGlobal.globalPink,
-                  colorLabel: Colors.white,
+                  colorLabel: ColorsGlobal.white,
                   onPressed: () => signUpAccount(),
                 ),
               ],

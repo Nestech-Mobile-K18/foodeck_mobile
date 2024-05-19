@@ -38,9 +38,9 @@ class Item extends StatelessWidget {
           child: Container(
             height: height,
             width: double.infinity,
-            padding: EdgeInsets.all(12.dp),
+            padding: EdgeInsets.all(AppPadding.p24),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.dp),
+              borderRadius: BorderRadius.circular(AppRadius.r16),
               image: DecorationImage(
                 image: AssetImage(img),
                 fit: BoxFit.cover,
@@ -54,10 +54,10 @@ class Item extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
-                        height: 24.dp,
-                        width: 24.dp,
+                        height: AppSize.s24,
+                        width: AppSize.s24,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.6),
+                          color: ColorsGlobal.white.withOpacity(0.6),
                           shape: BoxShape.circle,
                         ),
                         child: FittedBox(
@@ -66,8 +66,8 @@ class Item extends StatelessWidget {
                               icon: Icon(
                                 isLike ? Icons.favorite : Icons.favorite_border,
                                 color: isLike
-                                    ? Colors.pink
-                                    : Colors.white.withOpacity(0.6),
+                                    ? ColorsGlobal.globalPink
+                                    : ColorsGlobal.white.withOpacity(0.6),
                               ),
                               onPressed: () {},
                             )))
@@ -76,27 +76,24 @@ class Item extends StatelessWidget {
                 Row(
                   children: [
                     SizedBox(
-                      width: 57.dp,
-                      height: 24.dp,
+                      width: AppSize.s57,
+                      height: AppSize.s24,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.dp),
+                          color: ColorsGlobal.white,
+                          borderRadius: BorderRadius.circular(AppRadius.r16),
                         ),
                         child: Padding(
                             padding:
-                                EdgeInsets.fromLTRB(8.dp, 4.dp, 8.dp, 4.dp),
+                                EdgeInsets.symmetric(horizontal: AppPadding.p8, vertical: AppPadding.p4),
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.center,
                               child: Text(
                                 isTypeTime
-                                    ? '${value} ${unit}'
-                                    : '${unit}${value}',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16.dp,
-                                    fontWeight: FontWeight.w900),
+                                    ? '$value $unit'
+                                    : '$unit$value',
+                                style: AppTextStyle.priceSmallBold,
                               ),
                             )),
                       ),
@@ -108,7 +105,7 @@ class Item extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 8.dp,
+          height: AppSize.s8,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,11 +113,11 @@ class Item extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 17.dp,
-                  color: Colors.black,
+                  fontSize: AppSize.s17,
+                  color: ColorsGlobal.black,
                   fontWeight: FontWeight.w800),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               children: [
                 IconButton(
@@ -132,8 +129,8 @@ class Item extends StatelessWidget {
                 Text(
                   rate.toString(),
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 13.dp,
+                      color: ColorsGlobal.black,
+                      fontSize: AppSize.s13,
                       fontWeight: FontWeight.w500),
                 )
               ],
@@ -144,10 +141,10 @@ class Item extends StatelessWidget {
           address,
           textAlign: TextAlign.right,
           style: TextStyle(
-              color: Colors.grey, fontSize: 15.dp, fontWeight: FontWeight.w400),
+              color: ColorsGlobal.grey, fontSize: AppSize.s15, fontWeight: FontWeight.w400),
         ),
         SizedBox(
-          height: 16.dp,
+          height: AppSize.s16,
         )
       ],
     );

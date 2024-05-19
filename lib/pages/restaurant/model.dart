@@ -19,7 +19,7 @@ class FoodInfo {
   final String name;
   final String address;
   final bool isFavourite;
-    final String image;
+  final String? image;
   final List<FoodType> type;
   final int quanity;
   final String note;
@@ -27,7 +27,15 @@ class FoodInfo {
   final double totalPrice;
 
   const FoodInfo(
-      this.type, this.quanity, this.note, this.extra, this.totalPrice, this.name, this.address, this.isFavourite, this.image);
+      {required this.type,
+      required this.quanity,
+      required this.note,
+      required this.extra,
+      required this.totalPrice,
+      required this.name,
+      required this.address,
+      required this.isFavourite,
+      this.image});
 }
 
 class FoodType {
@@ -35,7 +43,7 @@ class FoodType {
   final String typeName;
   final double typePrice;
 
-  const FoodType(this.typeId, this.typeName, this.typePrice);
+  const FoodType({required this.typeId, required this.typeName, required this.typePrice});
 }
 
 class FoodExtra {
@@ -43,5 +51,5 @@ class FoodExtra {
   final String extraName;
   final double extraPrice;
 
-  const FoodExtra(this.extraId, this.extraName, this.extraPrice);
+  const FoodExtra({required this.extraId, required this.extraName, required this.extraPrice});
 }

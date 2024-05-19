@@ -28,16 +28,16 @@ class _SaveViewState extends State<SaveView> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.p24, vertical: AppPadding.p12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Save (${_saves.length})',
-            style: TextStyle(fontSize: 20.dp, fontWeight: FontWeight.bold),
+            '${AppStrings.save} (${_saves.length})',
+            style: AppTextStyle.title,
           ),
           SizedBox(
-            height: 12.dp,
+            height: AppSize.s12,
           ),
           ListView.builder(
               physics:

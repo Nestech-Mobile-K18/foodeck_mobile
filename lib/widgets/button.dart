@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:template/pages/export.dart';
 
 class Button extends StatelessWidget {
   final Color? colorBackgroud;
@@ -24,25 +24,25 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12),
+      padding: EdgeInsets.only(top: AppPadding.p12),
       child: RawMaterialButton(
           fillColor: colorBackgroud,
           constraints: BoxConstraints.tight(Size(width, height)),
           onPressed: onPressed,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(AppRadius.r16),
               side: BorderSide(
-                  color: colorBorder != null ? colorBorder! : Colors.white)),
+                  color: colorBorder != null ? colorBorder! : ColorsGlobal.white)),
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding:  EdgeInsets.all(AppPadding.p10),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (icon != null)
                   ImageIcon(
                     AssetImage(icon!),
-                    size: 30,
-                    color: Colors.white,
+                    size: AppSize.s30,
+                    color: ColorsGlobal.white,
                   ),
                 if (icon != null)
                   const SizedBox(
@@ -53,7 +53,7 @@ class Button extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                       color: colorLabel,
-                      fontSize: 17,
+                      fontSize: AppSize.s17,
                       fontWeight: FontWeight.bold),
                 ),
               ],

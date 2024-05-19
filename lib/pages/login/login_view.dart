@@ -83,7 +83,8 @@ class _LoginViewState extends State<LoginView> {
         if (mounted) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Login success'), backgroundColor: Colors.green));
+                content: Text('Login success'),
+                backgroundColor: ColorsGlobal.green));
           }
         }
       } on AuthException catch (error) {
@@ -143,7 +144,7 @@ class _LoginViewState extends State<LoginView> {
   Future<void> signInWithApple() async {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('The feature is being developed'),
-        backgroundColor: Colors.blue));
+        backgroundColor: ColorsGlobal.blue2));
   }
 
   @override
@@ -154,62 +155,62 @@ class _LoginViewState extends State<LoginView> {
             image: AssetImage(MediaRes.imgLogin),
             fit: BoxFit.cover,
           ),
-          backgroundColor: Colors.transparent,
-          toolbarHeight: 295.dp,
+          backgroundColor: ColorsGlobal.transparent,
+          toolbarHeight: AppSize.s295,
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.fromLTRB(32.dp, 48.dp, 32.dp, 32.dp),
+            padding: EdgeInsets.fromLTRB(
+                AppPadding.p32, AppPadding.p48, AppPadding.p32, AppPadding.p32),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Button(
-                      label: 'Login via Google',
+                      label: AppStrings.loginGoogle,
                       colorBackgroud: ColorsGlobal.red,
-                      colorLabel: Colors.white,
+                      colorLabel: ColorsGlobal.white,
                       icon: MediaRes.icGoogle,
-                      width: 328.dp,
-                      height: 62.dp,
+                      width: AppSize.s328,
+                      height: AppSize.s62,
                       onPressed: () => loginWithGoogle()),
                   Button(
-                      label: 'Login via Facebook',
+                      label: AppStrings.loginFacebook,
                       colorBackgroud: ColorsGlobal.blue,
-                      colorLabel: Colors.white,
+                      colorLabel: ColorsGlobal.white,
                       icon: MediaRes.icFacebook,
-                      width: 328.dp,
-                      height: 62.dp,
+                      width: AppSize.s328,
+                      height: AppSize.s62,
                       onPressed: () => signInWithFacebook()),
                   Button(
-                      label: 'Login via Apple',
+                      label: AppStrings.loginApple,
                       colorBackgroud: ColorsGlobal.black,
-                      colorLabel: Colors.white,
+                      colorLabel: ColorsGlobal.white,
                       icon: MediaRes.icApple,
-                      width: 328.dp,
-                      height: 62.dp,
+                      width: AppSize.s328,
+                      height: AppSize.s62,
                       onPressed: () => signInWithApple()),
                   Button(
-                      label: 'Login via Email',
-                      colorLabel: Colors.white,
+                      label: AppStrings.email,
+                      colorLabel: ColorsGlobal.white,
                       colorBackgroud: ColorsGlobal.globalPink,
                       icon: MediaRes.icMail,
-                      width: 328.dp,
-                      height: 62.dp,
+                      width: AppSize.s328,
+                      height: AppSize.s62,
                       onPressed: () => signInWithEmail()),
                   Button(
-                      label: 'Create an account',
+                      label: AppStrings.createAccount,
                       colorLabel: ColorsGlobal.grey,
                       colorBorder: ColorsGlobal.grey,
-                      colorBackgroud: Colors.white,
-                      width: 328.dp,
-                      height: 62.dp,
+                      colorBackgroud: ColorsGlobal.white,
+                      width: AppSize.s328,
+                      height: AppSize.s62,
                       onPressed: () => handleSignUp()),
                   Padding(
-                    padding: EdgeInsets.only(top: 32.0.dp),
+                    padding: EdgeInsets.only(top: AppPadding.p32),
                     child: Text(
-                      'By signing up, you are agreeing to our Terms & Conditions',
-                      style:
-                          TextStyle(color: ColorsGlobal.grey, fontSize: 18.dp),
+                      AppStrings.bySigningUp,
+                      style: AppTextStyle.decription,
                     ),
                   )
                 ]),

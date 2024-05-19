@@ -13,22 +13,25 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
 
   final List<Widget> imageSliders = imgList
       .map((item) => Container(
-            child: Container(
-              margin: EdgeInsets.all(5.0),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0.dp)),
-                  child: Stack(
-                    children: <Widget>[
-                      Image.network(
-                        item,
-                        fit: BoxFit.cover,
-                        width: 1000.0.dp,
-                        height: 160.dp,
-                      ),
-                     
-                    ],
-                  )),
-            ),
+            margin: EdgeInsets.all(AppMargin.m5),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(AppSize.s5)),
+                child: Stack(
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage(item),
+                      fit: BoxFit.cover,
+                      width: AppSize.s1000,
+                      height: AppSize.s160,
+                    ),
+                    // Image.network(
+                    //   item,
+                    //   fit: BoxFit.cover,
+                    //   width: AppSize.s1000,
+                    //   height: AppSize.s160,
+                    // ),
+                  ],
+                )),
           ))
       .toList();
 
@@ -54,15 +57,15 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
           return GestureDetector(
             onTap: () => _controller.animateToPage(entry.key),
             child: Container(
-              width: 12.0.dp,
-              height: 12.0.dp,
-              margin:
-                  EdgeInsets.symmetric(vertical: 8.0.dp, horizontal: 4.0.dp),
+              width: AppSize.s12,
+              height: AppSize.s12,
+              margin: EdgeInsets.symmetric(
+                  vertical: AppMargin.m8, horizontal: AppMargin.m4),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: (Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black)
+                          ? ColorsGlobal.white
+                          : ColorsGlobal.black)
                       .withOpacity(_current == entry.key ? 0.9 : 0.4)),
             ),
           );

@@ -33,6 +33,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
 
   @override
   void dispose() {
+    _mailController.dispose();
+    _passController.dispose();
     _focusNodeEmail.dispose();
     _focusNodePassword.dispose();
     _authSubscription.cancel();
@@ -49,7 +51,8 @@ class _LoginEmailViewState extends State<LoginEmailView> {
         await supabase.auth.signInWithPassword(email: mail, password: pass);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Login success'), backgroundColor: Colors.green));
+              content: Text('Login success'),
+              backgroundColor: ColorsGlobal.green));
         }
       } on AuthException catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -72,10 +75,10 @@ class _LoginEmailViewState extends State<LoginEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const AppBarScreen(title: 'Login via Email',),
-       
+        appBar: const AppBarScreen(
+            title: AppStrings.loginEmail, ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          padding: EdgeInsets.all(AppPadding.p24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -84,15 +87,15 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Input your credentials',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.dp),
+                    AppStrings.inputYourCredentials,
+                    style: AppTextStyle.title,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.only(
+                      top: AppPadding.p16, bottom: AppPadding.p16),
                   child: InputText(
-                    title: 'Email',
+                    title: AppStrings.email,
                     controller: _mailController,
                     keyboardType: TextInputType.emailAddress,
                     focusNode: _focusNodeEmail,
@@ -110,9 +113,9 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 16.dp),
+                  padding: EdgeInsets.only(bottom: AppPadding.p16),
                   child: InputText(
-                    title: 'Password',
+                    title: AppStrings.password,
                     controller: _passController,
                     isPass: true,
                     focusNode: _focusNodePassword,
@@ -133,27 +136,27 @@ class _LoginEmailViewState extends State<LoginEmailView> {
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(bottom: 40.dp),
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Colors.grey.shade500),
+                  padding: EdgeInsets.only(bottom: AppPadding.p40),
+                  child: const Text(
+                    AppStrings.forgotPassword,
+                    style: TextStyle(color: ColorsGlobal.grey2),
                   ),
                 ),
                 Button(
-                  label: 'Login',
-                  width: 328.dp,
-                  height: 62.dp,
+                  label: AppStrings.login,
+                  width: AppSize.s328,
+                  height: AppSize.s62,
                   colorBackgroud: ColorsGlobal.globalPink,
-                  colorLabel: Colors.white,
+                  colorLabel: ColorsGlobal.white,
                   onPressed: () => loginEmail(),
                 ),
                 Button(
-                  label: 'Create an account instead',
+                  label: AppStrings.createAccountInstead,
                   colorLabel: ColorsGlobal.grey,
                   colorBorder: ColorsGlobal.grey,
-                  colorBackgroud: Colors.white,
-                  width: 328.dp,
-                  height: 62.dp,
+                  colorBackgroud: ColorsGlobal.white,
+                  width: AppSize.s328,
+                  height: AppSize.s62,
                   onPressed: () => signupEmail(),
                 ),
               ],

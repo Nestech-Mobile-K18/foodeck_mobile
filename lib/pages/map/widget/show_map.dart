@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
+import '../../../resources/export.dart';
 import '../../../services/mapbox_config.dart';
 
 class ShowMap extends StatelessWidget {
@@ -37,7 +38,7 @@ class ShowMap extends StatelessWidget {
               point: MapBoxConfig.MY_POSITION,
               child: Icon(
                 Icons.person_pin,
-                color: Colors.blueAccent,
+                color: ColorsGlobal.blue2,
                 size: 40,
               ))
         ])

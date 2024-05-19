@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:template/pages/export.dart';
 
 class AppBarRestaurant extends StatelessWidget {
@@ -17,18 +16,19 @@ class AppBarRestaurant extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       backgroundColor: ColorsGlobal.globalPink,
-      toolbarHeight: 100.dp,
+      toolbarHeight: AppSize.s100,
       leading: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
         child: const Icon(
           Icons.arrow_back,
-          color: Colors.white,
+          color: ColorsGlobal.white,
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: EdgeInsets.symmetric(horizontal: 40.dp, vertical: 12.dp),
+        titlePadding: EdgeInsets.symmetric(
+            horizontal: AppPadding.p40, vertical: AppPadding.p12),
         title: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,17 +36,17 @@ class AppBarRestaurant extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontSize: 20.dp,
+                fontSize: AppSize.s20,
                 fontWeight: FontWeight.w700,
               ),
             ),
             SizedBox(
-              height: 5.dp,
+              height: AppSize.s5,
             ),
             Text(
               address,
               style: TextStyle(
-                fontSize: 14.dp,
+                fontSize: AppSize.s14,
                 fontWeight: FontWeight.w400,
               ),
             )
@@ -61,27 +61,27 @@ class AppBarRestaurant extends StatelessWidget {
       pinned: true,
       actions: <Widget>[
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.favorite_border,
-            color: Colors.white,
+            color: ColorsGlobal.white,
           ),
-          tooltip: "Like",
+          tooltip: AppStrings.like,
           onPressed: () {},
         ),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.share,
-            color: Colors.white,
+            color: ColorsGlobal.white,
           ),
-          tooltip: "Share",
+          tooltip: AppStrings.share,
           onPressed: () {},
         ),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.more_vert_outlined,
-            color: Colors.white,
+            color: ColorsGlobal.white,
           ),
-          tooltip: "More action",
+          tooltip: AppStrings.moreAction,
           onPressed: () {},
         ),
       ],

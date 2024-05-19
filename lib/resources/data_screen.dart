@@ -1,28 +1,26 @@
-import 'package:template/pages/checkout/model.dart';
 import 'package:template/pages/export.dart';
-import 'package:template/pages/restaurant/model.dart';
 
 final List<Category> catefories = [
   Category(
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Food',
     decription: 'Order food you love',
     img: MediaRes.img1,
-    bottom: 16.dp,
+    bottom: AppSize.s16,
   ),
   Category(
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Grocery',
     decription: 'Shop daily life items',
     img: MediaRes.img3,
-    right: 8.dp,
+    right: AppSize.s8,
   ),
   Category(
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Deserts',
     decription: 'Something Sweet',
     img: MediaRes.img2,
-    left: 8.dp,
+    left: AppSize.s8,
   ),
 ];
 
@@ -35,7 +33,7 @@ const List<String> imgList = [
 final List<Item> dealsHome = [
   Item(
     id: '1',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Jean’s Cakes',
     address: 'Johar Town',
     img: MediaRes.img4,
@@ -48,7 +46,7 @@ final List<Item> dealsHome = [
   ),
   Item(
     id: '2',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Thicc Shakes',
     address: 'Wapda Town',
     img: MediaRes.img6,
@@ -61,7 +59,7 @@ final List<Item> dealsHome = [
   ),
   Item(
     id: '3',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Daily Deli',
     address: 'Garden Town',
     img: MediaRes.img5,
@@ -226,28 +224,34 @@ const dataRestaurant = {
     ),
   ]
 };
-const FoodType foodType1 = FoodType('1', '8”', 10);
-const FoodType foodType2 = FoodType('2', '10”', 12);
-const FoodType foodType3 = FoodType('3', '12”', 16);
+const FoodType foodType1 = FoodType(typeId: '1', typeName: '8”', typePrice: 10);
+const FoodType foodType2 =
+    FoodType(typeId: '2', typeName: '10”', typePrice: 12);
+const FoodType foodType3 =
+    FoodType(typeId: '3', typeName: '12”', typePrice: 16);
 
-const FoodExtra foodExtra1 = FoodExtra('1', 'Texas Barbeque', 6);
-const FoodExtra foodExtra2 = FoodExtra('2', 'Char Donay', 8);
+const FoodExtra foodExtra1 =
+    FoodExtra(extraId: '1', extraName: 'Texas Barbeque', extraPrice: 6);
+const FoodExtra foodExtra2 =
+    FoodExtra(extraId: '2', extraName: 'Char Donay', extraPrice: 8);
 
 const FoodInfo foodOrderInfo = FoodInfo(
-    [foodType1, foodType2, foodType3],
-    1,
-    '',
-    [foodExtra1, foodExtra2],
-    0,
-    'Chicken Fajita Pizza',
-    'Daily Deli - Johar Town',
-    false,
-    MediaRes.img1);
+    type: [foodType1, foodType2, foodType3],
+    quanity: 1,
+    note: '',
+    extra: [foodExtra1, foodExtra2],
+    totalPrice: 0,
+    name: 'Chicken Fajita Pizza',
+    address: 'Daily Deli - Johar Town',
+    isFavourite: false,
+    image: MediaRes.img1);
 
-final List<FoodStatus> foodOptions = [FoodStatus('Remove it from my order', 0)];
+final List<FoodStatus> foodOptions = [
+  FoodStatus(label: 'Remove it from my order', value: 0)
+];
 
 final List<Food> cart = [
-  Food(
+  const Food(
     id: '61',
     price: 24,
     foodName: 'Chicken Fajita Pizza',
@@ -255,7 +259,7 @@ final List<Food> cart = [
     image: MediaRes.img9,
     quanity: 1,
   ),
-  Food(
+  const Food(
     id: '51',
     price: 12,
     foodName: 'Chicken Fajita Pizza',
@@ -263,7 +267,7 @@ final List<Food> cart = [
     image: MediaRes.img8,
     quanity: 3,
   ),
-  Food(
+  const Food(
     id: '51',
     price: 12,
     foodName: 'Chicken Fajita Pizza',
@@ -271,7 +275,7 @@ final List<Food> cart = [
     image: MediaRes.img8,
     quanity: 2,
   ),
-  Food(
+  const Food(
     id: '61',
     price: 24,
     foodName: 'Chicken Fajita Pizza',
@@ -279,7 +283,7 @@ final List<Food> cart = [
     image: MediaRes.img9,
     quanity: 1,
   ),
-  Food(
+  const Food(
     id: '51',
     price: 12,
     foodName: 'Chicken Fajita Pizza',
@@ -292,7 +296,7 @@ final List<Food> cart = [
 final List<Item> popularFood = [
   Item(
     id: '1',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Jean’s Cakes',
     address: 'Johar Town',
     img: MediaRes.img4,
@@ -305,7 +309,7 @@ final List<Item> popularFood = [
   ),
   Item(
     id: '2',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Thicc Shakes',
     address: 'Wapda Town',
     img: MediaRes.img6,
@@ -318,7 +322,7 @@ final List<Item> popularFood = [
   ),
   Item(
     id: '3',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Daily Deli',
     address: 'Garden Town',
     img: MediaRes.img5,
@@ -332,27 +336,23 @@ final List<Item> popularFood = [
 ];
 
 final List<CardPay> cards = [
-  CardPay('370000000000002', 'John Doe', MediaRes.card1),
-  CardPay('370000000000003', 'John Doe 1', MediaRes.card2),
-  CardPay('370000000000004', 'John Doe 2', MediaRes.card3),
-  CardPay('370000000000005', 'John Doe 3', MediaRes.card4),
+  const CardPay('370000000000002', 'John Doe', MediaRes.card1),
+  const CardPay('370000000000003', 'John Doe 1', MediaRes.card2),
+  const CardPay('370000000000004', 'John Doe 2', MediaRes.card3),
+  const CardPay('370000000000005', 'John Doe 3', MediaRes.card4),
 ];
-
 
 final List<OrderSummary> orderSummary = [
-  OrderSummary('Chicken Fajita Pizza',20, 1),
-  OrderSummary('Chicken Wrap Deluxe',10, 2),
-  OrderSummary('Sandwiches 1',10, 3),
-  OrderSummary('Sandwiches 2',8, 1),
- 
+  const OrderSummary('Chicken Fajita Pizza', 20, 1),
+  const OrderSummary('Chicken Wrap Deluxe', 10, 2),
+  const OrderSummary('Sandwiches 1', 10, 3),
+  const OrderSummary('Sandwiches 2', 8, 1),
 ];
-
-
 
 final List<Item> saves = [
   Item(
     id: '1',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Jean’s Cakes',
     address: 'Johar Town',
     img: MediaRes.img4,
@@ -365,7 +365,7 @@ final List<Item> saves = [
   ),
   Item(
     id: '2',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Thicc Shakes',
     address: 'Wapda Town',
     img: MediaRes.img6,
@@ -378,7 +378,7 @@ final List<Item> saves = [
   ),
   Item(
     id: '3',
-    height: 160.dp,
+    height: AppSize.s160,
     title: 'Daily Deli',
     address: 'Garden Town',
     img: MediaRes.img5,
@@ -391,17 +391,194 @@ final List<Item> saves = [
   ),
 ];
 
-final List<Notifiacation> notifications=[
-  Notifiacation('Your order has arrived', DateTime.parse('2024-01-20 20:18:04Z'),false, ''),
-  Notifiacation('Your order is on its way', DateTime.parse('2024-05-06 00:00:04Z'),true, ''),
+final List<Notifiacation> notifications = [
+  Notifiacation(
+      content: 'Your order has arrived',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: false,
+      description: ''),
+  Notifiacation(
+      content: 'Your order is on its way',
+      time: DateTime.parse('2024-05-06 00:00:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Your order has been placed',
+      time: DateTime.parse('2024-05-01 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Your order has arrived',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Confirm your phone number',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'We have updated our Privacy Policy',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: 'View Privacy Policy'),
+  Notifiacation(
+      content: 'Your order has been cancelled',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Your order has arrived',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Your order has been placed',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: ''),
+  Notifiacation(
+      content: 'Welcome to Foodeck',
+      time: DateTime.parse('2024-01-20 20:18:04Z'),
+      isRead: true,
+      description: 'Watch our video'),
+];
 
-  Notifiacation('Your order has been placed', DateTime.parse('2024-05-01 20:18:04Z'),true, ''),
-  Notifiacation('Your order has arrived', DateTime.parse('2024-01-20 20:18:04Z'),true, ''),
-  Notifiacation('Confirm your phone number', DateTime.parse('2024-01-20 20:18:04Z'),true, ''),
-  Notifiacation('We have updated our Privacy Policy', DateTime.parse('2024-01-20 20:18:04Z'),true, 'View Privacy Policy'),
-  Notifiacation('Your order has been cancelled', DateTime.parse('2024-01-20 20:18:04Z'),true, ''),
-  Notifiacation('Your order has arrived', DateTime.parse('2024-01-20 20:18:04Z'),true, ''),
-  Notifiacation('Your order has been placed', DateTime.parse('2024-01-20 20:18:04Z'),true, ''),
-  Notifiacation('Welcome to Foodeck', DateTime.parse('2024-01-20 20:18:04Z'),true, 'Watch our video'),
+final List<FoodRecentOrder> foodRecentOrders = [
+  FoodRecentOrder(
+    id: '1',
+    image: MediaRes.img5,
+    name: 'Lemon Pina Colada',
+    price: 20,
+    height: AppSize.s160,
+  ),
+  FoodRecentOrder(
+    id: '2',
+    image: MediaRes.img5,
+    name: 'Red Grape Margarita',
+    price: 25,
+    height: AppSize.s160,
+  ),
+  FoodRecentOrder(
+    id: '3',
+    image: MediaRes.img5,
+    name: 'Burger King',
+    price: 10,
+    height: AppSize.s160,
+  ),
+  FoodRecentOrder(
+    id: '4',
+    image: MediaRes.img5,
+    name: 'Wrap Factory',
+    price: 1,
+    height: AppSize.s160,
+  ),
+];
 
+final List<Bill> bills = [
+  const Bill(
+    date: '2024-01-01',
+    id: '1',
+    restaurantName: 'Daily Deli',
+    total: 25,
+  ),
+  const Bill(
+    date: '2024-01-01',
+    id: '1',
+    restaurantName: 'Daily Deli',
+    total: 25,
+  ),
+  const Bill(
+    date: '2024-01-01',
+    id: '1',
+    restaurantName: 'Daily Deli',
+    total: 25,
+  ),
+  const Bill(
+    date: '2024-01-01',
+    id: '1',
+    restaurantName: 'Daily Deli',
+    total: 25,
+  ),
+  const Bill(
+    date: '2024-01-01',
+    id: '1',
+    restaurantName: 'Daily Deli',
+    total: 25,
+  ),
+];
+
+const AccountInfo accountInfo = AccountInfo(
+    name: 'John Doe',
+    email: 'johndoe123@gmail.com',
+    phone: '03014124781',
+    pass: '123456',
+    id: '1');
+
+const Payment paymentInfo = Payment(
+    cardName: 'John Doe',
+    cardNbr: '1234 1234 1234 4871',
+    expiryDate: '02/2023',
+    cvc: '123',
+    image: MediaRes.card1);
+
+const List<Payment> payments = [
+  Payment(
+      cardName: 'John Doe',
+      cardNbr: '1234 1234 1234 4871',
+      expiryDate: '02/2023',
+      cvc: '123',
+      image: MediaRes.card1),
+  Payment(
+      cardName: 'John Doe 4',
+      cardNbr: '1234 1234 1234 8888',
+      expiryDate: '02/2023',
+      cvc: '333',
+      image: MediaRes.card2),
+  Payment(
+      cardName: 'John Doe 1',
+      cardNbr: '1234 1234 1234 77777',
+      expiryDate: '02/2023',
+      cvc: '444',
+      image: MediaRes.card3)
+];
+
+final BillDetail billDetail = BillDetail(
+    restaurant: 'Daily Deli',
+    date: '23 Jun, 2020',
+    orderSummary: orderSummary,
+    subTotal: 50,
+    vat: 10,
+    coupon: 4,
+    fee: 4,
+    deliveryAddress: 'Block P Phase 1 Johar Town, Lahore',
+    deliveryInstruction: 'I am house at around 9 PM',
+    paymentInfo: paymentInfo);
+
+final CoordinatesData coordinatesData = CoordinatesData(
+    lat: 10.7844036,
+    lng: 106.6672684,
+    locationName: 'ACB Tower',
+    address:
+        '444 Đ. Cách Mạng Tháng 8, Phường 11, Quận 3, Thành phố Hồ Chí Minh, Việt Nam');
+
+final List<CoordinatesData> coordinatesDatas = [
+  CoordinatesData(
+      lat: 10.7844036,
+      lng: .6672684,
+      locationName: 'ACB Tower',
+      address:
+          '444 Đ. Cách Mạng Tháng 8, Phường 11, Quận 3, Thành phố Hồ Chí Minh, Việt Nam'),
+  CoordinatesData(
+      lat: .7497281,
+      lng: .6122438,
+      locationName: '235 Đ. Vành Đai Trong',
+      address:
+          '235 Đ. Vành Đai Trong, Bình Trị Đông B, Bình Tân, Thành phố Hồ Chí Minh, Việt Nam'),
+  CoordinatesData(
+      lat: .7770549,
+      lng: 106.6059909,
+      locationName: 'Domino\'s Pizza Lê Văn Quới',
+      address:
+          '480 Đ. Lê Văn Quới, Bình Hưng Hoà A, Bình Tân, Thành phố Hồ Chí Minh, Việt Nam'),
 ];

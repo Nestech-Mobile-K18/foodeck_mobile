@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:template/pages/export.dart';
 
 class OrderInfoVew extends StatefulWidget {
@@ -41,32 +40,30 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
             title: foodInfo.name,
             isFavourite: foodInfo.isFavourite,
             address: foodInfo.address,
-            imageRestaurant: foodInfo.image,
+            imageRestaurant: foodInfo.image!,
           ),
           SliverList(
               delegate: SliverChildListDelegate([
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp),
+              padding: EdgeInsets.symmetric(horizontal: AppPadding.p24),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Variation',
-                        style: TextStyle(
-                            fontSize: 20.dp, fontWeight: FontWeight.w700),
+                        AppStrings.variation,
+                        style: AppTextStyle.title,
                       ),
                       Text(
-                        'Required',
-                        style: TextStyle(
-                            fontSize: 17.dp,
-                            color: ColorsGlobal.globalPink),
+                        AppStrings.required,
+                        style: AppTextStyle.textPink,
                       )
                     ],
                   ),
                   ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
+                      physics:
+                          const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: foodInfo.type.length,
@@ -82,8 +79,7 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
                                   Text(foodInfo.type[index].typeName),
                                   Text(
                                     '\$${foodInfo.type[index].typePrice.toString()}',
-                                    style:
-                                        const TextStyle(color: Colors.grey),
+                                    style: AppTextStyle.value,
                                   )
                                 ],
                               ),
@@ -103,22 +99,26 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
                 ],
               ),
             ),
-          
+
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             // Quanity
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 8.dp),
-              child: Text('Quanity',
-                  style: TextStyle(
-                      fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p8),
+              child: Text(AppStrings.quanity, style: AppTextStyle.title),
             ),
             Padding(
               padding: EdgeInsets.only(
-                  top: 8.dp, right: 24.dp, left: 24.dp, bottom: 24.dp),
+                  top: AppPadding.p8,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p24),
               child: InputQty(
                 maxVal: 100,
                 initVal: 0,
@@ -127,41 +127,44 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
                     const QtyFormProps(keyboardType: TextInputType.number),
                 decoration: QtyDecorationProps(
                     border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(16)),
-                    minusBtn: const Padding(
+                        borderSide: const BorderSide(color: ColorsGlobal.grey),
+                        borderRadius: BorderRadius.circular(AppRadius.r16)),
+                    minusBtn: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 16),
-                      child: Icon(
+                          horizontal: AppPadding.p16, vertical: AppPadding.p16),
+                      child: const Icon(
                         Icons.remove,
-                        color: Colors.grey,
+                        color: ColorsGlobal.grey,
                         size: 30,
                       ),
                     ),
-                    plusBtn: const Padding(
+                    plusBtn: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 16),
-                      child: Icon(Icons.add, color: Colors.grey, size: 30),
+                          horizontal: AppPadding.p16, vertical: AppPadding.p16),
+                      child:
+                           Icon(Icons.add, color: ColorsGlobal.grey, size: 30.dp),
                     )),
                 onQtyChanged: (val) {},
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             //Extra Sauce
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 4.dp),
-              child: Text('Extra Sauce',
-                  style: TextStyle(
-                      fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p4),
+              child: Text(AppStrings.extraSauce, style: AppTextStyle.title),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp),
+              padding: EdgeInsets.symmetric(horizontal: AppPadding.p24),
               child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
+                physics:
+                    const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: foodInfo.extra.length,
@@ -181,53 +184,55 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
                         });
                       },
                     ),
-                    title: Text(title),
+                    title: Text(
+                      title,
+                      style: AppTextStyle.label,
+                    ),
                   );
                 },
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             // Instructions
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 8.dp),
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Instructions',
-                      style: TextStyle(
-                          fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                  Text(AppStrings.instructions, style: AppTextStyle.title),
                   SizedBox(
-                    height: 5.dp,
+                    height: AppSize.s5,
                   ),
-                  Text('Let us know if you have specific things in mind',
-                      style:
-                          TextStyle(fontSize: 17.dp, color: Colors.grey)),
+                  Text(AppStrings.letUsKnow,
+                      style: AppTextStyle.decription),
                   SizedBox(
-                    height: 5.dp,
+                    height: AppSize.s5,
                   ),
                   TextFormField(
                     controller: _instructionsController,
                     decoration: InputDecoration(
-                      hintText: 'e.g. less spices, no mayo etc',
+                      hintText: AppStrings.hintTextInstructions,
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300, // Set border color
+                        borderSide: const BorderSide(
+                          color: ColorsGlobal.grey3, // Set border color
                         ),
-                        borderRadius: BorderRadius.circular(
-                            16.0), // Set border radius
+                        borderRadius:
+                            BorderRadius.circular(AppRadius.r16), // Set border radius
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
-                          color:
-                              ColorsGlobal.globalPink, // Set border color
+                          color: ColorsGlobal.globalPink, // Set border color
                         ),
-                        borderRadius: BorderRadius.circular(
-                            16.0), // Set border radius
+                        borderRadius:
+                            BorderRadius.circular(AppRadius.r16), // Set border radius
                       ),
                     ),
                   ),
@@ -235,31 +240,33 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             // If the product is not available
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 8.dp),
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('If the product is not available',
-                      style: TextStyle(
-                          fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                  Text(AppStrings.ifProductIsNotAvailabel,
+                      style: AppTextStyle.title),
                   SizedBox(
-                    height: 12.dp,
+                    height: AppSize.s12,
                   ),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.grey.shade300, // Border color
+                        color: ColorsGlobal.grey3, // Border color
                         width: 1.0, // Border width
                       ),
                       borderRadius:
-                          BorderRadius.circular(16.0), // Border radius
+                          BorderRadius.circular(AppRadius.r16), // Border radius
                     ),
                     child: DropdownButton<FoodStatus>(
                       isExpanded: true,
@@ -287,9 +294,9 @@ class _OrderInfoVewState extends State<OrderInfoVew> {
         ],
       ),
       bottomNavigationBar: BottomCheckout(
-        label: 'Add to cart',
+        label: AppStrings.addToCart,
         price: _price,
-        width: 137.dp,
+        width: AppSize.s137,
       ),
     );
   }

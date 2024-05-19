@@ -15,21 +15,21 @@ class BottomCheckout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24.0.dp),
+      padding: EdgeInsets.all(AppPadding.p24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             '\$$price',
-            style: TextStyle(fontSize: 28.dp, fontWeight: FontWeight.w900),
+            style: AppTextStyle.price,
           ),
           Button(
             label: label,
-            width: width ?? 172.dp,
-            height: 54.dp,
+            width: width ?? AppSize.s172,
+            height: AppSize.s54,
             colorBackgroud: ColorsGlobal.globalPink,
-            colorLabel: Colors.white,
+            colorLabel: ColorsGlobal.white,
             onPressed: onPressed,
           )
         ],

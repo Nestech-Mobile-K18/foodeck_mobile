@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:template/resources/colors.dart';
+import 'package:template/pages/export.dart';
 import 'package:template/widgets/custom_outline_input_border.dart';
 
 // class InputText extends StatelessWidget {
@@ -40,8 +39,10 @@ class InputText extends StatefulWidget {
 }
 
 class _InputTextState extends State<InputText> {
+  late bool _obscureText;
   @override
   void initState() {
+    _obscureText = widget.isPass;
     super.initState();
   }
 
@@ -51,7 +52,8 @@ class _InputTextState extends State<InputText> {
       focusNode: widget.focusNode,
       // onTap: _requestFocus,
       controller: widget.controller,
-      obscureText: widget.isPass ? true : false,
+      obscureText: _obscureText ? true : false,
+
       onTap: widget.onTap,
       decoration: InputDecoration(
         labelText: widget.title,
@@ -59,18 +61,33 @@ class _InputTextState extends State<InputText> {
         labelStyle: TextStyle(
             color: widget.focusNode!.hasFocus
                 ? ColorsGlobal.globalPink
-                : Colors.grey.shade500),
-        fillColor: Colors.white,
+                : ColorsGlobal.grey2),
+        fillColor: ColorsGlobal.white,
         enabledBorder: CustomOutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(AppRadius.r16),
+          borderSide: const BorderSide(color: ColorsGlobal.grey3),
         ),
         focusedBorder: CustomOutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(AppRadius.r16),
           borderSide: const BorderSide(
             color: ColorsGlobal.globalPink,
           ),
         ),
+        suffixIcon: widget.isPass
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                  color: ColorsGlobal.grey2,
+                ),
+              )
+            : null,
       ),
       validator: widget.validator,
       keyboardType: widget.keyboardType,

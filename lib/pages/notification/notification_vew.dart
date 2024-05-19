@@ -41,16 +41,16 @@ class _NotificationVewState extends State<NotificationVew> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+      padding: EdgeInsets.symmetric(horizontal: AppPadding.p24, vertical: AppPadding.p12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Notifications',
-            style: TextStyle(fontSize: 20.dp, fontWeight: FontWeight.bold),
+            AppStrings.notifications,
+            style: AppTextStyle.title,
           ),
           SizedBox(
-            height: 12.dp,
+            height: AppSize.s12,
           ),
           ListView.separated(
             physics:
@@ -63,16 +63,16 @@ class _NotificationVewState extends State<NotificationVew> {
                   leading: _notifications[index].isRead == false
                       ? Icon(
                           Icons.circle_rounded,
-                          size: 6.dp,
+                          size: AppSize.s6,
                           color: ColorsGlobal.globalPink,
                         )
                       : null,
                   trailing: Text(
                     "${calculate(_notifications[index].time)}${unitTime(_notifications[index].time)}",
-                    style: TextStyle(color: Colors.grey, fontSize: 17.dp),
+                    style: AppTextStyle.value,
                   ),
                   title: Text(_notifications[index].content,
-                      style: TextStyle(fontSize: 17.dp)));
+                      style: AppTextStyle.label));
             },
             separatorBuilder: (context, index) {
               return const Divider();

@@ -28,7 +28,6 @@ class _FoodState extends State<Food> {
           builder: (context) => OrderInfoVew(id: id),
           settings: RouteSettings(name: RouteName.orderInfo, arguments: id)),
     );
-   
   }
 
   @override
@@ -37,23 +36,21 @@ class _FoodState extends State<Food> {
       onTap: () => _handleOrderInfo(widget.id),
       child: Row(
         children: [
-          Container(
-            height: 100.dp,
-            width: 100.dp,
+          SizedBox(
+            height: AppSize.s100,
+            width: AppSize.s100,
             child: Stack(
               fit: StackFit.loose,
               children: [
                 Positioned(
-                  right: 15.dp,
-                  top: 15.dp,
+                  right: AppSize.s15,
+                  top: AppSize.s15,
                   child: Container(
-                    width: 64.dp,
-                    height: 64.dp,
+                    width: AppSize.s64,
+                    height: AppSize.s64,
                     clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            16) // Adjust the radius as needed
-                        ),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(AppRadius.r16)),
                     child: Image(
                       image: AssetImage(widget.image!),
                       fit: BoxFit.cover,
@@ -65,24 +62,24 @@ class _FoodState extends State<Food> {
                       right: 0,
                       top: 0,
                       child: Container(
-                        width: 25.dp,
+                        width: AppSize.s25,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white,
-                            width: 2.0.dp,
+                            color: ColorsGlobal.white,
+                            width: AppSize.s2,
                           ),
                         ),
                         child: CircleAvatar(
-                          backgroundColor: Colors.black,
+                          backgroundColor: ColorsGlobal.black,
                           child: Padding(
-                            padding: EdgeInsets.all(2.dp),
+                            padding: EdgeInsets.all(AppPadding.p2),
                             child: FittedBox(
                               fit: BoxFit.fill,
                               child: Text(
                                 widget.quanity.toString(),
                                 style: const TextStyle(
-                                    color: Colors.white,
+                                    color: ColorsGlobal.white,
                                     fontWeight: FontWeight.w500),
                               ),
                             ),
@@ -93,7 +90,7 @@ class _FoodState extends State<Food> {
             ),
           ),
           SizedBox(
-            width: 16.dp,
+            width: AppSize.s16,
           ),
           Expanded(
             flex: 3,
@@ -102,30 +99,29 @@ class _FoodState extends State<Food> {
               children: [
                 Text(
                   widget.foodName,
-                  style: TextStyle(fontSize: 17.dp, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: AppSize.s17, color: ColorsGlobal.black),
                 ),
                 Text(
                   widget.description!,
-                  style: TextStyle(fontSize: 15.dp, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: AppSize.s15, color: ColorsGlobal.grey),
                 ),
                 Text(
                   '\$${widget.price}',
-                  style: TextStyle(
-                      fontSize: 15.dp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600),
+                  style: AppTextStyle.priceSmall,
                 )
               ],
             ),
           ),
           SizedBox(
-            width: 16.dp,
+            width: AppSize.s16,
           ),
           if (widget.quanity != 0)
             Expanded(
                 child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
             ))
         ],
       ),

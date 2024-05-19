@@ -1,9 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:template/pages/export.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({Key? key}) : super(key: key);
-
+  const CheckoutView(
+      {Key? key,
+      required this.orderSummary,
+      required this.total,
+      required this.fee,
+      required this.vat,
+      required this.coupon})
+      : super(key: key);
+  final List<OrderSummary> orderSummary;
+  final double total;
+  final double fee;
+  final double vat;
+  final double coupon;
   @override
   _CheckoutViewState createState() => _CheckoutViewState();
 }
@@ -12,11 +24,13 @@ class _CheckoutViewState extends State<CheckoutView> {
   final TextEditingController _instructionsController = TextEditingController();
   late final List<CardPay> _cards;
   late final List<OrderSummary> _orderSummary;
-
+  late final CoordinatesData _coordinatesData;
   @override
   void initState() {
     _cards = cards;
     _orderSummary = orderSummary;
+
+    _coordinatesData = coordinatesData;
     super.initState();
   }
 
@@ -34,29 +48,28 @@ class _CheckoutViewState extends State<CheckoutView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarScreen(
-        title: 'Checkout',
-      ),
+          title: AppStrings.checkout, ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppPadding.p24, vertical: AppPadding.p12),
               child: Column(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Delivery Address',
-                          style: TextStyle(
-                              fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                      Text(AppStrings.deliveryAddress,
+                          style: AppTextStyle.title),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
-                            child: Text('Block P Phase 1 Johar Town, Lahore',
+                            child: Text(_coordinatesData.address!,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 17.dp, color: Colors.grey)),
+                                style: AppTextStyle.decription),
                           ),
                           IconButton(onPressed: () {}, icon: Icon(Icons.edit))
                         ],
@@ -65,59 +78,90 @@ class _CheckoutViewState extends State<CheckoutView> {
                   ),
                   Container(
                     width: double.infinity,
-                    height: 160.dp,
+                    height: AppSize.s160,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.dp),
+                      borderRadius: BorderRadius.circular(AppRadius.r16),
                       border: Border.all(
-                        color: Colors.grey.shade200,
-                        width: 2.0.dp,
+                        color: ColorsGlobal.grey3,
+                        // width: AppSize.s22,
                       ),
                     ),
-                    // child: google map
+                    child: FlutterMap(
+                      options: MapOptions(
+                        initialCenter:
+                            LatLng(_coordinatesData.lat!, _coordinatesData.lng!),
+                        initialZoom: 19,
+                        minZoom: 0,
+                        maxZoom: 19,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName:
+                              'net.tlserver6y.flutter_map_location_marker.example',
+                          maxZoom: 19,
+                        ),
+                        CurrentLocationLayer(
+                          followOnLocationUpdate: FollowOnLocationUpdate.always,
+                          turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+                        ),
+                        RichAttributionWidget(
+                          attributions: [
+                            TextSourceAttribution(
+                              'OpenStreetMap contributors',
+                              onTap: () => launchUrl(Uri.parse(
+                                  'https://openstreetmap.org/copyright')),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             // Delivery Instructions
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 8.dp),
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Delivery Instructions',
-                      style: TextStyle(
-                          fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                  Text(AppStrings.deliveryInstructions,
+                      style: AppTextStyle.title),
                   SizedBox(
-                    height: 5.dp,
+                    height: AppSize.s5,
                   ),
-                  Text('Let us know if you have specific things in mind',
-                      style: TextStyle(fontSize: 17.dp, color: Colors.grey)),
+                  Text(AppStrings.letUsKnow, style: AppTextStyle.decription),
                   SizedBox(
-                    height: 5.dp,
+                    height: AppSize.s5,
                   ),
                   TextFormField(
                     controller: _instructionsController,
                     decoration: InputDecoration(
-                      hintText: 'e.g. I am home around 10 pm',
+                      hintText: AppStrings.hintTextInstruction,
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300, // Set border color
+                        borderSide: const BorderSide(
+                          color: ColorsGlobal.grey3, // Set border color
                         ),
-                        borderRadius:
-                            BorderRadius.circular(16.0), // Set border radius
+                        borderRadius: BorderRadius.circular(
+                            AppRadius.r16), // Set border radius
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: ColorsGlobal.globalPink, // Set border color
                         ),
-                        borderRadius:
-                            BorderRadius.circular(16.0), // Set border radius
+                        borderRadius: BorderRadius.circular(
+                            AppRadius.r16), // Set border radius
                       ),
                     ),
                   ),
@@ -125,41 +169,39 @@ class _CheckoutViewState extends State<CheckoutView> {
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             //Payment Method
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.dp, vertical: 12.dp),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppPadding.p24, vertical: AppPadding.p12),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Payment Method',
-                          style: TextStyle(
-                              fontSize: 20.dp, fontWeight: FontWeight.w700)),
+                      Text(AppStrings.paymentMethod, style: AppTextStyle.title),
                       IconButton(onPressed: () {}, icon: Icon(Icons.add))
                     ],
                   ),
-                  Container(
-                    height: 200.0.dp,
+                  SizedBox(
+                    height: AppSize.s200,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _cards.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.dp),
+                            borderRadius: BorderRadius.circular(AppRadius.r16),
                             image: DecorationImage(
                               image: AssetImage(_cards[index].image),
                               fit: BoxFit.cover,
                             ),
                           ),
-                          width: 328.0.dp,
-                          // height: 150.dp,
-                          // padding: EdgeInsets.only(right: 24.dp),
-                          margin: EdgeInsets.symmetric(horizontal: 4.0.dp),
+                          width: AppSize.s328,
+                          margin:
+                              EdgeInsets.symmetric(horizontal: AppMargin.m4),
                         );
                       },
                     ),
@@ -168,88 +210,31 @@ class _CheckoutViewState extends State<CheckoutView> {
               ),
             ),
             Divider(
-              color: Colors.grey.shade300,
-              thickness: 8.dp,
+              color: ColorsGlobal.grey3,
+              thickness: AppSize.s8,
             ),
             //Order Summary
             Padding(
               padding: EdgeInsets.only(
-                  top: 24.dp, right: 24.dp, left: 24.dp, bottom: 8.dp),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Order Summary',
-                      style: TextStyle(
-                          fontSize: 20.dp, fontWeight: FontWeight.w700)),
-                  SizedBox(
-                    height: 5.dp,
-                  ),
-                  Text('Let us know if you have specific things in mind',
-                      style: TextStyle(fontSize: 17.dp, color: Colors.grey)),
-                  SizedBox(
-                    height: 5.dp,
-                  ),
-                  ListView.builder(
-                      physics:
-                          const NeverScrollableScrollPhysics(), // fix cannot scroll in listview mobile
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: _orderSummary.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            ListTile(
-                                trailing: Text(
-                                  "\$${_orderSummary[index].price}",
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 17.dp),
-                                ),
-                                title: Text(
-                                    "${_orderSummary[index].quanity}x ${_orderSummary[index].foodName}",
-                                    style: TextStyle(fontSize: 17.dp))),
-                          ],
-                        );
-                      }),
-                  ListTile(
-                      trailing: Text(
-                        "\$100",
-                        style: TextStyle(color: Colors.grey, fontSize: 17.dp),
-                      ),
-                      title:
-                          Text("Subtotal", style: TextStyle(fontSize: 17.dp))),
-                  const Divider(),
-                  ListTile(
-                      trailing: Text(
-                        "\$20",
-                        style: TextStyle(color: Colors.grey, fontSize: 17.dp),
-                      ),
-                      title: Text("Delivery Fee",
-                          style: TextStyle(fontSize: 17.dp))),
-                  const Divider(),
-                  ListTile(
-                      trailing: Text(
-                        "\$4",
-                        style: TextStyle(color: Colors.grey, fontSize: 17.dp),
-                      ),
-                      title: Text("VAT", style: TextStyle(fontSize: 17.dp))),
-                  const Divider(),
-                  ListTile(
-                      trailing: Text(
-                        "\$4",
-                        style: TextStyle(color: Colors.green, fontSize: 17.dp),
-                      ),
-                      title: Text("Coupon", style: TextStyle(fontSize: 17.dp)))
-                ],
+                  top: AppPadding.p24,
+                  right: AppPadding.p24,
+                  left: AppPadding.p24,
+                  bottom: AppPadding.p8),
+              child: OrderSummaryWidget(
+                orderSummary: _orderSummary,
+                coupon: billDetail.coupon!,
+                fee: billDetail.fee!,
+                subTotal: billDetail.subTotal,
+                vat: billDetail.vat!,
               ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomCheckout(
-        label: 'Pay Now',
-        price: 20,
-        width: 117.dp,
+        label: AppStrings.payNow,
+        price: widget.total,
+        width: AppSize.s117,
         onPressed: () => _handlePay(),
       ),
     );

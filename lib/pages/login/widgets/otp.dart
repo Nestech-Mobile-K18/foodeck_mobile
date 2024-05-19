@@ -16,7 +16,7 @@ class Otp extends StatelessWidget {
         print(res);
         const SnackBar(
           content: Text('Sign Up Success'),
-          backgroundColor: Colors.green,
+          backgroundColor: ColorsGlobal.green,
         );
         Navigator.of(context, rootNavigator: true)
             .pushReplacementNamed(RouteName.login);
@@ -34,35 +34,32 @@ class Otp extends StatelessWidget {
     }
 
     final defaultPinTheme = PinTheme(
-      width: 76.dp,
-      height: 76.dp,
-      textStyle: const TextStyle(
-        fontSize: 22,
-        color: Colors.black,
+      width: AppSize.s76,
+      height: AppSize.s76,
+      textStyle: TextStyle(
+        fontSize: AppSize.s22,
+        color: ColorsGlobal.black,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10.dp),
-        border: Border.all(color: Colors.grey.shade200),
+        color: ColorsGlobal.white,
+        borderRadius: BorderRadius.circular(AppSize.s10),
+        border: Border.all(color: ColorsGlobal.grey3),
       ),
     );
     return Scaffold(
-        appBar: const AppBarScreen(title: 'OTP',),
-        
+        appBar: const AppBarScreen(
+            title: AppStrings.otp, ),
         body: Padding(
-          padding: EdgeInsets.all(24.dp),
+          padding: EdgeInsets.all(AppPadding.p24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 24.dp),
+                margin: EdgeInsets.only(bottom: AppMargin.m24),
                 child: Text(
-                  "Confirm the code we sent you",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.dp,
-                      fontWeight: FontWeight.w700),
+                  AppStrings.confirmCode,
+                  style: AppTextStyle.title,
                 ),
               ),
               Pinput(
@@ -71,28 +68,22 @@ class Otp extends StatelessWidget {
                 focusedPinTheme: defaultPinTheme.copyWith(
                   decoration: defaultPinTheme.decoration!.copyWith(
                     border:
-                        Border.all(color: Colors.grey.shade600, width: 2.dp),
+                        Border.all(color: ColorsGlobal.grey, width: AppSize.s2),
                   ),
                 ),
                 controller: _tokenController,
               ),
               Container(
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(bottom: 100.dp),
-                child: Text(
-                  "Resend",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16.dp,
-                  ),
-                ),
+                margin: EdgeInsets.only(bottom: AppMargin.m100),
+                child: Text(AppStrings.resend, style: AppTextStyle.decription),
               ),
               Button(
-                label: 'Create an account',
-                width: 328.dp,
-                height: 62.dp,
+                label: AppStrings.createAccount,
+                width: AppSize.s328,
+                height: AppSize.s62,
                 colorBackgroud: ColorsGlobal.globalPink,
-                colorLabel: Colors.white,
+                colorLabel: ColorsGlobal.white,
                 onPressed: () => handleVerifyOTP(
                     email!.trim(), _tokenController.text.trim()),
               ),

@@ -31,77 +31,72 @@ class _RestaurantViewState extends State<RestaurantView> {
             address: retaurant.address,
             imageRestaurant: retaurant.image,
           ),
-
-
-          SliverFillRemaining(child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 40.dp, vertical: 12.dp),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          SliverFillRemaining(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: AppPadding.p40, vertical: AppPadding.p12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          const Icon(Icons.favorite_outline_outlined),
+                          Text(retaurant.rate.toString(),
+                              style: AppTextStyle.content)
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Icon(Icons.access_time_rounded),
+                          Text(
+                            '40m',
+                            style: AppTextStyle.content,
+                          )
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          const Icon(Icons.location_on_outlined),
+                          Text('1.6km', style: AppTextStyle.content)
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ScrollableListTabScroller(
+                    itemCount: dataRestaurant.length,
+                    tabBuilder:
+                        (BuildContext context, int index, bool active) =>
+                            Padding(
+                      padding: EdgeInsets.symmetric(horizontal: AppPadding.p24),
+                      child: Text(
+                        dataRestaurant.keys.elementAt(index),
+                        style: !active ? null : AppTextStyle.textPinkBold,
+                      ),
+                    ),
+                    itemBuilder: (BuildContext context, int index) => Column(
                       children: [
-                        Column(
-                          children: [
-                            const Icon(Icons.favorite_outline_outlined),
-                            Text(retaurant.rate.toString(),
-                                style: TextStyle(fontSize: 13.dp))
-                          ],
+                        Text(
+                          dataRestaurant.keys.elementAt(index),
+                          style: AppTextStyle.title,
                         ),
-                        Column(
-                          children: [
-                            const Icon(Icons.access_time_rounded),
-                            Text(
-                              '40m',
-                              style: TextStyle(fontSize: 13.dp),
+                        ...dataRestaurant.values
+                            .elementAt(index)
+                            .asMap()
+                            .map(
+                              (index, value) => MapEntry(index, value),
                             )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            const Icon(Icons.location_on_outlined),
-                            Text('1.6km', style: TextStyle(fontSize: 13.dp))
-                          ],
-                        )
+                            .values
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: ScrollableListTabScroller(
-                      itemCount: dataRestaurant.length,
-                      tabBuilder:
-                          (BuildContext context, int index, bool active) =>
-                              Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.dp),
-                        child: Text(
-                          dataRestaurant.keys.elementAt(index),
-                          style: !active
-                              ? null
-                              : const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorsGlobal.globalPink),
-                        ),
-                      ),
-                      itemBuilder: (BuildContext context, int index) => Column(
-                        children: [
-                          Text(
-                            dataRestaurant.keys.elementAt(index),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20.dp),
-                          ),
-                          ...dataRestaurant.values
-                              .elementAt(index)
-                              .asMap()
-                              .map(
-                                (index, value) => MapEntry(index, value),
-                              )
-                              .values
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

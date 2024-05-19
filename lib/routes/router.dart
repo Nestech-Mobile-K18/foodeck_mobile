@@ -28,15 +28,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _pageBuilder((_) => const WaitCheckoutView(), settings: settings);
 
     case RouteName.home:
-return _pageBuilder((_) => const Home(), settings: settings);
-      // return _pageBuilder(
-      //   (_) => HomePage(
-      //     userData: settings.arguments != null
-      //         ? settings.arguments as Map<dynamic, dynamic>
-      //         : null,
-      //   ),
-      //   settings: settings,
-      // );
+      return _pageBuilder((_) => const Home(), settings: settings);
+    // return _pageBuilder(
+    //   (_) => HomePage(
+    //     userData: settings.arguments != null
+    //         ? settings.arguments as Map<dynamic, dynamic>
+    //         : null,
+    //   ),
+    //   settings: settings,
+    // );
     case RouteName.loginEmail:
       return _pageBuilder((_) => const LoginEmailView(), settings: settings);
     case RouteName.signup:
@@ -47,9 +47,24 @@ return _pageBuilder((_) => const Home(), settings: settings);
         settings: settings,
       );
     case RouteName.cart:
-      return _pageBuilder((_) => const CartVew(), settings: settings);
-    case RouteName.checkout:
-      return _pageBuilder((_) => const CheckoutView(), settings: settings);
+      return _pageBuilder((_) => const CartView(), settings: settings);
+    case RouteName.editAccount:
+      return _pageBuilder((_) => const EditAccountView(), settings: settings);
+    // case RouteName.checkout:
+    //   return _pageBuilder((_) => const CheckoutView(), settings: settings);
+    case RouteName.myLocation:
+      return _pageBuilder((_) => const LocationsView(), settings: settings);
+    case RouteName.history:
+      return _pageBuilder((_) => const HistoryView(), settings: settings);
+    case RouteName.paymentMethod:
+      return _pageBuilder((_) => const PaymentMethodView(), settings: settings);
+    case RouteName.review:
+      return _pageBuilder((_) => const ReviewView(), settings: settings);
+    case RouteName.aboutUs:
+      return _pageBuilder((_) => const AboutUsView(), settings: settings);
+    case RouteName.addLocation:
+      return _pageBuilder((_) => const AddLocation(), settings: settings);
+
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),
           settings: settings);
