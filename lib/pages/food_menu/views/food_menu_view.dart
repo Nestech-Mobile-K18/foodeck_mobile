@@ -123,32 +123,29 @@ class _FoodMenuViewState extends State<FoodMenuView>
                 ),
               ),
               Positioned(
-                top: 45,
-                right: 70,
-                child: IconButton(
-                  icon: Icon(
-                    isLiked ? Icons.favorite : Icons.favorite_border,
-                    color: isLiked ? Colors.pink : ColorsGlobal.globalWhite,
-                  ),
-                  onPressed: _toggleLike,
-                ),
+                top: 35,
+                right: 20,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        isLiked ? Icons.favorite : Icons.favorite_border,
+                        color: isLiked ? Colors.pink : ColorsGlobal.globalWhite,
+                      ),
+                      onPressed: _toggleLike,
+                    ),
+                    Icon(
+                      Icons.share_outlined,
+                      color: ColorsGlobal.globalWhite,
+                    ),
+                    Icon(
+                      Icons.more_vert_outlined,
+                      color: ColorsGlobal.globalWhite,
+                    ),
+                  ],
+                )
               ),
-              const Positioned(
-                top: 45,
-                right: 40,
-                child: Icon(
-                  Icons.share_outlined,
-                  color: ColorsGlobal.globalWhite,
-                ),
-              ),
-              const Positioned(
-                top: 45,
-                right: 10,
-                child: Icon(
-                  Icons.more_vert_outlined,
-                  color: ColorsGlobal.globalWhite,
-                ),
-              ),
+
             ],
           ),
         ),

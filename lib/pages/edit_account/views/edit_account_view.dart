@@ -12,7 +12,7 @@ import '../../../widgets/cross_bar.dart';
 import '../vm/edit_account_view_model.dart';
 
 class EditAccountView extends StatefulWidget {
-  const EditAccountView({Key? key}) : super(key: key);
+  const EditAccountView({super.key});
 
   @override
   State<EditAccountView> createState() => _EditAccountViewState();

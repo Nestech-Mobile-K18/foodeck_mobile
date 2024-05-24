@@ -9,12 +9,15 @@ class CustomTextField extends StatefulWidget {
   final String? title;
   final bool? obscureText;
   final TextInputType? textInputType;
+  final Color? hintTextColor;
+  final bool? disableTitle;
   final Widget? iconSuffit;
   final bool? readOnly;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final List<TextInputFormatter>? inputFormatters;
-final Function()? onEditingComplete;
+  final Function()? onEditingComplete;
+
   const CustomTextField(
       {super.key,
       this.hintText,
@@ -23,10 +26,12 @@ final Function()? onEditingComplete;
       this.readOnly,
       this.obscureText,
       this.iconSuffit,
-        this.onChanged,
-        this.onSubmitted,
-        this.onEditingComplete,
-        this.inputFormatters,
+      this.disableTitle,
+      this.hintTextColor,
+      this.onChanged,
+      this.onSubmitted,
+      this.onEditingComplete,
+      this.inputFormatters,
       this.textInputType});
 
   @override
@@ -51,7 +56,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       width: double.maxFinite,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -67,6 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            widget.disableTitle == true ? Container() :
             CustomText(
               title: widget.title ?? 'Title',
               color:
@@ -93,6 +98,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               obscureText: widget.obscureText ?? false,
               decoration: InputDecoration(
                   hintText: widget.hintText ?? '',
+                  hintStyle: TextStyle(
+                      color: widget.hintTextColor ?? ColorsGlobal.textGrey),
                   border: InputBorder.none,
                   suffixIcon: widget.iconSuffit),
               inputFormatters: widget.inputFormatters,

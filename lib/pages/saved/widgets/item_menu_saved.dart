@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/saved/vm/saved_view_model.dart';
 
 import '../../../resources/const.dart';

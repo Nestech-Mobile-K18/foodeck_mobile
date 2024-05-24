@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:template/resources/const.dart';
+import 'package:template/widgets/custom_text.dart';
 
-import '../../../resources/const.dart';
-import '../../../widgets/custom_text.dart';
+
+import '../views/food_variations_view.dart';
 
 class TabDeals extends StatefulWidget {
   final List<Map<String, dynamic>>? listFoods;
@@ -12,6 +14,15 @@ class TabDeals extends StatefulWidget {
 }
 
 class _TabDealsState extends State<TabDeals> {
+  void _navigateToFoodVariations(BuildContext context, Map<String, dynamic> foodItem) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FoodVariationsView(bindingData: foodItem),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -33,53 +44,55 @@ class _TabDealsState extends State<TabDeals> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ...food['list_food'].map<Widget>((foodItem) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: Responsive.blockSizeWidth(context) * 0.2,
-                              height: Responsive.screenHeight(context) * 0.09,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                image: DecorationImage(
-                                  image: NetworkImage(foodItem['image_food']),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  title: foodItem['food_name'],
-                                  size: 17,
-                                  color: ColorsGlobal.globalBlack,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                SizedBox(
-                                  width:
-                                      Responsive.blockSizeWidth(context) * 0.6,
-                                  child: CustomText(
-                                    title: foodItem['bonus'],
-                                    maxLine: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: true,
-                                    size: 15,
-                                    color: ColorsGlobal.textGrey,
-                                    fontWeight: FontWeight.w500,
+                      return InkWell(
+                        onTap: () => _navigateToFoodVariations(context, foodItem),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: Responsive.blockSizeWidth(context) * 0.2,
+                                height: Responsive.screenHeight(context) * 0.09,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: DecorationImage(
+                                    image: NetworkImage(foodItem['image_food']),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                CustomText(
-                                  title: '\$${foodItem['price']}',
-                                  size: 15,
-                                  color: ColorsGlobal.globalBlack,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomText(
+                                    title: foodItem['food_name'],
+                                    size: 17,
+                                    color: ColorsGlobal.globalBlack,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  SizedBox(
+                                    width: Responsive.blockSizeWidth(context) * 0.6,
+                                    child: CustomText(
+                                      title: foodItem['bonus'],
+                                      maxLine: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      size: 15,
+                                      color: ColorsGlobal.textGrey,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  CustomText(
+                                    title: '\$${foodItem['price']}',
+                                    size: 15,
+                                    color: ColorsGlobal.globalBlack,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),

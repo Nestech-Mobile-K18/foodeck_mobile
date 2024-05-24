@@ -8,7 +8,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/services/api.dart';
 import 'package:template/services/mapbox_config.dart';
 import 'package:template/services/table_supbase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/auth_manager.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -18,6 +17,14 @@ class HomeViewModel extends ChangeNotifier {
   final API _api = API();
   static const String _baseUrl = MapBoxConfig.BASE_URL_MAPBOX;
   static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
+  int _totalQuantity = 0;
+
+  int get totalQuantity => _totalQuantity;
+
+  void updateTotalQuantity(int newQuantity) {
+    _totalQuantity = newQuantity;
+    notifyListeners();
+  }
 
   Future<Map<String, dynamic>> calculateDistanceAndTime(
       String userAddress, String restaurantAddress) async {
@@ -302,4 +309,39 @@ class HomeViewModel extends ChangeNotifier {
           .update({'list_like': updatedList}).eq('id', userId);
     }
   }
+
+  Future<void> clearCart() async {
+    final userId = await AuthManager.getUserId();
+    if (userId != null) {
+      // Clear the cart
+      await supabase.from('cart').update({'list_cart': []}).eq('user_id', userId);
+
+      // Update total quantity
+      _totalQuantity = 0;
+      notifyListeners();
+    }
+  }
+
+  Future<int> fetchTotalQuantityFromSupabase() async {
+    final String? userId = await AuthManager.getUserId();
+    if (userId != null) {
+      final response = await supabase
+          .from('cart')
+          .select('list_cart')
+          .eq('user_id', userId)
+          .single();
+      if (response != null && response['list_cart'] != null) {
+        final listCart = response['list_cart'] as List<dynamic>;
+        int totalQuantity = listCart.fold(0, (sum, item) => sum + (item['quantity'] as int? ?? 0));
+        return totalQuantity;
+      }
+    }
+    return 0;
+  }
+  Future<int> getTotalQuantityInCart() async {
+    int totalQuantity = await fetchTotalQuantityFromSupabase();
+    updateTotalQuantity(totalQuantity);
+    return totalQuantity;
+  }
+
 }
