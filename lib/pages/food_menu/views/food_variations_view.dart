@@ -512,6 +512,7 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                       selectedVariation: selectedVariation,
                       quantity: quantity,
                       totalPrice: totalPrice,
+                      instructions: instructionsController.text
                     );
                   },
                   color: ColorsGlobal.globalPink,

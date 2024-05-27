@@ -35,16 +35,16 @@ class _HomeViewState extends State<HomeView> {
     _viewModel.requestPermissionLocation(context);
     _viewModel.onAddressReceived = _updateAddress;
     _updateMenuData();
-    _updateTotalQuantity();
+    //_updateTotalQuantity();
   }
 
-  void _updateTotalQuantity() async {
-    int quantity = await _viewModel.getTotalQuantityInCart();
-    setState(() {
-      _viewModel
-          .updateTotalQuantity(quantity); // Update quantity in HomeViewModel
-    });
-  }
+  // void _updateTotalQuantity() async {
+  //   int quantity = await _viewModel.getTotalQuantityInCart();
+  //   setState(() {
+  //     _viewModel
+  //         .updateTotalQuantity(quantity); // Update quantity in HomeViewModel
+  //   });
+  // }
 
   void _updateAddress(String? address) {
     if (mounted) {

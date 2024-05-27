@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:template/pages/map/models/location_model.dart';
 import 'package:template/pages/map/views/add_location_view.dart';
 import 'package:template/pages/map/vm/map_view_model.dart';
 import 'package:template/pages/map/widget/bottom_sheet.dart';

@@ -322,26 +322,26 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  Future<int> fetchTotalQuantityFromSupabase() async {
-    final String? userId = await AuthManager.getUserId();
-    if (userId != null) {
-      final response = await supabase
-          .from('cart')
-          .select('list_cart')
-          .eq('user_id', userId)
-          .single();
-      if (response != null && response['list_cart'] != null) {
-        final listCart = response['list_cart'] as List<dynamic>;
-        int totalQuantity = listCart.fold(0, (sum, item) => sum + (item['quantity'] as int? ?? 0));
-        return totalQuantity;
-      }
-    }
-    return 0;
-  }
-  Future<int> getTotalQuantityInCart() async {
-    int totalQuantity = await fetchTotalQuantityFromSupabase();
-    updateTotalQuantity(totalQuantity);
-    return totalQuantity;
-  }
+  // Future<int> fetchTotalQuantityFromSupabase() async {
+  //   final String? userId = await AuthManager.getUserId();
+  //   if (userId != null) {
+  //     final response = await supabase
+  //         .from('cart')
+  //         .select('list_cart')
+  //         .eq('user_id', userId)
+  //         .single();
+  //     if (response != null && response['list_cart'] != null) {
+  //       final listCart = response['list_cart'] as List<dynamic>;
+  //       int totalQuantity = listCart.fold(0, (sum, item) => sum + (item['quantity'] as int? ?? 0));
+  //       return totalQuantity;
+  //     }
+  //   }
+  //   return 0;
+  // }
+  // Future<int> getTotalQuantityInCart() async {
+  //   int totalQuantity = await fetchTotalQuantityFromSupabase();
+  //   updateTotalQuantity(totalQuantity);
+  //   return totalQuantity;
+  // }
 
 }

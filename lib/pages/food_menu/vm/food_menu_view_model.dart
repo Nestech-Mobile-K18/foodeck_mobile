@@ -273,16 +273,17 @@ class FoodMenuViewModel extends ChangeNotifier {
     required String? selectedVariation,
     required int quantity,
     required double totalPrice,
+    required String instructions
   }) async {
     final userId = await AuthManager.getUserId();
     if (userId != null) {
       final userRecord = await supabase
           .from('users')
-          .select('id')
+          .select('id, email, phone, name')
           .eq('id', userId)
           .single();
 
-      if (userRecord.containsKey('id')) {
+      if (userRecord != null && userRecord.containsKey('id')) {
         final response = await supabase
             .from('cart')
             .select()
@@ -300,7 +301,7 @@ class FoodMenuViewModel extends ChangeNotifier {
             if (item['id_food'] == foodData['id_food']) {
               // If the product is already in the cart, update the quantity and price
               item['quantity'] += quantity;
-              item['price'] = (double.parse(item['price']) + totalPrice);
+              item['price'] = (item['price'] as double) + totalPrice;
               itemFound = true;
               break;
             }
@@ -318,13 +319,18 @@ class FoodMenuViewModel extends ChangeNotifier {
               'variation': variationMap != null ? selectedVariation : null,
               'quantity': quantity,
               'price': totalPrice,
+              'instructions': instructions,
+              'user_email': userRecord['email'],
+              'user_phone': userRecord['phone'],
+              'user_name': userRecord['name'],
             });
           }
 
           // Update the shopping cart in the database
           await supabase
               .from('cart')
-              .update({'list_cart': cartList}).eq('user_id', userId);
+              .update({'list_cart': cartList, 'is_order':false}).eq('user_id',
+              userId);
         } else {
           // If there is no shopping cart, create a new one and add products
           final newCartRecord = {
@@ -340,25 +346,30 @@ class FoodMenuViewModel extends ChangeNotifier {
                 'variation': variationMap != null ? selectedVariation : null,
                 'quantity': quantity,
                 'price': totalPrice,
+                'instructions': instructions,
+                'user_email': userRecord['email'],
+                'user_phone': userRecord['phone'],
+                'user_name': userRecord['name'],
               }
             ],
+            'is_order':false
           };
 
           // Add new cart to database
           await supabase.from('cart').insert(newCartRecord);
         }
 
-         ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Add to cart successfully'),
             duration: Duration(seconds: 2),
           ),
         );
       } else {
-        return ;
+        return;
       }
     } else {
-      return ;
+      return;
     }
   }
 

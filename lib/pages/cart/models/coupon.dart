@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class Coupon {
   final String? id;

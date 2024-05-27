@@ -55,4 +55,8 @@ class MediaRes {
   static const creditCard = '$_baseImage/ic_credit_card.png';
   static const masterCard = '$_baseIcon/ic_master_card.png';
   static const visaCard = '$_baseIcon/ic_visa_card.png';
+
+  // checkout
+  static const isDone = '$_baseImage/ic_done.png';
+  static const isDelivery = '$_baseImage/ic_delivery.png';
 }

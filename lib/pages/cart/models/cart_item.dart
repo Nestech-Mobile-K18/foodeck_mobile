@@ -1,28 +1,39 @@
 class CartItem {
+  final String? cartId;
   final String? idFood;
   final String? foodName;
   final String? bonus;
   final String? imageFood;
-  final String addressRestaurant;
+  final String? addressRestaurant;
   final List<String>? extraSauce;
   final String? variation;
   final int? quantity;
   final double? price;
+  final String? instructions;
+  final String? userEmail;
+  final String? userPhone;
+  final String? userName;
 
   CartItem({
-    required this.idFood,
-    required this.foodName,
-    required this.bonus,
-    required this.imageFood,
-    required this.addressRestaurant,
-    required this.extraSauce,
-    required this.variation,
-    required this.quantity,
-    required this.price,
+    this.cartId,
+    this.idFood,
+    this.foodName,
+    this.bonus,
+    this.imageFood,
+    this.addressRestaurant,
+    this.extraSauce,
+    this.variation,
+    this.quantity,
+    this.price,
+    this.instructions,
+    this.userEmail,
+    this.userPhone,
+    this.userName,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
+      cartId: json['cart_id'],
       idFood: json['id_food'],
       foodName: json['food_name'],
       bonus: json['bonus'],
@@ -32,11 +43,17 @@ class CartItem {
       variation: json['variation'],
       quantity: json['quantity'],
       price: json['price'],
+      instructions: json['instructions'],
+      userEmail: json['user_email'],
+      userPhone: json['user_phone'],
+      userName: json['user_name'],
     );
   }
 
+// Function to convert from CartItem to Map<String, dynamic>
   Map<String, dynamic> toJson() {
     return {
+      'cart_id': cartId,
       'id_food': idFood,
       'food_name': foodName,
       'bonus': bonus,
@@ -46,6 +63,15 @@ class CartItem {
       'variation': variation,
       'quantity': quantity,
       'price': price,
+      'instructions': instructions,
+      'user_email': userEmail,
+      'user_phone': userPhone,
+      'user_name': userName,
     };
   }
+}
+
+// Convert CartItem list to List<Map<String, dynamic>> list
+List<Map<String, dynamic>> cartItemListToMapList(List<CartItem> cartItems) {
+  return cartItems.map((cartItem) => cartItem.toJson()).toList();
 }

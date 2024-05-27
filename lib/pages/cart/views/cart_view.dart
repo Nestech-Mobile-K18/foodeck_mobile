@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:template/pages/cart/vm/cart_view_model.dart';
+import 'package:template/pages/food_menu/views/food_variations_view.dart';
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/method_button.dart';
 import '../../../resources/const.dart';
 import '../../../widgets/corner_clipper.dart';
 import '../../../widgets/custom_text.dart';
 import 'package:provider/provider.dart';
+import '../../checkout/views/checkout_view.dart';
 import '../widgets/coupon_bottom_sheet.dart';
 
 class CartView extends StatefulWidget {
@@ -62,6 +64,7 @@ class _CartViewState extends State<CartView> {
                         child: Text('There are no items in the cart'));
                   } else {
                     final cartItems = viewModel.cartItems;
+
                     return Container(
                       height: Responsive.screenHeight(context) * 0.5,
                       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -81,11 +84,11 @@ class _CartViewState extends State<CartView> {
                                         child: Image.network(
                                           item.imageFood ?? '',
                                           width:
-                                              Responsive.screenWidth(context) *
-                                                  0.2,
+                                          Responsive.screenWidth(context) *
+                                              0.2,
                                           height:
-                                              Responsive.screenHeight(context) *
-                                                  0.08,
+                                          Responsive.screenHeight(context) *
+                                              0.08,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -118,7 +121,7 @@ class _CartViewState extends State<CartView> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       CustomText(
                                         title: item.foodName,
@@ -131,7 +134,7 @@ class _CartViewState extends State<CartView> {
                                       if (item.extraSauce != null)
                                         CustomText(
                                             title:
-                                                '${item.extraSauce?.join(', ')}'),
+                                            '${item.extraSauce?.join(', ')}'),
                                       CustomText(title: '\$${item.price}'),
                                     ],
                                   ),
@@ -155,7 +158,7 @@ class _CartViewState extends State<CartView> {
               Container(
                 width: Responsive.screenWidth(context),
                 padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 color: ColorsGlobal.dividerGrey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,26 +185,31 @@ class _CartViewState extends State<CartView> {
                               itemBuilder: (context, index) {
                                 final item = proposedFoods[index];
                                 return GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push
+                                      (MaterialPageRoute(builder: (context)
+                                    =>FoodVariationsView(bindingData: item.toJson(),
+                                    )));
+                                  },
                                   child: Container(
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Stack(
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(16),
+                                              BorderRadius.circular(16),
                                               child: Image.network(
                                                 item.imageFood ?? '',
                                                 width: Responsive.screenWidth(
-                                                        context) *
+                                                    context) *
                                                     0.5,
                                                 height: Responsive.screenHeight(
-                                                        context) *
+                                                    context) *
                                                     0.15,
                                                 fit: BoxFit.cover,
                                               ),
@@ -212,23 +220,23 @@ class _CartViewState extends State<CartView> {
                                               child: Container(
                                                 alignment: Alignment.center,
                                                 width: Responsive.screenWidth(
-                                                        context) *
+                                                    context) *
                                                     0.1,
                                                 padding:
-                                                    const EdgeInsets.all(5),
+                                                const EdgeInsets.all(5),
                                                 decoration: const BoxDecoration(
                                                   color:
-                                                      ColorsGlobal.globalWhite,
+                                                  ColorsGlobal.globalWhite,
                                                   borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(8)),
+                                                  BorderRadius.all(
+                                                      Radius.circular(8)),
                                                 ),
                                                 child: CustomText(
                                                   title:
-                                                      '\$${item.price.toString()}',
+                                                  '\$${item.price.toString()}',
                                                   size: 14,
                                                   color:
-                                                      ColorsGlobal.globalBlack,
+                                                  ColorsGlobal.globalBlack,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -255,181 +263,205 @@ class _CartViewState extends State<CartView> {
                   ],
                 ),
               ),
-              Column(
-                children: [
-                  Container(
-                    width: Responsive.screenWidth(context),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    color: ColorsGlobal.globalWhite,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              // Thêm điều kiện hiển thị cho Column này
+              Consumer<CartViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.cartItems.isEmpty) {
+                    return Container(); // Ẩn Column nếu cartItems rỗng
+                  } else {
+                    return Column(
                       children: [
-                        const CustomText(
-                          title: 'Coupon',
-                          size: 17,
-                          color: ColorsGlobal.globalBlack,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        Consumer<CartViewModel>(
-                          builder: (context, viewModel, child) {
-                            return Container(
-                              margin: const EdgeInsets.symmetric(vertical: 15),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 10),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(16)),
-                                border:
-                                    Border.all(color: ColorsGlobal.textGrey),
+                        Container(
+                          width: Responsive.screenWidth(context),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          color: ColorsGlobal.globalWhite,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const CustomText(
+                                title: 'Coupon',
+                                size: 17,
+                                color: ColorsGlobal.globalBlack,
+                                fontWeight: FontWeight.bold,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    viewModel.selectedCouponCode ??
-                                        'No discount code selected',
-                                    style: const TextStyle(
-                                      color: ColorsGlobal.globalBlack,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w400,
+                              Consumer<CartViewModel>(
+                                builder: (context, viewModel, child) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 15),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      const BorderRadius.all(Radius.circular(16)),
+                                      border:
+                                      Border.all(color: ColorsGlobal.textGrey),
                                     ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => CouponBottomSheet(
-                                            cartViewModel: viewModel),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          viewModel.selectedCouponCode ??
+                                              'No discount code selected',
+                                          style: const TextStyle(
+                                            color: ColorsGlobal.globalBlack,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) => CouponBottomSheet(
+                                                  cartViewModel: viewModel),
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.arrow_forward,
+                                            color: ColorsGlobal.globalBlack,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const CrossBar(height: 5),
+                        Column(
+                          children: [
+                            ListTile(
+                              title: const CustomText(
+                                title: 'Subtotal',
+                                color: ColorsGlobal.globalBlack,
+                                size: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              trailing: Consumer<CartViewModel>(
+                                builder: (context, viewModel, child) {
+                                  return CustomText(
+                                    title:
+                                    '\$${viewModel.getTotalPrice().toStringAsFixed(0)}',
+                                    color: ColorsGlobal.globalPink,
+                                    size: 20,
+                                    fontWeight: FontWeight.bold,
+                                  );
+                                },
+                              ),
+                            ),
+                            ListTile(
+                              title: const CustomText(
+                                title: 'Delivery Fee',
+                                color: ColorsGlobal.globalBlack,
+                                size: 17,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              trailing: Consumer<CartViewModel>(
+                                builder: (context, viewModel, child) {
+                                  return CustomText(
+                                    title: '\$${deliveryFee.toStringAsFixed(0)}',
+                                    color: ColorsGlobal.textGrey,
+                                    size: 17,
+                                    fontWeight: FontWeight.w400,
+                                  );
+                                },
+                              ),
+                            ),
+                            const CrossBar(height: 2),
+                            ListTile(
+                              title: const CustomText(
+                                title: 'VAT',
+                                color: ColorsGlobal.globalBlack,
+                                size: 17,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              trailing: Consumer<CartViewModel>(
+                                builder: (context, viewModel, child) {
+                                  return CustomText(
+                                    title: '\$${vat.toStringAsFixed(0)}',
+                                    color: ColorsGlobal.textGrey,
+                                    size: 17,
+                                    fontWeight: FontWeight.w400,
+                                  );
+                                },
+                              ),
+                            ),
+                            const CrossBar(height: 2),
+                            ListTile(
+                              title: const CustomText(
+                                title: 'Coupon',
+                                color: ColorsGlobal.globalBlack,
+                                size: 17,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              trailing: Consumer<CartViewModel>(
+                                builder: (context, viewModel, child) {
+                                  return CustomText(
+                                    title:
+                                    '-\$${viewModel.selectedCouponValue?.toStringAsFixed(0) ?? '0'}',
+                                    color: ColorsGlobal.globalGreen,
+                                    size: 17,
+                                    fontWeight: FontWeight.w400,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Consumer<CartViewModel>(
+                                    builder: (context, viewModel, child) {
+                                      final totalPrice =
+                                          viewModel.getDiscountedTotalPrice() +
+                                              deliveryFee +
+                                              vat;
+                                      return CustomText(
+                                        title: '\$${totalPrice.toStringAsFixed(0)}',
+                                        color: ColorsGlobal.globalBlack,
+                                        size: 28,
+                                        fontWeight: FontWeight.bold,
                                       );
                                     },
-                                    icon: const Icon(
-                                      Icons.arrow_forward,
-                                      color: ColorsGlobal.globalBlack,
-                                    ),
                                   ),
+                                  MethodButton(
+                                      onTap: () {
+                                        final totalPrice = _viewModel.getDiscountedTotalPrice() + deliveryFee + vat;
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (context) => CheckoutView(checkoutData: {
+                                              'cartItems': _viewModel.cartItems,
+                                              'subtotal': _viewModel.getTotalPrice(),
+                                              'deliveryFee': deliveryFee,
+                                              'vat': vat,
+                                              'selectedCouponCode': _viewModel
+                                                  .selectedCouponCode ?? '',
+                                              'couponValue': _viewModel
+                                                  .selectedCouponValue ?? 0,
+                                              'totalPrice': totalPrice.toStringAsFixed(0),
+                                            },)));
+                                      },
+                                      color: ColorsGlobal.globalPink,
+                                      title: 'Go'
+                                          ' to Checkout',
+                                      widthButton:
+                                      Responsive.screenWidth(context) * 0.5),
                                 ],
                               ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const CrossBar(height: 5),
-                  Column(
-                    children: [
-                      ListTile(
-                        title: const CustomText(
-                          title: 'Subtotal',
-                          color: ColorsGlobal.globalBlack,
-                          size: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        trailing: Consumer<CartViewModel>(
-                          builder: (context, viewModel, child) {
-                            return CustomText(
-                              title:
-                                  '\$${viewModel.getTotalPrice().toStringAsFixed(0)}',
-                              color: ColorsGlobal.globalPink,
-                              size: 20,
-                              fontWeight: FontWeight.bold,
-                            );
-                          },
-                        ),
-                      ),
-                      ListTile(
-                        title: const CustomText(
-                          title: 'Delivery Fee',
-                          color: ColorsGlobal.globalBlack,
-                          size: 17,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        trailing: Consumer<CartViewModel>(
-                          builder: (context, viewModel, child) {
-                            return CustomText(
-                              title: '\$${deliveryFee.toStringAsFixed(0)}',
-                              color: ColorsGlobal.textGrey,
-                              size: 17,
-                              fontWeight: FontWeight.w400,
-                            );
-                          },
-                        ),
-                      ),
-                      const CrossBar(height: 2),
-                      ListTile(
-                        title: const CustomText(
-                          title: 'VAT',
-                          color: ColorsGlobal.globalBlack,
-                          size: 17,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        trailing: Consumer<CartViewModel>(
-                          builder: (context, viewModel, child) {
-                            return CustomText(
-                              title: '\$${vat.toStringAsFixed(0)}',
-                              color: ColorsGlobal.textGrey,
-                              size: 17,
-                              fontWeight: FontWeight.w400,
-                            );
-                          },
-                        ),
-                      ),
-                      const CrossBar(height: 2),
-                      ListTile(
-                        title: const CustomText(
-                          title: 'Coupon',
-                          color: ColorsGlobal.globalBlack,
-                          size: 17,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        trailing: Consumer<CartViewModel>(
-                          builder: (context, viewModel, child) {
-                            return CustomText(
-                              title:
-                                  '\$${viewModel.selectedCouponValue?.toStringAsFixed(0) ?? '0'}',
-                              color: ColorsGlobal.textGrey,
-                              size: 17,
-                              fontWeight: FontWeight.w400,
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Consumer<CartViewModel>(
-                              builder: (context, viewModel, child) {
-                                final totalPrice =
-                                    viewModel.getDiscountedTotalPrice() +
-                                        deliveryFee +
-                                        vat;
-                                return CustomText(
-                                  title: '\$${totalPrice.toStringAsFixed(0)}',
-                                  color: ColorsGlobal.globalBlack,
-                                  size: 28,
-                                  fontWeight: FontWeight.bold,
-                                );
-                              },
-                            ),
-                            MethodButton(
-                                color: ColorsGlobal.globalPink,
-                                title: 'Go'
-                                    ' to Checkout',
-                                widthButton:
-                                    Responsive.screenWidth(context) * 0.5),
+                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                      ],
+                    );
+                  }
+                },
               ),
             ],
           ),

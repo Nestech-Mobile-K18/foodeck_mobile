@@ -21,21 +21,45 @@ class CartViewModel extends ChangeNotifier {
   List<Coupon> get coupons => _coupons;
 
   String? get selectedCouponCode => _selectedCouponCode;
+
   int? get selectedCouponValue => _selectedCouponValue;
 
   Future<void> requestShowListCart() async {
     final String? userId = await AuthManager.getUserId();
     if (userId != null) {
-      final response =
-          await supabase.from('cart').select('list_cart').eq('user_id', userId);
+      final response = await supabase
+          .from('cart')
+          .select('id, list_cart')
+          .eq('user_id', userId)
+          .eq('is_order', false);
 
       final data = response;
-      if (data.isNotEmpty) {
+      if (data != null && data.isNotEmpty) {
         List<CartItem> allCartItems = [];
         for (var record in data) {
+          final cartId = record['id'];
           final listCartJson = record['list_cart'] as List;
-          allCartItems.addAll(
-              listCartJson.map((json) => CartItem.fromJson(json)).toList());
+          allCartItems.addAll(listCartJson.map((json) {
+            var cartItem = CartItem.fromJson(json);
+            cartItem = CartItem(
+              cartId: cartId,
+              // Gán cartId vào đây
+              idFood: cartItem.idFood,
+              foodName: cartItem.foodName,
+              bonus: cartItem.bonus,
+              imageFood: cartItem.imageFood,
+              addressRestaurant: cartItem.addressRestaurant,
+              extraSauce: cartItem.extraSauce,
+              variation: cartItem.variation,
+              quantity: cartItem.quantity,
+              price: cartItem.price,
+              instructions: cartItem.instructions,
+              userEmail: cartItem.userEmail,
+              userPhone: cartItem.userPhone,
+              userName: cartItem.userName,
+            );
+            return cartItem;
+          }).toList());
         }
         _cartItems = allCartItems;
         notifyListeners();
@@ -89,6 +113,7 @@ class CartViewModel extends ChangeNotifier {
     _selectedCouponValue = couponValue;
     notifyListeners();
   }
+
   double getDiscountedTotalPrice() {
     final totalPrice = getTotalPrice();
     if (_selectedCouponValue != null) {
@@ -98,9 +123,9 @@ class CartViewModel extends ChangeNotifier {
   }
 
   double getTotalPrice() {
-    return _cartItems.fold(
-        0.0, (sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 1));
+    return _cartItems.fold(0.0, (sum, item) => sum + (item.price ?? 0));
   }
+
   void destroy() {
     _cartItems = [];
     _proposedFoods = [];
