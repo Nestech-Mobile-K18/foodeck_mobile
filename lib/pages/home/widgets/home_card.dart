@@ -21,7 +21,7 @@ class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       height: heightCard ?? 160,
       width: widthCard ?? double.maxFinite,
       decoration: BoxDecoration(
@@ -32,7 +32,7 @@ class HomeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Container(
-        padding: EdgeInsets.only(left: 15, bottom: 15),
+        padding: const EdgeInsets.only(left: 15, bottom: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,

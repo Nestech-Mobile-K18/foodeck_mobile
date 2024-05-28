@@ -19,6 +19,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
   final ForgotPasswordViewModel _viewModel = ForgotPasswordViewModel();
   final Validation _validation = Validation();
 
+  @override
   void initState() {
     super.initState();
     newPasswordController.addListener(() {
@@ -81,7 +82,7 @@ class _NewPasswordViewState extends State<NewPasswordView> {
             ),
             const SizedBox(height: 10),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: MethodButton(
                   onTap: () {
                     _viewModel.validNewPassword(

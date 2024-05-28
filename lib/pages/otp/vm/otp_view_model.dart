@@ -46,11 +46,11 @@ class OTPViewModel {
   }
 
   /// Verifies the OTP code entered by the user.
-  Future<void> verifyOTP(BuildContext context, OTPModel _otpModel,
+  Future<void> verifyOTP(BuildContext context, OTPModel otpModel,
       {required bool fromHomeScreen}) async {
     try {
-      String token = _otpModel.otpValues.join();
-      String email = _otpModel.email;
+      String token = otpModel.otpValues.join();
+      String email = otpModel.email;
 
       final res = _api.requestVerifyOTP(
           token: token, otpType: OtpType.email, email: email);
@@ -100,9 +100,9 @@ class OTPViewModel {
   }
 
   /// Resends the OTP code to the user.
-  Future<void> resendOTP(OTPModel _otpModel, BuildContext context) async {
+  Future<void> resendOTP(OTPModel otpModel, BuildContext context) async {
     try {
-      _api.requestResendOTP(_otpModel.email);
+      _api.requestResendOTP(otpModel.email);
       // Start the countdown
       startResendOTPTimer(context);
     } catch (e) {

@@ -7,8 +7,7 @@ class ChooseAvatar extends StatefulWidget {
   final VoidCallback? chooseAvatar;
   final XFile? imgFile;
   final String? imgUrl;
-  const ChooseAvatar({Key? key, this.chooseAvatar, this.imgFile, this.imgUrl})
-      : super(key: key);
+  const ChooseAvatar({super.key, this.chooseAvatar, this.imgFile, this.imgUrl});
 
   @override
   State<ChooseAvatar> createState() => _ChooseAvatarState();

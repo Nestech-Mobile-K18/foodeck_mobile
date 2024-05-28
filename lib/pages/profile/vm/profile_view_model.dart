@@ -1,5 +1,4 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/services/api.dart';
 import 'package:template/services/table_supbase.dart';
 
@@ -56,7 +55,7 @@ class ProfileViewModel {
       yield joinedData;
 
       await Future.delayed(
-          Duration(seconds: 5)); // Waiting time before receiving new data
+          const Duration(seconds: 5)); // Waiting time before receiving new data
     }
   }
 

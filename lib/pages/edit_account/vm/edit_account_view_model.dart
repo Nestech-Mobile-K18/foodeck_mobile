@@ -52,7 +52,7 @@ class EditAccountViewModel extends ChangeNotifier {
 
     await _api.supabase.storage.from('users').upload(fileName, imageFile);
 
-    final res = _api.supabase.storage.from('users').getPublicUrl('$fileName');
+    final res = _api.supabase.storage.from('users').getPublicUrl(fileName);
     return res;
   }
 
@@ -133,7 +133,7 @@ class EditAccountViewModel extends ChangeNotifier {
     }
   }
 
-  void auththenUpdate(EditProfileModel input, BuildContext context) async {
+  void authenUpdate(EditProfileModel input, BuildContext context) async {
     if (input.name!.isEmpty ||
         input.email!.isEmpty ||
         input.phone!.isEmpty ||
@@ -171,7 +171,7 @@ class EditAccountViewModel extends ChangeNotifier {
         } on AuthApiException catch (e) {
           if (e.message ==
               'New password should be different from the old password.') {
-            // Show a Snackbar with the error message
+
             // ignore: use_build_context_synchronously
             _showError.showError(context,
                 'New password should be different from the old password.');

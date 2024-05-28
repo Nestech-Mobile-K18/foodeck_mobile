@@ -19,12 +19,12 @@ class FunctionItems extends StatelessWidget {
 
   /// Constructor for the FunctionItems widget.
   const FunctionItems({
-    Key? key,
+    super.key,
     required this.functionName,
     required this.imgString,
     this.onTap,
     this.isDividers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

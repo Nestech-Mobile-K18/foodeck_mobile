@@ -5,7 +5,7 @@ import 'package:template/resources/colors.dart';
 class FormOTP extends StatefulWidget {
   final List<String>? otpValues;
   final int? countForm;
-  const FormOTP({Key? key, this.otpValues, this.countForm}) : super(key: key);
+  const FormOTP({super.key, this.otpValues, this.countForm});
 
   @override
   _FormOTPState createState() => _FormOTPState();

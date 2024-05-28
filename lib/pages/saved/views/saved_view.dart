@@ -7,7 +7,7 @@ import '../../food_menu/views/food_menu_view.dart';
 
 class SavedView extends StatefulWidget {
   final String? userAddress;
-  const SavedView({Key? key, this.userAddress}) : super(key: key);
+  const SavedView({super.key, this.userAddress});
 
   @override
   State<SavedView> createState() => _SavedViewState();

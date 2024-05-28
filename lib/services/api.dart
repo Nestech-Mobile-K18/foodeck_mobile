@@ -6,12 +6,10 @@ class API {
 
   Future<String?> responseUserId() async {
     String? getUserId;
-    // Lấy thông tin về người dùng hiện tại đang đăng nhập
+
     var currentUser = supabase.auth.currentUser;
 
-    // Kiểm tra xem người dùng có tồn tại không
     if (currentUser != null) {
-      // Lấy id của người dùng hiện tại
       getUserId = currentUser.id.toString();
     }
 
@@ -30,7 +28,7 @@ class API {
   }
 
   /// Request to upsert user data into a specified Supabase table.
-  Future<void> requestUpSert(
+  Future<void> requestUpsert(
       Map<String, dynamic> userData, String tableSupabase) async {
     await supabase.from(tableSupabase).upsert(userData);
   }
@@ -60,7 +58,7 @@ class API {
         .eq('email', email)
         .eq('provider', 'Email');
 
-    return response.indexed.isNotEmpty && response != null;
+    return response.indexed.isNotEmpty;
   }
 
   /// Check if an email is registered with a Google provider.
@@ -71,7 +69,7 @@ class API {
         .eq('email', email)
         .eq('provider', 'Google');
 
-    return response.indexed.isNotEmpty && response != null;
+    return response.indexed.isNotEmpty;
   }
 
   /// Request to reset password for a specified email.
@@ -94,7 +92,7 @@ class API {
       Object value) async {
     var response = await supabase
         .from(tableSupabase)
-        .select(columnNames.join(", ")) // Chọn nhiều cột
+        .select(columnNames.join(", "))
         .eq(columnQuery, value);
 
     // Convert response data to List<Map<String, dynamic>>.
@@ -149,7 +147,7 @@ class API {
 
   /// Request the ID of the current authenticated user.
   Future<String?> requestQueryIdAuthen() async {
-    final response = await supabase.auth.currentUser?.id;
+    final response = supabase.auth.currentUser?.id;
     return response;
   }
 }

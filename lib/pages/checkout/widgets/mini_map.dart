@@ -29,7 +29,7 @@ class _MiniMapState extends State<MiniMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200,
       child: FutureBuilder<LatLng>(
         future: _initialPosition,
@@ -67,7 +67,7 @@ class _MiniMapState extends State<MiniMap> {
                         width: 80,
                         height: 80,
                         point: snapshot.data!,
-                        child: Icon(
+                        child: const Icon(
                           Icons.location_on,
                           color: Colors.red,
                           size: 40,

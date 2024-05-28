@@ -93,10 +93,10 @@ class _PaymentInputViewState extends State<PaymentInputView> {
     setState(() {
       if (isValid) {
         // Display the blue tick icon
-        _expiryDateValidityIcon = Icon(Icons.check, color: Colors.green);
+        _expiryDateValidityIcon = const Icon(Icons.check, color: Colors.green);
       } else {
         // Display the red X icon
-        _expiryDateValidityIcon = Icon(Icons.close, color: Colors.red);
+        _expiryDateValidityIcon = const Icon(Icons.close, color: Colors.red);
       }
     });
   }
@@ -234,18 +234,18 @@ class _PaymentInputViewState extends State<PaymentInputView> {
                       if (isCardExists) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Card number already exists!'),
+                            content:  Text('Card number already exists!'),
                           ),
                         );
                       } else {
-                        Payment _paymentModel = Payment(
+                        Payment paymentModel = Payment(
                           cardNumber: cardNumber,
                           expiryDate: expiryDateController.text,
                           cvc: cvcController.text,
                           cardName: cardNameController.text,
                           paymentMethod: getPaymentMethod(),
                         );
-                        await _viewModel.insertPaymentMethodNew(_paymentModel);
+                        await _viewModel.insertPaymentMethodNew(paymentModel);
                         Navigator.of(context).pop();
                       }
                     },

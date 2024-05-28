@@ -8,7 +8,7 @@ import 'package:template/resources/const.dart';
 import 'package:template/widgets/custom_text.dart';
 
 class MapBoxView extends StatefulWidget {
-  const MapBoxView({Key? key});
+  const MapBoxView({super.key});
 
   @override
   State<MapBoxView> createState() => _MapBoxViewState();
@@ -80,8 +80,8 @@ class _MapBoxViewState extends State<MapBoxView> with TickerProviderStateMixin {
               animationController: BottomSheet.createAnimationController(this),
               builder: (BuildContext context) {
                 return BottomSheetCustom(
-                  onEditing: (typeAdress, address, addressInstructions) {
-                    _viewModel.updateLocationOnSupabase(address, typeAdress,
+                  onEditing: (typeAddress, address, addressInstructions) {
+                    _viewModel.updateLocationOnSupabase(address, typeAddress,
                         addressInstructions, selectedIndex);
                     _closeBottomSheet();
                   },
@@ -98,12 +98,12 @@ class _MapBoxViewState extends State<MapBoxView> with TickerProviderStateMixin {
                                 String? address = _selectedItemData!['address'];
                                 String? typeAddress =
                                     _selectedItemData!['type_address'];
-                                String? addressInstrunctions =
+                                String? addressInstructions =
                                     _selectedItemData!['address_instructions'];
                                 await _viewModel.deleteLocationOnSupabase(
                                     address!,
                                     typeAddress!,
-                                    addressInstrunctions,
+                                    addressInstructions,
                                     context);
                                 // ignore: use_build_context_synchronously
                                 Navigator.of(context).pop();

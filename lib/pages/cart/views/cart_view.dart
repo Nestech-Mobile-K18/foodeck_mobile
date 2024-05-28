@@ -51,12 +51,19 @@ class _CartViewState extends State<CartView> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorsGlobal.globalWhite,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+          ),
           title: const CustomText(
             title: 'Cart',
             color: ColorsGlobal.globalBlack,
             size: 20,
             fontWeight: FontWeight.w700,
           ),
+
         ),
         body: SingleChildScrollView(
           child: Column(

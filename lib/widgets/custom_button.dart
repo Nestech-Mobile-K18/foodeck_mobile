@@ -21,17 +21,16 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Lấy chiều cao màn hình
+    // Get the screen height
     double screenHeight = MediaQuery.of(context).size.height;
 
-    // Tính toán padding dựa trên tỉ lệ phần trăm của chiều cao màn hình, ví dụ ở đây là 5%
+
     double verticalPadding = screenHeight * 0.02;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        // Áp dụng padding dọc theo tỉ lệ chiều cao màn hình
         padding: EdgeInsets.symmetric(vertical: verticalPadding),
         alignment: Alignment.center,
         width: double.infinity,

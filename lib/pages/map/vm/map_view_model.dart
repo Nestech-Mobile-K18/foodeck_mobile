@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -26,17 +27,14 @@ class MapViewModel extends ChangeNotifier {
   final supabase = Supabase.instance.client;
   bool get isLoading => _isLoading;
   bool isSearching = false;
-  OverlayEntry? _overlayEntry;
 
   /// Retrieves the user's current location.
   Future<LatLng?> setLocationUser() async {
     LocationData? locationData = await _location.getLocation();
-    if (locationData != null) {
-      double latitude = locationData.latitude!;
-      double longitude = locationData.longitude!;
-      return LatLng(latitude, longitude);
-    }
-    return null;
+    double latitude = locationData.latitude!;
+    double longitude = locationData.longitude!;
+    return LatLng(latitude, longitude);
+
   }
 
   /// Retrieves the user's address based on their current location.
@@ -85,9 +83,10 @@ class MapViewModel extends ChangeNotifier {
       if (locations.isNotEmpty) {
         // Check if index is valid
         if (index >= 0 && index <= 5) {
-          var addressColumn = 'address_$index';
-          var typeColumn = 'type_address_$index';
-          var addressInstructionsColumn = 'address_instructions_$index';
+          int step = index +1;
+          var addressColumn = 'address_$step';
+          var typeColumn = 'type_address_$step';
+          var addressInstructionsColumn = 'address_instructions_$step';
 
           // Update information at index
           await supabase.from('location_user').update({
@@ -149,13 +148,13 @@ class MapViewModel extends ChangeNotifier {
 
                         Navigator.of(context).pop(); // Close the dialog
                       },
-                      child: Text('Yes'),
+                      child: const Text('Yes'),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop(); // Close the dialog
                       },
-                      child: Text('No'),
+                      child: const Text('No'),
                     ),
                   ],
                 );
@@ -176,71 +175,69 @@ class MapViewModel extends ChangeNotifier {
   }
 
   Future<void> deleteLocationOnSupabase(String address, String typeAddress,
-      String? addressInstrunctions, BuildContext context) async {
-    if (address != null) {
-      // Get userId from users table
+      String? addressInstructions, BuildContext context) async {
+    // Get userId from users table
 
-      final String? userId = await AuthManager.getUserId();
+    final String? userId = await AuthManager.getUserId();
 
-      // Query the location_user table
-      var locationResponse = await supabase
-          .from('location_user')
-          .select('*')
-          .eq('user_id', userId!);
-      var locations = locationResponse;
+    // Query the location_user table
+    var locationResponse = await supabase
+        .from('location_user')
+        .select('*')
+        .eq('user_id', userId!);
+    var locations = locationResponse;
 
-      if (locations.isNotEmpty) {
-        // Check address columns 2 to 5
-        for (int i = 1; i <= 5; i++) {
-          var addressColumn = 'address_$i';
-          var typeColumn = 'type_address_$i';
-          var addressInstrunctionsColumn = 'address_instructions_$i';
-          var existingAddress = locations[0][addressColumn];
-          var existingType = locations[0][typeColumn];
-          var existingAddressInstrunctions =
-              locations[0][addressInstrunctionsColumn];
+    if (locations.isNotEmpty) {
+      // Check address columns 2 to 5
+      for (int i = 1; i <= 5; i++) {
+        var addressColumn = 'address_$i';
+        var typeColumn = 'type_address_$i';
+        var addressInstructionColumn = 'address_instructions_$i';
+        var existingAddress = locations[0][addressColumn];
+        var existingType = locations[0][typeColumn];
+        var existingAddressInstruction =
+            locations[0][addressInstructionColumn];
 
-          if (existingAddress == address &&
-              existingType == typeAddress &&
-              existingAddressInstrunctions == addressInstrunctions) {
-            // Delete data if address and address type exist
-            await supabase.from('location_user').update({
-              addressColumn: null,
-              typeColumn: null,
-              addressInstrunctionsColumn: null
-            }).eq('user_id', userId);
+        if (existingAddress == address &&
+            existingType == typeAddress &&
+            existingAddressInstruction == addressInstructions) {
+          // Delete data if address and address type exist
+          await supabase.from('location_user').update({
+            addressColumn: null,
+            typeColumn: null,
+            addressInstructionColumn: null
+          }).eq('user_id', userId);
 
-            // Move data from the following columns to the current column
-            for (int j = i + 1; j <= 5; j++) {
-              var nextAddressColumn = 'address_$j';
-              var nextTypeColumn = 'type_address_$j';
-              var nextAddressInstrunctionsColumn = 'address_instructions_$j';
-              var nextAddress = locations[0][nextAddressColumn];
-              var nextType = locations[0][nextTypeColumn];
-              var nextAddressInstrunctions =
-                  locations[0][nextAddressInstrunctionsColumn];
+          // Move data from the following columns to the current column
+          for (int j = i + 1; j <= 5; j++) {
+            var nextAddressColumn = 'address_$j';
+            var nextTypeColumn = 'type_address_$j';
+            var nextAddressInstructionColumn = 'address_instructions_$j';
+            var nextAddress = locations[0][nextAddressColumn];
+            var nextType = locations[0][nextTypeColumn];
+            var nextAddressInstruction =
+                locations[0][nextAddressInstructionColumn];
 
-              // If the following column has data, push the data into the current column and delete the data in the following column
-              if (nextAddress != null && nextType != null) {
-                await supabase.from('location_user').update({
-                  addressColumn: nextAddress,
-                  typeColumn: nextType,
-                  addressInstrunctionsColumn: nextAddressInstrunctions,
-                  nextAddressColumn: null,
-                  nextTypeColumn: null,
-                  nextAddressInstrunctionsColumn: null
-                }).eq('user_id', userId);
-              } else {
-                // If the following column has no data, exit the loop
-                break;
-              }
+            // If the following column has data, push the data into the current column and delete the data in the following column
+            if (nextAddress != null && nextType != null) {
+              await supabase.from('location_user').update({
+                addressColumn: nextAddress,
+                typeColumn: nextType,
+                addressInstructionColumn: nextAddressInstruction,
+                nextAddressColumn: null,
+                nextTypeColumn: null,
+                nextAddressInstructionColumn: null
+              }).eq('user_id', userId);
+            } else {
+              // If the following column has no data, exit the loop
+              break;
             }
-            break; // Exit the loop after deleting and moving data
           }
+          break; // Exit the loop after deleting and moving data
         }
       }
     }
-  }
+    }
 
   /// Retrieves the user ID from the database.
   Future<String?> responseUserId() async {
@@ -325,7 +322,7 @@ class MapViewModel extends ChangeNotifier {
       cancelDebounce();
 
       // Start a new debounce timer
-      _debounce = Timer(Duration(milliseconds: 300), () async {
+      _debounce = Timer(const Duration(milliseconds: 300), () async {
         currentQuery = query;
         String apiUrl =
             '$_baseUrl${Uri.encodeFull(query)}.json?access_token=$_apiKey';
@@ -351,7 +348,9 @@ class MapViewModel extends ChangeNotifier {
         notifyListeners();
       });
     } catch (e) {
-      print(e);
+      if(kDebugMode){
+        print(e);
+      }
     } finally {
       // Set _isLoading to false when the search is complete
       _isLoading = false;
@@ -385,7 +384,9 @@ class MapViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print('Error fetching location: $e');
+      if(kDebugMode){
+        print('Error fetching location: $e');
+      }
     }
     return null;
   }

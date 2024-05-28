@@ -79,7 +79,7 @@ class ForgotPasswordViewModel extends ChangeNotifier {
   void validNewPassword(
       BuildContext context, String newPassword, String email) {
     if (newPassword.isEmpty) {
-      _showError.showError(context, 'Mật khẩu không được để trống');
+      _showError.showError(context, 'Password can not be blank');
     } else {
       if (!_validation.isPasswordValid(newPassword)) {
         _showError.showError(context,
@@ -87,7 +87,8 @@ class ForgotPasswordViewModel extends ChangeNotifier {
       } else {
         updatePassword(email, newPassword, context);
         Navigator.of(context).push(
-            MaterialPageRoute(builder: ((context) => LoginViaEmailView())));
+            MaterialPageRoute(builder: ((context) => const LoginViaEmailView()
+            )));
       }
     }
   }

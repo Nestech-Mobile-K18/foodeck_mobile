@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:template/pages/edit_account/views/edit_account_view.dart';
 import 'package:template/pages/map/views/map_view.dart';
 import 'package:template/pages/my_orders/views/my_orders_view.dart';
+import 'package:template/pages/my_reviews/views/my_reviews_view.dart';
 import 'package:template/pages/payment/views/payment_method_view.dart';
 import 'package:template/pages/profile/widgets/components/function_header.dart';
 import 'package:template/pages/profile/widgets/components/function_items.dart';
@@ -29,7 +30,8 @@ class _AccountSettingsState extends State<AccountSettings> {
             onTap: () {
               // Navigates to edit profile screen
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => EditAccountView()));
+                  MaterialPageRoute(builder: (context) => const EditAccountView
+                    ()));
             }),
         FunctionItems(
             functionName: StringExtensions.myLocation,
@@ -37,7 +39,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             isDividers: true,
             onTap: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MapBoxView()));
+                  .push(MaterialPageRoute(builder: (context) =>const MapBoxView()));
             }),
         FunctionItems(
             functionName: StringExtensions.myOrders,
@@ -45,7 +47,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             isDividers: true,
             onTap: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyOrdersView()));
+                  .push(MaterialPageRoute(builder: (context) =>const MyOrdersView()));
             }),
         FunctionItems(
             functionName: StringExtensions.paymentMethods,
@@ -60,7 +62,8 @@ class _AccountSettingsState extends State<AccountSettings> {
             imgString: MediaRes.myReviews,
             isDividers: false,
             onTap: () {
-              // Navigates to edit profile screen
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const MyReviewsView()));
             }),
       ],
     );

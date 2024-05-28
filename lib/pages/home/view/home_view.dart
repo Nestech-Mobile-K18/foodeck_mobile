@@ -17,7 +17,7 @@ import '../widgets/home_explore.dart';
 class HomeView extends StatefulWidget {
   final Function(String)? userAddress;
 
-  const HomeView({Key? key, this.userAddress}) : super(key: key);
+  const HomeView({super.key, this.userAddress});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -29,22 +29,22 @@ class _HomeViewState extends State<HomeView> {
   Future<List<Map<String, dynamic>>?>? menuData;
   Future<Map<String, dynamic>>? selectTime;
 
+
   @override
   void initState() {
     super.initState();
     _viewModel.requestPermissionLocation(context);
     _viewModel.onAddressReceived = _updateAddress;
     _updateMenuData();
-    //_updateTotalQuantity();
+    _updateCartItemCount();
   }
 
-  // void _updateTotalQuantity() async {
-  //   int quantity = await _viewModel.getTotalQuantityInCart();
-  //   setState(() {
-  //     _viewModel
-  //         .updateTotalQuantity(quantity); // Update quantity in HomeViewModel
-  //   });
-  // }
+  Future<void> _updateCartItemCount() async {
+    final itemCount = await _viewModel.countCartItems();
+    setState(() {
+       itemCount;
+    });
+  }
 
   void _updateAddress(String? address) {
     if (mounted) {
@@ -73,53 +73,57 @@ class _HomeViewState extends State<HomeView> {
     return ChangeNotifierProvider(
       create: (_) => _viewModel,
       child: Scaffold(
-        appBar: HomeBar(context, _address),
-        floatingActionButton: Consumer<HomeViewModel>(
-          builder: (context, viewModel, _) {
-            int quantity = viewModel.totalQuantity;
-            return Stack(
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const CartView()));
-                  },
-                  shape: const CircleBorder(),
-                  backgroundColor: ColorsGlobal.globalPink,
-                  tooltip: 'check cart',
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        MediaRes.cart,
-                        fit: BoxFit.fill,
-                        width: 30,
-                        height: 30,
-                      ),
-                      if (quantity > 0)
-                        Positioned(
-                          left: 0,
-                          bottom: -6,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: ColorsGlobal.globalBlack,
-                            ),
-                            child: Text(
-                              '$quantity',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
+
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const CartView()));
+            if (result == true) {
+              _updateCartItemCount();
+            }
+          },
+          shape: const CircleBorder(),
+          backgroundColor: ColorsGlobal.globalPink,
+          tooltip: 'check cart',
+          child: Stack(
+            children: [
+              Image.asset(
+                MediaRes.cart,
+                fit: BoxFit.fill,
+                width: 30,
+                height: 30,
+              ),
+              Positioned(
+                left: 0,
+                bottom: -6,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorsGlobal.globalBlack,
+                  ),
+                  child: FutureBuilder<int>(
+                    future: _viewModel.countCartItems(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Text(
+                          snapshot.data.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
                           ),
-                        ),
-                    ],
+                        );
+                      }
+                    },
                   ),
                 ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
         floatingActionButtonLocation: CustomFloatingActionButtonLocation(),
         resizeToAvoidBottomInset: false,
@@ -127,17 +131,12 @@ class _HomeViewState extends State<HomeView> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
-              ),
+              HomeBar(address: _address),
+              const SizedBox(height: 20),
               const HomeCategories(),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               const HomeBannerSlider(),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               FutureBuilder(
                 future: menuData,
                 builder: (context, snapshot) {
@@ -178,18 +177,13 @@ class _HomeViewState extends State<HomeView> {
                   }
                 },
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               const HomeExplore(),
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
       ),
     );
-
   }
 }

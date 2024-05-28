@@ -97,7 +97,7 @@ class SavedViewModel {
     if (listLike != null) {
       final List<String> menuIds = [];
       if (listLike is List<dynamic>) {
-        // Duyệt qua từng phần tử trong mảng và thêm vào danh sách menuIds
+        // Go through each element in the array and add it to the menuIds list
         for (dynamic item in listLike) {
           menuIds.add(item.toString());
         }
@@ -106,7 +106,7 @@ class SavedViewModel {
       }
 
       final List<Map<String, dynamic>> dataList = [];
-      // Duyệt qua từng uuid trong danh sách menuIds và thực hiện truy vấn
+      // Go through each uuid in the list of menuIds and execute the query
       for (String menuId in menuIds) {
         final res = await _supabase
             .from(TableSupabase.mennuTable)

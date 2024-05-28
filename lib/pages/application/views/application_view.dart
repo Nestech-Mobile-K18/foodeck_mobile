@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/pages/application/vm/application_view_model.dart';
-import 'package:template/pages/home/view/home_view.dart';
 import 'package:template/resources/const.dart';
-
-import 'package:template/resources/export.dart';
 
 import '../models/application_model.dart';
 import '../widgets/build_pages.dart';
 
 class ApplicationView extends StatefulWidget {
-  const ApplicationView({Key? key}) : super(key: key);
+  const ApplicationView({super.key});
 
   @override
   State<ApplicationView> createState() => _ApplicationViewState();
@@ -30,7 +27,7 @@ class _ApplicationViewState extends State<ApplicationView> {
               height: Responsive.screenHeight(context) * 0.12,
               decoration: BoxDecoration(
                 color: ColorsGlobal.globalWhite,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),

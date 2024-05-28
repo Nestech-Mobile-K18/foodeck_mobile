@@ -34,7 +34,7 @@ class CartViewModel extends ChangeNotifier {
           .eq('is_order', false);
 
       final data = response;
-      if (data != null && data.isNotEmpty) {
+      if (data.isNotEmpty) {
         List<CartItem> allCartItems = [];
         for (var record in data) {
           final cartId = record['id'];

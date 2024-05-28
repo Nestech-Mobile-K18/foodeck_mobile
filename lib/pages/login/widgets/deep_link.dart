@@ -24,7 +24,7 @@ class DeepLink extends StatelessWidget {
                   decoration: TextDecoration.none),
             ),
             const TextSpan(
-              text: '', // Khoảng trắng
+              text: '',
             ),
             TextSpan(
               text: StringExtensions.termsAndConditions,

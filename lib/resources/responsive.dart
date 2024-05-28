@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 
 class Responsive {
-  // Trả về chiều rộng của màn hình
+  // Returns the width of the screen
   static double screenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
 
-  // Trả về chiều cao của màn hình
+  // Returns the height of the screen
   static double screenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
-  // Trả về kích thước của một khối theo chiều rộng
+  // Returns the size of a block based on width
   static double blockSizeWidth(BuildContext context, {double dividedBy = 1}) {
     return screenWidth(context) / dividedBy;
   }
 
-  // Trả về kích thước của một khối theo chiều cao
+  // Returns the size of a block based on height
   static double blockSizeHeight(BuildContext context, {double dividedBy = 1}) {
     return screenHeight(context) / dividedBy;
   }
 
-  // Trả về tỷ lệ của cỡ chữ so với cỡ chữ mặc định của thiết bị
+  // Returns the scale factor of text compared to the default text size of the device
   static double textScaleFactor(BuildContext context) {
     return MediaQuery.of(context).textScaleFactor;
   }
 
-  // Kiểm tra xem thiết bị có ở chế độ dọc không
+  // Checks if the device is in portrait mode
   static bool isPortrait(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.portrait;
   }
 
-  // Kiểm tra xem thiết bị có ở chế độ ngang không
+  // Checks if the device is in landscape mode
   static bool isLandscape(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.landscape;
   }

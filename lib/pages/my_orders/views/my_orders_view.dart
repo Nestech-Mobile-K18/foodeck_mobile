@@ -161,7 +161,7 @@ class _MyOrdersViewState extends State<MyOrdersView> {
                                         ),
                                       );
                                       if (result == true) {
-                                        // Nếu kết quả trả về là true, cập nhật danh sách đơn hàng
+                                        // If the return result is correct, update the order list
                                         _refreshOrders();
                                       }
                                     },

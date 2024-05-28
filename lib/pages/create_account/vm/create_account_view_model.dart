@@ -25,15 +25,15 @@ class CreateAccountViewModel extends ChangeNotifier {
 
       res.then((value) {
         if (value?.session?.user.id == null) {
-          _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');
+          _showError.showError(context, 'Something went wrong, please try again');
         } else {
-          _showError.showError(context, 'Đăng kí thành công');
+          _showError.showError(context, 'Registered successfully');
         }
       });
       return res;
     } catch (e) {
       // ignore: use_build_context_synchronously
-      _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');
+      _showError.showError(context, 'Something went wrong, please try again');
       return null;
     }
   }
@@ -54,11 +54,11 @@ class CreateAccountViewModel extends ChangeNotifier {
           tableSupabase: TableSupabase.usersTable, userData: userData);
     } catch (e) {
       // ignore: use_build_context_synchronously
-      _showError.showError(context, 'Đã xảy ra sự cố vui lòng thử lại');
+      _showError.showError(context, 'Something went wrong, please try again');
     }
   }
 
-  void auththenSignUp(CreateAccountModel input, BuildContext context) async {
+  void authenSignUp(CreateAccountModel input, BuildContext context) async {
     if (input.name.isEmpty ||
         input.email.isEmpty ||
         input.phone.isEmpty ||

@@ -3,10 +3,6 @@ import 'package:template/widgets/custom_textfield.dart';
 
 import '../../../resources/const.dart';
 
-import 'package:flutter/material.dart';
-import 'package:template/resources/const.dart';
-import 'package:template/widgets/custom_textfield.dart';
-
 class FieldEdit extends StatefulWidget {
   final TextEditingController? nameController;
   final TextEditingController? emailController;
@@ -14,12 +10,12 @@ class FieldEdit extends StatefulWidget {
   final TextEditingController? passwordController;
 
   const FieldEdit({
-    Key? key,
+    super.key,
     required this.nameController,
     required this.emailController,
     required this.phoneController,
     required this.passwordController,
-  }) : super(key: key);
+  });
 
   @override
   State<FieldEdit> createState() => _FieldEditState();

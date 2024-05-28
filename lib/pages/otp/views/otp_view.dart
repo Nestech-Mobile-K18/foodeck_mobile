@@ -80,23 +80,23 @@ class _OtpViewState extends State<OtpView> {
               height: 20,
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15, 20, 0, 10),
+              padding: const EdgeInsets.fromLTRB(15, 20, 0, 10),
               child: GestureDetector(
                 onTap: () {
                   if (_viewModel.canResend) {
-                    // Sử dụng biến canResend từ ViewModel
+                    // Use canResend variable from ViewModel
                     _viewModel.resendOTP(_otpModel, context);
-                    _viewModel.canResend = false; // Đặt lại biến canResend
+                    _viewModel.canResend = false; // Reset the canResend variable
                     _viewModel.startResendOTPTimer(
-                        context); // Khởi động lại đếm ngược
+                        context);// Restart the countdown
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content:
-                          Text('Mã OTP có hiệu lực trong 60s vui lòng đợi'),
+                          Text('OTP code is valid for 60 seconds, please wait'),
                     ));
                   }
                 },
-                child: CustomText(
+                child: const CustomText(
                   title: StringExtensions.resend,
                   size: 13,
                 ),

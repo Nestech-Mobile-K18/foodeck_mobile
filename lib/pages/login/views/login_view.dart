@@ -98,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ],
               ),
-              DeepLink()
+              const DeepLink()
             ],
           ),
         ));

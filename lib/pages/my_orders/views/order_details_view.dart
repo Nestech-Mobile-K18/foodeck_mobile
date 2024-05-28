@@ -258,7 +258,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                                               ['payment_method']['card_number']
                                           .substring(15)
                                   : '',
-                              // Kiểm tra xem card_number có tồn tại không trước khi truy cập
+                              // Check if card_number exists before accessing
                               color: ColorsGlobal.globalWhite,
                               size: 25,
                               fontWeight: FontWeight.w700,
@@ -303,7 +303,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             MethodButton(

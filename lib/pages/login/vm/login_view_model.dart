@@ -63,13 +63,14 @@ class LoginViewModel extends ChangeNotifier {
           Navigator.of(context)
               .pushNamedAndRemoveUntil('/application', (route) => false);
         }
-        _api.requestUpSert(userData, TableSupabase.usersTable);
+        _api.requestUpsert(userData, TableSupabase.usersTable);
 
         await AuthManager.handleSuccessfulLogin();
 
         return response;
       }
     }
+    return null;
   }
 
   Future<void> saveUserIdToSharedPreferences(String userId) async {
@@ -105,12 +106,12 @@ class LoginViewModel extends ChangeNotifier {
         };
 
         _api.requestSignInWithOAuth(OAuthProvider.facebook);
-        _api.requestUpSert(userData, TableSupabase.usersTable);
+        _api.requestUpsert(userData, TableSupabase.usersTable);
         if (userData.isNotEmpty) {
           await AuthManager.handleSuccessfulLogin();
           // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => ApplicationView()));
+              MaterialPageRoute(builder: (context) => const ApplicationView()));
         }
       } else if (result.status == LoginStatus.cancelled) {
         // ignore: use_build_context_synchronously

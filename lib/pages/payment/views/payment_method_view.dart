@@ -6,7 +6,7 @@ import '../vm/payment_view_model.dart';
 import 'payment_input_view.dart';
 
 class PaymentMethodView extends StatefulWidget {
-  const PaymentMethodView({Key? key}) : super(key: key);
+  const PaymentMethodView({super.key});
 
   @override
   State<PaymentMethodView> createState() => _PaymentMethodViewState();
@@ -57,7 +57,7 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomText(
+                  const CustomText(
                     title: "You haven't added any payment method yet.",
                     size: 18,
                     color: ColorsGlobal.globalBlack,

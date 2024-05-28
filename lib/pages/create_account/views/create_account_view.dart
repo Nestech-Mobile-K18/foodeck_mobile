@@ -94,7 +94,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             ),
             const SizedBox(height: 10),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   CustomTextField(
@@ -126,18 +126,18 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             ),
             const SizedBox(height: 15),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   MethodButton(
                       onTap: () {
-                        CreateAccountModel _signUpModel = CreateAccountModel(
+                        CreateAccountModel signUpModel = CreateAccountModel(
                           name: nameController.text.trim(),
                           email: emailController.text.trim(),
                           phone: phoneController.text.trim(),
                           password: passwordController.text.trim(),
                         );
-                        _viewModel.auththenSignUp(_signUpModel, context);
+                        _viewModel.authenSignUp(signUpModel, context);
                       },
                       color: ColorsGlobal.globalPink,
                       title: StringExtensions.createAnAccount),

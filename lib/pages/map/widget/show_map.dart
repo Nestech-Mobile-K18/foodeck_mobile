@@ -6,7 +6,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:template/pages/map/vm/map_view_model.dart';
 import 'package:template/pages/map/widget/location_card.dart';
-import 'package:template/resources/colors.dart';
 import 'package:template/resources/const.dart';
 import 'package:template/widgets/custom_text.dart';
 
@@ -22,14 +21,13 @@ class ShowMap extends StatefulWidget {
   final Function(Map<String, String?>, int)?
       onLongPressLocationCard; // Update the callback type
 
-  ShowMap(
-      {Key? key,
+  const ShowMap(
+      {super.key,
       this.mapController,
       this.isShowLocationCard,
       this.onTarget,
       this.onLongPressLocationCard, // Update the parameter type
-      this.onMarkerSelected})
-      : super(key: key);
+      this.onMarkerSelected});
 
   @override
   State<ShowMap> createState() => _ShowMapState();

@@ -9,7 +9,7 @@ class FunctionHeader extends StatelessWidget {
   final String? headerText;
 
   /// Constructor for the FunctionHeader widget.
-  const FunctionHeader({Key? key, required this.headerText}) : super(key: key);
+  const FunctionHeader({super.key, required this.headerText});
 
   @override
   Widget build(BuildContext context) {

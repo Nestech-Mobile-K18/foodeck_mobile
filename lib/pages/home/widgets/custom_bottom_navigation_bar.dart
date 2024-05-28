@@ -5,10 +5,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final Function(int) onItemTapped;
 
   const CustomBottomNavigationBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +39,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap: onItemTapped,
         selectedItemColor: Colors.pink,
         unselectedItemColor: Colors.grey,
-        selectedLabelStyle: TextStyle(color: Colors.pink),
-        unselectedLabelStyle: TextStyle(color: Colors.grey),
+        selectedLabelStyle: const TextStyle(color: Colors.pink),
+        unselectedLabelStyle: const TextStyle(color: Colors.grey),
         showUnselectedLabels: true,
       ),
     );
   }
 
-  // Hàm trả về màu sắc của icon dựa trên chỉ số của tab
+  // Function returns the color of the icon based on the tab index
   Color _getColor(int index) {
     return selectedIndex == index ? Colors.pink : Colors.grey;
   }

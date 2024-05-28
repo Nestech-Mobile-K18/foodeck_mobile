@@ -283,7 +283,7 @@ class FoodMenuViewModel extends ChangeNotifier {
           .eq('id', userId)
           .single();
 
-      if (userRecord != null && userRecord.containsKey('id')) {
+      if (userRecord.containsKey('id')) {
         final response = await supabase
             .from('cart')
             .select()

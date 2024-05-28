@@ -80,7 +80,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             ),
             const SizedBox(height: 10),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: MethodButton(
                   onTap: () {
                     _viewModel.validReset(context, emailController.text.trim());

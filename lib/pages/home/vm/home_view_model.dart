@@ -17,14 +17,6 @@ class HomeViewModel extends ChangeNotifier {
   final API _api = API();
   static const String _baseUrl = MapBoxConfig.BASE_URL_MAPBOX;
   static const String _apiKey = MapBoxConfig.MAPBOX_ACCESS_TOKEN;
-  int _totalQuantity = 0;
-
-  int get totalQuantity => _totalQuantity;
-
-  void updateTotalQuantity(int newQuantity) {
-    _totalQuantity = newQuantity;
-    notifyListeners();
-  }
 
   Future<Map<String, dynamic>> calculateDistanceAndTime(
       String userAddress, String restaurantAddress) async {
@@ -100,7 +92,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> updateAddressOnSupabase(
-      String? address, String? type_address) async {
+      String? address, String? typeAddress) async {
     if (address != null) {
       // Perform a SELECT query to get the ID from the data table
       var response = await supabase
@@ -123,7 +115,7 @@ class HomeViewModel extends ChangeNotifier {
             await supabase.from('location_user').upsert({
               TableSupabase.userIdColumn: userId,
               TableSupabase.addressColumn1: address,
-              TableSupabase.type_address_1_Column: type_address,
+              TableSupabase.type_address_1_Column: typeAddress,
               TableSupabase.address_instructions_1_Column: 'Near empty plot',
             }).eq('user_id', userId);
           }
@@ -167,39 +159,33 @@ class HomeViewModel extends ChangeNotifier {
     var permissionStatus = await Permission.location.request();
     if (permissionStatus.isGranted) {
       LocationData? locationData = await location.getLocation();
-      if (locationData != null) {
-        double latitude = locationData.latitude!;
-        double longitude = locationData.longitude!;
-        print('Latitude: $latitude, Longitude: $longitude');
+      double latitude = locationData.latitude!;
+      double longitude = locationData.longitude!;
 
-        String apiUrl =
-            '$_baseUrl$longitude,$latitude.json?access_token=$_apiKey';
+      String apiUrl =
+          '$_baseUrl$longitude,$latitude.json?access_token=$_apiKey';
 
-        var response = await http.get(Uri.parse(apiUrl));
-        if (response.statusCode == 200) {
-          var data = json.decode(response.body);
+      var response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
 
-          var firstFeature = data['features'][0];
-          String? address = firstFeature['place_name'];
+        var firstFeature = data['features'][0];
+        String? address = firstFeature['place_name'];
 
-          String? type = firstFeature['text'];
+        String? type = firstFeature['text'];
 
-          await updateAddressOnSupabase(address, type);
+        await updateAddressOnSupabase(address, type);
 
-          // Call getLocationDataById to get address
-          String? receivedAddress = await getLocationDataById();
+        // Call getLocationDataById to get address
+        String? receivedAddress = await getLocationDataById();
 
-          // Pass the received address to onAddressReceived
-          if (onAddressReceived != null) {
-            onAddressReceived!(receivedAddress!);
-          }
-        } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Failed to fetch address')));
+        // Pass the received address to onAddressReceived
+        if (onAddressReceived != null) {
+          onAddressReceived!(receivedAddress!);
         }
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Location is not granted')));
+            .showSnackBar(SnackBar(content: Text('Failed to fetch address')));
       }
     }
   }
@@ -310,38 +296,49 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> clearCart() async {
-    final userId = await AuthManager.getUserId();
-    if (userId != null) {
-      // Clear the cart
-      await supabase.from('cart').update({'list_cart': []}).eq('user_id', userId);
+  Future<int> countCartItems() async {
+    // Execute query to get data from "cart" table
+    final response = await supabase.from('cart').select('list_cart');
 
-      // Update total quantity
-      _totalQuantity = 0;
-      notifyListeners();
+    // Extract data from response
+    final List<Map<String, dynamic>> data = response;
+
+    // Check the column "list_cart" is empty // Check the column "list_cart" is empty
+    final bool isEmptyCart = data
+        .any((cart) => cart['list_cart'] == null || cart['list_cart'].isEmpty);
+
+    // If "list_cart" is empty, return 0, return the number of elements in column "list_cart"
+    if (isEmptyCart) {
+      return 0;
+    } else {
+      // Count the number of objects in the list "list_cart"
+      int itemCount = 0;
+      for (var cart in data) {
+        List<dynamic> listCart = cart['list_cart'];
+        itemCount += listCart.length;
+      }
+      return itemCount;
     }
   }
 
-  // Future<int> fetchTotalQuantityFromSupabase() async {
-  //   final String? userId = await AuthManager.getUserId();
-  //   if (userId != null) {
-  //     final response = await supabase
-  //         .from('cart')
-  //         .select('list_cart')
-  //         .eq('user_id', userId)
-  //         .single();
-  //     if (response != null && response['list_cart'] != null) {
-  //       final listCart = response['list_cart'] as List<dynamic>;
-  //       int totalQuantity = listCart.fold(0, (sum, item) => sum + (item['quantity'] as int? ?? 0));
-  //       return totalQuantity;
-  //     }
-  //   }
-  //   return 0;
-  // }
-  // Future<int> getTotalQuantityInCart() async {
-  //   int totalQuantity = await fetchTotalQuantityFromSupabase();
-  //   updateTotalQuantity(totalQuantity);
-  //   return totalQuantity;
-  // }
+  Future<List<Map<String, dynamic>>> searchFoodByName(String foodName) async {
+    // Execute query to get data from table "foods"
+    final response = await supabase.from('food').select('*');
 
+    // Extract data from response
+    final List<Map<String, dynamic>> foods = response;
+
+    // Search for the dish name in the list of dishes and save the results to the list
+    List<Map<String, dynamic>> searchResults = [];
+    for (var food in foods) {
+      if (food['food_name']
+          .toString()
+          .toLowerCase()
+          .contains(foodName.toLowerCase())) {
+        searchResults.add(food);
+      }
+    }
+    // Returns a list of search results
+    return searchResults;
+  }
 }

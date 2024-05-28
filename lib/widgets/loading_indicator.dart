@@ -12,8 +12,8 @@ class LoadingIndicator extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
         ),
-        // Loading indicator ở giữa màn hình
-        Center(
+        // Loading indicator in the middle of the screen
+        const Center(
           child: CircularProgressIndicator(),
         ),
       ],

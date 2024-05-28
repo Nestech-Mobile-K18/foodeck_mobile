@@ -54,7 +54,7 @@ class _HomeExploreState extends State<HomeExplore> {
           child: SizedBox(
             height: 750,
             child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               itemCount: categoriesProducts.length,
               itemBuilder: (BuildContext context, int index) {

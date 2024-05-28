@@ -5,7 +5,6 @@ import 'package:template/widgets/custom_text.dart';
 import '../../../resources/const.dart';
 import '../../../services/auth_manager.dart';
 import '../../../widgets/loading_indicator.dart';
-import '../models/categories_products.dart';
 
 class HomeDeals extends StatefulWidget {
   final void Function(Map<String, dynamic>)? onDealSelected;
@@ -13,12 +12,11 @@ class HomeDeals extends StatefulWidget {
   final VoidCallback? onTapShowListMenu;
   final String? userAddress;
   const HomeDeals(
-      {Key? key,
+      {super.key,
       this.onDealSelected,
       this.data,
       this.onTapShowListMenu,
-      this.userAddress})
-      : super(key: key);
+      this.userAddress});
 
   @override
   State<HomeDeals> createState() => _HomeDealsState();
@@ -55,7 +53,7 @@ class _HomeDealsState extends State<HomeDeals> {
     String? currentUserId = await userId;
     if (currentUserId != null) {
       List<String> likedMenuIds =
-          await _viewModel.getListLikeMenuIds(currentUserId ?? '');
+          await _viewModel.getListLikeMenuIds(currentUserId);
       if (mounted) {
         // Check if the widget is mounted
         setState(() {
@@ -128,28 +126,24 @@ class _HomeDealsState extends State<HomeDeals> {
                           .calculateDistanceAndTime(widget.userAddress ?? '',
                               widget.data![index]['place'])
                           .then((snapshot) {
-                        if (snapshot == null) {
-                          return null;
-                        } else {
-                          final dataTime = snapshot['durationInSeconds'];
-                          final dataDistance = snapshot['distance'];
-                          setState(() {
-                            isTime = dataTime.toString();
-                            distance = dataDistance.toString();
-                          });
+                        final dataTime = snapshot['durationInSeconds'];
+                        final dataDistance = snapshot['distance'];
+                        setState(() {
+                          isTime = dataTime.toString();
+                          distance = dataDistance.toString();
+                        });
 
-                          widget.onDealSelected!({
-                            'user_id': currentUserId,
-                            'menu_id': widget.data?[index]['id_menu'],
-                            'img_menu': widget.data?[index]['img_menu'],
-                            'category': widget.data?[index]['category'],
-                            'place': widget.data?[index]['place'],
-                            'time': isTime,
-                            'vote': widget.data?[index]['vote'],
-                            'distance': distance
-                          });
-                        }
-                      });
+                        widget.onDealSelected!({
+                          'user_id': currentUserId,
+                          'menu_id': widget.data?[index]['id_menu'],
+                          'img_menu': widget.data?[index]['img_menu'],
+                          'category': widget.data?[index]['category'],
+                          'place': widget.data?[index]['place'],
+                          'time': isTime,
+                          'vote': widget.data?[index]['vote'],
+                          'distance': distance
+                        });
+                                            });
                     }
                   },
                   child: SingleChildScrollView(
@@ -180,7 +174,7 @@ class _HomeDealsState extends State<HomeDeals> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return LoadingIndicator();
+                                  return const LoadingIndicator();
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
@@ -251,7 +245,7 @@ class _HomeDealsState extends State<HomeDeals> {
                                     size: 17,
                                   ),
                                   Container(
-                                    constraints: BoxConstraints(
+                                    constraints: const BoxConstraints(
                                         maxWidth:
                                             150), // Set maximum width constraint
                                     child: CustomText(

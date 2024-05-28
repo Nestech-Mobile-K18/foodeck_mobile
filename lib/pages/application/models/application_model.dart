@@ -8,19 +8,19 @@ class BottomNavItemModel {
 }
 
 var bottomTabs = [
-  BottomNavigationBarItem(
+  const BottomNavigationBarItem(
     icon: Icon(Icons.search_outlined),
     label: 'Explore',
   ),
-  BottomNavigationBarItem(
+  const BottomNavigationBarItem(
     icon: Icon(Icons.favorite_border_outlined),
     label: 'Saved',
   ),
-  BottomNavigationBarItem(
+  const BottomNavigationBarItem(
     icon: Icon(Icons.notifications_none_outlined),
     label: 'Notifications',
   ),
-  BottomNavigationBarItem(
+  const BottomNavigationBarItem(
     icon: Icon(Icons.person_2_outlined),
     label: 'Profile',
   ),

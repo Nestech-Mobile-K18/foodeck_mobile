@@ -6,7 +6,7 @@ import '../vm/map_view_model.dart';
 import '../widget/show_map.dart';
 
 class AddLocationView extends StatefulWidget {
-  const AddLocationView({Key? key});
+  const AddLocationView({super.key});
 
   @override
   State<AddLocationView> createState() => _AddLocationViewState();
@@ -16,7 +16,7 @@ class _AddLocationViewState extends State<AddLocationView> {
   final MapViewModel _viewModel = MapViewModel();
   bool _isLoadingMore = false;
   bool _hasMoreResults =
-      true; // Thêm biến này để kiểm tra xem còn kết quả nào nữa không
+      true; // Add this variable to check if there are any more results
   LatLng? _onTarget;
   final ScrollController _scrollController = ScrollController();
   LatLng? selectedLocation;
@@ -44,19 +44,17 @@ class _AddLocationViewState extends State<AddLocationView> {
 
   void _loadMore() async {
     if (!_isLoadingMore && _hasMoreResults) {
-      // Thêm điều kiện `_hasMoreResults`
+      // Add condition `_hasMoreResults`
       setState(() {
         _isLoadingMore = true;
       });
       try {
         await _viewModel.searchPlaces(_viewModel.currentQuery);
-      } catch (e) {
-        print('Error loading more: $e');
       } finally {
         setState(() {
           _isLoadingMore = false;
           _hasMoreResults = _viewModel.searchResults.length >
-              5; // Cập nhật giá trị của _hasMoreResults
+              5; // Update the value of _hasMoreResults
         });
       }
     }
@@ -136,8 +134,8 @@ class _AddLocationViewState extends State<AddLocationView> {
             ),
             if (_hasMoreResults)
               _isLoadingMore
-                  ? CircularProgressIndicator()
-                  : SizedBox() // Hiển thị chỉ khi còn kết quả và đang tải
+                  ? const CircularProgressIndicator()
+                  : const SizedBox() // Displayed only when results are available and loading
           ],
         ),
       ),

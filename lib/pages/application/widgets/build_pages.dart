@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/pages/notification/views/notification_view.dart';
 import 'package:template/pages/profile/views/profile_view.dart';
 import 'package:template/pages/saved/views/saved_view.dart';
 
@@ -8,7 +9,7 @@ import '../../home/view/home_view.dart';
 class PageBuilder extends StatefulWidget {
   final int index;
 
-  PageBuilder({
+  const PageBuilder({
     super.key,
     required this.index,
   });
@@ -25,17 +26,17 @@ class _PageBuilderState extends State<PageBuilder> {
   }
 
   Widget buildPage(int index) {
-    List<Widget> _widget = [
+    List<Widget> widget = [
       HomeView(
         userAddress: (address) {
           userAddress = address;
         },
       ),
       SavedView(userAddress: userAddress),
-      Container(),
+      const NotificationView(),
       const ProfileView(),
     ];
 
-    return _widget[index];
+    return widget[index];
   }
 }

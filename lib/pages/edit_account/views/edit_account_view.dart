@@ -63,10 +63,10 @@ class _EditAccountViewState extends State<EditAccountView> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(
             children: [
-              CrossBar(height: 10),
+              const CrossBar(height: 10),
               ChooseAvatar(
                 imgFile: _selectedImageFile,
                 imgUrl: _selectedImageURL,
@@ -86,7 +86,8 @@ class _EditAccountViewState extends State<EditAccountView> {
                   phoneController: phoneController,
                   passwordController: passwordController),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical:
+                40),
                 child: MethodButton(
                     onTap: () async {
                       String? avatarPath = _selectedImageFile?.path;
@@ -96,7 +97,7 @@ class _EditAccountViewState extends State<EditAccountView> {
                           email: emailController?.text,
                           phone: phoneController?.text,
                           password: passwordController?.text);
-                      _viewModel.auththenUpdate(model, context);
+                      _viewModel.authenUpdate(model, context);
                     },
                     color: ColorsGlobal.globalPink,
                     title: StringExtensions.save),
