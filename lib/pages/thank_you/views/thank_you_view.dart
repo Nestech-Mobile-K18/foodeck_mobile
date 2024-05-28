@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:template/pages/application/views/application_view.dart';
+import 'package:template/pages/home/view/home_view.dart';
 import 'package:template/resources/const.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/method_button.dart';
 
 class ThankYouView extends StatefulWidget {
-  const ThankYouView({super.key});
+  final String? addressUser;
+
+  const ThankYouView({super.key, this.addressUser});
 
   @override
   State<ThankYouView> createState() => _ThankYouViewState();
@@ -48,11 +51,12 @@ class _ThankYouViewState extends State<ThankYouView> {
               title: 'Go Home',
               widthButton: Responsive.screenWidth(context) * 0.8,
               onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const ApplicationView()),
-                    (route) => false);
-              },
+                Navigator
+                    .of(context)
+                    .push(MaterialPageRoute(builder:
+                    (context) => ApplicationView()))
+                    ;
+                },
             )
           ],
         ),

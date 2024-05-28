@@ -22,6 +22,7 @@ class CheckoutView extends StatefulWidget {
 
 class _CheckoutViewState extends State<CheckoutView> {
   final CheckOutViewModel _viewModel = CheckOutViewModel();
+  String? address;
   final TextEditingController instructionsController = TextEditingController();
   Map<String, dynamic>? _selectedPaymentMethod;
 
@@ -55,7 +56,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             return const Center(child: Text('No data available'));
           }
 
-          final address = snapshot.data!['address'] as String?;
+          address = snapshot.data!['address'] as String?;
 
           return SingleChildScrollView(
             child: Column(
@@ -404,9 +405,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30,
-                    vertical:
-                  20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -431,7 +431,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                             _viewModel.addOrder(checkoutData, address,
                                 instructions, _selectedPaymentMethod!);
                             Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const ThankYouView()));
+                                builder: (context) => ThankYouView(
+                                      addressUser: address,
+                                    )));
                           } else {
                             return;
                           }

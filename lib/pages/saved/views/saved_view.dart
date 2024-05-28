@@ -34,6 +34,7 @@ class _SavedViewState extends State<SavedView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorsGlobal.globalWhite,
+        automaticallyImplyLeading: false,
         title: const CustomText(
           title: 'Saved',
           color: ColorsGlobal.globalBlack,

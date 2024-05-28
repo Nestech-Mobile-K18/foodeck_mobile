@@ -129,7 +129,7 @@ class CheckOutViewModel extends ChangeNotifier {
 
     // Create order information
     final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('dd/MM/yyyy').format(now);
+    final String formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(now);
     final String orderName = 'Order $formattedDate';
     const String status = 'Order received';
 
@@ -140,7 +140,6 @@ class CheckOutViewModel extends ChangeNotifier {
       'payment_method': paymentMethod,
       'checkout_data': checkoutData,
     };
-
 
 
     final List<CartItem> cartItems = checkoutData['cartItems'];

@@ -154,7 +154,7 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                     color: ColorsGlobal.globalWhite,
                   ),
                   onPressed: () {
-                    Navigator.pop(context, true);
+                    Navigator.of(context).pop(true);
                   },
                 ),
               ),
