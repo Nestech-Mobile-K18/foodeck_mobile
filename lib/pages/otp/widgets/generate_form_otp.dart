@@ -19,6 +19,12 @@ class _FormOTPState extends State<FormOTP> {
     super.initState();
     isFilled = List<bool>.filled(widget.countForm ?? 1, false);
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    isFilled = [];
+  }
 
   @override
   Widget build(BuildContext context) {

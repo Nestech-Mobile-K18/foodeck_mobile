@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
 import 'package:template/pages/checkout/vm/checkout_view_model.dart';
 import '../../../services/mapbox_config.dart';
 

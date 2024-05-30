@@ -134,6 +134,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "debounce_throttle",
+      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/debounce_throttle-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "device_frame",
       "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/device_frame-1.1.0",
       "packageUri": "lib/",
@@ -213,7 +219,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter",
+      "rootUri": "file:///C:/src/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -255,7 +261,7 @@
     },
     {
       "name": "flutter_localizations",
-      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_localizations",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -309,13 +315,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_test",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -860,8 +866,14 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "simple_observable",
+      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/simple_observable-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
-      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1142,7 +1154,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-05-12T12:42:28.447528Z",
+  "generated": "2024-05-29T08:12:37.622198Z",
   "generator": "pub",
   "generatorVersion": "3.2.4"
 }

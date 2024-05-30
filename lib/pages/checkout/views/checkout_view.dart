@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:template/pages/checkout/vm/checkout_view_model.dart';
 import 'package:template/pages/checkout/widgets/mini_map.dart';
@@ -30,7 +32,14 @@ class _CheckoutViewState extends State<CheckoutView> {
   void dispose() {
     _viewModel.dispose();
     instructionsController.dispose();
+
     super.dispose();
+  }
+
+  Future<void> refreshPayment() async {
+    setState(() {
+      _viewModel.fetchPaymentMethods();
+    });
   }
 
   @override
@@ -170,13 +179,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                             color: ColorsGlobal.globalBlack,
                           ),
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       const PaymentInputView(),
                                 ),
                               );
+                              refreshPayment();
                             },
                             icon: const Icon(
                               Icons.add,

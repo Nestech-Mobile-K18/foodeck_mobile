@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/pages/food_menu/views/food_variations_view.dart';
 import 'package:template/pages/my_orders/views/order_details_view.dart';
 import 'package:template/resources/const.dart';
 import 'package:template/widgets/cross_bar.dart';
@@ -78,33 +79,40 @@ class _MyOrdersViewState extends State<MyOrdersView> {
                               final foodItem = proposedFood[index];
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        foodItem['image_food'],
-                                        fit: BoxFit.cover,
-                                        height: Responsive.screenHeight(context) * 0.2,
-                                        width: Responsive.screenWidth(context) * 0.5,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    Navigator.of(context).push
+                                      (MaterialPageRoute(builder: (context)
+                                    =>FoodVariationsView(bindingData: foodItem,)));
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          foodItem['image_food'],
+                                          fit: BoxFit.cover,
+                                          height: Responsive.screenHeight(context) * 0.2,
+                                          width: Responsive.screenWidth(context) * 0.5,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    CustomText(
-                                      title: foodItem['food_name'],
-                                      size: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorsGlobal.globalBlack,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    CustomText(
-                                      title: '\$${foodItem['price']}',
-                                      size: 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: ColorsGlobal.globalGrey,
-                                    ),
-                                  ],
+                                      const SizedBox(height: 8),
+                                      CustomText(
+                                        title: foodItem['food_name'],
+                                        size: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorsGlobal.globalBlack,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      CustomText(
+                                        title: '\$${foodItem['price']}',
+                                        size: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color: ColorsGlobal.globalGrey,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },

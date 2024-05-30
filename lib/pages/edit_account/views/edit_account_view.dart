@@ -26,18 +26,18 @@ class _EditAccountViewState extends State<EditAccountView> {
   final EditAccountViewModel _viewModel = EditAccountViewModel();
   XFile? _selectedImageFile;
   String? _selectedImageURL;
+
   @override
   void initState() {
     super.initState();
-    // Call the responseProfile function and attach values ​​to controllers when receiving results
+    // Call the responseProfile function and assign values ​​to controllers when receiving results
     _viewModel.responseProfile().then((response) {
-      if (response != null) {
+      if (response != null && mounted) {
         setState(() {
           nameController?.text = response[TableSupabase.nameColumn] ?? '';
           emailController?.text = response[TableSupabase.emailColumn] ?? '';
           phoneController?.text = response[TableSupabase.phoneColumn] ?? '';
-          passwordController?.text =
-              response[TableSupabase.passwordColumn] ?? '';
+          passwordController?.text = response[TableSupabase.passwordColumn] ?? '';
           // Check if the avatar column has a value
           if (response['avatar'] != null) {
             // Create a new XFile from the string path
@@ -46,6 +46,15 @@ class _EditAccountViewState extends State<EditAccountView> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    nameController?.dispose();
+    emailController?.dispose();
+    phoneController?.dispose();
+    passwordController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -72,8 +81,8 @@ class _EditAccountViewState extends State<EditAccountView> {
                 imgUrl: _selectedImageURL,
                 chooseAvatar: () async {
                   final imageFile =
-                      await _viewModel.requestStoragePermission(context);
-                  if (imageFile != null) {
+                  await _viewModel.requestStoragePermission(context);
+                  if (imageFile != null && mounted) {
                     setState(() {
                       _selectedImageFile = imageFile;
                     });
@@ -86,8 +95,7 @@ class _EditAccountViewState extends State<EditAccountView> {
                   phoneController: phoneController,
                   passwordController: passwordController),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical:
-                40),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
                 child: MethodButton(
                     onTap: () async {
                       String? avatarPath = _selectedImageFile?.path;

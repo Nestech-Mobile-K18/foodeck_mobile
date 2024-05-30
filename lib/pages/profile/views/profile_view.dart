@@ -45,7 +45,7 @@ class _ProfileViewState extends State<ProfileView> {
                 },
               ),
               const AccountSettings(),
-              const GeneralSettings(),
+               const GeneralSettings(),
               const SizedBox(height: 30),
             ],
           ),

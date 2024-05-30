@@ -44,7 +44,7 @@ class _PaymentInputViewState extends State<PaymentInputView> {
     setState(() {
       // Get the card number after removing spaces
       final cardNumber =
-      cardNumberController.text.replaceAll(RegExp(r'\s'), '');
+          cardNumberController.text.replaceAll(RegExp(r'\s'), '');
 
       // Use intermediate variable to check tag type
       // Visa card starts with 4
@@ -60,7 +60,7 @@ class _PaymentInputViewState extends State<PaymentInputView> {
     // Insert a space every 4 characters
     final formattedValue = input.replaceAllMapped(
       RegExp(r'.{4}'),
-          (match) => '${match.group(0)} ',
+      (match) => '${match.group(0)} ',
     );
     return formattedValue.trim(); // Trim to remove leading/trailing spaces
   }
@@ -100,6 +100,7 @@ class _PaymentInputViewState extends State<PaymentInputView> {
       }
     });
   }
+
   String getPaymentMethod() {
     if (isVisaCard) return 'Visa';
     if (isMasterCard) return 'MasterCard';
@@ -130,6 +131,15 @@ class _PaymentInputViewState extends State<PaymentInputView> {
           size: 17,
           fontWeight: FontWeight.w600,
         ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: ColorsGlobal.globalBlack,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -148,22 +158,22 @@ class _PaymentInputViewState extends State<PaymentInputView> {
                       if (formattedValue != cardNumberController.text) {
                         cardNumberController.value =
                             cardNumberController.value.copyWith(
-                              text: formattedValue,
-                              selection: TextSelection.collapsed(
-                                  offset: formattedValue.length),
-                            );
+                          text: formattedValue,
+                          selection: TextSelection.collapsed(
+                              offset: formattedValue.length),
+                        );
                       }
                     },
                     onEditingComplete: () {
                       final formattedValue =
-                      formatCardNumber(cardNumberController.text);
+                          formatCardNumber(cardNumberController.text);
                       if (formattedValue != cardNumberController.text) {
                         cardNumberController.value =
                             cardNumberController.value.copyWith(
-                              text: formattedValue,
-                              selection: TextSelection.collapsed(
-                                  offset: formattedValue.length),
-                            );
+                          text: formattedValue,
+                          selection: TextSelection.collapsed(
+                              offset: formattedValue.length),
+                        );
                       }
                     },
                     iconSuffit: Row(
@@ -217,24 +227,27 @@ class _PaymentInputViewState extends State<PaymentInputView> {
                     color: ColorsGlobal.globalPink,
                     title: StringExtensions.confirmAdditionalCards,
                     onTap: () async {
-                      final currentCards = await _viewModel.getPaymentMethodsOnce();
+                      final currentCards =
+                          await _viewModel.getPaymentMethodsOnce();
 
                       if (currentCards.length >= 5) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('You can register up to 5 accounts only.'),
+                            content:
+                                Text('You can register up to 5 accounts only.'),
                           ),
                         );
                         return; // Stop execution if there are already 5 tokens
                       }
 
                       final cardNumber = cardNumberController.text;
-                      final isCardExists = await _viewModel.isCardNumberExists(cardNumber);
+                      final isCardExists =
+                          await _viewModel.isCardNumberExists(cardNumber);
 
                       if (isCardExists) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:  Text('Card number already exists!'),
+                            content: Text('Card number already exists!'),
                           ),
                         );
                       } else {

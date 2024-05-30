@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:template/widgets/custom_textfield.dart';
+import 'package:template/widgets/method_button.dart';
 import '../../../resources/const.dart';
 import '../../../widgets/custom_text.dart';
 import '../vm/payment_view_model.dart';
@@ -111,17 +112,17 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
                               ),
                               method['payment_method'] == 'Visa'
                                   ? Image.asset(
-                                MediaRes.visaCard,
-                                fit: BoxFit.cover,
-                                height: 50,
-                                width: 50,
-                              )
+                                      MediaRes.visaCard,
+                                      fit: BoxFit.cover,
+                                      height: 50,
+                                      width: 50,
+                                    )
                                   : Image.asset(
-                                MediaRes.masterCard,
-                                fit: BoxFit.cover,
-                                height: 50,
-                                width: 50,
-                              )
+                                      MediaRes.masterCard,
+                                      fit: BoxFit.cover,
+                                      height: 50,
+                                      width: 50,
+                                    )
                             ],
                           ),
                         ),
@@ -135,7 +136,7 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
                           ),
                         ),
                         Positioned(
-                          bottom: 90,
+                          bottom: 20,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -168,10 +169,24 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
                               ),
                               CustomTextField(
                                 title: 'CVC',
-                                controller: TextEditingController(
-                                    text: method['cvc']),
+                                controller:
+                                    TextEditingController(text: method['cvc']),
                                 readOnly: true,
                               ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              MethodButton(
+                                onTap: () async{
+                                  await _viewModel.deletePaymentMethod
+                                    (method['card_number'], method['cvc']);
+                                  Navigator.of(context).pop(true);
+                                },
+                                color: ColorsGlobal.globalPink,
+                                title: 'Remove Card',
+                                widthButton:
+                                    Responsive.screenWidth(context) * 0.5,
+                              )
                             ],
                           ),
                         ),

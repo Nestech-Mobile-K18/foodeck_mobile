@@ -108,12 +108,7 @@ class CreateAccountViewModel extends ChangeNotifier {
         } else {
           // If email is not registered, proceed with registration
           pushInformation(input, context);
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) =>
-                  OtpView(email: input.email, fromHomeScreen: true),
-            ),
-          );
+
         }
       }
     }

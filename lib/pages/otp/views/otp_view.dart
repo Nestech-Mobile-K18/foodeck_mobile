@@ -1,41 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/pages/otp/models/otp_model.dart';
 import 'package:template/pages/otp/vm/otp_view_model.dart';
 import 'package:template/pages/otp/widgets/generate_form_otp.dart';
-
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/const.dart';
 
+
 class OtpView extends StatefulWidget {
   final String? email;
   final bool? fromHomeScreen;
-  const OtpView({super.key, this.email, this.fromHomeScreen});
+
+  const OtpView({Key? key, this.email, this.fromHomeScreen}) : super(key: key);
 
   @override
   State<OtpView> createState() => _OtpViewState();
 }
 
 class _OtpViewState extends State<OtpView> {
-  final OTPViewModel _viewModel = OTPViewModel();
-  List<String> otpValues = List.filled(6, '');
   late final OTPModel _otpModel;
+  late final OTPViewModel _viewModel;
+  ScaffoldMessengerState? _scaffoldMessenger;
+  BuildContext? _previousContext;
 
   @override
   void initState() {
     super.initState();
-    if (_viewModel.timer?.isActive == true) {
-      _viewModel.timer?.cancel();
-    }
-    _otpModel = OTPModel(otpValues: otpValues, email: widget.email!);
+    _viewModel = OTPViewModel();
+    _otpModel = OTPModel(otpValues: List.filled(6, ''), email: widget.email!);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scaffoldMessenger ??= ScaffoldMessenger.of(context);
+    _previousContext = context;
   }
 
   @override
   void dispose() {
+    if (_previousContext != null) {
+      _viewModel.disposeVerifyOTP();
+    }
     super.dispose();
-    if (_viewModel.timer?.isActive == true) {
-      _viewModel.timer?.cancel();
+  }
+
+  void _showErrorMessage(String message) {
+    if (_scaffoldMessenger != null && mounted) {
+      _scaffoldMessenger!.showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -45,10 +59,11 @@ class _OtpViewState extends State<OtpView> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const CustomText(
-            title: StringExtensions.otp,
-            size: 17,
-            fontWeight: FontWeight.w600,
-            color: ColorsGlobal.globalBlack),
+          title: StringExtensions.otp,
+          size: 17,
+          fontWeight: FontWeight.w600,
+          color: ColorsGlobal.globalBlack,
+        ),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -74,7 +89,7 @@ class _OtpViewState extends State<OtpView> {
             ),
             FormOTP(
               countForm: 6,
-              otpValues: otpValues,
+              otpValues: _otpModel.otpValues,
             ),
             const SizedBox(
               height: 20,
@@ -84,16 +99,17 @@ class _OtpViewState extends State<OtpView> {
               child: GestureDetector(
                 onTap: () {
                   if (_viewModel.canResend) {
-                    // Use canResend variable from ViewModel
-                    _viewModel.resendOTP(_otpModel, context);
-                    _viewModel.canResend = false; // Reset the canResend variable
-                    _viewModel.startResendOTPTimer(
-                        context);// Restart the countdown
+                    _viewModel.resendOTP(_otpModel, context).catchError((error) {
+                      if (error is AuthException && error.statusCode == 429) {
+                        _showErrorMessage('Email rate limit exceeded, please wait a moment before retrying.');
+                      } else {
+                        _showErrorMessage('An error occurred, please try again.');
+                      }
+                    });
+                    _viewModel.canResend = false;
+                    _viewModel.startResendOTPTimer(context);
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content:
-                          Text('OTP code is valid for 60 seconds, please wait'),
-                    ));
+                    _showErrorMessage('OTP code is valid for 60 seconds, please wait');
                   }
                 },
                 child: const CustomText(
@@ -106,12 +122,12 @@ class _OtpViewState extends State<OtpView> {
               height: 20,
             ),
             MethodButton(
-                onTap: () {
-                  _viewModel.verifyOTP(context, _otpModel,
-                      fromHomeScreen: widget.fromHomeScreen!);
-                },
-                color: ColorsGlobal.globalPink,
-                title: StringExtensions.confirm)
+              onTap: () {
+                _viewModel.verifyOTP(context, _otpModel, fromHomeScreen: widget.fromHomeScreen!);
+              },
+              color: ColorsGlobal.globalPink,
+              title: StringExtensions.confirm,
+            ),
           ],
         ),
       ),

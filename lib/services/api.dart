@@ -150,4 +150,7 @@ class API {
     final response = supabase.auth.currentUser?.id;
     return response;
   }
+  Future<void> logOut()async{
+    await supabase.auth.signOut();
+  }
 }

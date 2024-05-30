@@ -71,6 +71,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
           color: ColorsGlobal.globalPink,
           title: 'Select',
           onTap: () {
+
             Navigator.pop(context);
           },
         )

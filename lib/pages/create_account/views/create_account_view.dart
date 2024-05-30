@@ -8,6 +8,8 @@ import 'package:template/widgets/custom_button.dart';
 import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/custom_textfield.dart';
 
+import '../../otp/views/otp_view.dart';
+
 class CreateAccountView extends StatefulWidget {
   const CreateAccountView({super.key});
 
@@ -38,6 +40,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     passwordController.addListener(() {
       _validation.isPasswordValid(passwordController.text);
     });
+    _viewModel.dispose();
   }
 
   @override
@@ -138,6 +141,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           password: passwordController.text.trim(),
                         );
                         _viewModel.authenSignUp(signUpModel, context);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                OtpView(email: emailController.text.trim(), fromHomeScreen: true),
+                          ),
+                        );
                       },
                       color: ColorsGlobal.globalPink,
                       title: StringExtensions.createAnAccount),

@@ -39,6 +39,7 @@ class StringExtensions {
   static const generalSettings = 'General Settings';
   static const aboutUs = 'About us';
   static const dataUsage = 'Data usage';
+  static const logOut = 'Log out';
 
   // map
   static const myLocations = 'My Locations';

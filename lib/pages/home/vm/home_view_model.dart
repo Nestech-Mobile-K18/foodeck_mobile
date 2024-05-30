@@ -298,7 +298,8 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<int> countCartItems() async {
     // Execute query to get data from "cart" table
-    final response = await supabase.from('cart').select('list_cart');
+    final response = await supabase.from('cart').select('list_cart').eq
+      ('is_order', false);
 
     // Extract data from response
     final List<Map<String, dynamic>> data = response;

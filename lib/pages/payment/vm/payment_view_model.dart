@@ -34,14 +34,13 @@ class PaymentViewModel {
     }
 
     while (true) {
-      final response = await _supabase
-          .from('payment_method')
-          .select()
-          .eq('user_id', userId);
+      final response =
+          await _supabase.from('payment_method').select().eq('user_id', userId);
 
       final data = response;
       yield data.cast<Map<String, dynamic>>();
-      await Future.delayed(const Duration(seconds: 5)); // Refresh every 5 seconds
+      await Future.delayed(
+          const Duration(seconds: 5)); // Refresh every 5 seconds
     }
   }
 
@@ -52,10 +51,8 @@ class PaymentViewModel {
       return [];
     }
 
-    final response = await _supabase
-        .from('payment_method')
-        .select()
-        .eq('user_id', userId);
+    final response =
+        await _supabase.from('payment_method').select().eq('user_id', userId);
 
     return response.cast<Map<String, dynamic>>();
   }
@@ -76,4 +73,23 @@ class PaymentViewModel {
     final data = response;
     return data.isNotEmpty;
   }
+
+  Future<void> deletePaymentMethod(String cardNumber, String cvc) async {
+    final String? userId = await AuthManager.getUserId();
+
+    if (userId == null) {
+      throw Exception('User ID not found');
+    }
+
+    final response = await _supabase
+        .from('payment_method')
+        .select()
+        .eq('user_id', userId)
+        .eq('card_number', cardNumber)
+        .eq('cvc', cvc)
+        .single();
+
+    final id = response['id'];
+    await _supabase.from('payment_method').delete().eq('id', id);
+    }
 }

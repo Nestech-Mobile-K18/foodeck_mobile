@@ -52,21 +52,20 @@ class OTPViewModel {
       String token = otpModel.otpValues.join();
       String email = otpModel.email;
 
-      final res = _api.requestVerifyOTP(
+      final res = await _api.requestVerifyOTP(
           token: token, otpType: OtpType.email, email: email);
-      res.then((value) async {
-        final User? user = value?.user;
+
+      if (res?.user != null) {
+        final User? user = res?.user;
         if (user != null) {
-          if (fromHomeScreen == true) {
+          if (fromHomeScreen) {
             final String? userId = await _getUserIdFromSupabase(email);
             if (userId != null) {
-              _saveUserIdToSharedPreferences(userId);
+              await _saveUserIdToSharedPreferences(userId);
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('/application', (route) => false);
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('This user does not exist'),
-              ));
+              _showError.showError(context, 'This user does not exist');
             }
           } else {
             Navigator.of(context).pushReplacement(
@@ -76,13 +75,13 @@ class OTPViewModel {
             );
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('This user does not exist'),
-          ));
+          _showError.showError(context, 'This user does not exist');
         }
-      });
+      } else {
+        _showError.showError(context, 'OTP code is incorrect');
+      }
     } catch (e) {
-      _showError.showError(context, 'OTP code is incorrect');
+      _showError.showError(context, 'An error occurred. Please try again.');
     }
   }
 
@@ -110,4 +109,8 @@ class OTPViewModel {
           context, 'The OTP code is valid within 60 seconds. Please wait.');
     }
   }
+  void disposeVerifyOTP() {
+    timer?.cancel();
+  }
+
 }

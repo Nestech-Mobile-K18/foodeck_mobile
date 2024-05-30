@@ -24,13 +24,14 @@ class _AvatarAndNameState extends State<AvatarAndName> {
     } else {
       imageProvider = const AssetImage(MediaRes.avatar);
     }
-    return Column(
+    return Padding(padding: const  EdgeInsets.symmetric(horizontal: 40,
+        vertical:
+    20), child:  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Align(
           alignment: Alignment.center,
           child: Container(
-            margin: const EdgeInsets.only(bottom: 20, top: 20),
             height: Responsive.screenWidth(context) * 0.3,
             width: Responsive.screenHeight(context) * 0.3,
             decoration: BoxDecoration(
@@ -52,9 +53,13 @@ class _AvatarAndNameState extends State<AvatarAndName> {
           title: widget.address ?? 'Lahore, Pakistan',
           color: ColorsGlobal.textGrey,
           fontWeight: FontWeight.w500,
+          textAlign: TextAlign.center,
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+          maxLine: 2,
           size: 15,
         ),
       ],
-    );
+    ),);
   }
 }
