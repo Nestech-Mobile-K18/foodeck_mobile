@@ -1,0 +1,24 @@
+name: merge_develop
+
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build Test Develop
+    runs-on: windowos-latest
+    steps:
+      - uses: action/checkout@v1
+      - uses: action/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.2.3'
+      - run: flutter pub get
+      - run: flutter test
