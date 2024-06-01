@@ -8,7 +8,7 @@ on:
 name: merge_develop
 jobs:
   build:
-    name: Build Test Develop
+    name: Build_Test_Develop
     runs-on: windowos-latest
     steps:
       - uses: action/checkout@v1
