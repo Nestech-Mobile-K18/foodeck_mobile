@@ -1,5 +1,3 @@
-name: merge_develop
-
 on:
   pull_request:
     branches:
@@ -7,7 +5,7 @@ on:
   push:
     branches:
       - develop
-
+name: merge_develop
 jobs:
   build:
     name: Build Test Develop
@@ -22,3 +20,12 @@ jobs:
           flutter-version: '3.2.3'
       - run: flutter pub get
       - run: flutter test
+      - run: flutter build apk --debug --split-per-abi
+      - run: |
+         flutter build ios --no-codesign
+         cd build/ios/iphoneos
+         mkdir Payload
+         cd Payload
+         ln -s ../Runner.app
+         cd ..
+         zip -r app.ipa Payload
