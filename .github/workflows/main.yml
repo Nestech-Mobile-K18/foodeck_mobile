@@ -8,7 +8,7 @@ jobs:
     name: Build_Test_Develop
     runs-on: windows-latest
     steps:
-      - uses: action/checkout@v1
+      - uses: actions/checkout@v4
       - uses: action/setup-java@v1
         with:
           java-version: '17.x'
