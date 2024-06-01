@@ -9,7 +9,7 @@ name: merge_develop
 jobs:
   build:
     name: Build_Test_Develop
-    runs-on: windowos-latest
+    runs-on: window-latest
     steps:
       - uses: action/checkout@v1
       - uses: action/setup-java@v1
