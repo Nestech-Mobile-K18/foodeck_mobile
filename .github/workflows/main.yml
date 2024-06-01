@@ -1,10 +1,7 @@
 on:
   pull_request:
     branches:
-      - develop
-  push:
-    branches:
-      - develop
+      - develop-nga-nguyen
 name: merge_develop
 jobs:
   build:
