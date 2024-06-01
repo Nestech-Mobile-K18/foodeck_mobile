@@ -8,12 +8,14 @@ import 'package:template/widgets/custom_text.dart';
 import 'package:template/widgets/method_button.dart';
 import 'package:template/resources/const.dart';
 
+import '../../../services/auth_manager.dart';
+
 
 class OtpView extends StatefulWidget {
   final String? email;
   final bool? fromHomeScreen;
 
-  const OtpView({Key? key, this.email, this.fromHomeScreen}) : super(key: key);
+  const OtpView({super.key, this.email, this.fromHomeScreen});
 
   @override
   State<OtpView> createState() => _OtpViewState();
@@ -122,8 +124,15 @@ class _OtpViewState extends State<OtpView> {
               height: 20,
             ),
             MethodButton(
-              onTap: () {
+              onTap: () async{
                 _viewModel.verifyOTP(context, _otpModel, fromHomeScreen: widget.fromHomeScreen!);
+                await AuthManager.handleSuccessfulLogin();
+                final userId = await _viewModel
+                    .getUserIdFromSupabase(widget.email ??'');
+                if (userId != null) {
+                  await _viewModel
+                      .saveUserIdToSharedPreferences(userId);
+                }
               },
               color: ColorsGlobal.globalPink,
               title: StringExtensions.confirm,

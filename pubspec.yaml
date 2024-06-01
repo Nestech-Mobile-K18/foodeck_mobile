@@ -28,7 +28,7 @@ dependencies:
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   swipe_to: ^1.0.5
-  url_launcher: ^6.2.3
+  url_launcher: ^6.2.6
   chewie: ^1.7.4
   another_flutter_splash_screen: ^1.2.0
   flutter_map: ^6.1.0
@@ -43,6 +43,8 @@ dependencies:
   device_preview: 1.1.0
   http: ^1.2.0
   debounce_throttle: ^2.0.0
+  share: ^2.0.4
+  appcenter_sdk_flutter: ^0.5.1
 
 
 dev_dependencies:

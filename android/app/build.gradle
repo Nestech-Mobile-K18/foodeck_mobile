@@ -87,4 +87,7 @@ flutter {
 dependencies {
     implementation 'com.facebook.android:facebook-login:latest.release'
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
+    def appCenterSdkVersion = '5.0.4'
+    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 }

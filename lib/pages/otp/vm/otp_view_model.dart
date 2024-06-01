@@ -109,6 +109,21 @@ class OTPViewModel {
           context, 'The OTP code is valid within 60 seconds. Please wait.');
     }
   }
+  Future<String?> getUserIdFromSupabase(String email) async {
+    var response = await _api.supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+    String? userId = response['id'];
+
+    return userId;
+  }
+  Future<void> saveUserIdToSharedPreferences(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId);
+  }
   void disposeVerifyOTP() {
     timer?.cancel();
   }

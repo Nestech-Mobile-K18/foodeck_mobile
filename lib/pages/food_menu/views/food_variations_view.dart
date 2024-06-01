@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:template/widgets/cross_bar.dart';
 import 'package:template/widgets/custom_textfield.dart';
 import 'package:template/widgets/method_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../resources/const.dart';
 import '../../../services/auth_manager.dart';
@@ -105,7 +107,28 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
     );
   }
 
+  Future<void> _generateDeepLink() async {
+    final Uri deepLinkUri = Uri(
+      scheme: 'io.supabase.flutterquickstart',
+      // Thay thế bằng scheme của Supabase
+      host: 'login-callback',
+      path: '/',
+      queryParameters: {
+        'id_food': widget.bindingData?['id_food'].toString(),
+        'variation': selectedVariation,
+        'extra_sauce': selectedExtraSauce.join(','),
+        'quantity': quantity.toString(),
+        'instructions': instructionsController.text,
+      },
+    );
 
+    final String deepLinkUrl = deepLinkUri.toString();
+    if (await canLaunch(deepLinkUrl)) {
+      await launch(deepLinkUrl);
+    } else {
+      throw 'Không thể mở $deepLinkUrl';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,14 +221,24 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                       ),
                       onPressed: _toggleLike,
                     ),
-                    const Icon(
-                      Icons.share_outlined,
-                      color: ColorsGlobal.globalWhite,
+                    IconButton(
+                      onPressed: () {
+                        Share.share("https://play.google.com/store/apps/details?id=com.instructivetech.testapp");
+                      },
+                      icon: Icon(
+                        Icons.share_outlined,
+                        color: ColorsGlobal.globalWhite,
+                      ),
                     ),
-                    const Icon(
-                      Icons.more_vert_outlined,
-                      color: ColorsGlobal.globalWhite,
-                    ),
+                    IconButton(
+                      onPressed: () {
+                        _generateDeepLink();
+                      },
+                      icon: Icon(
+                        Icons.more_vert_outlined,
+                        color: ColorsGlobal.globalWhite,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -293,12 +326,12 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                 ),
                 Container(
                   margin:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: Responsive.screenWidth(context),
                   decoration: BoxDecoration(
                       borderRadius:
-                      const BorderRadius.all(Radius.circular(16.0)),
+                          const BorderRadius.all(Radius.circular(16.0)),
                       border: Border.all(
                           color: ColorsGlobal.dividerGrey, width: 2)),
                   child: Row(
@@ -465,7 +498,7 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(16.0)),
+                              const BorderRadius.all(Radius.circular(16.0)),
                           border: Border.all(
                               color: ColorsGlobal.dividerGrey, width: 2)),
                       child: DropdownButton<String>(
@@ -504,16 +537,15 @@ class _FoodVariationsViewState extends State<FoodVariationsView> {
                 MethodButton(
                   onTap: () {
                     _viewmodel.requestAddToCart(
-                      context: context,
-                      foodData: widget.bindingData!,
-                      extraSauceMap: extraSauceMap,
-                      variationMap: variationMap,
-                      selectedExtraSauce: selectedExtraSauce,
-                      selectedVariation: selectedVariation,
-                      quantity: quantity,
-                      totalPrice: totalPrice,
-                      instructions: instructionsController.text
-                    );
+                        context: context,
+                        foodData: widget.bindingData!,
+                        extraSauceMap: extraSauceMap,
+                        variationMap: variationMap,
+                        selectedExtraSauce: selectedExtraSauce,
+                        selectedVariation: selectedVariation,
+                        quantity: quantity,
+                        totalPrice: totalPrice,
+                        instructions: instructionsController.text);
                   },
                   color: ColorsGlobal.globalPink,
                   title: 'Add to cart',

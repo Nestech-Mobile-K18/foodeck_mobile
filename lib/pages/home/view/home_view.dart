@@ -154,7 +154,7 @@ class _HomeViewState extends State<HomeView> {
                   },
                   shape: const CircleBorder(),
                   backgroundColor: ColorsGlobal.globalPink,
-                  tooltip: 'Check Cart',
+                  tooltip: 'Your Cart',
                   child: Stack(
                     children: [
                       Image.asset(

@@ -26,6 +26,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "appcenter_sdk_flutter",
+      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/appcenter_sdk_flutter-0.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.10",
       "packageUri": "lib/",
@@ -800,6 +806,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "share",
+      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/share-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "shared_preferences",
       "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.2.2",
       "packageUri": "lib/",
@@ -981,7 +993,7 @@
     },
     {
       "name": "url_launcher",
-      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.5",
+      "rootUri": "file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.6",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1154,7 +1166,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-05-29T08:12:37.622198Z",
+  "generated": "2024-05-31T14:02:55.957138Z",
   "generator": "pub",
   "generatorVersion": "3.2.4"
 }

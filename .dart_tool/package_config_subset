@@ -14,6 +14,10 @@ app_links
 3.2
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/app_links-4.0.1/
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/app_links-4.0.1/lib/
+appcenter_sdk_flutter
+2.18
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/appcenter_sdk_flutter-0.5.1/
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/appcenter_sdk_flutter-0.5.1/lib/
 archive
 2.12
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/archive-3.4.10/
@@ -514,6 +518,10 @@ rxdart
 2.12
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.27.7/
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.27.7/lib/
+share
+2.12
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/share-2.0.4/
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/share-2.0.4/lib/
 shared_preferences
 2.19
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.2.2/
@@ -632,8 +640,8 @@ file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/unicode-0.3.1/
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/unicode-0.3.1/lib/
 url_launcher
 3.2
-file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.5/
-file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.5/lib/
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.6/
+file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.2.6/lib/
 url_launcher_android
 3.0
 file:///C:/Users/ASUS/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.0/

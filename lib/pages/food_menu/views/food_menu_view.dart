@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:template/pages/food_menu/vm/food_menu_view_model.dart';
 import 'package:template/pages/food_menu/widgets/tab_bar_menu.dart';
 import 'package:template/pages/food_menu/widgets/tab_bar_view_menu.dart';
@@ -10,6 +11,7 @@ import '../../../widgets/loading_indicator.dart';
 
 class FoodMenuView extends StatefulWidget {
   final Map<String, dynamic>? bindingData;
+
   const FoodMenuView({super.key, this.bindingData});
 
   @override
@@ -123,29 +125,33 @@ class _FoodMenuViewState extends State<FoodMenuView>
                 ),
               ),
               Positioned(
-                top: 35,
-                right: 20,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        isLiked ? Icons.favorite : Icons.favorite_border,
-                        color: isLiked ? Colors.pink : ColorsGlobal.globalWhite,
+                  top: 35,
+                  right: 20,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          color:
+                              isLiked ? Colors.pink : ColorsGlobal.globalWhite,
+                        ),
+                        onPressed: _toggleLike,
                       ),
-                      onPressed: _toggleLike,
-                    ),
-                    Icon(
-                      Icons.share_outlined,
-                      color: ColorsGlobal.globalWhite,
-                    ),
-                    Icon(
-                      Icons.more_vert_outlined,
-                      color: ColorsGlobal.globalWhite,
-                    ),
-                  ],
-                )
-              ),
-
+                      IconButton(
+                        onPressed: () {
+                          Share.share("https://play.google.com/store/apps/details?id=com.instructivetech.testapp");
+                        },
+                        icon: Icon(
+                          Icons.share_outlined,
+                          color: ColorsGlobal.globalWhite,
+                        ),
+                      ),
+                      Icon(
+                        Icons.more_vert_outlined,
+                        color: ColorsGlobal.globalWhite,
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),
