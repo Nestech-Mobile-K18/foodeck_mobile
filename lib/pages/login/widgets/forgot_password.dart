@@ -22,9 +22,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
       }
     } on AuthException catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, error.message);
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, error.message);
+      }
     } catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      }
     }
   }
 
@@ -38,7 +42,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          unFocus;
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
             appBar: AppBar(

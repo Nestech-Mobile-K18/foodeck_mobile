@@ -34,15 +34,21 @@ class _CreateAccountState extends State<CreateAccount> {
           'phone': phoneController.text.trim(),
           'password': passwordController.text.trim(),
         });
-        Navigator.pushNamed(context, AppRouter.otp,
-            arguments: emailController.text.trim());
+        if (mounted) {
+          Navigator.pushNamed(context, AppRouter.otp,
+              arguments: emailController.text.trim());
+        }
       } else {
         ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
       }
     } on AuthException catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, error.message);
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, error.message);
+      }
     } catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      }
     }
   }
 
@@ -59,7 +65,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        unFocus;
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -265,7 +271,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   ),
                   CustomButton(
                       onPressed: () {
-                        unFocus;
+                        FocusManager.instance.primaryFocus?.unfocus();
                         signUpAndAddUsers();
                       },
                       text: const CustomText(

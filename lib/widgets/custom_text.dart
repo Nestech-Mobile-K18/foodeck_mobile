@@ -12,7 +12,8 @@ class CustomText extends StatelessWidget {
       this.fontWeight,
       this.color,
       this.textDecoration,
-      this.textAlign});
+      this.textAlign,
+      this.textOverflow});
 
   final String content;
   final double? fontSize;
@@ -20,11 +21,13 @@ class CustomText extends StatelessWidget {
   final Color? color;
   final TextDecoration? textDecoration;
   final TextAlign? textAlign;
+  final TextOverflow? textOverflow;
 
   @override
   Widget build(BuildContext context) {
     return Text(content,
         textAlign: textAlign,
+        overflow: textOverflow ?? TextOverflow.ellipsis,
         style: AppText.inter.copyWith(
             fontSize: fontSize ?? 17,
             fontWeight: fontWeight,

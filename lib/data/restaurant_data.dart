@@ -176,11 +176,15 @@ class RestaurantData {
       }).then((value) => CustomWidgets.customSnackBar(
           context, AppColor.globalPinkShadow, 'You just liked this item'));
     } on AuthException catch (error) {
-      CustomWidgets.customSnackBar(
-          context, AppColor.buttonShadowBlack, error.message);
+      if (context.mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.buttonShadowBlack, error.message);
+      }
     } catch (error) {
-      CustomWidgets.customSnackBar(
-          context, AppColor.buttonShadowBlack, 'Error occurred, please retry');
+      if (context.mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'Error occurred, please retry');
+      }
     }
   }
 
@@ -196,11 +200,15 @@ class RestaurantData {
       }).then((value) => CustomWidgets.customSnackBar(
           context, AppColor.buttonShadowBlack, 'You just unliked this item'));
     } on AuthException catch (error) {
-      CustomWidgets.customSnackBar(
-          context, AppColor.buttonShadowBlack, error.message);
+      if (context.mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.buttonShadowBlack, error.message);
+      }
     } catch (error) {
-      CustomWidgets.customSnackBar(
-          context, AppColor.buttonShadowBlack, 'Error occurred, please retry');
+      if (context.mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'Error occurred, please retry');
+      }
     }
   }
 }

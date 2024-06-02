@@ -1,4 +1,3 @@
-import 'package:template/pages/splash/bloc/splash_page_bloc.dart';
 import 'package:template/source/export.dart';
 
 part 'splash_page_extension_ui.dart';
@@ -11,30 +10,16 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final splashPageBloc = SplashPageBloc();
-
   @override
   void initState() {
-    splashPageBloc.add(SplashPageInitialEvent());
+    context.read<SplashPageBloc>().add(SplashPageInitialEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SplashPageBloc, SplashPageState>(
-      bloc: splashPageBloc,
-      listener: (context, state) {
-        if (state is SplashLoadedAnimationSuccessState) {
-          supabase.auth.onAuthStateChange.listen((event) {
-            final session = event.session;
-            if (session != null) {
-              Navigator.pushNamed(context, AppRouter.homePage);
-            } else if (session == null) {
-              Navigator.pushNamed(context, AppRouter.loginPage);
-            }
-          });
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         switch (state.runtimeType) {
           case SplashPageInitial:
@@ -63,10 +48,7 @@ class _SplashPageState extends State<SplashPage> {
                 animation3: true,
                 animation2: false);
           default:
-            return const SplashPageAnimation(
-                animationFirstAndLast: true,
-                animation3: true,
-                animation2: false);
+            return const SizedBox();
         }
       },
     );

@@ -61,19 +61,20 @@ class _BottomCardState extends State<BottomCard> {
         'area': widget.area,
         'city': widget.city
       });
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text('This location has been deleted')));
+      if (mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'This location has been deleted');
+      }
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: const Duration(milliseconds: 1500),
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text(error.message)));
+      if (mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.buttonShadowBlack, error.message);
+      }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(milliseconds: 1500),
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      if (mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'Error occurred, please retry');
+      }
     }
   }
 
@@ -88,34 +89,40 @@ class _BottomCardState extends State<BottomCard> {
 
   Future updateLocation(index, num distance, num duration, Map geometry) async {
     try {
+      late dynamic id;
       var response = await supabase.from('restaurants').select('id');
       var records = response.toList() as List;
       for (var record in records) {
         var userId = record['id'];
-        await supabase.from('restaurants').update({
-          'name': responses[index]['name'],
-          'address': responses[index]['address'],
-          'area': responses[index]['area'],
-          'city': responses[index]['city'],
-          'latitude': responses[index]['latitude'],
-          'longitude': responses[index]['longitude'],
-          'distance': distance,
-          'duration': duration,
-          'geometry': geometry
-        }).eq('id', userId);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: AppColor.globalPinkShadow,
-            duration: Duration(milliseconds: 1500),
-            content: Text('You just saved info')));
+        setState(() {
+          id = userId;
+        });
+      }
+      await supabase.from('restaurants').update({
+        'name': responses[index]['name'],
+        'address': responses[index]['address'],
+        'area': responses[index]['area'],
+        'city': responses[index]['city'],
+        'latitude': responses[index]['latitude'],
+        'longitude': responses[index]['longitude'],
+        'distance': distance,
+        'duration': duration,
+        'geometry': geometry
+      }).eq('id', id);
+      if (mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.globalPinkShadow, 'You just saved info');
       }
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text(error.message)));
+      if (mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.buttonShadowBlack, error.message);
+      }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      if (mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'Error occurred, please retry');
+      }
     }
   }
 

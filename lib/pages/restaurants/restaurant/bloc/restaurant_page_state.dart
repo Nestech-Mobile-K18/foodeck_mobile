@@ -14,19 +14,25 @@ final class RestaurantPageInitial extends RestaurantPageState {}
 class RestaurantPageLoadingState extends RestaurantPageState {}
 
 class RestaurantPageLoadingSuccessState extends RestaurantPageState {
-  final List<RestaurantModel> restaurant;
+  final RestaurantModel restaurant;
 
   const RestaurantPageLoadingSuccessState({required this.restaurant});
 }
-
-class RestaurantPageBackState extends RestaurantPageActionState {}
 
 class RestaurantPageShareState extends RestaurantPageActionState {}
 
 class RestaurantPageReportState extends RestaurantPageActionState {}
 
-class RestaurantPageReviewState extends RestaurantPageActionState {}
+class RestaurantPageSetRateState extends RestaurantPageActionState {}
+
+class RestaurantPageSentReviewState extends RestaurantPageActionState {}
 
 class RestaurantPageMapState extends RestaurantPageActionState {}
 
-class RestaurantPageNavigateState extends RestaurantPageActionState {}
+class RestaurantPageNavigateToAddonState extends RestaurantPageActionState {
+  final FoodItems foodItems;
+  final RestaurantModel restaurant;
+
+  RestaurantPageNavigateToAddonState(
+      {required this.foodItems, required this.restaurant});
+}

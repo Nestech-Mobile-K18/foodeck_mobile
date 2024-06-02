@@ -2,47 +2,38 @@ import 'package:rive/rive.dart';
 import 'package:template/source/export.dart';
 
 class RiveAnimations {
-  static Widget addToCartAnimation(VoidCallback onTap) {
-    return Positioned(
-      bottom: 0,
-      right: 0,
-      child: GestureDetector(
-        onTap: onTap,
-        child: SizedBox(
-          height: 70,
-          width: 300,
-          child: RiveAnimation.asset(
-            alignment: Alignment.bottomCenter,
-            fit: BoxFit.cover,
-            RiveUtils.addToCartModel.src,
-            artboard: RiveUtils.addToCartModel.artBoard,
-            onInit: (artBoard) {
-              RiveUtils.addToCartModel.statusTrigger = RiveUtils.getRiveTrigger(
-                  artBoard, RiveUtils.addToCartModel.action,
-                  stateMachineName: RiveUtils.addToCartModel.stateMachineName);
-            },
-          ),
-        ),
+  static Widget addToCartAnimation() {
+    return SizedBox(
+      height: 70,
+      width: 300,
+      child: RiveAnimation.asset(
+        alignment: Alignment.bottomCenter,
+        fit: BoxFit.cover,
+        RiveUtils.addToCartModel.src,
+        artboard: RiveUtils.addToCartModel.artBoard,
+        onInit: (artBoard) {
+          RiveUtils.addToCartModel.statusTrigger = RiveUtils.getRiveTrigger(
+              artBoard, RiveUtils.addToCartModel.action,
+              stateMachineName: RiveUtils.addToCartModel.stateMachineName);
+        },
       ),
     );
   }
 
-  static Widget reviewAnimation(VoidCallback onTap) {
-    return GestureDetector(
-        onTap: onTap,
-        child: SizedBox(
-          height: 100,
-          child: RiveAnimation.asset(
-            fit: BoxFit.cover,
-            RiveUtils.reviewModel.src,
-            artboard: RiveUtils.reviewModel.artBoard,
-            onInit: (artBoard) {
-              RiveUtils.reviewModel.statusTrigger = RiveUtils.getRiveTrigger(
-                  artBoard, RiveUtils.reviewModel.action,
-                  stateMachineName: RiveUtils.reviewModel.stateMachineName);
-            },
-          ),
-        ));
+  static Widget reviewAnimation() {
+    return SizedBox(
+      height: 100,
+      child: RiveAnimation.asset(
+        fit: BoxFit.cover,
+        RiveUtils.reviewModel.src,
+        artboard: RiveUtils.reviewModel.artBoard,
+        onInit: (artBoard) {
+          RiveUtils.reviewModel.statusTrigger = RiveUtils.getRiveTrigger(
+              artBoard, RiveUtils.reviewModel.action,
+              stateMachineName: RiveUtils.reviewModel.stateMachineName);
+        },
+      ),
+    );
   }
 
   static Widget pigeonAnimation() {
@@ -62,9 +53,26 @@ class RiveAnimations {
         ));
   }
 
+  static Widget logOutAnimation() {
+    return SizedBox(
+      height: 36,
+      width: 36,
+      child: RiveAnimation.asset(
+        fit: BoxFit.cover,
+        RiveUtils.logOut.src,
+        artboard: RiveUtils.logOut.artBoard,
+        onInit: (artBoard) {
+          RiveUtils.logOut.statusTrigger = RiveUtils.getRiveTrigger(
+              artBoard, RiveUtils.logOut.action,
+              stateMachineName: RiveUtils.logOut.stateMachineName);
+        },
+      ),
+    );
+  }
+
   static Widget lightOrDarkAnimation(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -94,6 +102,43 @@ class RiveAnimations {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  static Widget bottomAnimation(int currentIndex, int index) {
+    return SizedBox(
+      height: 36,
+      width: 36,
+      child: Opacity(
+        opacity: currentIndex == index ? 1 : 0.5,
+        child: RiveAnimation.asset(
+          RiveUtils.bottomModel[index].src,
+          artboard: RiveUtils.bottomModel[index].artBoard,
+          onInit: (artBoard) {
+            RiveUtils.bottomModel[index].statusTrigger =
+                RiveUtils.getRiveTrigger(
+                    artBoard, RiveUtils.bottomModel[index].action,
+                    stateMachineName:
+                        RiveUtils.bottomModel[index].stateMachineName);
+          },
+        ),
+      ),
+    );
+  }
+
+  static Widget profileAnimation(RiveModel index) {
+    return SizedBox(
+      height: 36,
+      width: 36,
+      child: RiveAnimation.asset(
+        fit: BoxFit.cover,
+        index.src,
+        artboard: index.artBoard,
+        onInit: (artBoard) {
+          index.statusTrigger = RiveUtils.getRiveTrigger(artBoard, index.action,
+              stateMachineName: index.stateMachineName);
+        },
       ),
     );
   }

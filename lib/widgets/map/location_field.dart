@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:template/pages/restaurants/detail_page/select_address.dart';
 import 'package:template/widgets/map/bottom_card.dart';
 import 'package:template/widgets/map/mapbox_handler.dart';
 import 'package:template/widgets/map/search_model.dart';
@@ -18,9 +17,10 @@ class _LocationFieldState extends State<LocationField> {
     // Get response using Mapbox Search API
     List response = await getParsedResponseForQuery(value);
     // Set responses and isDestination in parent
-    SearchModel.of(context)?.responsesState = response;
-    BottomCard.of(context)?.responsesState = response;
-    SelectAddress.of(context)?.responsesState = response;
+    if (mounted) {
+      SearchModel.of(context)?.responsesState = response;
+      BottomCard.of(context)?.responsesState = response;
+    }
   }
 
   @override

@@ -5,21 +5,11 @@ import 'package:template/widgets/map/mapbox_reverse.dart';
 import 'package:template/widgets/map/mapbox_search.dart';
 
 // ----------------------------- Mapbox Search Query -----------------------------
-String getValidatedQueryFromQuery(String query) {
-  // Remove whitespaces
-  String validatedQuery = query.trim();
-  return validatedQuery;
-}
 
 Future<List> getParsedResponseForQuery(String value) async {
   List parsedResponses = [];
 
-  // If empty query send blank response
-  String query = getValidatedQueryFromQuery(value);
-  if (query == '') return parsedResponses;
-
-  // Else search and then send response
-  final response = await getSearchResultsFromQueryUsingMapbox(query);
+  final response = await getSearchResultsFromQueryUsingMapbox(value);
 
   List features = response['features'];
   for (var feature in features) {

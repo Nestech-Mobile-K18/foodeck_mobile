@@ -1,20 +1,25 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:template/source/export.dart';
 
 part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc() : super(HomePageInitial()) {
+    on<HomePageInitialEvent>(homePageInitialEvent);
     on<HomePageSelectIndexEvent>(homePageSelectIndexEvent);
-    on<HomePageNavigateEvent>(homePageNavigateEvent);
+  }
+
+  FutureOr<void> homePageInitialEvent(
+      HomePageInitialEvent event, Emitter<HomePageState> emit) async {
+    emit(HomePageLoadingState());
+    await Future.delayed(const Duration(seconds: 2));
+    emit(const HomePageSelectIndex0State(index: 0));
   }
 
   FutureOr<void> homePageSelectIndexEvent(
       HomePageSelectIndexEvent event, Emitter<HomePageState> emit) {
+    RiveUtils.changeSMITriggerState(
+        RiveUtils.bottomModel[event.index].statusTrigger!);
     if (event.index == 0) {
       emit(HomePageSelectIndex0State(index: event.index));
     } else if (event.index == 1) {
@@ -24,10 +29,5 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     } else if (event.index == 3) {
       emit(HomePageSelectIndex3State(index: event.index));
     }
-  }
-
-  FutureOr<void> homePageNavigateEvent(
-      HomePageNavigateEvent event, Emitter<HomePageState> emit) {
-    emit(HomePageNavigateActionState());
   }
 }

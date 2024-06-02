@@ -5,9 +5,11 @@ class RiveModel {
   late String? label = '';
   late SMITrigger? statusTrigger;
   late SMIBool? statusBool;
+  final KindSetting? kindSetting;
 
   RiveModel(
-      {required this.action,
+      {this.kindSetting,
+      required this.action,
       this.label,
       required this.src,
       required this.artBoard,
@@ -60,6 +62,13 @@ class RiveUtils {
       artBoard: 'New Artboard',
       stateMachineName: 'State Machine 1');
 
+  // LogOut Animation
+  static RiveModel logOut = RiveModel(
+      action: 'click',
+      src: 'assets/rives/icons.riv',
+      artBoard: 'EXIT',
+      stateMachineName: 'state_machine');
+
 // Pigeon Animation
   static RiveModel pigeonModel = RiveModel(
       action: 'hover',
@@ -95,11 +104,6 @@ class RiveUtils {
         stateMachineName: 'switch',
         label: 'Saved',
         action: 'click'),
-    // RiveModel(
-    //     src: 'assets/rives/animated_icon_set_-_1_color.riv',
-    //     artBoard: "LIKE/STAR",
-    //     stateMachineName: "STAR_Interactivity",
-    //     label: ''),
     RiveModel(
         src: 'assets/rives/animated_icon_set_-_1_color.riv',
         artBoard: "BELL",
@@ -113,4 +117,59 @@ class RiveUtils {
         label: 'Profile',
         action: 'click'),
   ];
+
+//   Profile Animation Icons
+  static List<RiveModel> profileIcons = [
+    RiveModel(
+        src: 'assets/rives/animated_icons_pack_1.riv',
+        artBoard: 'EMPOLYEE  ICON',
+        stateMachineName: "USER",
+        label: 'Edit Account',
+        action: 'click',
+        kindSetting: KindSetting.account),
+    RiveModel(
+        src: 'assets/rives/animated_icons_pack_1.riv',
+        artBoard: "LOCATION ICON",
+        stateMachineName: "LOCATION",
+        label: 'My Locations',
+        action: 'click',
+        kindSetting: KindSetting.account),
+    RiveModel(
+        src: 'assets/rives/icon_my_order.riv',
+        artBoard: "archive-box",
+        stateMachineName: "State Machine 1",
+        label: 'My Orders',
+        action: 'click',
+        kindSetting: KindSetting.account),
+    RiveModel(
+        src: 'assets/rives/animated_icons_pack_1.riv',
+        artBoard: 'WALLET  ICON',
+        stateMachineName: "WALLET",
+        label: 'Payment Methods',
+        action: 'click',
+        kindSetting: KindSetting.account),
+    RiveModel(
+        src: 'assets/rives/icons.riv',
+        artBoard: "LIKE/STAR",
+        stateMachineName: "STAR_Interactivity",
+        label: 'My Reviews',
+        action: 'click',
+        kindSetting: KindSetting.account),
+    RiveModel(
+        src: 'assets/rives/animated_icons_pack_1.riv',
+        artBoard: "GLOBE ICON",
+        stateMachineName: "GLOBEL",
+        label: 'About Us',
+        action: 'click',
+        kindSetting: KindSetting.general),
+    RiveModel(
+        src: 'assets/rives/icon_data.riv',
+        artBoard: "COINS",
+        stateMachineName: "COINS_Interactivity",
+        label: 'Data Usage',
+        action: 'click',
+        kindSetting: KindSetting.general)
+  ];
 }
+
+enum KindSetting { account, general }

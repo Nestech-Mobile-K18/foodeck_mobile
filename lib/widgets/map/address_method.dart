@@ -29,8 +29,11 @@ LatLng getLatLngFromSharedPrefs() {
 }
 
 LatLng getAddress() {
-  return LatLng(sharedPreferences.getDouble('latitudeAddress')!,
-      sharedPreferences.getDouble('longitudeAddress')!);
+  return LatLng(
+      sharedPreferences.getDouble('latitudeAddress') ??
+          sharedPreferences.getDouble('latitude')!,
+      sharedPreferences.getDouble('longitudeAddress') ??
+          sharedPreferences.getDouble('longitude')!);
 }
 
 late MapboxMapController mapController;

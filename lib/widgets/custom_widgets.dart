@@ -9,19 +9,18 @@ class CustomWidgets {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           clipBehavior: Clip.none,
-          duration: Duration(milliseconds: 1500),
+          duration: const Duration(milliseconds: 1500),
           backgroundColor: color,
           content: CustomText(content: content)));
   }
 
-  static Widget currentAddress(String address, String address1) {
+  static Widget currentAddress(String address) {
     return AnimatedTextKit(
-      repeatForever: true,
+      totalRepeatCount: 1,
       animatedTexts: [
         TyperAnimatedText(address,
-            textStyle: AppText.inter.copyWith(fontSize: 17)),
-        TyperAnimatedText(address1,
-            textStyle: AppText.inter.copyWith(fontSize: 17)),
+            textStyle: AppText.inter
+                .copyWith(fontSize: 17, overflow: TextOverflow.ellipsis))
       ],
     );
   }

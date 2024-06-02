@@ -9,9 +9,9 @@ sealed class HomePageState extends Equatable {
   List<Object?> get props => [];
 }
 
-sealed class HomePageActionState extends HomePageState {}
-
 final class HomePageInitial extends HomePageState {}
+
+class HomePageLoadingState extends HomePageState {}
 
 class HomePageSelectIndex0State extends HomePageState {
   final int index;
@@ -36,5 +36,3 @@ class HomePageSelectIndex3State extends HomePageState {
 
   const HomePageSelectIndex3State({required this.index});
 }
-
-class HomePageNavigateActionState extends HomePageActionState {}

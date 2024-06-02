@@ -14,11 +14,9 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  final explorePageBloc = ExplorePageBloc();
-
   @override
   void initState() {
-    explorePageBloc.add(ExplorePageInitialEvent());
+    context.read<ExplorePageBloc>().add(ExplorePageInitialEvent());
     super.initState();
   }
 
@@ -35,33 +33,30 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ExplorePageBloc, ExplorePageState>(
-      bloc: explorePageBloc,
       listenWhen: (previous, current) => current is ExplorePageActionState,
       buildWhen: (previous, current) => current is! ExplorePageActionState,
       listener: (context, state) {
         if (state is ExplorePageSearchNavigateActionState) {
           Navigator.pushNamed(context, AppRouter.searchPage);
         } else if (state is ExplorePageNavigateActionState) {
-          Navigator.pushNamed(context, AppRouter.dealPage,
-              arguments: DealsPage(restaurant: state.restaurantModel));
+          Navigator.pushNamed(context, AppRouter.restaurantPage,
+              arguments: RestaurantPage(restaurant: state.restaurantModel));
         } else if (state is ExplorePageCartNavigateActionState) {
-          Navigator.pushNamed(context, AppRouter.addCart);
+          Navigator.pushNamed(context, AppRouter.restaurantCart);
         } else if (state is ExplorePageLikeState) {
           toggleLike(state, context);
         }
       },
       builder: (context, state) {
         switch (state.runtimeType) {
-          case ExplorePageInitial:
-            return const LoadingAnimationRive();
           case ExplorePageLoadingState:
             return const LoadingAnimationRive();
           case ExplorePageLoadingSuccessState:
             final successState = state as ExplorePageLoadingSuccessState;
-            return ExploreBody(
-                explorePageBloc: explorePageBloc, successState: successState);
+            return ExploreBody(successState: successState);
+          default:
+            return const LoadingAnimationRive();
         }
-        return const SizedBox();
       },
     );
   }

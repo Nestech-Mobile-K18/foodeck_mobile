@@ -59,8 +59,8 @@ class _MyReviewsState extends State<MyReviews> {
                                                 const EdgeInsets.only(left: 3),
                                             foodImage: snapshot.data![index]
                                                 ['restaurant_image'],
-                                            deliveryTime: snapshot.data![index]
-                                                ['time'],
+                                            deliveryTime:
+                                                '${snapshot.data![index]['time']} mins',
                                             shopName: snapshot.data![index]
                                                 ['restaurant_name'],
                                             shopAddress: snapshot.data![index]

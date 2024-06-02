@@ -26,9 +26,13 @@ class _OtpState extends State<Otp> {
       await supabase.auth
           .verifyOTP(token: token, type: OtpType.email, email: widget.email);
     } on AuthException catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, error.message);
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, error.message);
+      }
     } catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      }
     }
   }
 
@@ -39,9 +43,13 @@ class _OtpState extends State<Otp> {
           .then((value) =>
               ShowBearSnackBar.showBearSnackBar(context, 'OTP in your email'));
     } on AuthException catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, error.message);
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, error.message);
+      }
     } catch (error) {
-      ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      if (mounted) {
+        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      }
     }
   }
 
@@ -49,7 +57,7 @@ class _OtpState extends State<Otp> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          unFocus;
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: Scaffold(
             appBar: AppBar(

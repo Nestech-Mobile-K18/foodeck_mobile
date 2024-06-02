@@ -3,18 +3,17 @@ part of 'explore_page.dart';
 class ExploreBody extends StatelessWidget {
   const ExploreBody({
     super.key,
-    required this.explorePageBloc,
     required this.successState,
   });
 
   final ExplorePageLoadingSuccessState successState;
-  final ExplorePageBloc explorePageBloc;
 
   @override
   Widget build(BuildContext context) {
+    final explorePageBloc = context.read<ExplorePageBloc>();
     return GestureDetector(
       onTap: () {
-        unFocus;
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
           appBar: AppBar(
@@ -39,8 +38,7 @@ class ExploreBody extends StatelessWidget {
                       width: 12,
                     ),
                     CustomWidgets.currentAddress(
-                        sharedPreferences.getString('currentAddress')!,
-                        sharedPreferences.getString('currentAddress1')!),
+                        sharedPreferences.getString('currentAddress')!),
                   ],
                 ),
                 Padding(
@@ -93,43 +91,42 @@ class ExploreBody extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 40),
-                  child: MiddleSlideList(
-                      explorePageBloc: explorePageBloc,
-                      successState: successState),
+                  child: MiddleSlideList(successState: successState),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-                  child: BottomListShopping(
-                    explorePageBloc: explorePageBloc,
-                    successState: successState,
-                  ),
+                  child: BottomListShopping(successState: successState),
                 )
               ],
             ),
           ),
-          floatingActionButton: CartItemsListData.cartItems.isEmpty
-              ? const SizedBox()
-              : Badge(
-                  smallSize: 25,
-                  largeSize: 25,
-                  backgroundColor: Colors.black,
-                  label: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3),
-                      child: CustomText(
-                          content: '${CartItemsListData.cartItems.length}')),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      explorePageBloc.add(ExplorePageCartNavigateEvent());
-                    },
-                    backgroundColor: AppColor.globalPink,
-                    shape: const CircleBorder(),
-                    child: const Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                    ),
+          floatingActionButton: Builder(builder: (context) {
+            if (CartItemsListData.cartItems.isNotEmpty) {
+              return Badge(
+                smallSize: 25,
+                largeSize: 25,
+                backgroundColor: Colors.black,
+                label: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: CustomText(
+                        content: '${CartItemsListData.cartItems.length}')),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    explorePageBloc.add(ExplorePageCartNavigateEvent());
+                  },
+                  backgroundColor: AppColor.globalPink,
+                  shape: const CircleBorder(),
+                  child: const Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Colors.white,
                   ),
-                )),
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          })),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:template/source/export.dart';
 
-class CustomFormFill extends StatefulWidget {
+class CustomFormFill extends StatelessWidget {
   const CustomFormFill(
       {super.key,
       this.textInputType,
@@ -24,7 +24,9 @@ class CustomFormFill extends StatefulWidget {
       this.heightBoxShadow,
       this.widthBoxShadow,
       this.hintColor,
-      this.onTap});
+      this.onTap,
+      this.onEditingComplete,
+      this.prefixIcons});
 
   final TextInputType? textInputType;
   final Function(String)? function;
@@ -36,6 +38,7 @@ class CustomFormFill extends StatefulWidget {
   final Color? borderColor;
   final Color? focusErrorBorderColor;
   final Widget? icons;
+  final Widget? prefixIcons;
   final bool? obscureText;
   final BoxConstraints? boxSize;
   final TextAlign? textAlign;
@@ -48,75 +51,69 @@ class CustomFormFill extends StatefulWidget {
   final double? widthBoxShadow;
   final Color? hintColor;
   final VoidCallback? onTap;
+  final VoidCallback? onEditingComplete;
 
-  @override
-  State<CustomFormFill> createState() => _CustomFormFillState();
-}
-
-class _CustomFormFillState extends State<CustomFormFill> {
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         AnimatedContainer(
-          width: widget.widthBoxShadow ?? 328,
-          height: widget.heightBoxShadow ??
-              MediaQuery.of(context).size.height * 0.0669,
+          width: widthBoxShadow ?? 328,
+          height:
+              heightBoxShadow ?? MediaQuery.of(context).size.height * 0.0669,
           duration: const Duration(milliseconds: 1000),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                    color: widget.boxShadow ?? Colors.transparent,
+                    color: boxShadow ?? Colors.transparent,
                     offset: const Offset(4, 4),
                     blurRadius: 5,
                     spreadRadius: 1)
               ]),
         ),
         TextFormField(
-          onTap: widget.onTap,
-          inputFormatters: widget.textInputFormatter,
-          textAlign: widget.textAlign ?? TextAlign.start,
-          obscureText: widget.obscureText ?? false,
-          keyboardType: widget.textInputType,
-          onChanged: widget.function,
-          style: AppText.inter.copyWith(
-              fontSize: 17, color: widget.inputColor ?? AppColor.globalPink),
-          controller: widget.textEditingController,
+          onEditingComplete: onEditingComplete,
+          onTap: onTap,
+          inputFormatters: textInputFormatter,
+          textAlign: textAlign ?? TextAlign.start,
+          obscureText: obscureText ?? false,
+          keyboardType: textInputType,
+          onChanged: function,
+          style: AppText.inter
+              .copyWith(fontSize: 17, color: inputColor ?? AppColor.globalPink),
+          controller: textEditingController,
           decoration: InputDecoration(
-              suffixIcon: widget.icons,
-              constraints:
-                  widget.boxSize ?? const BoxConstraints(maxWidth: 328),
-              labelText: widget.labelText,
+              prefixIcon: prefixIcons,
+              suffixIcon: icons,
+              constraints: boxSize ?? const BoxConstraints(maxWidth: 328),
+              labelText: labelText,
               labelStyle:
                   AppText.inter.copyWith(fontSize: 12, color: Colors.grey),
-              floatingLabelStyle: AppText.inter
-                  .copyWith(fontSize: 12, color: widget.labelColor),
+              floatingLabelStyle:
+                  AppText.inter.copyWith(fontSize: 12, color: labelColor),
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              errorText: widget.errorText,
+              errorText: errorText,
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: Colors.red)),
               focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: Colors.red)),
-              contentPadding: widget.padding ??
+              contentPadding: padding ??
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: widget.borderColor ?? Colors.grey),
+                  borderSide: BorderSide(color: borderColor ?? Colors.grey),
                   borderRadius: BorderRadius.circular(16)),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color:
-                          widget.focusErrorBorderColor ?? AppColor.globalPink),
+                      color: focusErrorBorderColor ?? AppColor.globalPink),
                   borderRadius: BorderRadius.circular(16)),
-              hintText: widget.hintText,
+              hintText: hintText,
               hintStyle: AppText.inter.copyWith(
-                  fontSize: 17,
-                  color: widget.hintColor ?? AppColor.globalPinkShadow),
-              helperText: widget.exampleText ?? '',
+                  fontSize: 17, color: hintColor ?? AppColor.globalPinkShadow),
+              helperText: exampleText ?? '',
               helperStyle: const TextStyle(color: AppColor.buttonShadowBlack),
               errorStyle: const TextStyle(color: Colors.red)),
         ),

@@ -35,78 +35,85 @@ class _EditAccountState extends State<EditAccount> {
 
   void updateProfile() async {
     try {
+      late dynamic id;
       var response = await supabase.from('users').select('id');
       var records = response.toList() as List;
       for (var record in records) {
         var userId = record['id'];
-        if (emailRegex.hasMatch(emailController.text) &&
-            nameRegex.hasMatch(nameController.text) &&
-            phoneRegex.hasMatch(phoneController.text) &&
-            passRegex.hasMatch(passwordController.text)) {
-          await supabase.auth.updateUser(UserAttributes(
-            email: emailController.text.isEmpty
-                ? sharedPreferences.getString('email')
-                : emailController.text,
-            password: passwordController.text.isEmpty
-                ? sharedPreferences.getString('email')
-                : passwordController.text,
-          ));
-          await supabase.from('users').update({
-            'email': emailController.text.isEmpty
-                ? sharedPreferences.getString('email')
-                : emailController.text,
-            'full_name': nameController.text.isEmpty
-                ? sharedPreferences.getString('name')
-                : nameController.text,
-            'phone': phoneController.text.isEmpty
-                ? sharedPreferences.getString('phone')
-                : phoneController.text,
-            'password': passwordController.text.isEmpty
-                ? sharedPreferences.getString('password')
-                : passwordController.text,
-            'avatar_url': _imageUrl
-          }).eq('id', userId);
-          setState(() {
-            sharedPreferences.setString('avatar', _imageUrl!);
-            sharedPreferences.setString(
-                'name',
-                nameController.text.isEmpty
-                    ? sharedPreferences.getString('name')!
-                    : nameController.text);
-            sharedPreferences.setString(
-                'email',
-                emailController.text.isEmpty
-                    ? sharedPreferences.getString('email')!
-                    : emailController.text);
-            sharedPreferences.setString(
-                'phone',
-                phoneController.text.isEmpty
-                    ? sharedPreferences.getString('phone')!
-                    : phoneController.text);
-            sharedPreferences.setString(
-                'password',
-                passwordController.text.isEmpty
-                    ? sharedPreferences.getString('password')!
-                    : passwordController.text);
-          });
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: AppColor.globalPinkShadow,
-              duration: Duration(milliseconds: 1500),
-              content: Text('You just saved info')));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              backgroundColor: AppColor.buttonShadowBlack,
-              content: Text('Please make sure everything is corrected')));
+        setState(() {
+          id = userId;
+        });
+      }
+      if (emailRegex.hasMatch(emailController.text) &&
+          nameRegex.hasMatch(nameController.text) &&
+          phoneRegex.hasMatch(phoneController.text) &&
+          passRegex.hasMatch(passwordController.text)) {
+        await supabase.auth.updateUser(UserAttributes(
+          email: emailController.text.isEmpty
+              ? sharedPreferences.getString('email')
+              : emailController.text,
+          password: passwordController.text.isEmpty
+              ? sharedPreferences.getString('email')
+              : passwordController.text,
+        ));
+        await supabase.from('users').update({
+          'email': emailController.text.isEmpty
+              ? sharedPreferences.getString('email')
+              : emailController.text,
+          'full_name': nameController.text.isEmpty
+              ? sharedPreferences.getString('name')
+              : nameController.text,
+          'phone': phoneController.text.isEmpty
+              ? sharedPreferences.getString('phone')
+              : phoneController.text,
+          'password': passwordController.text.isEmpty
+              ? sharedPreferences.getString('password')
+              : passwordController.text,
+          'avatar_url': _imageUrl
+        }).eq('id', id);
+        setState(() {
+          sharedPreferences.setString('avatar', _imageUrl!);
+          sharedPreferences.setString(
+              'name',
+              nameController.text.isEmpty
+                  ? sharedPreferences.getString('name')!
+                  : nameController.text);
+          sharedPreferences.setString(
+              'email',
+              emailController.text.isEmpty
+                  ? sharedPreferences.getString('email')!
+                  : emailController.text);
+          sharedPreferences.setString(
+              'phone',
+              phoneController.text.isEmpty
+                  ? sharedPreferences.getString('phone')!
+                  : phoneController.text);
+          sharedPreferences.setString(
+              'password',
+              passwordController.text.isEmpty
+                  ? sharedPreferences.getString('password')!
+                  : passwordController.text);
+        });
+        if (mounted) {
+          CustomWidgets.customSnackBar(
+              context, AppColor.globalPinkShadow, 'You just saved info');
+        }
+      } else {
+        if (mounted) {
+          CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+              'Please make sure everything is corrected');
         }
       }
     } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text(error.message)));
+      if (mounted) {
+        CustomWidgets.customSnackBar(
+            context, AppColor.buttonShadowBlack, error.message);
+      }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
+      if (mounted) {
+        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+            'Error occurred, please retry');
+      }
     }
   }
 
@@ -114,7 +121,7 @@ class _EditAccountState extends State<EditAccount> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        unFocus;
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(

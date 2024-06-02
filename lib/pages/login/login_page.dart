@@ -51,27 +51,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void check(String index) {
-    setState(() {
-      switch (index) {
-        case 'Login via Email':
-          Navigator.pushNamed(context, AppRouter.loginOrRegister,
-              arguments: const LoginOrRegister(index: 0));
-          break;
-        case 'Create an account':
-          Navigator.pushNamed(context, AppRouter.loginOrRegister,
-              arguments: const LoginOrRegister(index: 1));
-          break;
-        case 'Login via Google':
-          _googleSignIn();
-          break;
-        case 'Login via Facebook':
-          facebookSignIn();
-          break;
-        case 'Login via Apple':
-          ShowBearSnackBar.showBearSnackBar(context, 'Updating...');
-          break;
-      }
-    });
+    switch (index) {
+      case 'Login via Email':
+        Navigator.pushNamed(context, AppRouter.loginOrRegister,
+            arguments: const LoginOrRegister(index: 0));
+        break;
+      case 'Create an account':
+        Navigator.pushNamed(context, AppRouter.loginOrRegister,
+            arguments: const LoginOrRegister(index: 1));
+        break;
+      case 'Login via Google':
+        _googleSignIn();
+        break;
+      case 'Login via Facebook':
+        facebookSignIn();
+        break;
+      case 'Login via Apple':
+        ShowBearSnackBar.showBearSnackBar(context, 'Updating...');
+        break;
+    }
   }
 
   @override

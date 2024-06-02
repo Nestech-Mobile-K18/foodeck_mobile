@@ -10,8 +10,6 @@ class DetailHistoryOrder extends StatefulWidget {
 }
 
 class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
-  bool isCvvFocused = false;
-
   @override
   Widget build(BuildContext context) {
     final dataOrders = supabase
@@ -166,8 +164,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                           const SizedBox(
                             height: 10,
                           ),
-                          CustomWidgets.currentAddress(
-                              widget.res['address'], widget.res['address1'])
+                          CustomWidgets.currentAddress(widget.res['address'])
                         ],
                       ),
                     ),
@@ -213,19 +210,12 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                               fontWeight: FontWeight.bold),
                           Padding(
                             padding: const EdgeInsets.only(top: 24, bottom: 40),
-                            child: CreditCardWidget(
-                              padding: 0,
-                              cardBgColor: AppColor.globalPink,
-                              labelCardHolder: '',
-                              cardType: CardType.mastercard,
-                              enableFloatingCard: true,
-                              isHolderNameVisible: true,
-                              cardNumber: '',
-                              expiryDate: '',
-                              cardHolderName: '',
-                              cvvCode: '',
-                              showBackView: isCvvFocused,
-                              onCreditCardWidgetChange: (p0) {},
+                            child: Container(
+                              height: 210,
+                              decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(Assets.creditCard),
+                                      fit: BoxFit.cover)),
                             ),
                           ),
                           Center(

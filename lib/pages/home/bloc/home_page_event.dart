@@ -9,10 +9,10 @@ sealed class HomePageEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class HomePageInitialEvent extends HomePageEvent {}
+
 class HomePageSelectIndexEvent extends HomePageEvent {
   final int index;
 
   const HomePageSelectIndexEvent({required this.index});
 }
-
-class HomePageNavigateEvent extends HomePageEvent {}

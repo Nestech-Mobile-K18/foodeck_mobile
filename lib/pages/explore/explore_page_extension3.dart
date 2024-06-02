@@ -1,14 +1,9 @@
 part of 'explore_page.dart';
 
 class MiddleSlideList extends StatefulWidget {
-  const MiddleSlideList({
-    super.key,
-    required this.explorePageBloc,
-    required this.successState,
-  });
+  const MiddleSlideList({super.key, required this.successState});
 
   final ExplorePageLoadingSuccessState successState;
-  final ExplorePageBloc explorePageBloc;
 
   @override
   State<MiddleSlideList> createState() => _MiddleSlideListState();
@@ -22,6 +17,7 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
 
   @override
   Widget build(BuildContext context) {
+    final explorePageBloc = context.read<ExplorePageBloc>();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.only(left: 25, right: 10),
@@ -49,7 +45,7 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
                       .length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) => BannerItems(
-                      onTap: () => widget.explorePageBloc.add(ExplorePageNavigateEvent(
+                      onTap: () => explorePageBloc.add(ExplorePageNavigateEvent(
                           restaurantModel: RestaurantData.kindFood(
                               TitleFood.Deals,
                               widget.successState.restaurant)[index])),
@@ -66,14 +62,15 @@ class _MiddleSlideListState extends State<MiddleSlideList> {
                       rateStar:
                           '${RestaurantData.kindFood(TitleFood.Deals, widget.successState.restaurant)[index].rate}',
                       action: () {
-                        widget.explorePageBloc.add(ExplorePageLikeEvent(
+                        explorePageBloc.add(ExplorePageLikeEvent(
                             saveFood: RestaurantData.kindFood(TitleFood.Deals,
                                 widget.successState.restaurant)[index]));
                       },
                       iconShape: SavedListData.saveFood.contains(RestaurantData.kindFood(TitleFood.Deals, widget.successState.restaurant)[index])
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      heartColor: SavedListData.saveFood.contains(RestaurantData.kindFood(TitleFood.Deals, widget.successState.restaurant)[index])
+                      heartColor: SavedListData.saveFood
+                              .contains(RestaurantData.kindFood(TitleFood.Deals, widget.successState.restaurant)[index])
                           ? AppColor.globalPink
                           : Colors.white))))
     ]);

@@ -32,6 +32,9 @@ class Assets {
   static const String avatar = 'assets/images/Avatar.png';
 
 // Icons
+  static const String chip = 'assets/icons/Chip.png';
+  static const String visa = 'assets/icons/Visa.png';
+  static const String master = 'assets/icons/Master.png';
   static const String appleLogo = 'assets/icons/AppleLogo.png';
   static const String emailLogo = 'assets/icons/EmailLogo.png';
   static const String facebookLogo = 'assets/icons/FacebookLogo.png';

@@ -1,7 +1,7 @@
-import 'package:template/source/export.dart';
+part of 'restaurant_page.dart';
 
-class CustomSliverBar extends StatelessWidget {
-  const CustomSliverBar({
+class RestaurantBottomAppBar extends StatelessWidget {
+  const RestaurantBottomAppBar({
     super.key,
     required this.restaurant,
   });

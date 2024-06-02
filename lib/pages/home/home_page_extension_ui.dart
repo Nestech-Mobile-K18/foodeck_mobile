@@ -1,14 +1,10 @@
 part of 'home_page.dart';
 
 class BottomRoute extends StatelessWidget {
-  BottomRoute({
-    super.key,
-    required this.currentIndex,
-    required this.homePageBloc,
-  });
+  BottomRoute({super.key, required this.currentIndex});
 
   final int currentIndex;
-  final HomePageBloc homePageBloc;
+
   final tabs = [
     const ExplorePage(),
     const SavedPage(),
@@ -23,9 +19,9 @@ class BottomRoute extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           onTap: (value) {
-            homePageBloc.add(HomePageSelectIndexEvent(index: value));
-            RiveUtils.changeSMITriggerState(
-                RiveUtils.bottomModel[value].statusTrigger!);
+            context
+                .read<HomePageBloc>()
+                .add(HomePageSelectIndexEvent(index: value));
           },
           currentIndex: currentIndex,
           selectedLabelStyle: AppText.inter.copyWith(fontSize: 11),
@@ -40,24 +36,7 @@ class BottomRoute extends StatelessWidget {
               (index) {
                 return BottomNavigationBarItem(
                     label: RiveUtils.bottomModel[index].label,
-                    icon: SizedBox(
-                      height: 36,
-                      width: 36,
-                      child: Opacity(
-                        opacity: currentIndex == index ? 1 : 0.5,
-                        child: RiveAnimation.asset(
-                          RiveUtils.bottomModel[index].src,
-                          artboard: RiveUtils.bottomModel[index].artBoard,
-                          onInit: (artBoard) {
-                            RiveUtils.bottomModel[index].statusTrigger =
-                                RiveUtils.getRiveTrigger(artBoard,
-                                    RiveUtils.bottomModel[index].action,
-                                    stateMachineName: RiveUtils
-                                        .bottomModel[index].stateMachineName);
-                          },
-                        ),
-                      ),
-                    ));
+                    icon: RiveAnimations.bottomAnimation(currentIndex, index));
               },
             )
           ]),

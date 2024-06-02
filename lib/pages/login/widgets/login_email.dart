@@ -98,7 +98,7 @@ class _LoginEmailState extends State<LoginEmail> {
           isCheck!.value = false;
           isHandsUp!.value = false;
         });
-        unFocus;
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -238,7 +238,7 @@ class _LoginEmailState extends State<LoginEmail> {
                       padding: const EdgeInsets.only(bottom: 40, top: 10),
                       child: GestureDetector(
                           onTap: () {
-                            unFocus;
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pushNamed(
                                 context, AppRouter.forgotPassword);
                           },

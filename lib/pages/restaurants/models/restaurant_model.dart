@@ -72,7 +72,7 @@ class CartItems {
   final List<String> selectAddon;
   final List<String> size;
   final String note;
-  final int price;
+  int price;
   int quantity;
 }
 

@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:template/source/export.dart';
+part of 'restaurant_page.dart';
 
-class DetailAppBar extends StatefulWidget {
-  const DetailAppBar(
+class RestaurantAppBar extends StatelessWidget {
+  const RestaurantAppBar(
       {super.key,
       required this.image,
       required this.name,
@@ -13,66 +12,14 @@ class DetailAppBar extends StatefulWidget {
   final String image, name, place;
 
   @override
-  State<DetailAppBar> createState() => _DetailAppBarState();
-}
-
-class _DetailAppBarState extends State<DetailAppBar> {
-  final reviewController = TextEditingController();
-  double rate = 1;
-
-  @override
-  void dispose() {
-    reviewController.clear();
-    super.dispose();
-  }
-
-  void sent() {
-    if (reviewController.text.isNotEmpty) {
-      RiveUtils.changeSMITriggerState(RiveUtils.reviewModel.statusTrigger!);
-      addReview();
-      Future.delayed(
-          const Duration(milliseconds: 3000), () => Navigator.pop(context));
-    } else {
-      null;
-    }
-  }
-
-  Future addReview() async {
-    try {
-      if (reviewController.text.isEmpty) {
-        return null;
-      } else {
-        await supabase.from('reviews').insert({
-          'restaurant_image': widget.restaurant.image,
-          'restaurant_name': widget.restaurant.shopName,
-          'time': widget.restaurant.deliveryTime,
-          'place': widget.restaurant.address,
-          'vote': widget.restaurant.rate,
-          'my_vote': rate,
-          'my_review': reviewController.text.trim()
-        });
-      }
-    } on AuthException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: const Duration(milliseconds: 1500),
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text(error.message)));
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(milliseconds: 1500),
-          backgroundColor: AppColor.buttonShadowBlack,
-          content: Text('Error occurred, please retry')));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final restaurantPageBloc = context.read<RestaurantPageBloc>();
     return Container(
         height: 250,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(widget.image), fit: BoxFit.cover)),
+            image:
+                DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +40,7 @@ class _DetailAppBarState extends State<DetailAppBar> {
                       IconButton(
                         color: AppColor.globalPink,
                         onPressed: null,
-                        icon: SavedListData.saveFood.contains(widget.restaurant)
+                        icon: SavedListData.saveFood.contains(restaurant)
                             ? const Icon(
                                 Icons.favorite,
                                 color: AppColor.globalPink,
@@ -107,8 +54,9 @@ class _DetailAppBarState extends State<DetailAppBar> {
                         width: 5,
                       ),
                       GestureDetector(
-                        onTap: () async {
-                          await Share.share('text');
+                        onTap: () {
+                          restaurantPageBloc.add(
+                              RestaurantPageShareEvent(restaurant: restaurant));
                         },
                         child: Image.asset(
                           Assets.shareNetwork,
@@ -138,16 +86,6 @@ class _DetailAppBarState extends State<DetailAppBar> {
                                           titlePadding: const EdgeInsets.only(
                                               left: 10, top: 24, right: 24),
                                           title: CupertinoTextFormFieldRow(
-                                            validator: (value) {
-                                              if (reviewController
-                                                  .text.isNotEmpty) {
-                                                return '';
-                                              } else {
-                                                return 'It\'s empty';
-                                              }
-                                            },
-                                            autovalidateMode:
-                                                AutovalidateMode.always,
                                             decoration: BoxDecoration(
                                                 border: Border.all(
                                                     color:
@@ -155,8 +93,8 @@ class _DetailAppBarState extends State<DetailAppBar> {
                                                 color: Colors.white,
                                                 borderRadius:
                                                     BorderRadius.circular(24)),
-                                            controller: reviewController,
-                                            onChanged: (value) {},
+                                            controller: restaurantPageBloc
+                                                .reviewController,
                                             maxLines: 5,
                                           ),
                                           children: [
@@ -165,7 +103,8 @@ class _DetailAppBarState extends State<DetailAppBar> {
                                                   left: 24),
                                               child: RatingBar.builder(
                                                 itemSize: 22,
-                                                initialRating: rate,
+                                                initialRating:
+                                                    restaurantPageBloc.rate,
                                                 minRating: 1,
                                                 maxRating: 5,
                                                 unratedColor: Colors.grey,
@@ -176,13 +115,28 @@ class _DetailAppBarState extends State<DetailAppBar> {
                                                   color: Colors.yellow,
                                                 ),
                                                 onRatingUpdate: (value) {
-                                                  setState(() {
-                                                    rate = value;
-                                                  });
+                                                  restaurantPageBloc.add(
+                                                      RestaurantPageSetRateEvent(
+                                                          rate: value));
                                                 },
                                               ),
                                             ),
-                                            RiveAnimations.reviewAnimation(sent)
+                                            GestureDetector(
+                                                onTap: () {
+                                                  restaurantPageBloc.add(
+                                                      RestaurantPageSentReviewEvent(
+                                                          restaurant:
+                                                              restaurant,
+                                                          reviewController:
+                                                              restaurantPageBloc
+                                                                  .reviewController,
+                                                          rate:
+                                                              restaurantPageBloc
+                                                                  .rate,
+                                                          context: context));
+                                                },
+                                                child: RiveAnimations
+                                                    .reviewAnimation())
                                           ],
                                         ));
                               },
@@ -194,8 +148,8 @@ class _DetailAppBarState extends State<DetailAppBar> {
                               )),
                           PopupMenuItem(
                               onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRouter.myLocation);
+                                restaurantPageBloc
+                                    .add(RestaurantPageMapEvent());
                               },
                               padding: EdgeInsets.zero,
                               child: TextButton.icon(
@@ -216,14 +170,12 @@ class _DetailAppBarState extends State<DetailAppBar> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                          content: widget.name,
+                          content: name,
                           fontSize: 22,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                       CustomText(
-                          content: widget.place,
-                          color: Colors.white,
-                          fontSize: 15)
+                          content: place, color: Colors.white, fontSize: 15)
                     ]))
           ],
         ));

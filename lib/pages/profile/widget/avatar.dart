@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../../../main.dart';
+import 'package:template/source/export.dart';
 
 class Avatar extends StatelessWidget {
   const Avatar({super.key, this.imageUrl, required this.onUpload});
@@ -40,13 +36,18 @@ class Avatar extends StatelessWidget {
     return GestureDetector(
       onTap: updatePicture,
       child: imageUrl != null
-          ? Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage(imageUrl!), fit: BoxFit.cover)))
+          ? CachedNetworkImage(
+              placeholder: (context, url) => const CircularProgressIndicator(
+                    color: AppColor.globalPink,
+                  ),
+              imageUrl: imageUrl!,
+              imageBuilder: (context, imageProvider) => Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover))))
           : Container(
               width: 120,
               height: 120,
