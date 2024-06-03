@@ -225,7 +225,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/src/flutter/packages/flutter",
+      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -267,7 +267,7 @@
     },
     {
       "name": "flutter_localizations",
-      "rootUri": "file:///C:/src/flutter/packages/flutter_localizations",
+      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -321,13 +321,13 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/src/flutter/packages/flutter_test",
+      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -885,7 +885,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/Users/ASUS/fvm/versions/3.16.7/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1166,7 +1166,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-05-31T14:02:55.957138Z",
+  "generated": "2024-06-03T05:35:13.024426Z",
   "generator": "pub",
   "generatorVersion": "3.2.4"
 }
