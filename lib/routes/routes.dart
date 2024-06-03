@@ -28,60 +28,77 @@ class AppRouter {
   static Route<dynamic> routes(RouteSettings settings) {
     switch (settings.name) {
       case splashPage:
-        return MaterialPageRoute(builder: (_) => const SplashPage());
+        return pageBuilder((_) => const SplashPage(), settings: settings);
       case homePage:
-        return MaterialPageRoute(builder: (_) => const HomePage());
+        return pageBuilder((_) => const HomePage(), settings: settings);
       case loginPage:
-        return MaterialPageRoute(builder: (_) => const LoginPage());
+        return pageBuilder((_) => const LoginPage(), settings: settings);
       case loginEmail:
-        return MaterialPageRoute(builder: (_) => const LoginEmail());
+        return pageBuilder((_) => const LoginEmail(), settings: settings);
       case createAccount:
-        return MaterialPageRoute(builder: (_) => const CreateAccount());
+        return pageBuilder((_) => const CreateAccount(), settings: settings);
       case myLocation:
-        return MaterialPageRoute(builder: (_) => const MyLocation());
+        return pageBuilder((_) => const MyLocation(), settings: settings);
       case otp:
         final args = settings.arguments as Otp;
-        return MaterialPageRoute(builder: (_) => Otp(email: args.email));
+        return pageBuilder((_) => Otp(email: args.email), settings: settings);
       case restaurantAddon:
         final args = settings.arguments as RestaurantAddon;
-        return MaterialPageRoute(
-            builder: (_) => RestaurantAddon(
-                foodItems: args.foodItems, restaurant: args.restaurant));
+        return pageBuilder(
+            (_) => RestaurantAddon(
+                foodItems: args.foodItems, restaurant: args.restaurant),
+            settings: settings);
       case searchPage:
-        return MaterialPageRoute(builder: (_) => const SearchPage());
+        return pageBuilder((_) => const SearchPage(), settings: settings);
       case restaurantPage:
         final args = settings.arguments as RestaurantPage;
-        return MaterialPageRoute(
-            builder: (_) => RestaurantPage(restaurant: args.restaurant));
+        return pageBuilder((_) => RestaurantPage(restaurant: args.restaurant),
+            settings: settings);
       case loginOrRegister:
         final args = settings.arguments as LoginOrRegister;
-        return MaterialPageRoute(
-            builder: (_) => LoginOrRegister(index: args.index));
+        return pageBuilder((_) => LoginOrRegister(index: args.index),
+            settings: settings);
       case forgotPassword:
-        return MaterialPageRoute(builder: (_) => const ForgotPassword());
+        return pageBuilder((_) => const ForgotPassword(), settings: settings);
       case editAccount:
-        return MaterialPageRoute(builder: (_) => const EditAccount());
+        return pageBuilder((_) => const EditAccount(), settings: settings);
       case myOrders:
-        return MaterialPageRoute(builder: (_) => const MyOrders());
+        return pageBuilder((_) => const MyOrders(), settings: settings);
       case paymentMethods:
-        return MaterialPageRoute(builder: (_) => const PaymentMethods());
+        return pageBuilder((_) => const PaymentMethods(), settings: settings);
       case myReviews:
-        return MaterialPageRoute(builder: (_) => const MyReviews());
+        return pageBuilder((_) => const MyReviews(), settings: settings);
       case detailHistoryOrder:
         final args = settings.arguments as DetailHistoryOrder;
-        return MaterialPageRoute(
-            builder: (_) => DetailHistoryOrder(res: args.res));
+        return pageBuilder((_) => DetailHistoryOrder(res: args.res),
+            settings: settings);
       case restaurantCheckOut:
-        return MaterialPageRoute(builder: (_) => const RestaurantCheckOut());
+        return pageBuilder((_) => const RestaurantCheckOut(),
+            settings: settings);
       case orderComplete:
-        return MaterialPageRoute(builder: (_) => const OrderComplete());
+        return pageBuilder((_) => const OrderComplete(), settings: settings);
       case restaurantCart:
-        return MaterialPageRoute(builder: (_) => const RestaurantCart());
+        return pageBuilder((_) => const RestaurantCart(), settings: settings);
       case createCard:
-        return MaterialPageRoute(builder: (_) => const CreateCard());
+        return pageBuilder((_) => const CreateCard(), settings: settings);
       default:
         return errorRoute();
     }
+  }
+
+  static PageRouteBuilder<dynamic> pageBuilder(
+      Widget Function(BuildContext) page,
+      {required RouteSettings settings}) {
+    return PageRouteBuilder(
+        settings: settings,
+        transitionDuration: const Duration(milliseconds: 600),
+        transitionsBuilder: (_, animation, __, child) {
+          Animation<Offset> offset =
+              Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
+                  .animate(animation);
+          return SlideTransition(position: offset, child: child);
+        },
+        pageBuilder: (context, _, __) => page(context));
   }
 
   static MaterialPageRoute<dynamic> errorRoute() {
