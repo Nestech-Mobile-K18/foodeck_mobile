@@ -15,16 +15,13 @@ class _CreateAccountState extends State<CreateAccount> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-  RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
-  RegExp nameRegex = RegExp(
-      r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
 
   Future signUpAndAddUsers() async {
     try {
-      if (emailRegex.hasMatch(emailController.text) &&
-          nameRegex.hasMatch(nameController.text) &&
-          phoneRegex.hasMatch(phoneController.text) &&
-          passRegex.hasMatch(passwordController.text)) {
+      if (Validation.emailRegex.hasMatch(emailController.text) &&
+          Validation.nameRegex.hasMatch(nameController.text) &&
+          Validation.phoneRegex.hasMatch(phoneController.text) &&
+          Validation.passRegex.hasMatch(passwordController.text)) {
         await supabase.auth.signUp(
             email: emailController.text.trim(),
             password: passwordController.text.trim());
@@ -87,28 +84,32 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
-                        boxShadow: nameRegex.hasMatch(nameController.text)
-                            ? Colors.pink.shade100
-                            : Colors.white,
+                        boxShadow:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? Colors.pink.shade100
+                                : Colors.white,
                         textInputType: TextInputType.name,
                         labelText: 'Full Name',
                         hintText: 'John Doe',
-                        exampleText: nameRegex.hasMatch(nameController.text)
-                            ? null
-                            : 'Example: John Doe',
-                        labelColor: nameRegex.hasMatch(nameController.text)
-                            ? AppColor.globalPink
-                            : nameController.text.isEmpty
+                        exampleText:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? null
+                                : 'Example: John Doe',
+                        labelColor:
+                            Validation.nameRegex.hasMatch(nameController.text)
                                 ? AppColor.globalPink
-                                : Colors.red,
+                                : nameController.text.isEmpty
+                                    ? AppColor.globalPink
+                                    : Colors.red,
                         borderColor: nameController.text.isNotEmpty
                             ? AppColor.globalPink
                             : Colors.grey,
-                        inputColor: nameRegex.hasMatch(nameController.text)
-                            ? AppColor.globalPink
-                            : Colors.red,
+                        inputColor:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? AppColor.globalPink
+                                : Colors.red,
                         focusErrorBorderColor:
-                            nameRegex.hasMatch(nameController.text)
+                            Validation.nameRegex.hasMatch(nameController.text)
                                 ? AppColor.globalPink
                                 : nameController.text.isEmpty
                                     ? AppColor.globalPink
@@ -116,10 +117,11 @@ class _CreateAccountState extends State<CreateAccount> {
                         textEditingController: nameController,
                         function: (value) {
                           setState(() {
-                            nameRegex.hasMatch(nameController.text);
+                            Validation.nameRegex.hasMatch(nameController.text);
                           });
                         },
-                        errorText: nameRegex.hasMatch(nameController.text)
+                        errorText: Validation.nameRegex
+                                .hasMatch(nameController.text)
                             ? null
                             : nameController.text.isEmpty
                                 ? null
@@ -128,28 +130,32 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
-                      boxShadow: emailRegex.hasMatch(emailController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: 'johndoe123@gmail.com',
-                      exampleText: emailRegex.hasMatch(emailController.text)
-                          ? null
-                          : 'Example: johndoe123@gmail.com',
+                      exampleText:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? null
+                              : 'Example: johndoe123@gmail.com',
                       borderColor: emailController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
-                      inputColor: emailRegex.hasMatch(emailController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
-                      labelColor: emailRegex.hasMatch(emailController.text)
-                          ? AppColor.globalPink
-                          : emailController.text.isEmpty
+                      inputColor:
+                          Validation.emailRegex.hasMatch(emailController.text)
                               ? AppColor.globalPink
                               : Colors.red,
+                      labelColor:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? AppColor.globalPink
+                              : emailController.text.isEmpty
+                                  ? AppColor.globalPink
+                                  : Colors.red,
                       focusErrorBorderColor:
-                          emailRegex.hasMatch(emailController.text)
+                          Validation.emailRegex.hasMatch(emailController.text)
                               ? AppColor.globalPink
                               : emailController.text.isEmpty
                                   ? AppColor.globalPink
@@ -157,10 +163,11 @@ class _CreateAccountState extends State<CreateAccount> {
                       textEditingController: emailController,
                       function: (value) {
                         setState(() {
-                          emailRegex.hasMatch(emailController.text);
+                          Validation.emailRegex.hasMatch(emailController.text);
                         });
                       },
-                      errorText: emailRegex.hasMatch(emailController.text)
+                      errorText: Validation.emailRegex
+                              .hasMatch(emailController.text)
                           ? null
                           : emailController.text.isEmpty
                               ? null
@@ -170,43 +177,46 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
-                      boxShadow: phoneRegex.hasMatch(phoneController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       textInputType: TextInputType.phone,
                       labelText: 'Phone No.',
                       hintText: '+92 3014124781',
-                      exampleText: phoneRegex.hasMatch(phoneController.text)
-                          ? null
-                          : 'Need correct number',
+                      exampleText:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? null
+                              : 'Need correct number',
                       textInputFormatter: [
                         LengthLimitingTextInputFormatter(13)
                       ],
                       labelColor: phoneController.text.isEmpty
                           ? AppColor.globalPink
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? AppColor.globalPink
                               : Colors.red,
                       borderColor: phoneController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
-                      inputColor: phoneRegex.hasMatch(phoneController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
+                      inputColor:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? AppColor.globalPink
+                              : Colors.red,
                       focusErrorBorderColor: phoneController.text.isEmpty
                           ? AppColor.globalPink
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? AppColor.globalPink
                               : Colors.red,
                       textEditingController: phoneController,
                       function: (value) {
                         setState(() {
-                          phoneRegex.hasMatch(phoneController.text);
+                          Validation.phoneRegex.hasMatch(phoneController.text);
                         });
                       },
                       errorText: phoneController.text.isEmpty
                           ? null
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? null
                               : '${phoneController.text} is not a valid phone number',
                     ),
@@ -214,26 +224,30 @@ class _CreateAccountState extends State<CreateAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
                     child: CustomFormFill(
-                      boxShadow: passRegex.hasMatch(passwordController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       labelText: 'Password',
-                      exampleText: passRegex.hasMatch(passwordController.text)
-                          ? null
-                          : 'Example: Johndoe123!',
-                      labelColor: passRegex.hasMatch(passwordController.text)
-                          ? AppColor.globalPink
-                          : passwordController.text.isEmpty
+                      exampleText:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? null
+                              : 'Example: Johndoe123!',
+                      labelColor:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? AppColor.globalPink
+                              : passwordController.text.isEmpty
+                                  ? AppColor.globalPink
+                                  : Colors.red,
+                      inputColor:
+                          Validation.passRegex.hasMatch(passwordController.text)
                               ? AppColor.globalPink
                               : Colors.red,
-                      inputColor: passRegex.hasMatch(passwordController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
                       borderColor: passwordController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
                       focusErrorBorderColor:
-                          passRegex.hasMatch(passwordController.text)
+                          Validation.passRegex.hasMatch(passwordController.text)
                               ? AppColor.globalPink
                               : passwordController.text.isEmpty
                                   ? AppColor.globalPink
@@ -250,18 +264,20 @@ class _CreateAccountState extends State<CreateAccount> {
                                 showPass
                                     ? Icons.visibility
                                     : Icons.visibility_off,
-                                color:
-                                    passRegex.hasMatch(passwordController.text)
-                                        ? AppColor.globalPink
-                                        : Colors.red,
+                                color: Validation.passRegex
+                                        .hasMatch(passwordController.text)
+                                    ? AppColor.globalPink
+                                    : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
                       function: (value) {
                         setState(() {
-                          passRegex.hasMatch(passwordController.text);
+                          Validation.passRegex
+                              .hasMatch(passwordController.text);
                         });
                       },
-                      errorText: passRegex.hasMatch(passwordController.text)
+                      errorText: Validation.passRegex
+                              .hasMatch(passwordController.text)
                           ? null
                           : passwordController.text.isEmpty
                               ? null

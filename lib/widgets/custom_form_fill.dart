@@ -26,7 +26,10 @@ class CustomFormFill extends StatelessWidget {
       this.hintColor,
       this.onTap,
       this.onEditingComplete,
-      this.prefixIcons});
+      this.prefixIcons,
+      this.validator,
+      this.readOnly,
+      this.textCapitalization});
 
   final TextInputType? textInputType;
   final Function(String)? function;
@@ -52,7 +55,9 @@ class CustomFormFill extends StatelessWidget {
   final Color? hintColor;
   final VoidCallback? onTap;
   final VoidCallback? onEditingComplete;
-
+  final String? Function(String?)? validator;
+  final bool? readOnly;
+  final TextCapitalization? textCapitalization;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -74,6 +79,10 @@ class CustomFormFill extends StatelessWidget {
               ]),
         ),
         TextFormField(
+          readOnly: readOnly ?? false,
+          textCapitalization: textCapitalization ?? TextCapitalization.none,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           onEditingComplete: onEditingComplete,
           onTap: onTap,
           inputFormatters: textInputFormatter,

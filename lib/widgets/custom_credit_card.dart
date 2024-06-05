@@ -20,8 +20,6 @@ class CreditCard extends StatelessWidget {
       clipBehavior: Clip.none,
       elevation: 10,
       child: Container(
-        height: 210,
-        width: double.maxFinite,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             image: const DecorationImage(
@@ -32,7 +30,7 @@ class CreditCard extends StatelessWidget {
                 top: 41,
                 right: 40,
                 child: CustomText(
-                    content: cardNumber,
+                    content: cardNumber.replaceRange(0, 14, '****'),
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: Colors.white)),

@@ -23,6 +23,7 @@ class _RestaurantCheckOutState extends State<RestaurantCheckOut> {
   Widget build(BuildContext context) {
     final restaurantCartBloc = context.read<RestaurantCartBloc>();
     final restaurantCheckOutBloc = context.read<RestaurantCheckOutBloc>();
+    final paymentMethodsBloc = context.read<PaymentMethodsBloc>();
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus!.unfocus();
@@ -164,19 +165,70 @@ class _RestaurantCheckOutState extends State<RestaurantCheckOut> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      restaurantCheckOutBloc.add(
+                                          RestaurantCheckOutNavigateToCreateCardEvent());
+                                    },
                                     icon: const Icon(Icons.add))
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24),
-                            child: CreditCard(
-                              cardName: '',
-                              cardNumber: '',
-                              cardType: CardType.master,
-                            ),
-                          )
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: BlocBuilder<PaymentMethodsBloc,
+                                  PaymentMethodsState>(
+                                builder: (context, state) {
+                                  switch (state.runtimeType) {
+                                    case PaymentMethodsLoadedState:
+                                      final success =
+                                          state as PaymentMethodsLoadedState;
+                                      return success.paymentModel.isEmpty
+                                          ? TextButton.icon(
+                                              onPressed: null,
+                                              label: const CustomText(
+                                                  content: 'Pay By Cash'),
+                                              icon: const Icon(Icons.money),
+                                            )
+                                          : SizedBox(
+                                              height: 240,
+                                              child: CustomSlidePage(
+                                                  currentCard:
+                                                      paymentMethodsBloc
+                                                          .currentCard,
+                                                  itemCount: success
+                                                      .paymentModel.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 10),
+                                                        child: CreditCard(
+                                                            cardName: success
+                                                                .paymentModel[
+                                                                    index]
+                                                                .cardName,
+                                                            cardType: success
+                                                                    .paymentModel[
+                                                                        index]
+                                                                    .cardNumber
+                                                                    .startsWith(
+                                                                        '4')
+                                                                ? CardType.visa
+                                                                : CardType
+                                                                    .master,
+                                                            cardNumber: success
+                                                                .paymentModel[
+                                                                    index]
+                                                                .cardNumber));
+                                                  }),
+                                            );
+                                  }
+                                  return const SizedBox();
+                                },
+                              ))
                         ],
                       ),
                     ),

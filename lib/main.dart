@@ -34,6 +34,15 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ProfilePageBloc>(
+          create: (context) => ProfilePageBloc(),
+        ),
+        BlocProvider<CreateCardBloc>(
+          create: (context) => CreateCardBloc(),
+        ),
+        BlocProvider<PaymentMethodsBloc>(
+          create: (context) => PaymentMethodsBloc(),
+        ),
         BlocProvider<RestaurantCheckOutBloc>(
           create: (context) => RestaurantCheckOutBloc(),
         ),
@@ -66,12 +75,9 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+final dataCard = supabase.from('card').stream(primaryKey: ['id']);
 final supabase = Supabase.instance.client;
 final dataReview = supabase.from('reviews').stream(primaryKey: ['id']);
 final dataOrderComplete =
     supabase.from('order_complete').stream(primaryKey: ['id']);
 final dataRestaurants = supabase.from('restaurants').stream(primaryKey: ['id']);
-RegExp emailRegex = RegExp(
-    r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-RegExp passRegex = RegExp(
-    r'^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$');

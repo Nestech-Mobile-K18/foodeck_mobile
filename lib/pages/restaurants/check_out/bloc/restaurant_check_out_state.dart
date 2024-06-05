@@ -34,5 +34,8 @@ class RestaurantCheckOutMoveCameraState extends RestaurantCheckOutState {}
 
 class RestaurantCheckOutEditAddressState extends RestaurantCheckOutState {}
 
+class RestaurantCheckOutNavigateToCreateCardState
+    extends RestaurantCheckOutActionState {}
+
 class RestaurantCheckOutNavigateToOrderCompleteState
     extends RestaurantCheckOutActionState {}

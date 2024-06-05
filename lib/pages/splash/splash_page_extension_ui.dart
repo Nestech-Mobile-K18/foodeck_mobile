@@ -77,9 +77,7 @@ class SplashPageAnimation extends StatelessWidget {
                       opacity: animation2 ? 0 : 1,
                       duration: const Duration(milliseconds: 1500),
                       child: const WaveDots(size: 36, color: Colors.white))),
-          animationFirstAndLast
-              ? const LoadingAnimationRive(color: Colors.transparent)
-              : const SizedBox()
+          const SizedBox()
         ],
       ),
     );

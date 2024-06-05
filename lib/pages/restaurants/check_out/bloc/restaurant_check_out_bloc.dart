@@ -20,6 +20,8 @@ class RestaurantCheckOutBloc
     on<RestaurantCheckOutSearchEvent>(restaurantCheckOutSearchEvent);
     on<RestaurantCheckOutMoveCameraEvent>(restaurantCheckOutMoveCameraEvent);
     on<RestaurantCheckOutEditAddressEvent>(restaurantCheckOutEditAddressEvent);
+    on<RestaurantCheckOutNavigateToCreateCardEvent>(
+        restaurantCheckOutNavigateToCreateCardEvent);
     on<RestaurantCheckOutNavigateToOrderCompleteEvent>(
         restaurantCheckOutNavigateToOrderCompleteEvent);
   }
@@ -74,6 +76,19 @@ class RestaurantCheckOutBloc
         loading: true,
         address: sharedPreferences.getString('address')!,
         responses: responses,
+        searchController: searchController));
+  }
+
+  FutureOr<void> restaurantCheckOutNavigateToCreateCardEvent(
+      RestaurantCheckOutNavigateToCreateCardEvent event,
+      Emitter<RestaurantCheckOutState> emit) {
+    AppRouter.navigatorKey.currentState!.pushNamed(AppRouter.createCard);
+    emit(RestaurantCheckOutNavigateToCreateCardState());
+    emit(RestaurantCheckOutLoadedState(
+        nothing: true,
+        loading: true,
+        address: sharedPreferences.getString('address')!,
+        responses: const [],
         searchController: searchController));
   }
 

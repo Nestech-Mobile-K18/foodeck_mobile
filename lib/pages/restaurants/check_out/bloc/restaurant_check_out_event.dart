@@ -29,6 +29,9 @@ class RestaurantCheckOutEditAddressEvent extends RestaurantCheckOutEvent {
   const RestaurantCheckOutEditAddressEvent({required this.index});
 }
 
+class RestaurantCheckOutNavigateToCreateCardEvent
+    extends RestaurantCheckOutEvent {}
+
 class RestaurantCheckOutNavigateToOrderCompleteEvent
     extends RestaurantCheckOutEvent {
   final BuildContext context;

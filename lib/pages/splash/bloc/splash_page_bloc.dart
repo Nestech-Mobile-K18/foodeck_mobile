@@ -73,7 +73,7 @@ class SplashPageBloc extends Bloc<SplashPageEvent, SplashPageState> {
     emit(SplashLoadingAnimationThirdState());
     await Future.delayed(const Duration(milliseconds: 3500));
     emit(SplashLoadingAnimationFourthState());
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1500));
     authState();
   }
 }

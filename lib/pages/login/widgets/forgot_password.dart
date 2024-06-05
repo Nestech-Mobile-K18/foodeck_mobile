@@ -13,7 +13,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Future login() async {
     try {
       FocusScope.of(context).requestFocus(FocusNode());
-      if (emailRegex.hasMatch(emailController.text)) {
+      if (Validation.passRegex.hasMatch(emailController.text)) {
         await supabase.auth
             .signInWithOtp(email: emailController.text, shouldCreateUser: false)
             .then((value) => Navigator.pushNamed(context, AppRouter.otp,
@@ -66,18 +66,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 padding:
                                     const EdgeInsets.only(top: 16, bottom: 20),
                                 child: CustomFormFill(
-                                    boxShadow: emailRegex
+                                    boxShadow: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? Colors.pink.shade100
                                         : Colors.white,
                                     textInputType: TextInputType.emailAddress,
                                     labelText: 'Email',
                                     hintText: 'johndoe123@gmail.com',
-                                    exampleText: emailRegex
+                                    exampleText: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? null
                                         : 'Example: johndoe123@gmail.com',
-                                    labelColor: emailRegex
+                                    labelColor: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? AppColor.globalPink
                                         : emailController.text.isEmpty
@@ -86,11 +86,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     borderColor: emailController.text.isNotEmpty
                                         ? AppColor.globalPink
                                         : Colors.grey,
-                                    inputColor: emailRegex
+                                    inputColor: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? AppColor.globalPink
                                         : Colors.red,
-                                    focusErrorBorderColor: emailRegex
+                                    focusErrorBorderColor: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? AppColor.globalPink
                                         : emailController.text.isEmpty
@@ -99,11 +99,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     textEditingController: emailController,
                                     function: (value) {
                                       setState(() {
-                                        emailRegex
+                                        Validation.passRegex
                                             .hasMatch(emailController.text);
                                       });
                                     },
-                                    errorText: emailRegex
+                                    errorText: Validation.passRegex
                                             .hasMatch(emailController.text)
                                         ? null
                                         : emailController.text.isEmpty

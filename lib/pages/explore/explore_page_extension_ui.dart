@@ -101,32 +101,40 @@ class ExploreBody extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButton: Builder(builder: (context) {
-            if (CartItemsListData.cartItems.isNotEmpty) {
-              return Badge(
-                smallSize: 25,
-                largeSize: 25,
-                backgroundColor: Colors.black,
-                label: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: CustomText(
-                        content: '${CartItemsListData.cartItems.length}')),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    explorePageBloc.add(ExplorePageCartNavigateEvent());
-                  },
-                  backgroundColor: AppColor.globalPink,
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.white,
-                  ),
-                ),
-              );
-            } else {
+          floatingActionButton:
+              BlocBuilder<RestaurantAddonBloc, RestaurantAddonState>(
+            builder: (context, state) {
+              switch (state.runtimeType) {
+                case RestaurantAddonLoadingSuccessState:
+                  return CartItemsListData.cartItems.isEmpty
+                      ? const SizedBox()
+                      : Badge(
+                          smallSize: 25,
+                          largeSize: 25,
+                          backgroundColor: Colors.black,
+                          label: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 3),
+                              child: CustomText(
+                                  content:
+                                      '${CartItemsListData.cartItems.length}')),
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              explorePageBloc
+                                  .add(ExplorePageCartNavigateEvent());
+                            },
+                            backgroundColor: AppColor.globalPink,
+                            shape: const CircleBorder(),
+                            child: const Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+              }
               return const SizedBox();
-            }
-          })),
+            },
+          )),
     );
   }
 }

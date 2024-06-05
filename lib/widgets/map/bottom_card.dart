@@ -53,76 +53,28 @@ class _BottomCardState extends State<BottomCard> {
     super.initState();
   }
 
-  Future deleteRestaurantDetailAtDatabase() async {
-    try {
-      await supabase.from('restaurants').delete().match({
-        'name': widget.name,
-        'address': widget.address,
-        'area': widget.area,
-        'city': widget.city
-      });
-      if (mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
-            'This location has been deleted');
-      }
-    } on AuthException catch (error) {
-      if (mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
-    }
-  }
-
   Future addCard(index) async {
     Map modifiedResponse =
         await getDirectionsAPIResponse(latLng, responses[index]['location']);
     // Calculate the distance and time
     num distance = modifiedResponse['distance'] / 1000;
     num duration = modifiedResponse['duration'] / 60;
-    updateLocation(index, distance, duration, modifiedResponse['geometry']);
-  }
-
-  Future updateLocation(index, num distance, num duration, Map geometry) async {
-    try {
-      late dynamic id;
-      var response = await supabase.from('restaurants').select('id');
-      var records = response.toList() as List;
-      for (var record in records) {
-        var userId = record['id'];
-        setState(() {
-          id = userId;
-        });
-      }
-      await supabase.from('restaurants').update({
-        'name': responses[index]['name'],
-        'address': responses[index]['address'],
-        'area': responses[index]['area'],
-        'city': responses[index]['city'],
-        'latitude': responses[index]['latitude'],
-        'longitude': responses[index]['longitude'],
-        'distance': distance,
-        'duration': duration,
-        'geometry': geometry
-      }).eq('id', id);
-      if (mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.globalPinkShadow, 'You just saved info');
-      }
-    } on AuthException catch (error) {
-      if (mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
+    if (mounted) {
+      RestaurantData.updateItemInDataBase(
+          context,
+          'restaurants',
+          {
+            'name': responses[index]['name'],
+            'address': responses[index]['address'],
+            'area': responses[index]['area'],
+            'city': responses[index]['city'],
+            'latitude': responses[index]['latitude'],
+            'longitude': responses[index]['longitude'],
+            'distance': distance,
+            'duration': duration,
+            'geometry': modifiedResponse['geometry']
+          },
+          'You just saved info');
     }
   }
 
@@ -227,7 +179,18 @@ class _BottomCardState extends State<BottomCard> {
                                                   setState(() {
                                                     yesClick!.value = true;
                                                   });
-                                                  deleteRestaurantDetailAtDatabase();
+                                                  RestaurantData
+                                                      .deleteItemFromDataBase(
+                                                          context,
+                                                          'restaurants',
+                                                          {
+                                                            'name': widget.name,
+                                                            'address':
+                                                                widget.address,
+                                                            'area': widget.area,
+                                                            'city': widget.city
+                                                          },
+                                                          'This location has been deleted');
                                                   Future.delayed(
                                                       const Duration(
                                                           milliseconds: 2000),

@@ -44,10 +44,10 @@ class _EditAccountState extends State<EditAccount> {
           id = userId;
         });
       }
-      if (emailRegex.hasMatch(emailController.text) &&
+      if (Validation.emailRegex.hasMatch(emailController.text) &&
           nameRegex.hasMatch(nameController.text) &&
           phoneRegex.hasMatch(phoneController.text) &&
-          passRegex.hasMatch(passwordController.text)) {
+          Validation.passRegex.hasMatch(passwordController.text)) {
         await supabase.auth.updateUser(UserAttributes(
           email: emailController.text.isEmpty
               ? sharedPreferences.getString('email')
@@ -200,28 +200,32 @@ class _EditAccountState extends State<EditAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
-                      boxShadow: emailRegex.hasMatch(emailController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       textInputType: TextInputType.emailAddress,
                       labelText: 'Email',
                       hintText: sharedPreferences.getString('email') ?? '',
-                      exampleText: emailRegex.hasMatch(emailController.text)
-                          ? null
-                          : 'Example: johndoe123@gmail.com',
+                      exampleText:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? null
+                              : 'Example: johndoe123@gmail.com',
                       borderColor: emailController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
-                      inputColor: emailRegex.hasMatch(emailController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
-                      labelColor: emailRegex.hasMatch(emailController.text)
-                          ? AppColor.globalPink
-                          : emailController.text.isEmpty
+                      inputColor:
+                          Validation.emailRegex.hasMatch(emailController.text)
                               ? AppColor.globalPink
                               : Colors.red,
+                      labelColor:
+                          Validation.emailRegex.hasMatch(emailController.text)
+                              ? AppColor.globalPink
+                              : emailController.text.isEmpty
+                                  ? AppColor.globalPink
+                                  : Colors.red,
                       focusErrorBorderColor:
-                          emailRegex.hasMatch(emailController.text)
+                          Validation.emailRegex.hasMatch(emailController.text)
                               ? AppColor.globalPink
                               : emailController.text.isEmpty
                                   ? AppColor.globalPink
@@ -229,10 +233,11 @@ class _EditAccountState extends State<EditAccount> {
                       textEditingController: emailController,
                       function: (value) {
                         setState(() {
-                          emailRegex.hasMatch(emailController.text);
+                          Validation.emailRegex.hasMatch(emailController.text);
                         });
                       },
-                      errorText: emailRegex.hasMatch(emailController.text)
+                      errorText: Validation.emailRegex
+                              .hasMatch(emailController.text)
                           ? null
                           : emailController.text.isEmpty
                               ? null
@@ -286,27 +291,31 @@ class _EditAccountState extends State<EditAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
                     child: CustomFormFill(
-                      boxShadow: passRegex.hasMatch(passwordController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       labelText: 'Password',
                       hintText: sharedPreferences.getString('password'),
-                      exampleText: passRegex.hasMatch(passwordController.text)
-                          ? null
-                          : 'Example: Johndoe123!',
-                      labelColor: passRegex.hasMatch(passwordController.text)
-                          ? AppColor.globalPink
-                          : passwordController.text.isEmpty
+                      exampleText:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? null
+                              : 'Example: Johndoe123!',
+                      labelColor:
+                          Validation.passRegex.hasMatch(passwordController.text)
+                              ? AppColor.globalPink
+                              : passwordController.text.isEmpty
+                                  ? AppColor.globalPink
+                                  : Colors.red,
+                      inputColor:
+                          Validation.passRegex.hasMatch(passwordController.text)
                               ? AppColor.globalPink
                               : Colors.red,
-                      inputColor: passRegex.hasMatch(passwordController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
                       borderColor: passwordController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
                       focusErrorBorderColor:
-                          passRegex.hasMatch(passwordController.text)
+                          Validation.passRegex.hasMatch(passwordController.text)
                               ? AppColor.globalPink
                               : passwordController.text.isEmpty
                                   ? AppColor.globalPink
@@ -323,18 +332,20 @@ class _EditAccountState extends State<EditAccount> {
                                 showPass
                                     ? Icons.visibility
                                     : Icons.visibility_off,
-                                color:
-                                    passRegex.hasMatch(passwordController.text)
-                                        ? AppColor.globalPink
-                                        : Colors.red,
+                                color: Validation.passRegex
+                                        .hasMatch(passwordController.text)
+                                    ? AppColor.globalPink
+                                    : Colors.red,
                               )),
                       obscureText: showPass ? false : true,
                       function: (value) {
                         setState(() {
-                          passRegex.hasMatch(passwordController.text);
+                          Validation.passRegex
+                              .hasMatch(passwordController.text);
                         });
                       },
-                      errorText: passRegex.hasMatch(passwordController.text)
+                      errorText: Validation.passRegex
+                              .hasMatch(passwordController.text)
                           ? null
                           : passwordController.text.isEmpty
                               ? null
