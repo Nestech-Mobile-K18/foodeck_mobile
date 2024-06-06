@@ -1,14 +1,6 @@
 import 'dart:collection';
+import 'package:template/pages/export.dart';
 
-import 'package:template/pages/map/map_view.dart';
-
-import '../resources/routes.dart';
-import '../pages/otp/otp_view.dart';
-import 'package:flutter/material.dart';
-import '../pages/login/login_view.dart';
-import '../pages/splash/splash_view.dart';
-import '../common/view/page_under_construction.dart';
-import '../pages/create_account/create_account_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -22,11 +14,27 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _pageBuilder((_) => const CreateAccountView(), settings: settings);
 
     case RouteName.otp:
-      return _pageBuilder((_) => const OtpView(), settings: settings);
+      return _pageBuilder((_) => Otp(email: settings.arguments != null
+              ? settings.arguments as String
+              : null,),
+          settings: settings);
 
     case RouteName.map:
       return _pageBuilder((_) => const MapBoxView(), settings: settings);
 
+    case RouteName.home:
+      return _pageBuilder(
+        (_) => HomePage(
+          userData: settings.arguments != null 
+              ? settings.arguments as Map<dynamic, dynamic>
+              : null,
+        ),
+        settings: settings,
+      );
+    case RouteName.loginEmail:
+      return _pageBuilder((_) => const LoginEmailView(), settings: settings);
+    case RouteName.signup:
+      return _pageBuilder((_) => const CreateAccountView(), settings: settings);
     default:
       return _pageBuilder((_) => const PageUnderConstruction(),
           settings: settings);

@@ -1,32 +1,26 @@
 import 'dart:async';
 import 'package:template/pages/export.dart';
 
-class CreateAccountView extends StatefulWidget {
-  const CreateAccountView({super.key});
+class LoginEmailView extends StatefulWidget {
+  const LoginEmailView({Key? key}) : super(key: key);
 
   @override
-  State<CreateAccountView> createState() => _CreateAccountViewState();
+  _LoginEmailViewState createState() => _LoginEmailViewState();
 }
 
-class _CreateAccountViewState extends State<CreateAccountView> {
+class _LoginEmailViewState extends State<LoginEmailView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _mailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
   late final StreamSubscription<AuthState> _authSubscription;
   late FocusNode _focusNodeEmail;
   late FocusNode _focusNodePassword;
-  late FocusNode _focusNodeName;
-  late FocusNode _focusNodePhone;
 
   @override
   void initState() {
     _focusNodeEmail = FocusNode();
     _focusNodePassword = FocusNode();
-    _focusNodeName = FocusNode();
-    _focusNodePhone = FocusNode();
     _authSubscription = supabase.auth.onAuthStateChange.listen((event) {
       final session = event.session;
       if (session != null) {
@@ -41,39 +35,38 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   void dispose() {
     _focusNodeEmail.dispose();
     _focusNodePassword.dispose();
-    _focusNodeName.dispose();
-    _focusNodePhone.dispose();
     _authSubscription.cancel();
     super.dispose();
   }
 
-  Future<void> signUpAccount() async {
-    try {
-      final AuthResponse res = await supabase.auth.signUp(
-          email: _mailController.text.trim(),
-          password: _passController.text.trim(),
-          data: {
-            'name': _nameController.text.trim(),
-            'phone': _phoneController.text.trim(),
-          });
-
-      if (res.user?.id != null) {
-        // đăng kí thành công chuyển tới màn hình OTP
-        Navigator.of(context, rootNavigator: true).pushReplacementNamed(
-            RouteName.otp,
-            arguments: _mailController.text.trim());
+  Future<void> loginEmail() async {
+    if (_formKey.currentState!.validate()) {
+      // _formKey.currentState!.save();
+      _formKey.currentState!.save();
+      try {
+        final mail = _mailController.text.trim();
+        final pass = _passController.text.trim();
+        await supabase.auth.signInWithPassword(email: mail, password: pass);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Login success'), backgroundColor: Colors.green));
+        }
+      } on AuthException catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(error.message),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Error occured, please retry.'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ));
       }
-    } on PostgrestException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ));
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      ));
     }
+  }
+
+  Future<void> signupEmail() async {
+    Navigator.of(context).pushNamed(RouteName.signup);
   }
 
   @override
@@ -81,7 +74,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Create an account',
+            'Login via Email',
             style: TextStyle(fontSize: 22.dp, fontWeight: FontWeight.bold),
           ),
           bottom: PreferredSize(
@@ -94,7 +87,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           ),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(24.dp, 24.dp, 24.dp, 24.dp),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -106,25 +99,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     'Input your credentials',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20.dp),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
-                  child: InputText(
-                    title: 'Name',
-                    controller: _nameController,
-                    focusNode: _focusNodeName,
-                    onTap: () {
-                      setState(() {
-                        FocusScope.of(context).requestFocus(_focusNodeName);
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Name Is Empty';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
@@ -148,27 +122,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
-                  child: InputText(
-                    title: 'Phone',
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    focusNode: _focusNodePhone,
-                    onTap: () {
-                      setState(() {
-                        FocusScope.of(context).requestFocus(_focusNodePhone);
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Phone is Empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16.dp, bottom: 16.dp),
+                  padding: EdgeInsets.only(bottom: 16.dp),
                   child: InputText(
                     title: 'Password',
                     controller: _passController,
@@ -189,13 +143,30 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     },
                   ),
                 ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(bottom: 40.dp),
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Colors.grey.shade500),
+                  ),
+                ),
                 Button(
-                  label: 'Create an account',
+                  label: 'Login',
                   width: 328.dp,
                   height: 62.dp,
                   colorBackgroud: ColorsGlobal.globalPink,
                   colorLabel: Colors.white,
-                  onPressed: () => signUpAccount(),
+                  onPressed: () => loginEmail(),
+                ),
+                Button(
+                  label: 'Create an account instead',
+                  colorLabel: ColorsGlobal.grey,
+                  colorBorder: ColorsGlobal.grey,
+                  colorBackgroud: Colors.white,
+                  width: 328.dp,
+                  height: 62.dp,
+                  onPressed: () => signupEmail(),
                 ),
               ],
             ),
