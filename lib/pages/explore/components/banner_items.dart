@@ -1,6 +1,6 @@
 import 'package:template/source/export.dart';
 
-class BannerItems extends StatefulWidget {
+class BannerItems extends StatelessWidget {
   const BannerItems({
     super.key,
     required this.foodImage,
@@ -11,14 +11,12 @@ class BannerItems extends StatefulWidget {
     required this.rateStar,
     this.paddingText,
     this.action,
-    this.heartColor,
-    this.icon,
     this.paddingImage,
     this.onTap,
-    this.iconShape,
     this.heartIcon,
     this.badge,
     this.voteStar,
+    this.restaurantModel,
   });
 
   final EdgeInsets? paddingText;
@@ -30,27 +28,19 @@ class BannerItems extends StatefulWidget {
   final String shopAddress;
   final String rateStar;
   final VoidCallback? action;
-  final Color? heartColor;
-  final IconData? iconShape;
-  final Widget? icon;
   final VoidCallback? onTap;
   final Widget? heartIcon;
   final Widget? badge;
   final Widget? voteStar;
-
-  @override
-  State<BannerItems> createState() => _BannerItemsState();
-}
-
-class _BannerItemsState extends State<BannerItems> {
+  final RestaurantModel? restaurantModel;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.paddingImage ?? EdgeInsets.zero,
+      padding: paddingImage ?? EdgeInsets.zero,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Stack(alignment: Alignment.topRight, children: [
           GestureDetector(
-            onTap: widget.onTap,
+            onTap: onTap,
             child: Card(
               elevation: 10,
               shape: RoundedRectangleBorder(
@@ -60,16 +50,16 @@ class _BannerItemsState extends State<BannerItems> {
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
                       image: AssetImage(
-                        widget.foodImage,
+                        foodImage,
                       ),
                       fit: BoxFit.cover,
                     )),
-                width: widget.widthImage ?? MediaQuery.of(context).size.width,
+                width: widthImage ?? MediaQuery.of(context).size.width,
                 height: 160,
               ),
             ),
           ),
-          widget.badge ??
+          badge ??
               Positioned(
                   left: 12,
                   bottom: 12,
@@ -78,41 +68,67 @@ class _BannerItemsState extends State<BannerItems> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 4),
                           child: CustomText(
-                              content: widget.deliveryTime,
+                              content: deliveryTime,
                               fontSize: 12,
                               fontWeight: FontWeight.bold)))),
-          widget.heartIcon ??
+          heartIcon ??
               GestureDetector(
-                  onTap: widget.action,
+                  onTap: action,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 12, top: 12),
                     child: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: widget.icon ??
-                          Icon(
-                            widget.iconShape,
-                            color: widget.heartColor,
-                          ),
-                    ),
+                        width: 24,
+                        height: 24,
+                        child: restaurantModel == null
+                            ? null
+                            : BlocConsumer<ExplorePageBloc, ExplorePageState>(
+                                buildWhen: (previous, current) =>
+                                    current is ExplorePageLikeState,
+                                listener: (BuildContext context,
+                                    ExplorePageState state) {
+                                  if (state is ExplorePageLikeState) {
+                                    CommonUtils.toggleLike(state, context);
+                                  }
+                                },
+                                builder: (context, state) {
+                                  switch (state.runtimeType) {
+                                    case ExplorePageLikeState:
+                                      return SavedListData.saveFood
+                                              .contains(restaurantModel)
+                                          ? const Icon(Icons.favorite,
+                                              color: AppColor.globalPink)
+                                          : const Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.white,
+                                            );
+                                  }
+                                  return SavedListData.saveFood
+                                          .contains(restaurantModel)
+                                      ? const Icon(Icons.favorite,
+                                          color: AppColor.globalPink)
+                                      : const Icon(
+                                          Icons.favorite_border,
+                                          color: Colors.white,
+                                        );
+                                },
+                              )),
                   ))
         ]),
         Padding(
-          padding: widget.paddingText ?? const EdgeInsets.only(top: 8),
+          padding: paddingText ?? const EdgeInsets.only(top: 8),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              CustomText(content: widget.shopName, fontWeight: FontWeight.bold),
-              CustomText(
-                  content: widget.shopAddress, fontSize: 15, color: Colors.grey)
+              CustomText(content: shopName, fontWeight: FontWeight.bold),
+              CustomText(content: shopAddress, fontSize: 15, color: Colors.grey)
             ]),
-            widget.voteStar ??
+            voteStar ??
                 TextButton.icon(
                     style: const ButtonStyle(
                         padding: WidgetStatePropertyAll(EdgeInsets.zero)),
                     onPressed: null,
                     label: CustomText(
-                        content: widget.rateStar,
+                        content: rateStar,
                         fontSize: 13,
                         fontWeight: FontWeight.bold),
                     icon: Image.asset(

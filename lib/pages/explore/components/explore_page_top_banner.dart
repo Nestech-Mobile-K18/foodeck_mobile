@@ -1,4 +1,4 @@
-part of 'explore_page.dart';
+import 'package:template/source/export.dart';
 
 class TopListShopping extends StatelessWidget {
   const TopListShopping({
@@ -7,29 +7,37 @@ class TopListShopping extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      buildCard(Assets.food, 'Food', 'Order Food You Love', double.maxFinite),
-      Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildCard(Assets.grocery, 'Grocery', 'Shop daily life items', 156),
-            buildCard(Assets.desert, 'Deserts', 'Something Sweet', 156)
-          ],
-        ),
-      )
-    ]);
+    return GestureDetector(
+      onTap: () {
+        customSnackBar(context, AppColor.buttonShadowBlack, 'In Updating...');
+      },
+      child: Column(children: [
+        buildCard(Assets.food, 'Food', 'Order Food You Love'),
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Row(
+            children: [
+              Expanded(
+                  child: buildCard(
+                      Assets.grocery, 'Grocery', 'Shop daily life items')),
+              const SizedBox(width: 16),
+              Expanded(
+                  child: buildCard(Assets.desert, 'Deserts', 'Something Sweet'))
+            ],
+          ),
+        )
+      ]),
+    );
   }
 
-  Card buildCard(String image, String tittle, String content, double width) {
+  Card buildCard(String image, String tittle, String content) {
     return Card(
       elevation: 10,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Stack(children: [
         Container(
           height: 160,
-          width: width,
+          width: double.maxFinite,
           decoration: BoxDecoration(
               image:
                   DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),

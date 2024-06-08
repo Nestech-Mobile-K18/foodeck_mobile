@@ -14,10 +14,9 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   FutureOr<void> profilePageInitialEvent(
       ProfilePageInitialEvent event, Emitter<ProfilePageState> emit) {
     emit(ProfilePageLoadedState(
-        image: event.image,
-        name: event.name,
-        address: event.address,
-        load: false));
+        image: sharedPreferences.getString('avatar')!,
+        name: sharedPreferences.getString('name')!,
+        address: sharedPreferences.getString('currentAddress')!));
   }
 
   FutureOr<void> profilePageNavigateEvent(
@@ -30,8 +29,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     emit(ProfilePageLoadedState(
         image: sharedPreferences.getString('avatar')!,
         name: sharedPreferences.getString('name')!,
-        address: sharedPreferences.getString('currentAddress')!,
-        load: false));
+        address: sharedPreferences.getString('currentAddress')!));
   }
 
   FutureOr<void> profilePageToggleThemeEvent(
@@ -44,8 +42,7 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     emit(ProfilePageLoadedState(
         image: sharedPreferences.getString('avatar')!,
         name: sharedPreferences.getString('name')!,
-        address: sharedPreferences.getString('currentAddress')!,
-        load: true));
+        address: sharedPreferences.getString('currentAddress')!));
     await Future.delayed(
         const Duration(milliseconds: 2000), () => supabase.auth.signOut());
     emit(ProfilePageLogOutState());
@@ -70,12 +67,10 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         AppRouter.navigatorKey.currentState!.pushNamed(AppRouter.myReviews);
         break;
       case 'About Us':
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, 'In Updating...');
+        customSnackBar(context, AppColor.buttonShadowBlack, 'In Updating...');
         break;
       case 'Data Usage':
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, 'In Updating...');
+        customSnackBar(context, AppColor.buttonShadowBlack, 'In Updating...');
         break;
     }
   }

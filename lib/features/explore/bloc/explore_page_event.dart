@@ -1,12 +1,6 @@
 part of 'explore_page_bloc.dart';
 
-sealed class ExplorePageEvent extends Equatable {
-  const ExplorePageEvent();
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => [];
-}
+sealed class ExplorePageEvent {}
 
 class ExplorePageInitialEvent extends ExplorePageEvent {}
 
@@ -15,7 +9,7 @@ class ExplorePageSearchNavigateEvent extends ExplorePageEvent {}
 class ExplorePageNavigateEvent extends ExplorePageEvent {
   final RestaurantModel restaurantModel;
 
-  const ExplorePageNavigateEvent({required this.restaurantModel});
+  ExplorePageNavigateEvent({required this.restaurantModel});
 }
 
 class ExplorePageCartNavigateEvent extends ExplorePageEvent {}
@@ -23,5 +17,5 @@ class ExplorePageCartNavigateEvent extends ExplorePageEvent {}
 class ExplorePageLikeEvent extends ExplorePageEvent {
   final RestaurantModel saveFood;
 
-  const ExplorePageLikeEvent({required this.saveFood});
+  ExplorePageLikeEvent({required this.saveFood});
 }

@@ -39,17 +39,16 @@ class _SearchModelState extends State<SearchModel> {
         'geometry': geometry
       });
       if (mounted) {
-        CustomWidgets.customSnackBar(
+        customSnackBar(
             context, AppColor.globalPinkShadow, 'This location has been saved');
       }
     } on AuthException catch (error) {
       if (mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }

@@ -33,7 +33,7 @@ class _CreateAccountState extends State<CreateAccount> {
         });
         if (mounted) {
           Navigator.pushNamed(context, AppRouter.otp,
-              arguments: emailController.text.trim());
+              arguments: Otp(email: emailController.text.trim()));
         }
       } else {
         ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
@@ -44,7 +44,7 @@ class _CreateAccountState extends State<CreateAccount> {
       }
     } catch (error) {
       if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+        ShowBearSnackBar.showBearSnackBar(context, error.toString());
       }
     }
   }

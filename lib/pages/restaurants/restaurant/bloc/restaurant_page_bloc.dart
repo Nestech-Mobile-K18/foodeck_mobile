@@ -68,7 +68,7 @@ class RestaurantPageBloc
       Future.delayed(
           const Duration(milliseconds: 3000), () => Navigator.pop(context));
     } else {
-      CustomWidgets.customSnackBar(context, Colors.red.withOpacity(0.9),
+      customSnackBar(context, Colors.red.withOpacity(0.9),
           'It\'s empty, Please leave a comment');
     }
   }
@@ -91,12 +91,11 @@ class RestaurantPageBloc
       }
     } on AuthException catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }

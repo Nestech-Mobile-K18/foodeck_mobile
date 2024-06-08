@@ -3,12 +3,7 @@ part of 'profile_page_bloc.dart';
 @immutable
 sealed class ProfilePageEvent {}
 
-class ProfilePageInitialEvent extends ProfilePageEvent {
-  final String image, name, address;
-
-  ProfilePageInitialEvent(
-      {required this.image, required this.name, required this.address});
-}
+class ProfilePageInitialEvent extends ProfilePageEvent {}
 
 class ProfilePageNavigateEvent extends ProfilePageEvent {
   final BuildContext context;

@@ -30,6 +30,7 @@ class CustomText extends StatelessWidget {
         overflow: textOverflow ?? TextOverflow.ellipsis,
         style: AppText.inter.copyWith(
             fontSize: fontSize ?? 17,
+            overflow: textOverflow ?? TextOverflow.ellipsis,
             fontWeight: fontWeight,
             color: color,
             decoration: textDecoration));

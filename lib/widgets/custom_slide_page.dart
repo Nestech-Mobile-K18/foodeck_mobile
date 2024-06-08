@@ -17,19 +17,16 @@ class _CustomSlidePageState extends State<CustomSlidePage> {
   int cardIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 24, left: 13, right: 15),
-      child: PageView.builder(
-          controller: pageController,
-          onPageChanged: (value) {
-            widget.currentCard!.value = value;
-            cardIndex = value;
-          },
-          scrollBehavior: const ScrollBehavior(),
-          clipBehavior: Clip.none,
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.itemCount,
-          itemBuilder: widget.itemBuilder),
-    );
+    return PageView.builder(
+        controller: pageController,
+        onPageChanged: (value) {
+          widget.currentCard!.value = value;
+          cardIndex = value;
+        },
+        scrollBehavior: const ScrollBehavior(),
+        clipBehavior: Clip.none,
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.itemCount,
+        itemBuilder: widget.itemBuilder);
   }
 }

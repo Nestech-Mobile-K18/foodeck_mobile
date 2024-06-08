@@ -164,7 +164,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                           const SizedBox(
                             height: 10,
                           ),
-                          CustomWidgets.currentAddress(widget.res['address'])
+                          CustomText(content: widget.res['address'])
                         ],
                       ),
                     ),

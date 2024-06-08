@@ -4,12 +4,10 @@ class SplashPageAnimation extends StatelessWidget {
   const SplashPageAnimation({
     super.key,
     required this.animationFirstAndLast,
-    required this.animation3,
     required this.animation2,
   });
 
   final bool animationFirstAndLast;
-  final bool animation3;
   final bool animation2;
 
   @override
@@ -66,18 +64,11 @@ class SplashPageAnimation extends StatelessWidget {
                       textAlign: TextAlign.center,
                       color: Colors.white))),
           Positioned(
-              top: animation3 ? 450 : 500,
-              child: animation3
-                  ? SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.2,
-                      child: animationFirstAndLast
-                          ? null
-                          : Lottie.asset(Assets.done))
-                  : AnimatedOpacity(
-                      opacity: animation2 ? 0 : 1,
-                      duration: const Duration(milliseconds: 1500),
-                      child: const WaveDots(size: 36, color: Colors.white))),
-          const SizedBox()
+              top: 500,
+              child: AnimatedOpacity(
+                  opacity: animation2 ? 0 : 1,
+                  duration: const Duration(milliseconds: 1500),
+                  child: const WaveDots(size: 36, color: Colors.white)))
         ],
       ),
     );

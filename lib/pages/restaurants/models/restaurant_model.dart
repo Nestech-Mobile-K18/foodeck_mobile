@@ -15,7 +15,7 @@ class RestaurantModel {
       required this.titleFood});
 }
 
-enum TitleFood { Deals, Explore, Popular, Recent }
+enum TitleFood { Deals, Explore, Recent }
 
 class FoodItems {
   final String picture;

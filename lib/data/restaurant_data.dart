@@ -174,17 +174,15 @@ class RestaurantData {
   static Future addItemToDataBase(BuildContext context, String table,
       Map<String, Object> info, String popUp) async {
     try {
-      await supabase.from(table).upsert(info).then((value) =>
-          CustomWidgets.customSnackBar(
-              context, AppColor.globalPinkShadow, popUp));
+      await supabase.from(table).upsert(info).then(
+          (value) => customSnackBar(context, AppColor.globalPinkShadow, popUp));
     } on AuthException catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }
@@ -194,16 +192,14 @@ class RestaurantData {
       Map<String, Object> info, String popUp) async {
     try {
       await supabase.from(table).delete().match(info).then((value) =>
-          CustomWidgets.customSnackBar(
-              context, AppColor.buttonShadowBlack, popUp));
+          customSnackBar(context, AppColor.buttonShadowBlack, popUp));
     } on AuthException catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }
@@ -221,16 +217,15 @@ class RestaurantData {
       }
       await supabase.from(table).update(info).eq('id', id);
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.globalPinkShadow, popUp);
+        customSnackBar(context, AppColor.globalPinkShadow, popUp);
       }
     } on AuthException catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }

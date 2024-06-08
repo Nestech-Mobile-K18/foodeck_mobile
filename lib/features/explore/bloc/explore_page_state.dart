@@ -1,11 +1,6 @@
 part of 'explore_page_bloc.dart';
 
-sealed class ExplorePageState extends Equatable {
-  const ExplorePageState();
-
-  @override
-  List<Object> get props => [];
-}
+sealed class ExplorePageState {}
 
 class ExplorePageActionState extends ExplorePageState {}
 
@@ -13,11 +8,7 @@ final class ExplorePageInitial extends ExplorePageState {}
 
 class ExplorePageLoadingState extends ExplorePageState {}
 
-class ExplorePageLoadingSuccessState extends ExplorePageState {
-  final List<RestaurantModel> restaurant;
-
-  const ExplorePageLoadingSuccessState({required this.restaurant});
-}
+class ExplorePageLoadingSuccessState extends ExplorePageState {}
 
 class ExplorePageLikeState extends ExplorePageActionState {
   final RestaurantModel restaurantModel;
@@ -29,8 +20,4 @@ class ExplorePageSearchNavigateActionState extends ExplorePageActionState {}
 
 class ExplorePageCartNavigateActionState extends ExplorePageActionState {}
 
-class ExplorePageNavigateActionState extends ExplorePageActionState {
-  final RestaurantModel restaurantModel;
-
-  ExplorePageNavigateActionState({required this.restaurantModel});
-}
+class ExplorePageNavigateActionState extends ExplorePageActionState {}

@@ -34,29 +34,33 @@ class Avatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: updatePicture,
-      child: imageUrl != null
-          ? CachedNetworkImage(
-              placeholder: (context, url) => const CircularProgressIndicator(
-                    color: AppColor.globalPink,
-                  ),
-              imageUrl: imageUrl!,
-              imageBuilder: (context, imageProvider) => Container(
+        onTap: updatePicture,
+        child: CachedNetworkImage(
+            errorWidget: (context, url, error) => Container(
                   width: 120,
                   height: 120,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover))))
-          : Container(
-              width: 120,
-              height: 120,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.grey),
-              child: const Center(
-                child: Text('No Image'),
-              ),
-            ),
-    );
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.grey),
+                  child: const Center(
+                    child: Text('No Image'),
+                  ),
+                ),
+            placeholder: (context, url) => Container(
+                  width: 120,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.circle, color: Colors.grey),
+                  child: const CircularProgressIndicator(
+                    color: AppColor.globalPink,
+                  ),
+                ),
+            imageUrl: imageUrl!,
+            imageBuilder: (context, imageProvider) => Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover)))));
   }
 }

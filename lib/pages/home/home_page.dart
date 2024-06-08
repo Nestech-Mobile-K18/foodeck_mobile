@@ -1,7 +1,5 @@
 import 'package:template/source/export.dart';
 
-part 'home_page_extension_ui.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -10,6 +8,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final tabs = [
+    const ExplorePage(),
+    const SavedPage(),
+    const NotificationsPage(),
+    const ProfilePage()
+  ];
+
   @override
   void initState() {
     context.read<HomePageBloc>().add(HomePageInitialEvent());
@@ -18,27 +23,41 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomePageBloc, HomePageState>(
-      listener: (context, state) {},
+    return BlocBuilder<HomePageBloc, HomePageState>(
       builder: (context, state) {
         switch (state.runtimeType) {
           case HomePageLoadingState:
-            return const LoadingAnimationRive();
-          case HomePageSelectIndex0State:
-            final selectIndex = state as HomePageSelectIndex0State;
-            return BottomRoute(currentIndex: selectIndex.index);
-          case HomePageSelectIndex1State:
-            final selectIndex = state as HomePageSelectIndex1State;
-            return BottomRoute(currentIndex: selectIndex.index);
-          case HomePageSelectIndex2State:
-            final selectIndex = state as HomePageSelectIndex2State;
-            return BottomRoute(currentIndex: selectIndex.index);
-          case HomePageSelectIndex3State:
-            final selectIndex = state as HomePageSelectIndex3State;
-            return BottomRoute(currentIndex: selectIndex.index);
-          default:
-            return const SizedBox();
+            return customLoading();
+          case HomePageSelectIndexState:
+            final selectIndex = state as HomePageSelectIndexState;
+            return Scaffold(
+                body: tabs[selectIndex.index],
+                bottomNavigationBar: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    onTap: (value) {
+                      context
+                          .read<HomePageBloc>()
+                          .add(HomePageSelectIndexEvent(index: value));
+                    },
+                    currentIndex: selectIndex.index,
+                    selectedLabelStyle: AppText.inter.copyWith(fontSize: 11),
+                    unselectedLabelStyle: AppText.inter.copyWith(fontSize: 11),
+                    showUnselectedLabels: true,
+                    unselectedItemColor: Colors.grey,
+                    selectedItemColor: AppColor.globalPink,
+                    elevation: 20,
+                    items: [
+                      ...List.generate(
+                        bottomIcons.length,
+                        (index) {
+                          return BottomNavigationBarItem(
+                              label: bottomIcons[index].label,
+                              icon: Icon(bottomIcons[index].icon));
+                        },
+                      )
+                    ]));
         }
+        return const SizedBox.shrink();
       },
     );
   }

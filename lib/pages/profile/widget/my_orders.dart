@@ -14,6 +14,7 @@ class _MyOrdersState extends State<MyOrders> {
 
   @override
   Widget build(BuildContext context) {
+    final explorePageBloc = context.read<ExplorePageBloc>();
     return StreamBuilder(
         stream: dataOrderComplete,
         builder: (context, snapshot) {
@@ -57,33 +58,40 @@ class _MyOrdersState extends State<MyOrders> {
                                     itemCount: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)
                                         .length,
                                     scrollDirection: Axis.horizontal,
-                                    itemBuilder: (BuildContext context, int index) => BannerItems(
-                                        heartIcon: const SizedBox(),
-                                        badge: const SizedBox(),
-                                        voteStar: const SizedBox(),
-                                        onTap: () {},
-                                        paddingImage:
-                                            const EdgeInsets.only(right: 10),
-                                        paddingText: const EdgeInsets.only(
-                                            left: 3, top: 8),
-                                        foodImage: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
-                                            .image,
-                                        deliveryTime:
-                                            '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].deliveryTime} mins',
-                                        shopName: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
-                                            .shopName,
-                                        shopAddress: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index]
-                                            .address,
-                                        rateStar:
-                                            '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].rate}',
-                                        action: () {},
-                                        iconShape: SavedListData.saveFood.contains(RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        heartColor: SavedListData.saveFood
-                                                .contains(RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])
-                                            ? AppColor.globalPink
-                                            : Colors.white)),
+                                    itemBuilder: (BuildContext context, int index) =>
+                                        BannerItems(
+                                            heartIcon: const SizedBox(),
+                                            badge: const SizedBox(),
+                                            voteStar: const SizedBox(),
+                                            onTap: () {},
+                                            paddingImage: const EdgeInsets.only(
+                                                right: 10),
+                                            paddingText: const EdgeInsets.only(
+                                                left: 3, top: 8),
+                                            foodImage: RestaurantData.kindFood(
+                                                    TitleFood.Recent,
+                                                    RestaurantData
+                                                        .restaurant)[index]
+                                                .image,
+                                            deliveryTime:
+                                                '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].deliveryTime} mins',
+                                            shopName: RestaurantData.kindFood(
+                                                    TitleFood.Recent,
+                                                    RestaurantData.restaurant)[index]
+                                                .shopName,
+                                            shopAddress: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].address,
+                                            rateStar: '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].rate}',
+                                            action: () {
+                                              explorePageBloc.add(
+                                                  ExplorePageLikeEvent(
+                                                      saveFood: RestaurantData
+                                                              .kindFood(
+                                                                  TitleFood.Recent,
+                                                                  RestaurantData
+                                                                      .restaurant)[
+                                                          index]));
+                                            },
+                                            restaurantModel: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])),
                               )),
                         )
                       ],

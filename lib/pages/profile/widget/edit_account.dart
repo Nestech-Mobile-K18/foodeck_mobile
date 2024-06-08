@@ -13,9 +13,6 @@ class _EditAccountState extends State<EditAccount> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-  RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
-  RegExp nameRegex = RegExp(
-      r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
   String? _imageUrl;
 
   @override
@@ -44,74 +41,83 @@ class _EditAccountState extends State<EditAccount> {
           id = userId;
         });
       }
-      if (Validation.emailRegex.hasMatch(emailController.text) &&
-          nameRegex.hasMatch(nameController.text) &&
-          phoneRegex.hasMatch(phoneController.text) &&
-          Validation.passRegex.hasMatch(passwordController.text)) {
-        await supabase.auth.updateUser(UserAttributes(
-          email: emailController.text.isEmpty
-              ? sharedPreferences.getString('email')
-              : emailController.text,
-          password: passwordController.text.isEmpty
-              ? sharedPreferences.getString('email')
-              : passwordController.text,
-        ));
-        await supabase.from('users').update({
-          'email': emailController.text.isEmpty
-              ? sharedPreferences.getString('email')
-              : emailController.text,
-          'full_name': nameController.text.isEmpty
-              ? sharedPreferences.getString('name')
-              : nameController.text,
-          'phone': phoneController.text.isEmpty
-              ? sharedPreferences.getString('phone')
-              : phoneController.text,
-          'password': passwordController.text.isEmpty
-              ? sharedPreferences.getString('password')
-              : passwordController.text,
-          'avatar_url': _imageUrl
-        }).eq('id', id);
-        setState(() {
-          sharedPreferences.setString('avatar', _imageUrl!);
-          sharedPreferences.setString(
-              'name',
-              nameController.text.isEmpty
-                  ? sharedPreferences.getString('name')!
-                  : nameController.text);
-          sharedPreferences.setString(
-              'email',
-              emailController.text.isEmpty
-                  ? sharedPreferences.getString('email')!
-                  : emailController.text);
-          sharedPreferences.setString(
-              'phone',
-              phoneController.text.isEmpty
-                  ? sharedPreferences.getString('phone')!
-                  : phoneController.text);
-          sharedPreferences.setString(
-              'password',
-              passwordController.text.isEmpty
-                  ? sharedPreferences.getString('password')!
-                  : passwordController.text);
-        });
-        if (mounted) {
-          CustomWidgets.customSnackBar(
-              context, AppColor.globalPinkShadow, 'You just saved info');
-        }
+      if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       } else {
-        if (mounted) {
-          CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
-              'Please make sure everything is corrected');
-        }
+        await supabase.auth.updateUser(UserAttributes(
+          email: Validation.emailRegex.hasMatch(emailController.text)
+              ? emailController.text
+              : sharedPreferences.getString('email'),
+          password: passwordController.text.isEmpty
+              ? sharedPreferences.getString('password')
+              : Validation.passRegex.hasMatch(passwordController.text)
+                  ? passwordController.text
+                  : sharedPreferences.getString('password'),
+        ));
       }
+
+      await supabase.from('users').update({
+        'email': emailController.text.isEmpty
+            ? sharedPreferences.getString('email')
+            : Validation.emailRegex.hasMatch(emailController.text)
+                ? emailController.text
+                : sharedPreferences.getString('email'),
+        'full_name': nameController.text.isEmpty
+            ? sharedPreferences.getString('name')
+            : Validation.nameRegex.hasMatch(nameController.text)
+                ? nameController.text
+                : sharedPreferences.getString('name'),
+        'phone': phoneController.text.isEmpty
+            ? sharedPreferences.getString('phone')
+            : Validation.phoneRegex.hasMatch(phoneController.text)
+                ? phoneController.text
+                : sharedPreferences.getString('phone'),
+        'password': passwordController.text.isEmpty
+            ? sharedPreferences.getString('password')
+            : Validation.passRegex.hasMatch(passwordController.text)
+                ? passwordController.text
+                : sharedPreferences.getString('password'),
+        'avatar_url': _imageUrl
+      }).eq('id', id);
+      setState(() {
+        sharedPreferences.setString('avatar', _imageUrl!);
+        sharedPreferences.setString(
+            'name',
+            nameController.text.isEmpty
+                ? sharedPreferences.getString('name')!
+                : nameController.text);
+        sharedPreferences.setString(
+            'email',
+            emailController.text.isEmpty
+                ? sharedPreferences.getString('email')!
+                : emailController.text);
+        sharedPreferences.setString(
+            'phone',
+            phoneController.text.isEmpty
+                ? sharedPreferences.getString('phone')!
+                : phoneController.text);
+        sharedPreferences.setString(
+            'password',
+            passwordController.text.isEmpty
+                ? sharedPreferences.getString('password')!
+                : passwordController.text);
+      });
+      if (mounted) {
+        customSnackBar(
+            context, AppColor.globalPinkShadow, 'You just saved info');
+      }
+      // else if(emailController.text.isEmpty||nameController.text.isEmpty||phoneController.text.isEmpty||) else {
+      //   if (mounted) {
+      //     customSnackBar(context, AppColor.buttonShadowBlack,
+      //         'Please make sure everything is corrected');
+      //   }
+      // }
     } on AuthException catch (error) {
       if (mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }
@@ -159,28 +165,32 @@ class _EditAccountState extends State<EditAccount> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: CustomFormFill(
-                        boxShadow: nameRegex.hasMatch(nameController.text)
-                            ? Colors.pink.shade100
-                            : Colors.white,
+                        boxShadow:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? Colors.pink.shade100
+                                : Colors.white,
                         textInputType: TextInputType.name,
                         labelText: 'Full Name',
                         hintText: sharedPreferences.getString('name') ?? '',
-                        exampleText: nameRegex.hasMatch(nameController.text)
-                            ? null
-                            : 'Example: John Doe',
-                        labelColor: nameRegex.hasMatch(nameController.text)
-                            ? AppColor.globalPink
-                            : nameController.text.isEmpty
+                        exampleText:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? null
+                                : 'Example: John Doe',
+                        labelColor:
+                            Validation.nameRegex.hasMatch(nameController.text)
                                 ? AppColor.globalPink
-                                : Colors.red,
+                                : nameController.text.isEmpty
+                                    ? AppColor.globalPink
+                                    : Colors.red,
                         borderColor: nameController.text.isNotEmpty
                             ? AppColor.globalPink
                             : Colors.grey,
-                        inputColor: nameRegex.hasMatch(nameController.text)
-                            ? AppColor.globalPink
-                            : Colors.red,
+                        inputColor:
+                            Validation.nameRegex.hasMatch(nameController.text)
+                                ? AppColor.globalPink
+                                : Colors.red,
                         focusErrorBorderColor:
-                            nameRegex.hasMatch(nameController.text)
+                            Validation.nameRegex.hasMatch(nameController.text)
                                 ? AppColor.globalPink
                                 : nameController.text.isEmpty
                                     ? AppColor.globalPink
@@ -188,10 +198,11 @@ class _EditAccountState extends State<EditAccount> {
                         textEditingController: nameController,
                         function: (value) {
                           setState(() {
-                            nameRegex.hasMatch(nameController.text);
+                            Validation.nameRegex.hasMatch(nameController.text);
                           });
                         },
-                        errorText: nameRegex.hasMatch(nameController.text)
+                        errorText: Validation.nameRegex
+                                .hasMatch(nameController.text)
                             ? null
                             : nameController.text.isEmpty
                                 ? null
@@ -247,43 +258,46 @@ class _EditAccountState extends State<EditAccount> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: CustomFormFill(
-                      boxShadow: phoneRegex.hasMatch(phoneController.text)
-                          ? Colors.pink.shade100
-                          : Colors.white,
+                      boxShadow:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? Colors.pink.shade100
+                              : Colors.white,
                       textInputType: TextInputType.phone,
                       labelText: 'Phone No.',
                       hintText: sharedPreferences.getString('phone') ?? '',
-                      exampleText: phoneRegex.hasMatch(phoneController.text)
-                          ? null
-                          : 'Need correct number',
+                      exampleText:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? null
+                              : 'Need correct number',
                       textInputFormatter: [
                         LengthLimitingTextInputFormatter(13)
                       ],
                       labelColor: phoneController.text.isEmpty
                           ? AppColor.globalPink
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? AppColor.globalPink
                               : Colors.red,
                       borderColor: phoneController.text.isNotEmpty
                           ? AppColor.globalPink
                           : Colors.grey,
-                      inputColor: phoneRegex.hasMatch(phoneController.text)
-                          ? AppColor.globalPink
-                          : Colors.red,
+                      inputColor:
+                          Validation.phoneRegex.hasMatch(phoneController.text)
+                              ? AppColor.globalPink
+                              : Colors.red,
                       focusErrorBorderColor: phoneController.text.isEmpty
                           ? AppColor.globalPink
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? AppColor.globalPink
                               : Colors.red,
                       textEditingController: phoneController,
                       function: (value) {
                         setState(() {
-                          phoneRegex.hasMatch(phoneController.text);
+                          Validation.phoneRegex.hasMatch(phoneController.text);
                         });
                       },
                       errorText: phoneController.text.isEmpty
                           ? null
-                          : phoneRegex.hasMatch(phoneController.text)
+                          : Validation.phoneRegex.hasMatch(phoneController.text)
                               ? null
                               : '${phoneController.text} is not a valid phone number',
                     ),

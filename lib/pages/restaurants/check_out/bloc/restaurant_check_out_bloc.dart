@@ -198,12 +198,11 @@ class RestaurantCheckOutBloc
       });
     } on AuthException catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(
-            context, AppColor.buttonShadowBlack, error.message);
+        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
       }
     } catch (error) {
       if (context.mounted) {
-        CustomWidgets.customSnackBar(context, AppColor.buttonShadowBlack,
+        customSnackBar(context, AppColor.buttonShadowBlack,
             'Error occurred, please retry');
       }
     }
