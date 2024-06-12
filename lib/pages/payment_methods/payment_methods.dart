@@ -44,7 +44,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
         builder: (context, state) {
           switch (state.runtimeType) {
             case PaymentMethodsLoadingState:
-              return const LoadingAnimationRive();
+              return customLoading();
             case PaymentMethodsLoadedState:
               final success = state as PaymentMethodsLoadedState;
               return success.paymentModel.isEmpty

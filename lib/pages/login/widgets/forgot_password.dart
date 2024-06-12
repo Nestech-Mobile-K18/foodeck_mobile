@@ -16,18 +16,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       if (Validation.passRegex.hasMatch(emailController.text)) {
         await supabase.auth
             .signInWithOtp(email: emailController.text, shouldCreateUser: false)
-            .then((value) => Navigator.pushNamed(context, AppRouter.otp,
-                arguments: emailController.text.trim()));
+            .then((value) => AppRouter.navigatorKey.currentState!.pushNamed(AppRouter.otp,
+                arguments: Otp(email: emailController.text.trim())));
       } else {
-        ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
+        customSnackBar(context,Toast.error, 'Not Correct!');
       }
-    } on AuthException catch (error) {
+    }  catch (e) {
       if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+        customSnackBar(context,Toast.error, e.toString());
       }
     }
   }
@@ -65,59 +61,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               Padding(
                                 padding:
                                     const EdgeInsets.only(top: 16, bottom: 20),
-                                child: CustomFormFill(
-                                    boxShadow: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? Colors.pink.shade100
-                                        : Colors.white,
-                                    textInputType: TextInputType.emailAddress,
+                                child: CustomTextField(
+                                    keyboardType: TextInputType.emailAddress,
                                     labelText: 'Email',
-                                    hintText: 'johndoe123@gmail.com',
-                                    exampleText: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? null
-                                        : 'Example: johndoe123@gmail.com',
-                                    labelColor: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? AppColor.globalPink
-                                        : emailController.text.isEmpty
-                                            ? AppColor.globalPink
-                                            : Colors.red,
-                                    borderColor: emailController.text.isNotEmpty
-                                        ? AppColor.globalPink
-                                        : Colors.grey,
-                                    inputColor: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? AppColor.globalPink
-                                        : Colors.red,
-                                    focusErrorBorderColor: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? AppColor.globalPink
-                                        : emailController.text.isEmpty
-                                            ? AppColor.globalPink
-                                            : Colors.red,
-                                    textEditingController: emailController,
-                                    function: (value) {
+                                    controller: emailController,
+                                    onChanged: (value) {
                                       setState(() {
                                         Validation.passRegex
                                             .hasMatch(emailController.text);
                                       });
                                     },
-                                    errorText: Validation.passRegex
-                                            .hasMatch(emailController.text)
-                                        ? null
-                                        : emailController.text.isEmpty
-                                            ? null
-                                            : '${emailController.text} is not a valid email'),
+                                    activeValidate: Validation.passRegex
+                                                .hasMatch(
+                                                    emailController.text) ||
+                                            emailController.text.isEmpty
+                                        ? false
+                                        : true,
+                                    errorText: Validation.passRegex.hasMatch(
+                                                emailController.text) ||
+                                            emailController.text.isEmpty
+                                        ? ''
+                                        : '${emailController.text} is not a valid email'),
                               ),
                               CustomButton(
                                   onPressed: () {
                                     login();
                                   },
-                                  text: const CustomText(
-                                      content: 'Login',
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                  content: 'Login',
                                   color: AppColor.globalPink)
                             ]))))));
   }

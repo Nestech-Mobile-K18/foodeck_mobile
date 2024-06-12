@@ -1,7 +1,18 @@
 import 'package:template/source/export.dart';
 
-class ExplorePage extends StatelessWidget {
+class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
+
+  @override
+  State<ExplorePage> createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage> {
+  @override
+  void initState() {
+    context.read<ExplorePageBloc>().add(ExplorePageInitialEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,32 +20,45 @@ class ExplorePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
+              alignment: Alignment.bottomCenter,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(Assets.homeBar), fit: BoxFit.cover))),
           toolbarHeight: 142,
           automaticallyImplyLeading: false,
           titleTextStyle:
-              AppText.inter.copyWith(fontSize: 17, color: Colors.white),
+              AppTextStyle.inter.copyWith(fontSize: 17, color: Colors.white),
           titleSpacing: 24,
           title: Column(
             children: [
-              sharedPreferences.getString('currentAddress') != null
-                  ? Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        CustomText(
-                            content:
-                                sharedPreferences.getString('currentAddress')!)
-                      ],
-                    )
-                  : const SizedBox.shrink(),
+              BlocBuilder<ExplorePageBloc, ExplorePageState>(
+                buildWhen: (previous, current) =>
+                    current is ExplorePageLoadingSuccessState,
+                builder: (context, state) {
+                  switch (state.runtimeType) {
+                    case ExplorePageLoadingSuccessState:
+                      final success = state as ExplorePageLoadingSuccessState;
+                      return success.userModel['address'] != null
+                          ? Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                  child: CustomText(
+                                      content: success.userModel['address']),
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink();
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
               Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: GestureDetector(
@@ -42,31 +66,19 @@ class ExplorePage extends StatelessWidget {
                         explorePageBloc.add(ExplorePageSearchNavigateEvent()),
                     child: Container(
                         height: 54,
-                        width: double.maxFinite,
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
                             color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black26,
-                                  offset: Offset(4, 4),
-                                  blurRadius: 5,
-                                  spreadRadius: 1),
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
-                          child: Row(
-                            children: [
-                              Image.asset(Assets.search, color: Colors.grey),
-                              Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: CustomText(
-                                      content: 'Search...',
-                                      color: Colors.grey[400]))
-                            ],
-                          ),
-                        )),
+                            borderRadius: BorderRadius.circular(16)),
+                        child: Row(children: [
+                          Image.asset(Assets.search, color: Colors.grey),
+                          const SizedBox(width: 8),
+                          CustomText(
+                              content: 'Search...',
+                              fontSize: 20,
+                              color: Colors.grey[400])
+                        ])),
                   ))
             ],
           ),

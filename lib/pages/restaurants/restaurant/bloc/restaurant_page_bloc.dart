@@ -68,8 +68,8 @@ class RestaurantPageBloc
       Future.delayed(
           const Duration(milliseconds: 3000), () => Navigator.pop(context));
     } else {
-      customSnackBar(context, Colors.red.withOpacity(0.9),
-          'It\'s empty, Please leave a comment');
+      customSnackBar(
+          context, Toast.error, 'It\'s empty, Please leave a comment');
     }
   }
 
@@ -89,14 +89,9 @@ class RestaurantPageBloc
           'my_review': reviewController.text.trim()
         });
       }
-    } on AuthException catch (error) {
+    } catch (e) {
       if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
+        customSnackBar(context, Toast.error, e.toString());
       }
     }
   }

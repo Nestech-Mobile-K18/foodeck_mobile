@@ -1,4 +1,3 @@
-import 'package:rive/rive.dart';
 import 'package:template/source/export.dart';
 
 class LoginEmail extends StatefulWidget {
@@ -14,72 +13,21 @@ class _LoginEmailState extends State<LoginEmail> {
   bool showPass = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  Artboard? riveBearArtBoard;
-  SMITrigger? success;
-  SMITrigger? fail;
-  SMIBool? isCheck;
-  SMIBool? isHandsUp;
-  SMINumber? number;
-
-  @override
-  void initState() {
-    rootBundle.load('assets/rives/animated_login_character_.riv').then(
-      (data) {
-        final file = RiveFile.import(data);
-        final artBoard = file.mainArtboard;
-        var controller =
-            StateMachineController.fromArtboard(artBoard, 'Login Machine');
-        if (controller != null) {
-          artBoard.addController(controller);
-          success = controller.findSMI('trigSuccess');
-          fail = controller.findSMI('trigFail');
-          isCheck = controller.findSMI('isChecking');
-          isHandsUp = controller.findSMI('isHandsUp');
-          number = controller.findSMI('numLook');
-        }
-        setState(() => riveBearArtBoard = artBoard);
-      },
-    );
-    super.initState();
-  }
 
   Future login() async {
-    setState(() {
-      isCheck!.value = false;
-      isHandsUp!.value = false;
-    });
     if (Validation.emailRegex.hasMatch(emailController.text) &&
         Validation.passRegex.hasMatch(passwordController.text)) {
-      Future.delayed(const Duration(milliseconds: 1600), () {
-        setState(() {
-          success!.value = true;
-        });
-      });
-      Future.delayed(const Duration(milliseconds: 2200), () {
-        try {
-          supabase.auth.signInWithPassword(
-              email: emailController.text.trim(),
-              password: passwordController.text.trim());
-        } on AuthException catch (error) {
-          setState(() {
-            isCheck!.value = false;
-            isHandsUp!.value = false;
-            fail!.value = true;
-          });
-          ShowBearSnackBar.showBearSnackBar(context, error.message);
-        } catch (error) {
-          setState(() {
-            fail!.value = true;
-          });
-          ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+      try {
+        await supabase.auth.signInWithPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
+      } catch (e) {
+        if (mounted) {
+          customSnackBar(context, Toast.error, e.toString());
         }
-      });
+      }
     } else {
-      Future.delayed(
-          const Duration(milliseconds: 1600),
-          () => setState(() {
-                fail!.value = true;
-              }));
+      customSnackBar(context, Toast.error, 'Error!, please retry');
     }
   }
 
@@ -94,10 +42,6 @@ class _LoginEmailState extends State<LoginEmail> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isCheck!.value = false;
-          isHandsUp!.value = false;
-        });
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
@@ -113,137 +57,72 @@ class _LoginEmailState extends State<LoginEmail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(
-                      content: 'Input your credentials',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                  riveBearArtBoard == null
-                      ? const SizedBox()
-                      : SizedBox(
-                          height: 255,
-                          child: Rive(
-                            artboard: riveBearArtBoard!,
-                            fit: BoxFit.cover,
-                          )),
-                  CustomFormFill(
-                    boxShadow:
-                        Validation.emailRegex.hasMatch(emailController.text)
-                            ? Colors.pink.shade100
-                            : Colors.white,
-                    textInputType: TextInputType.emailAddress,
-                    labelText: 'Email',
-                    hintText: 'johndoe123@gmail.com',
-                    exampleText:
-                        Validation.emailRegex.hasMatch(emailController.text)
-                            ? null
-                            : 'Example: johndoe123@gmail.com',
-                    borderColor: emailController.text.isNotEmpty
-                        ? AppColor.globalPink
-                        : Colors.grey,
-                    inputColor:
-                        Validation.emailRegex.hasMatch(emailController.text)
-                            ? AppColor.globalPink
-                            : Colors.red,
-                    labelColor:
-                        Validation.emailRegex.hasMatch(emailController.text)
-                            ? AppColor.globalPink
-                            : emailController.text.isEmpty
-                                ? AppColor.globalPink
-                                : Colors.red,
-                    focusErrorBorderColor:
-                        Validation.emailRegex.hasMatch(emailController.text)
-                            ? AppColor.globalPink
-                            : emailController.text.isEmpty
-                                ? AppColor.globalPink
-                                : Colors.red,
-                    textEditingController: emailController,
-                    onTap: () {
-                      setState(() {
-                        isCheck!.value = true;
-                        isHandsUp!.value = false;
-                      });
-                    },
-                    function: (value) {
-                      setState(() {
-                        number!.value = value.length.toDouble();
-                        Validation.emailRegex.hasMatch(emailController.text);
-                      });
-                    },
-                    errorText: Validation.emailRegex
-                            .hasMatch(emailController.text)
-                        ? null
-                        : emailController.text.isEmpty
-                            ? null
-                            : '${emailController.text} is not a valid email',
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: CustomText(
+                        content: 'Input your credentials',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
+                  CustomTextField(
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      labelText: 'Email',
+                      controller: emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          Validation.emailRegex.hasMatch(emailController.text);
+                        });
+                      },
+                      activeValidate: Validation.emailRegex
+                                  .hasMatch(emailController.text) ||
+                              emailController.text.isEmpty
+                          ? false
+                          : true,
+                      errorText: Validation.emailRegex
+                                  .hasMatch(emailController.text) ||
+                              emailController.text.isEmpty
+                          ? ''
+                          : '${emailController.text} is not a valid email'),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CustomFormFill(
-                      boxShadow:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? Colors.pink.shade100
-                              : Colors.white,
-                      labelText: 'Password',
-                      exampleText:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? null
-                              : 'Example: Johndoe123!',
-                      labelColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : passwordController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      inputColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      borderColor: passwordController.text.isNotEmpty
-                          ? AppColor.globalPink
-                          : Colors.grey,
-                      focusErrorBorderColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : passwordController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      icons: passwordController.text.isEmpty
-                          ? const SizedBox()
-                          : IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  showPass = !showPass;
-                                });
-                              },
-                              icon: Icon(
-                                showPass
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Validation.passRegex
-                                        .hasMatch(passwordController.text)
-                                    ? AppColor.globalPink
-                                    : Colors.red,
-                              )),
-                      obscureText: showPass ? false : true,
-                      onTap: () {
-                        setState(() {
-                          isHandsUp!.value = true;
-                        });
-                      },
-                      function: (value) {
-                        setState(() {
-                          Validation.passRegex
-                              .hasMatch(passwordController.text);
-                        });
-                      },
-                      errorText: Validation.passRegex
-                              .hasMatch(passwordController.text)
-                          ? null
-                          : passwordController.text.isEmpty
-                              ? null
-                              : 'Need number, symbol, capital and small letter',
-                      textEditingController: passwordController,
-                    ),
+                    child: CustomTextField(
+                        labelText: 'Password',
+                        suffix: passwordController.text.isEmpty
+                            ? const SizedBox()
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPass = !showPass;
+                                  });
+                                },
+                                child: Icon(
+                                  showPass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Validation.passRegex
+                                          .hasMatch(passwordController.text)
+                                      ? Colors.grey[400]
+                                      : Colors.red,
+                                )),
+                        obscureText: showPass ? false : true,
+                        onChanged: (value) {
+                          setState(() {
+                            Validation.passRegex
+                                .hasMatch(passwordController.text);
+                          });
+                        },
+                        activeValidate: Validation.passRegex
+                                    .hasMatch(passwordController.text) ||
+                                passwordController.text.isEmpty
+                            ? false
+                            : true,
+                        errorText: Validation.passRegex
+                                    .hasMatch(passwordController.text) ||
+                                passwordController.text.isEmpty
+                            ? ''
+                            : 'Need number, symbol, capital and small letter',
+                        controller: passwordController),
                   ),
                   Padding(
                       padding: const EdgeInsets.only(bottom: 40, top: 10),
@@ -261,18 +140,13 @@ class _LoginEmailState extends State<LoginEmail> {
                       onPressed: () {
                         login();
                       },
-                      text: const CustomText(
-                          content: 'Login',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                      content: 'Login',
                       color: AppColor.globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: widget.onPressed,
-                      text: const CustomText(
-                          content: 'Create an account instead',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
+                      content: 'Create an account instead',
+                      contentColor: Colors.grey,
                       color: Colors.white)
                 ],
               ),

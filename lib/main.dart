@@ -32,51 +32,60 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider<ProfilePageBloc>(
-          create: (context) => ProfilePageBloc(),
-        ),
-        BlocProvider<CreateCardBloc>(
-          create: (context) => CreateCardBloc(),
-        ),
-        BlocProvider<PaymentMethodsBloc>(
-          create: (context) => PaymentMethodsBloc(),
-        ),
-        BlocProvider<RestaurantCheckOutBloc>(
-          create: (context) => RestaurantCheckOutBloc(),
-        ),
-        BlocProvider<RestaurantAddonBloc>(
-          create: (context) => RestaurantAddonBloc(),
-        ),
-        BlocProvider<RestaurantCartBloc>(
-          create: (context) => RestaurantCartBloc(),
-        ),
-        BlocProvider(
-          create: (context) => RestaurantPageBloc(),
-        ),
-        BlocProvider(
-          create: (context) => ExplorePageBloc(),
-        ),
-        BlocProvider(
-          create: (context) => HomePageBloc(),
-        ),
-        BlocProvider(
-          create: (context) => SplashPageBloc(),
-        ),
+        RepositoryProvider(
+          create: (context) => UserRepository(userProvider: UserProvider()),
+        )
       ],
-      child: MaterialApp(
-          navigatorKey: AppRouter.navigatorKey,
-          theme: ThemeProvider.themeData,
-          debugShowCheckedModeBanner: false,
-          initialRoute: AppRouter.splashPage,
-          onGenerateRoute: AppRouter.routes),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<ProfilePageBloc>(
+            create: (context) =>
+                ProfilePageBloc(context.read<UserRepository>()),
+          ),
+          BlocProvider<CreateCardBloc>(
+            create: (context) => CreateCardBloc(),
+          ),
+          BlocProvider<PaymentMethodsBloc>(
+            create: (context) => PaymentMethodsBloc(),
+          ),
+          BlocProvider<RestaurantCheckOutBloc>(
+            create: (context) => RestaurantCheckOutBloc(),
+          ),
+          BlocProvider<RestaurantAddonBloc>(
+            create: (context) => RestaurantAddonBloc(),
+          ),
+          BlocProvider<RestaurantCartBloc>(
+            create: (context) => RestaurantCartBloc(),
+          ),
+          BlocProvider(
+            create: (context) => RestaurantPageBloc(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ExplorePageBloc(context.read<UserRepository>()),
+          ),
+          BlocProvider(
+            create: (context) => HomePageBloc(),
+          ),
+          BlocProvider(
+            create: (context) => SplashPageBloc(),
+          ),
+        ],
+        child: MaterialApp(
+            navigatorKey: AppRouter.navigatorKey,
+            theme: ThemeProvider.themeData,
+            debugShowCheckedModeBanner: false,
+            initialRoute: AppRouter.splashPage,
+            onGenerateRoute: AppRouter.routes),
+      ),
     );
   }
 }
 
 final dataCard = supabase.from('card').stream(primaryKey: ['id']);
-final supabase = Supabase.instance.client;
+
 final dataReview = supabase.from('reviews').stream(primaryKey: ['id']);
 final dataOrderComplete =
     supabase.from('order_complete').stream(primaryKey: ['id']);

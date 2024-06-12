@@ -9,7 +9,7 @@ class TopListShopping extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        customSnackBar(context, AppColor.buttonShadowBlack, 'In Updating...');
+        customSnackBar(context, Toast.error, 'In Updating...');
       },
       child: Column(children: [
         buildCard(Assets.food, 'Food', 'Order Food You Love'),
@@ -39,6 +39,7 @@ class TopListShopping extends StatelessWidget {
           height: 160,
           width: double.maxFinite,
           decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
               image:
                   DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
         ),

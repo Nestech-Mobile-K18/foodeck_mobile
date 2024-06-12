@@ -40,8 +40,10 @@ class _HomePageState extends State<HomePage> {
                           .add(HomePageSelectIndexEvent(index: value));
                     },
                     currentIndex: selectIndex.index,
-                    selectedLabelStyle: AppText.inter.copyWith(fontSize: 11),
-                    unselectedLabelStyle: AppText.inter.copyWith(fontSize: 11),
+                    selectedLabelStyle:
+                        AppTextStyle.inter.copyWith(fontSize: 11),
+                    unselectedLabelStyle:
+                        AppTextStyle.inter.copyWith(fontSize: 11),
                     showUnselectedLabels: true,
                     unselectedItemColor: Colors.grey,
                     selectedItemColor: AppColor.globalPink,

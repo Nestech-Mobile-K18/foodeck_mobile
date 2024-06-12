@@ -20,37 +20,23 @@ class _SearchModelState extends State<SearchModel> {
     // Calculate the distance and time
     num distance = modifiedResponse['distance'] / 1000;
     num duration = modifiedResponse['duration'] / 60;
-    addRestaurantDetailToDatabase(
-        index, distance, duration, modifiedResponse['geometry']);
-  }
-
-  Future addRestaurantDetailToDatabase(
-      index, num distance, num duration, Map geometry) async {
-    try {
-      await supabase.from('restaurants').insert({
-        'name': responses[index]['name'],
-        'address': responses[index]['address'],
-        'area': responses[index]['area'],
-        'city': responses[index]['city'],
-        'latitude': responses[index]['latitude'],
-        'longitude': responses[index]['longitude'],
-        'distance': distance,
-        'duration': duration,
-        'geometry': geometry
-      });
-      if (mounted) {
-        customSnackBar(
-            context, AppColor.globalPinkShadow, 'This location has been saved');
-      }
-    } on AuthException catch (error) {
-      if (mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
+    if (mounted) {
+      AsyncFunctions.insertData(
+          'restaurants',
+          {
+            'name': responses[index]['name'],
+            'address': responses[index]['address'],
+            'area': responses[index]['area'],
+            'city': responses[index]['city'],
+            'latitude': responses[index]['latitude'],
+            'longitude': responses[index]['longitude'],
+            'distance': distance,
+            'duration': duration,
+            'geometry': modifiedResponse['geometry']
+          },
+          PopUp.allow,
+          context,
+          'This address was saved');
     }
   }
 

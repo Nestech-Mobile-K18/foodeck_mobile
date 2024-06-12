@@ -27,48 +27,57 @@ class SplashPageAnimation extends StatelessWidget {
                         image: AssetImage(Assets.splashScreen),
                         fit: BoxFit.cover)),
           ),
-          Positioned(
-            top: 168.33,
-            child: AnimatedScale(
-                scale: animationFirstAndLast ? 0 : 1,
+          Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 168.33, bottom: 18.33),
+              child: AnimatedScale(
+                  scale: animationFirstAndLast ? 0 : 1,
+                  duration: const Duration(milliseconds: 1500),
+                  child: AnimatedOpacity(
+                      opacity: animationFirstAndLast ? 0 : 1,
+                      duration: const Duration(milliseconds: 1500),
+                      child: AnimatedRotation(
+                          turns: animationFirstAndLast ? 0 : 1,
+                          duration: const Duration(milliseconds: 1500),
+                          child: Image.asset(Assets.foodDeck)))),
+            ),
+            AnimatedAlign(
                 duration: const Duration(milliseconds: 1500),
+                alignment: animationFirstAndLast
+                    ? Alignment.centerLeft
+                    : Alignment.center,
                 child: AnimatedOpacity(
                     opacity: animationFirstAndLast ? 0 : 1,
                     duration: const Duration(milliseconds: 1500),
-                    child: AnimatedRotation(
-                        turns: animationFirstAndLast ? 0 : 1,
-                        duration: const Duration(milliseconds: 1500),
-                        child: Image.asset(Assets.foodDeck)))),
-          ),
-          AnimatedPositioned(
-              duration: const Duration(milliseconds: 1500),
-              top: 290,
-              left: animationFirstAndLast ? 0 : 92,
-              child: AnimatedOpacity(
-                  opacity: animationFirstAndLast ? 0 : 1,
-                  duration: const Duration(milliseconds: 1500),
-                  child: const CustomText(
-                      content: 'Foodeck',
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white))),
-          AnimatedPositioned(
-              duration: const Duration(milliseconds: 1500),
-              top: animationFirstAndLast ? 800 : 387,
-              child: AnimatedOpacity(
-                  opacity: animationFirstAndLast ? 0 : 1,
-                  duration: const Duration(milliseconds: 1500),
-                  child: const CustomText(
-                      content:
-                          'Aliquam commodo tortor lacinia lorem\naccumsan aliquam',
-                      textAlign: TextAlign.center,
-                      color: Colors.white))),
-          Positioned(
-              top: 500,
+                    child: const CustomText(
+                        content: 'Foodeck',
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white))),
+            Padding(
+              padding: const EdgeInsets.only(top: 80),
               child: AnimatedOpacity(
                   opacity: animation2 ? 0 : 1,
                   duration: const Duration(milliseconds: 1500),
-                  child: const WaveDots(size: 36, color: Colors.white)))
+                  child: const WaveDots(size: 36, color: Colors.white)),
+            )
+          ]),
+          Padding(
+            padding: const EdgeInsets.only(top: 387),
+            child: AnimatedAlign(
+                duration: const Duration(milliseconds: 1500),
+                alignment: animationFirstAndLast
+                    ? Alignment.bottomCenter
+                    : Alignment.topCenter,
+                child: AnimatedOpacity(
+                    opacity: animationFirstAndLast ? 0 : 1,
+                    duration: const Duration(milliseconds: 1500),
+                    child: const CustomText(
+                        content:
+                            'Aliquam commodo tortor lacinia lorem\naccumsan aliquam',
+                        textAlign: TextAlign.center,
+                        color: Colors.white))),
+          ),
         ],
       ),
     );

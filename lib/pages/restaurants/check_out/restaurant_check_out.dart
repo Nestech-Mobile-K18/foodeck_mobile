@@ -132,16 +132,11 @@ class _RestaurantCheckOutState extends State<RestaurantCheckOut> {
                                 textOverflow: TextOverflow.visible,
                                 color: Colors.grey),
                             Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: CustomFormFill(
-                                textEditingController:
-                                    restaurantCheckOutBloc.noteController,
-                                hintText: 'e.g. I am home around 10 pm',
-                                hintColor: Colors.grey,
-                                inputColor: Colors.grey,
-                                focusErrorBorderColor: Colors.grey,
-                              ),
-                            )
+                                padding: const EdgeInsets.only(top: 16),
+                                child: CustomTextField(
+                                    controller:
+                                        restaurantCheckOutBloc.noteController,
+                                    labelText: 'e.g. I am home around 10 pm'))
                           ],
                         ),
                       ),
@@ -260,10 +255,7 @@ class _RestaurantCheckOutState extends State<RestaurantCheckOut> {
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold),
                                   CustomButton(
-                                    text: const CustomText(
-                                        content: 'Pay Now',
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                    content: 'Pay Now',
                                     color: AppColor.globalPink,
                                     heightBox: 54,
                                     widthBox: 172,

@@ -537,14 +537,11 @@ class _RestaurantAddonState extends State<RestaurantAddon> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 24, bottom: 15),
-                                    child: CustomFormFill(
-                                      textEditingController:
+                                    child: CustomTextField(
+                                      controller:
                                           restaurantAddonBloc.noteController,
-                                      borderColor: Colors.grey[400],
-                                      hintText: 'e.g. less spices, no mayo etc',
-                                      focusErrorBorderColor: Colors.grey[400],
-                                      inputColor: Colors.grey[400],
-                                      hintColor: Colors.grey[400],
+                                      labelText:
+                                          'e.g. less spices, no mayo etc',
                                     ),
                                   ),
                                 ],

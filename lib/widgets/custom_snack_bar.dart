@@ -1,6 +1,8 @@
 import 'package:template/source/export.dart';
 
-customSnackBar(BuildContext context, Color color, String content) {
+enum Toast { success, error }
+
+customSnackBar(BuildContext context, Toast type, String content) {
   ScaffoldMessenger.of(context)
     ..removeCurrentSnackBar()
     ..showSnackBar(SnackBar(
@@ -8,6 +10,8 @@ customSnackBar(BuildContext context, Color color, String content) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         clipBehavior: Clip.none,
         duration: const Duration(milliseconds: 1500),
-        backgroundColor: color,
+        backgroundColor: type == Toast.success
+            ? AppColor.globalPinkShadow
+            : AppColor.buttonShadowBlack,
         content: CustomText(content: content)));
 }

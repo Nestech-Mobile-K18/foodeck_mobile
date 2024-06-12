@@ -60,8 +60,7 @@ class _BottomCardState extends State<BottomCard> {
     num distance = modifiedResponse['distance'] / 1000;
     num duration = modifiedResponse['duration'] / 60;
     if (mounted) {
-      RestaurantData.updateItemInDataBase(
-          context,
+      AsyncFunctions.updateData(
           'restaurants',
           {
             'name': responses[index]['name'],
@@ -74,7 +73,9 @@ class _BottomCardState extends State<BottomCard> {
             'duration': duration,
             'geometry': modifiedResponse['geometry']
           },
-          'You just saved info');
+          PopUp.allow,
+          context,
+          'Address updated');
     }
   }
 
@@ -179,18 +180,18 @@ class _BottomCardState extends State<BottomCard> {
                                                   setState(() {
                                                     yesClick!.value = true;
                                                   });
-                                                  RestaurantData
-                                                      .deleteItemFromDataBase(
-                                                          context,
-                                                          'restaurants',
-                                                          {
-                                                            'name': widget.name,
-                                                            'address':
-                                                                widget.address,
-                                                            'area': widget.area,
-                                                            'city': widget.city
-                                                          },
-                                                          'This location has been deleted');
+                                                  AsyncFunctions.deleteData(
+                                                      'restaurants',
+                                                      {
+                                                        'name': widget.name,
+                                                        'address':
+                                                            widget.address,
+                                                        'area': widget.area,
+                                                        'city': widget.city
+                                                      },
+                                                      PopUp.allow,
+                                                      context,
+                                                      'Address was deleted');
                                                   Future.delayed(
                                                       const Duration(
                                                           milliseconds: 2000),

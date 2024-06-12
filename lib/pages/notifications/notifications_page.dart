@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:template/source/export.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -8,6 +9,24 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
+  @override
+  void initState() {
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => showCupertinoModalPopup(
+            context: context,
+            builder: (context) => const SimpleDialog(
+                titlePadding: EdgeInsets.all(24),
+                title: Center(
+                  child: CustomText(
+                    content: 'This page is under developing',
+                    textOverflow: TextOverflow.visible,
+                    color: Colors.black,
+                  ),
+                ))));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Notifications> note = [

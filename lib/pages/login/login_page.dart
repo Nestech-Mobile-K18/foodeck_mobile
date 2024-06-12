@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
         facebookSignIn();
         break;
       case 'Login via Apple':
-        ShowBearSnackBar.showBearSnackBar(context, 'Updating...');
+        customSnackBar(context,Toast.error, 'Updating...');
         break;
     }
   }
@@ -106,14 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ? null
                                 : Image.asset(
                                     LoginButton.loginButton[index].type),
-                            text: CustomText(
-                                content:
-                                    LoginButton.loginButton[index].loginText,
-                                color:
-                                    index == LoginButton.loginButton.length - 1
-                                        ? Colors.grey
-                                        : Colors.white,
-                                fontWeight: FontWeight.bold),
+                            content: LoginButton.loginButton[index].loginText,
+                            contentColor:
+                                index == LoginButton.loginButton.length - 1
+                                    ? Colors.grey
+                                    : Colors.white,
                             color:
                                 LoginButton.loginButton[index].backGroundColor,
                           );

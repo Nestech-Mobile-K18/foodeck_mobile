@@ -17,10 +17,11 @@ class _CreateAccountState extends State<CreateAccount> {
   final passwordController = TextEditingController();
 
   Future signUpAndAddUsers() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     try {
       if (Validation.emailRegex.hasMatch(emailController.text) &&
           Validation.nameRegex.hasMatch(nameController.text) &&
-          Validation.phoneRegex.hasMatch(phoneController.text) &&
+          phoneController.text.length == 10 &&
           Validation.passRegex.hasMatch(passwordController.text)) {
         await supabase.auth.signUp(
             email: emailController.text.trim(),
@@ -36,15 +37,11 @@ class _CreateAccountState extends State<CreateAccount> {
               arguments: Otp(email: emailController.text.trim()));
         }
       } else {
-        ShowBearSnackBar.showBearSnackBar(context, 'Not Correct!');
+        customSnackBar(context, Toast.error, 'Info must correct and not empty');
       }
-    } on AuthException catch (error) {
+    } catch (e) {
       if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, error.toString());
+        customSnackBar(context, Toast.error, e.toString());
       }
     }
   }
@@ -82,226 +79,125 @@ class _CreateAccountState extends State<CreateAccount> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: CustomFormFill(
-                        boxShadow:
-                            Validation.nameRegex.hasMatch(nameController.text)
-                                ? Colors.pink.shade100
-                                : Colors.white,
-                        textInputType: TextInputType.name,
-                        labelText: 'Full Name',
-                        hintText: 'John Doe',
-                        exampleText:
-                            Validation.nameRegex.hasMatch(nameController.text)
-                                ? null
-                                : 'Example: John Doe',
-                        labelColor:
-                            Validation.nameRegex.hasMatch(nameController.text)
-                                ? AppColor.globalPink
-                                : nameController.text.isEmpty
-                                    ? AppColor.globalPink
-                                    : Colors.red,
-                        borderColor: nameController.text.isNotEmpty
-                            ? AppColor.globalPink
-                            : Colors.grey,
-                        inputColor:
-                            Validation.nameRegex.hasMatch(nameController.text)
-                                ? AppColor.globalPink
-                                : Colors.red,
-                        focusErrorBorderColor:
-                            Validation.nameRegex.hasMatch(nameController.text)
-                                ? AppColor.globalPink
-                                : nameController.text.isEmpty
-                                    ? AppColor.globalPink
-                                    : Colors.red,
-                        textEditingController: nameController,
-                        function: (value) {
+                      padding: const EdgeInsets.only(top: 16),
+                      child: CustomTextField(
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          labelText: 'Full Name',
+                          controller: nameController,
+                          onChanged: (value) {
+                            setState(() {
+                              Validation.nameRegex
+                                  .hasMatch(nameController.text);
+                            });
+                          },
+                          activeValidate: Validation.nameRegex
+                                      .hasMatch(nameController.text) ||
+                                  nameController.text.isEmpty
+                              ? false
+                              : true,
+                          errorText: Validation.nameRegex
+                                      .hasMatch(nameController.text) ||
+                                  nameController.text.isEmpty
+                              ? ''
+                              : '${nameController.text} is not a valid name')),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: CustomTextField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        labelText: 'Email',
+                        controller: emailController,
+                        onChanged: (value) {
                           setState(() {
-                            Validation.nameRegex.hasMatch(nameController.text);
+                            Validation.emailRegex
+                                .hasMatch(emailController.text);
                           });
                         },
-                        errorText: Validation.nameRegex
-                                .hasMatch(nameController.text)
-                            ? null
-                            : nameController.text.isEmpty
-                                ? null
-                                : '${nameController.text} is not a valid name'),
+                        activeValidate: Validation.emailRegex
+                                    .hasMatch(emailController.text) ||
+                                emailController.text.isEmpty
+                            ? false
+                            : true,
+                        errorText: Validation.emailRegex
+                                    .hasMatch(emailController.text) ||
+                                emailController.text.isEmpty
+                            ? ''
+                            : '${emailController.text} is not a valid email'),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CustomFormFill(
-                      boxShadow:
-                          Validation.emailRegex.hasMatch(emailController.text)
-                              ? Colors.pink.shade100
-                              : Colors.white,
-                      textInputType: TextInputType.emailAddress,
-                      labelText: 'Email',
-                      hintText: 'johndoe123@gmail.com',
-                      exampleText:
-                          Validation.emailRegex.hasMatch(emailController.text)
-                              ? null
-                              : 'Example: johndoe123@gmail.com',
-                      borderColor: emailController.text.isNotEmpty
-                          ? AppColor.globalPink
-                          : Colors.grey,
-                      inputColor:
-                          Validation.emailRegex.hasMatch(emailController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      labelColor:
-                          Validation.emailRegex.hasMatch(emailController.text)
-                              ? AppColor.globalPink
-                              : emailController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      focusErrorBorderColor:
-                          Validation.emailRegex.hasMatch(emailController.text)
-                              ? AppColor.globalPink
-                              : emailController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      textEditingController: emailController,
-                      function: (value) {
-                        setState(() {
-                          Validation.emailRegex.hasMatch(emailController.text);
-                        });
-                      },
-                      errorText: Validation.emailRegex
-                              .hasMatch(emailController.text)
-                          ? null
-                          : emailController.text.isEmpty
-                              ? null
-                              : '${emailController.text} is not a valid email',
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: CustomFormFill(
-                      boxShadow:
-                          Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? Colors.pink.shade100
-                              : Colors.white,
-                      textInputType: TextInputType.phone,
-                      labelText: 'Phone No.',
-                      hintText: '+92 3014124781',
-                      exampleText:
-                          Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? null
-                              : 'Need correct number',
-                      textInputFormatter: [
-                        LengthLimitingTextInputFormatter(13)
-                      ],
-                      labelColor: phoneController.text.isEmpty
-                          ? AppColor.globalPink
-                          : Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      borderColor: phoneController.text.isNotEmpty
-                          ? AppColor.globalPink
-                          : Colors.grey,
-                      inputColor:
-                          Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      focusErrorBorderColor: phoneController.text.isEmpty
-                          ? AppColor.globalPink
-                          : Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      textEditingController: phoneController,
-                      function: (value) {
-                        setState(() {
-                          Validation.phoneRegex.hasMatch(phoneController.text);
-                        });
-                      },
-                      errorText: phoneController.text.isEmpty
-                          ? null
-                          : Validation.phoneRegex.hasMatch(phoneController.text)
-                              ? null
-                              : '${phoneController.text} is not a valid phone number',
-                    ),
+                    child: CustomTextField(
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                        labelText: 'Phone No.',
+                        inputFormatters: [LengthLimitingTextInputFormatter(13)],
+                        controller: phoneController,
+                        onChanged: (value) {
+                          setState(() {
+                            phoneController.text = value;
+                          });
+                        },
+                        activeValidate: phoneController.text.length == 10 ||
+                                phoneController.text.isEmpty
+                            ? false
+                            : true,
+                        errorText: phoneController.text.length == 10 ||
+                                phoneController.text.isEmpty
+                            ? ''
+                            : '${phoneController.text} is not a valid phone number'),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 40),
-                    child: CustomFormFill(
-                      boxShadow:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? Colors.pink.shade100
-                              : Colors.white,
-                      labelText: 'Password',
-                      exampleText:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? null
-                              : 'Example: Johndoe123!',
-                      labelColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : passwordController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      inputColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : Colors.red,
-                      borderColor: passwordController.text.isNotEmpty
-                          ? AppColor.globalPink
-                          : Colors.grey,
-                      focusErrorBorderColor:
-                          Validation.passRegex.hasMatch(passwordController.text)
-                              ? AppColor.globalPink
-                              : passwordController.text.isEmpty
-                                  ? AppColor.globalPink
-                                  : Colors.red,
-                      icons: passwordController.text.isEmpty
-                          ? const SizedBox()
-                          : IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  showPass = !showPass;
-                                });
-                              },
-                              icon: Icon(
-                                showPass
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Validation.passRegex
-                                        .hasMatch(passwordController.text)
-                                    ? AppColor.globalPink
-                                    : Colors.red,
-                              )),
-                      obscureText: showPass ? false : true,
-                      function: (value) {
-                        setState(() {
-                          Validation.passRegex
-                              .hasMatch(passwordController.text);
-                        });
-                      },
-                      errorText: Validation.passRegex
-                              .hasMatch(passwordController.text)
-                          ? null
-                          : passwordController.text.isEmpty
-                              ? null
-                              : 'Need number, symbol, capital and small letter',
-                      textEditingController: passwordController,
-                    ),
+                    child: CustomTextField(
+                        labelText: 'Password',
+                        suffix: passwordController.text.isEmpty
+                            ? const SizedBox()
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showPass = !showPass;
+                                  });
+                                },
+                                child: Icon(
+                                  showPass
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Validation.passRegex
+                                          .hasMatch(passwordController.text)
+                                      ? Colors.grey[400]
+                                      : Colors.red,
+                                )),
+                        obscureText: showPass ? false : true,
+                        onChanged: (value) {
+                          setState(() {
+                            Validation.passRegex
+                                .hasMatch(passwordController.text);
+                          });
+                        },
+                        activeValidate: Validation.passRegex
+                                    .hasMatch(passwordController.text) ||
+                                passwordController.text.isEmpty
+                            ? false
+                            : true,
+                        errorText: Validation.passRegex
+                                    .hasMatch(passwordController.text) ||
+                                passwordController.text.isEmpty
+                            ? ''
+                            : 'Need number, symbol, capital and small letter',
+                        controller: passwordController),
                   ),
                   CustomButton(
                       onPressed: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
                         signUpAndAddUsers();
                       },
-                      text: const CustomText(
-                          content: 'Create an account',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                      content: 'Create an account',
                       color: AppColor.globalPink),
                   CustomButton(
                       borderSide: const BorderSide(color: Colors.grey),
                       onPressed: widget.onPressed,
-                      text: const CustomText(
-                          content: 'Login instead',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
+                      content: 'Login instead',
+                      contentColor: Colors.grey,
                       color: Colors.white)
                 ],
               ),

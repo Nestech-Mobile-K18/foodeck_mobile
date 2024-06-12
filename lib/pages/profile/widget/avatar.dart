@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:template/source/export.dart';
 
 class Avatar extends StatelessWidget {
@@ -33,34 +34,83 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: updatePicture,
-        child: CachedNetworkImage(
-            errorWidget: (context, url, error) => Container(
-                  width: 120,
-                  height: 120,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.grey),
-                  child: const Center(
-                    child: Text('No Image'),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(128, 24, 128, 40),
+      child: GestureDetector(
+          onTap: () => sharedPreferences.getBool('yes') != null
+              ? updatePicture()
+              : showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) => CupertinoAlertDialog(
+                    title: const CustomText(
+                      content: 'Do you want to access to your photo library',
+                      textOverflow: TextOverflow.visible,
+                    ),
+                    actions: [
+                      CupertinoDialogAction(
+                          onPressed: () {
+                            updatePicture();
+                            Navigator.pop(context);
+                            sharedPreferences.setBool('yes', true);
+                          },
+                          child: const CustomText(
+                            content: 'Accept',
+                            color: Colors.blue,
+                          )),
+                      CupertinoDialogAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const CustomText(
+                            content: 'No',
+                            color: Colors.black,
+                          ))
+                    ],
                   ),
                 ),
-            placeholder: (context, url) => Container(
-                  width: 120,
-                  height: 120,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.grey),
-                  child: const CircularProgressIndicator(
-                    color: AppColor.globalPink,
+          child: Badge(
+            offset: const Offset(-20, -25),
+            padding: const EdgeInsets.all(5.85),
+            label: const Icon(Icons.camera_alt_outlined, color: Colors.white),
+            backgroundColor: AppColor.globalPink,
+            alignment: Alignment.bottomRight,
+            child: imageUrl != null
+                ? CachedNetworkImage(
+                    errorWidget: (context, url, error) => Container(
+                          alignment: Alignment.center,
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.grey[400]),
+                          child: const Icon(Icons.person,
+                              color: Colors.white, size: 80),
+                        ),
+                    placeholder: (context, url) => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.grey[400]),
+                          child: const CircularProgressIndicator(
+                              color: AppColor.globalPink),
+                        ),
+                    imageUrl: imageUrl!,
+                    imageBuilder: (context, imageProvider) => Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover))))
+                : Container(
+                    alignment: Alignment.center,
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.grey[400]),
+                    child:
+                        const Icon(Icons.person, color: Colors.white, size: 80),
                   ),
-                ),
-            imageUrl: imageUrl!,
-            imageBuilder: (context, imageProvider) => Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover)))));
+          )),
+    );
   }
 }

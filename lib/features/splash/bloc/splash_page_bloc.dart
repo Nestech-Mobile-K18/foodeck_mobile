@@ -10,8 +10,7 @@ class SplashPageBloc extends Bloc<SplashPageEvent, SplashPageState> {
 
   FutureOr<void> splashPageInitialEvent(
       SplashPageInitialEvent event, Emitter<SplashPageState> emit) async {
-    CommonUtils.initializeLocationAndSave();
-    CommonUtils.getInitialProfile();
+    CommonUtils.initializeLocationAndSave(event.context);
     emit(SplashLoadingAnimationState(
         animationFirstAndLast: true, animation2: true));
     await Future.delayed(const Duration(milliseconds: 1000));

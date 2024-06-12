@@ -4,22 +4,13 @@ part 'explore_page_event.dart';
 part 'explore_page_state.dart';
 
 class ExplorePageBloc extends Bloc<ExplorePageEvent, ExplorePageState> {
-  ExplorePageBloc() : super(ExplorePageInitial()) {
+  final UserRepository userRepository;
+  ExplorePageBloc(this.userRepository) : super(ExplorePageInitial()) {
     on<ExplorePageInitialEvent>(explorePageInitialEvent);
     on<ExplorePageSearchNavigateEvent>(explorePageSearchNavigateEvent);
     on<ExplorePageNavigateEvent>(explorePageNavigateEvent);
     on<ExplorePageCartNavigateEvent>(explorePageCartNavigateEvent);
     on<ExplorePageLikeEvent>(explorePageLikeEvent);
-  }
-
-  // Convert latitude and longitude to address
-  void setAddress() async {
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        getLatLngFromSharedPrefs().latitude,
-        getLatLngFromSharedPrefs().longitude);
-    Placemark place = placeMarks[0];
-    sharedPreferences.setString(
-        'currentAddress', '${place.street}, ${place.subAdministrativeArea}');
   }
 
   void toggleSave(ExplorePageLikeEvent event) {
@@ -31,10 +22,14 @@ class ExplorePageBloc extends Bloc<ExplorePageEvent, ExplorePageState> {
   }
 
   FutureOr<void> explorePageInitialEvent(
-      ExplorePageInitialEvent event, Emitter<ExplorePageState> emit) {
-    setAddress();
+      ExplorePageInitialEvent event, Emitter<ExplorePageState> emit) async {
     emit(ExplorePageLoadingState());
-    emit(ExplorePageLoadingSuccessState());
+    try {
+      final user = await userRepository.getUser();
+      emit(ExplorePageLoadingSuccessState(userModel: user));
+    } catch (e) {
+      emit(ExplorePageErrorState());
+    }
   }
 
   FutureOr<void> explorePageSearchNavigateEvent(

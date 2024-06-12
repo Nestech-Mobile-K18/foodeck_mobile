@@ -12,7 +12,9 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    context.read<SplashPageBloc>().add(SplashPageInitialEvent());
+    context
+        .read<SplashPageBloc>()
+        .add(SplashPageInitialEvent(context: context));
     super.initState();
   }
 

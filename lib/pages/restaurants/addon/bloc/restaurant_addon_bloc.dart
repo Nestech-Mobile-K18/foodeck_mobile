@@ -108,7 +108,7 @@ class RestaurantAddonBloc
 
   int totalPrice(RadioType turnOn, int quantityFood) {
     int addonPriceSize =
-        RestaurantData.choseTopping(turnOn, RestaurantData.addonItems).fold(
+        RestaurantData.sortTopping(turnOn, RestaurantData.addonItems).fold(
             0, (previousValue, element) => previousValue + element.priceSize);
     return (slot[0] + slot[1] + addonPriceSize) * quantityFood;
   }
@@ -124,7 +124,7 @@ class RestaurantAddonBloc
         : currentSelect.add('');
     List<String> currentSize = [];
     currentSize.add(
-        RestaurantData.choseTopping(turnOn, RestaurantData.addonItems)
+        RestaurantData.sortTopping(turnOn, RestaurantData.addonItems)
             .elementAt(0)
             .size);
     CartItems? cart = CartItemsListData.cartItems.firstWhereOrNull((element) {

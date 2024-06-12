@@ -43,7 +43,7 @@ class _ListSlideBannerState extends State<ListSlideBanner> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        customSnackBar(context, AppColor.buttonShadowBlack, 'In Updating...');
+        customSnackBar(context, Toast.error, 'In Updating...');
       },
       child: Column(children: [
         Padding(

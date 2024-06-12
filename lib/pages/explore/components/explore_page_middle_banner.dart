@@ -24,33 +24,33 @@ class MiddleSlideList extends StatelessWidget {
               height: 220,
               child: CustomSlidePage(
                   itemCount:
-                      RestaurantData.kindFood(TitleFood.Deals, RestaurantData.restaurant)
+                      RestaurantData.sortRestaurant(TitleFood.Deals, RestaurantData.restaurant)
                           .length,
                   itemBuilder: (context, index) => BannerItems(
                       onTap: () => explorePageBloc.add(ExplorePageNavigateEvent(
-                          restaurantModel: RestaurantData.kindFood(
+                          restaurantModel: RestaurantData.sortRestaurant(
                               TitleFood.Deals,
                               RestaurantData.restaurant)[index])),
                       paddingImage: const EdgeInsets.only(right: 10),
                       paddingText: const EdgeInsets.only(left: 3),
-                      foodImage: RestaurantData.kindFood(
+                      foodImage: RestaurantData.sortRestaurant(
                               TitleFood.Deals, RestaurantData.restaurant)[index]
                           .image,
                       deliveryTime:
-                          '${RestaurantData.kindFood(TitleFood.Deals, RestaurantData.restaurant)[index].deliveryTime} mins',
-                      shopName: RestaurantData.kindFood(
+                          '${RestaurantData.sortRestaurant(TitleFood.Deals, RestaurantData.restaurant)[index].deliveryTime} mins',
+                      shopName: RestaurantData.sortRestaurant(
                               TitleFood.Deals, RestaurantData.restaurant)[index]
                           .shopName,
-                      shopAddress: RestaurantData.kindFood(
+                      shopAddress: RestaurantData.sortRestaurant(
                               TitleFood.Deals, RestaurantData.restaurant)[index]
                           .address,
-                      rateStar: '${RestaurantData.kindFood(TitleFood.Deals, RestaurantData.restaurant)[index].rate}',
+                      rateStar: '${RestaurantData.sortRestaurant(TitleFood.Deals, RestaurantData.restaurant)[index].rate}',
                       action: () {
                         explorePageBloc.add(ExplorePageLikeEvent(
-                            saveFood: RestaurantData.kindFood(TitleFood.Deals,
+                            saveFood: RestaurantData.sortRestaurant(TitleFood.Deals,
                                 RestaurantData.restaurant)[index]));
                       },
-                      restaurantModel: RestaurantData.kindFood(TitleFood.Deals, RestaurantData.restaurant)[index]))))
+                      restaurantModel: RestaurantData.sortRestaurant(TitleFood.Deals, RestaurantData.restaurant)[index]))))
     ]);
   }
 }

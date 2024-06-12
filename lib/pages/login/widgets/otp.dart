@@ -12,7 +12,8 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   @override
   void initState() {
-    ShowBearSnackBar.showBearSnackBar(context, 'OTP in your email');
+    Future.delayed(const Duration(milliseconds: 500),
+        () => customSnackBar(context, Toast.error, 'OTP in your email'));
     super.initState();
   }
 
@@ -21,17 +22,14 @@ class _OtpState extends State<Otp> {
   List<String> otpValues = List.filled(6, '');
 
   Future checkOTP() async {
+    FocusManager.instance.primaryFocus!.unfocus();
     String token = otpValues.join();
     try {
       await supabase.auth
           .verifyOTP(token: token, type: OtpType.email, email: widget.email);
-    } on AuthException catch (error) {
+    } catch (e) {
       if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+        customSnackBar(context, Toast.error, e.toString());
       }
     }
   }
@@ -41,14 +39,10 @@ class _OtpState extends State<Otp> {
       await supabase.auth
           .signInWithOtp(shouldCreateUser: false, email: widget.email)
           .then((value) =>
-              ShowBearSnackBar.showBearSnackBar(context, 'OTP in your email'));
-    } on AuthException catch (error) {
+              customSnackBar(context, Toast.error, 'OTP in your email'));
+    } catch (e) {
       if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, error.message);
-      }
-    } catch (error) {
-      if (mounted) {
-        ShowBearSnackBar.showBearSnackBar(context, 'Error!, please retry');
+        customSnackBar(context, Toast.error, e.toString());
       }
     }
   }
@@ -79,7 +73,7 @@ class _OtpState extends State<Otp> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.only(top: 16),
                           child: ValueListenableBuilder(
                             valueListenable: currentIndex,
                             builder: (BuildContext context, int value,
@@ -89,41 +83,46 @@ class _OtpState extends State<Otp> {
                                     MainAxisAlignment.spaceBetween,
                                 children: List.generate(
                                   6,
-                                  (index) => CustomFormFill(
-                                    boxShadow: currentIndex.value >= index
-                                        ? Colors.pink.shade100
-                                        : Colors.white,
-                                    heightBoxShadow: 48,
-                                    widthBoxShadow: 50,
-                                    padding: EdgeInsets.zero,
-                                    textAlign: TextAlign.center,
-                                    boxSize: const BoxConstraints(
-                                        maxWidth: 50, maxHeight: 76),
-                                    textInputType: TextInputType.number,
-                                    borderColor: currentIndex.value >= index
-                                        ? AppColor.globalPink
-                                        : Colors.grey,
-                                    textInputFormatter: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      LengthLimitingTextInputFormatter(1)
-                                    ],
-                                    function: (value) {
-                                      otpValues[index] = value;
-                                      setState(() {
-                                        currentIndex.value = index;
-                                      });
-                                      if (value.length == 1) {
-                                        currentIndex.value == 5
-                                            ? null
-                                            : FocusScope.of(context)
-                                                .nextFocus();
-                                      } else {
-                                        currentIndex.value == 0
-                                            ? null
-                                            : FocusScope.of(context)
-                                                .previousFocus();
-                                      }
-                                    },
+                                  (index) => Flexible(
+                                    child: SizedBox(
+                                      width: 60,
+                                      child: CustomTextField(
+                                        autofocus: true,
+                                        textInputAction: TextInputAction.next,
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        activeValidate: true,
+                                        borderColor: value >= index
+                                            ? AppColor.globalPink
+                                            : Colors.grey,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          LengthLimitingTextInputFormatter(1)
+                                        ],
+                                        onChanged: (value) {
+                                          otpValues[index] = value;
+
+                                          if (value.length == 1) {
+                                            setState(() {
+                                              currentIndex.value = index + 1;
+                                            });
+                                            currentIndex.value == 6
+                                                ? null
+                                                : FocusScope.of(context)
+                                                    .nextFocus();
+                                          } else {
+                                            setState(() {
+                                              currentIndex.value = index - 1;
+                                            });
+                                            currentIndex.value == -1
+                                                ? null
+                                                : FocusScope.of(context)
+                                                    .previousFocus();
+                                          }
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                               );
@@ -144,49 +143,12 @@ class _OtpState extends State<Otp> {
                           valueListenable: currentIndex,
                           builder:
                               (BuildContext context, int value, Widget? child) {
-                            return GestureDetector(
-                              onTap: () {
-                                currentIndex.value == 5 ? checkOTP() : null;
-                              },
-                              child: Center(
-                                child: AnimatedContainer(
-                                  height: 62,
-                                  width: 328,
-                                  decoration: BoxDecoration(
-                                      color: currentIndex.value == 5
-                                          ? AppColor.globalPink
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(16),
-                                      boxShadow: currentIndex.value == 5
-                                          ? [
-                                              BoxShadow(
-                                                  color: Colors.grey.shade500,
-                                                  offset: const Offset(4, 4),
-                                                  blurRadius: 15,
-                                                  spreadRadius: 1),
-                                              BoxShadow(
-                                                  color: Colors.grey.shade200,
-                                                  offset: const Offset(-4, -4),
-                                                  blurRadius: 15,
-                                                  spreadRadius: 1)
-                                            ]
-                                          : null),
-                                  duration: const Duration(seconds: 1),
-                                  child: Center(
-                                    child: AnimatedDefaultTextStyle(
-                                      style: AppText.inter.copyWith(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                      duration: const Duration(seconds: 1),
-                                      child: Text(currentIndex.value == 5
-                                          ? 'Confirm'
-                                          : ''),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
+                            return CustomButton(
+                                onPressed: () {
+                                  value == 6 ? checkOTP() : null;
+                                },
+                                content: 'Confirm',
+                                color: AppColor.globalPink);
                           },
                         )
                       ])),

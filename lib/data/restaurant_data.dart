@@ -148,86 +148,19 @@ class RestaurantData {
         addonName: '', size: '12"', priceSize: 16, price: 0, radio: RadioType.c)
   ];
 
-  static List<RestaurantModel> kindFood(
+  static List<RestaurantModel> sortRestaurant(
       TitleFood titleFood, List<RestaurantModel> fullMenu) {
     return fullMenu.where((food) => food.titleFood == titleFood).toList();
   }
 
-  static List<RiveModel> kindSetting(
-      KindSetting kindSetting, List<RiveModel> setting) {
-    return setting
-        .where((element) => element.kindSetting == kindSetting)
-        .toList();
-  }
-
   // phân loại thức ăn theo menu
-  static List<FoodItems> filterCategory(
+  static List<FoodItems> sortFood(
       FoodCategory foodCategory, List<FoodItems> fullMenu) {
     return fullMenu.where((food) => food.foodCategory == foodCategory).toList();
   }
 
   // phân loại topping theo món ăn
-  static List<Addon> choseTopping(RadioType radioType, List<Addon> full) {
+  static List<Addon> sortTopping(RadioType radioType, List<Addon> full) {
     return full.where((addon) => addon.radio == radioType).toList();
-  }
-
-  static Future addItemToDataBase(BuildContext context, String table,
-      Map<String, Object> info, String popUp) async {
-    try {
-      await supabase.from(table).upsert(info).then(
-          (value) => customSnackBar(context, AppColor.globalPinkShadow, popUp));
-    } on AuthException catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
-    }
-  }
-
-  static Future deleteItemFromDataBase(BuildContext context, String table,
-      Map<String, Object> info, String popUp) async {
-    try {
-      await supabase.from(table).delete().match(info).then((value) =>
-          customSnackBar(context, AppColor.buttonShadowBlack, popUp));
-    } on AuthException catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
-    }
-  }
-
-  static Future updateItemInDataBase(BuildContext context, String table,
-      Map<String, Object> info, String popUp) async {
-    try {
-      late dynamic id;
-      var response = await supabase.from(table).select('id');
-      var records = response.toList() as List;
-      for (var record in records) {
-        var userId = record['id'];
-        id = userId;
-      }
-      await supabase.from(table).update(info).eq('id', id);
-      if (context.mounted) {
-        customSnackBar(context, AppColor.globalPinkShadow, popUp);
-      }
-    } on AuthException catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack, error.message);
-      }
-    } catch (error) {
-      if (context.mounted) {
-        customSnackBar(context, AppColor.buttonShadowBlack,
-            'Error occurred, please retry');
-      }
-    }
   }
 }

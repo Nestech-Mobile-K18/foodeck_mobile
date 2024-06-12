@@ -58,10 +58,7 @@ class _OrderCompleteState extends State<OrderComplete> {
                   Navigator.pushNamedAndRemoveUntil(
                       context, AppRouter.homePage, (route) => false);
                 },
-                text: const CustomText(
-                    content: 'Go Home',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                content: 'Go Home',
                 color: AppColor.globalPink)
           ],
         ),

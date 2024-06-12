@@ -67,9 +67,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                           ],
                       body: TabBarView(
                           children: FoodCategory.values.map((category) {
-                        List<FoodItems> categoryMenu =
-                            RestaurantData.filterCategory(
-                                category, RestaurantData.foodItems);
+                        List<FoodItems> categoryMenu = RestaurantData.sortFood(
+                            category, RestaurantData.foodItems);
                         return ListView.builder(
                             itemCount: categoryMenu.length,
                             physics: const NeverScrollableScrollPhysics(),

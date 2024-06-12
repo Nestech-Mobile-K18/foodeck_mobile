@@ -9,7 +9,6 @@ class CreateCard extends StatefulWidget {
 }
 
 class _CreateCardState extends State<CreateCard> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final cardNameController = TextEditingController();
   final cardNumberController = TextEditingController();
   final expiryDateController = TextEditingController();
@@ -40,48 +39,56 @@ class _CreateCardState extends State<CreateCard> {
             child: Center(
                 child: Column(
               children: [
-                CustomFormFill(
+                CustomTextField(
                     labelText: 'Card Name',
-                    textInputType: TextInputType.name,
-                    textEditingController: cardNameController,
-                    labelColor: AppColor.globalPink,
-                    prefixIcons: const Icon(Icons.person_2_outlined),
+                    keyboardType: TextInputType.name,
+                    controller: cardNameController,
+                    prefix: const Icon(Icons.person_2_outlined),
                     textCapitalization: TextCapitalization.characters,
-                    validator: (p0) {
-                      if (Validation.cardNameRegex
-                          .hasMatch(cardNameController.text)) {
-                        return null;
-                      } else {
-                        return 'Invalid Name';
-                      }
+                    onChanged: (p0) {
+                      setState(() {
+                        Validation.cardNameRegex
+                            .hasMatch(cardNameController.text);
+                      });
                     },
-                    onEditingComplete: () =>
-                        FocusScope.of(context).nextFocus()),
+                    activeValidate: Validation.cardNameRegex
+                                .hasMatch(cardNameController.text) ||
+                            cardNameController.text.isEmpty
+                        ? false
+                        : true,
+                    errorText: Validation.cardNameRegex
+                                .hasMatch(cardNameController.text) ||
+                            cardNameController.text.isEmpty
+                        ? ''
+                        : 'Invalid Name'),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: CustomFormFill(
+                  child: CustomTextField(
                     labelText: 'Card Number',
-                    textEditingController: cardNumberController,
-                    labelColor: AppColor.globalPink,
-                    prefixIcons: const Icon(Icons.credit_card),
-                    textInputType: TextInputType.number,
-                    textInputFormatter: [
+                    controller: cardNumberController,
+                    prefix: const Icon(Icons.credit_card),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(16),
                       CardNumberFormatter(textIndex: 4, replaceText: ' ')
                     ],
-                    validator: (p0) {
-                      if (cardNumberController.text.length < 19) {
-                        return 'Must be 16 digits';
-                      } else {
-                        return null;
-                      }
-                    },
-                    function: (value) {
+                    errorText: cardNumberController.text.length < 19 &&
+                            cardNumberController.text.isNotEmpty
+                        ? 'Must be 16 digits'
+                        : '',
+                    onChanged: (value) {
                       createCardBloc
                           .add(CreateCardChangeTypeCardEvent(typeCard: value));
+                      setState(() {
+                        cardNumberController.text = value;
+                      });
                     },
-                    icons: Padding(
+                    activeValidate: cardNumberController.text.length < 19 &&
+                            cardNumberController.text.isNotEmpty
+                        ? true
+                        : false,
+                    suffix: Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: BlocBuilder<CreateCardBloc, CreateCardState>(
                         builder: (context, state) {
@@ -108,7 +115,7 @@ class _CreateCardState extends State<CreateCard> {
                     ),
                   ),
                 ),
-                CustomFormFill(
+                CustomTextField(
                   onTap: () async {
                     DateTime? dateTime = await showDatePicker(
                         context: context,
@@ -121,28 +128,33 @@ class _CreateCardState extends State<CreateCard> {
                       });
                     }
                   },
+                  activeValidate: false,
                   labelText: 'Expiry Date',
-                  textEditingController: expiryDateController,
-                  labelColor: AppColor.globalPink,
+                  controller: expiryDateController,
                   readOnly: true,
-                  prefixIcons: const Icon(Icons.date_range),
+                  prefix: const Icon(Icons.date_range),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: CustomFormFill(
+                  child: CustomTextField(
                     labelText: 'CVC/CVV',
-                    validator: (p0) {
-                      if (cvcController.text.length < 3) {
-                        return 'Must be 3 digits';
-                      } else {
-                        return null;
-                      }
+                    errorText: cvcController.text.length < 3 &&
+                            cvcController.text.isNotEmpty
+                        ? 'Must be 3 digits'
+                        : '',
+                    controller: cvcController,
+                    onChanged: (value) {
+                      setState(() {
+                        cvcController.text = value;
+                      });
                     },
-                    textEditingController: cvcController,
-                    labelColor: AppColor.globalPink,
-                    prefixIcons: const Icon(Icons.password),
-                    textInputType: TextInputType.number,
-                    textInputFormatter: [
+                    activeValidate: cvcController.text.length < 3 &&
+                            cvcController.text.isNotEmpty
+                        ? true
+                        : false,
+                    prefix: const Icon(Icons.password),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(3)
                     ],
@@ -157,10 +169,7 @@ class _CreateCardState extends State<CreateCard> {
                           expiryDate: expiryDateController.text,
                           cvc: cvcController.text));
                     },
-                    text: const CustomText(
-                        content: 'Save',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
+                    content: 'Save',
                     color: AppColor.globalPink)
               ],
             )),

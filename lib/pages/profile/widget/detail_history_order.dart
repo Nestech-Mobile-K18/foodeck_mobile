@@ -221,10 +221,7 @@ class _DetailHistoryOrderState extends State<DetailHistoryOrder> {
                           Center(
                             child: CustomButton(
                                 onPressed: () {},
-                                text: const CustomText(
-                                    content: 'Cancel Order',
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                content: 'Cancel Order',
                                 color: AppColor.globalPink),
                           )
                         ],

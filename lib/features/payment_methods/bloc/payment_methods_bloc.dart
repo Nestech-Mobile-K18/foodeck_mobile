@@ -48,14 +48,15 @@ class PaymentMethodsBloc
   FutureOr<void> paymentMethodsRemoveCardEvent(
       PaymentMethodsRemoveCardEvent event,
       Emitter<PaymentMethodsState> emit) async {
-    await RestaurantData.deleteItemFromDataBase(
-        event.context,
+    await AsyncFunctions.deleteData(
         'card',
         {
           'card_name': event.paymentModel.cardName,
           'card_number': event.paymentModel.cardNumber
         },
-        'You just removed this card');
+        PopUp.allow,
+        event.context,
+        'You just removed a card');
     final data = await supabase.from('card').select();
     currentCard.value = data
             .map((e) => PaymentModel(
@@ -80,8 +81,7 @@ class PaymentMethodsBloc
   FutureOr<void> paymentMethodsAddCardEvent(PaymentMethodsAddCardEvent event,
       Emitter<PaymentMethodsState> emit) async {
     FocusManager.instance.primaryFocus!.unfocus();
-    await RestaurantData.addItemToDataBase(
-        event.context,
+    await AsyncFunctions.insertData(
         'card',
         {
           'card_name': event.cardName,
@@ -89,7 +89,9 @@ class PaymentMethodsBloc
           'expiry_date': event.expiryDate,
           'cvc': event.cvc,
         },
-        'You just added new card');
+        PopUp.allow,
+        event.context,
+        'You just added a new card');
     final data = await supabase.from('card').select();
     currentCard.value = data
             .map((e) => PaymentModel(

@@ -50,10 +50,7 @@ class PaymentMethodBody extends StatelessWidget {
                                       context: context,
                                       paymentModel: paymentModel[value]));
                             },
-                            text: const CustomText(
-                                content: 'Remove Card',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
+                            content: 'Remove Card',
                             color: AppColor.globalPink),
                       )
                     ],

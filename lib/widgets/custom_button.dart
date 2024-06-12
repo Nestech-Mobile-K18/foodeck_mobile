@@ -1,50 +1,52 @@
-import 'package:flutter/material.dart';
+import 'package:template/source/export.dart';
 
-class CustomButton extends StatefulWidget {
+class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     this.onPressed,
     this.icons,
-    required this.text,
+    required this.content,
     required this.color,
     this.borderSide,
     this.heightBox,
     this.widthBox,
     this.paddingLeft,
+    this.contentColor,
+    this.contentWeight,
+    this.borderRadius,
+    this.paddingBottom,
   });
 
   final VoidCallback? onPressed;
   final Widget? icons;
-  final Widget text;
+  final String content;
+  final Color? contentColor;
+  final FontWeight? contentWeight;
   final Color color;
   final BorderSide? borderSide;
-  final double? heightBox;
-  final double? widthBox;
-  final double? paddingLeft;
+  final double? heightBox, widthBox, paddingLeft, borderRadius, paddingBottom;
 
-  @override
-  State<CustomButton> createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: paddingBottom ?? 16),
       child: ElevatedButton.icon(
-        onPressed: widget.onPressed,
-        label: widget.text,
-        icon: widget.icons ?? const SizedBox(),
+        onPressed: onPressed,
+        label: CustomText(
+            content: content,
+            color: contentColor ?? Colors.white,
+            fontWeight: contentWeight ?? FontWeight.w700),
+        icon: icons ?? const SizedBox(),
         style: ButtonStyle(
             padding: WidgetStatePropertyAll(
-                EdgeInsets.only(right: widget.paddingLeft ?? 0)),
+                EdgeInsets.only(right: paddingLeft ?? 0)),
             elevation: const WidgetStatePropertyAll(10),
             fixedSize: WidgetStatePropertyAll(
-                Size(widget.widthBox ?? 328, widget.heightBox ?? 62)),
-            backgroundColor: WidgetStatePropertyAll(widget.color),
+                Size(widthBox ?? double.maxFinite, heightBox ?? 62)),
+            backgroundColor: WidgetStatePropertyAll(color),
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-                side: widget.borderSide ?? BorderSide.none))),
+                borderRadius: BorderRadius.circular(borderRadius ?? 30),
+                side: borderSide ?? BorderSide.none))),
       ),
     );
   }

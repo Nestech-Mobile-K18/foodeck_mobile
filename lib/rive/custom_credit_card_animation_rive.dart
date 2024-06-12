@@ -34,11 +34,7 @@ class _CustomCreditCardAnimationRiveState
             fit: FlexFit.loose,
             child: CustomButton(
               heightBox: 62,
-              text: const CustomText(
-                content: 'Add New Card',
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+              content: 'Add New Card',
               color: AppColor.globalPink,
               onPressed: () {
                 paymentMethodsBloc

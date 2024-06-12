@@ -1,7 +1,6 @@
 import 'package:template/source/export.dart';
 
 class Validation {
-  static RegExp phoneRegex = RegExp(r'^[+]?\d{10,13}$');
   static RegExp nameRegex = RegExp(
       r'^([^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+\s?[^!@#$%^&+`;/_~*(),.?":{}|<>0-9]+?\S)$');
   static RegExp emailRegex = RegExp(

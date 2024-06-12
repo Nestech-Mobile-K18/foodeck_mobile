@@ -33,7 +33,7 @@ class RestaurantBottomAppBar extends StatelessWidget {
               labelColor: AppColor.globalPink,
               unselectedLabelColor: Colors.grey,
               isScrollable: true,
-              labelStyle: AppText.inter
+              labelStyle: AppTextStyle.inter
                   .copyWith(fontSize: 15, fontWeight: FontWeight.bold),
               tabs: _buildCategoryTabs()),
           expandedTitleScale: 1,

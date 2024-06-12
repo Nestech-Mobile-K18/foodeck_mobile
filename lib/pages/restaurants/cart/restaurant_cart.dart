@@ -88,16 +88,18 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                             text: TextSpan(
                                                 text:
                                                     '${success.cartItems[index].foodItems.nameFood}\n',
-                                                style: AppText.inter.copyWith(
-                                                    fontSize: 17,
-                                                    color: Colors.black),
+                                                style: AppTextStyle.inter
+                                                    .copyWith(
+                                                        fontSize: 17,
+                                                        color: Colors.black),
                                                 children: [
                                               TextSpan(
                                                   text:
                                                       '${success.cartItems[index].size[0]} ',
-                                                  style: AppText.inter.copyWith(
-                                                      fontSize: 15,
-                                                      color: Colors.grey)),
+                                                  style: AppTextStyle.inter
+                                                      .copyWith(
+                                                          fontSize: 15,
+                                                          color: Colors.grey)),
                                               WidgetSpan(
                                                   baseline:
                                                       TextBaseline.ideographic,
@@ -116,9 +118,10 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                               TextSpan(
                                                   text:
                                                       ' ${success.cartItems[index].selectAddon[0]}\n${success.cartItems[index].selectAddon[1]}\n${success.cartItems[index].note}\n',
-                                                  style: AppText.inter.copyWith(
-                                                      fontSize: 15,
-                                                      color: Colors.grey)),
+                                                  style: AppTextStyle.inter
+                                                      .copyWith(
+                                                          fontSize: 15,
+                                                          color: Colors.grey)),
                                               const WidgetSpan(
                                                   child: SizedBox(
                                                 height: 30,
@@ -126,10 +129,11 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                               TextSpan(
                                                   text:
                                                       '\$${success.cartItems[index].price}',
-                                                  style: AppText.inter.copyWith(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold))
+                                                  style: AppTextStyle.inter
+                                                      .copyWith(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold))
                                             ])),
                                         IconButton(
                                             onPressed: () {
@@ -179,7 +183,7 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                         controller: pageController,
                                         clipBehavior: Clip.none,
                                         itemCount:
-                                            RestaurantData.filterCategory(FoodCategory.Beverages, RestaurantData.foodItems)
+                                            RestaurantData.sortFood(FoodCategory.Beverages, RestaurantData.foodItems)
                                                 .length,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (BuildContext context, int index) => BannerItems(
@@ -188,18 +192,18 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                                 right: 10),
                                             paddingText:
                                                 const EdgeInsets.only(left: 3),
-                                            foodImage: RestaurantData.filterCategory(
+                                            foodImage: RestaurantData.sortFood(
                                                     FoodCategory.Beverages,
                                                     RestaurantData
                                                         .foodItems)[index]
                                                 .picture,
                                             deliveryTime:
-                                                '\$${RestaurantData.filterCategory(FoodCategory.Beverages, RestaurantData.foodItems)[index].price}',
-                                            shopName: RestaurantData.filterCategory(
+                                                '\$${RestaurantData.sortFood(FoodCategory.Beverages, RestaurantData.foodItems)[index].price}',
+                                            shopName: RestaurantData.sortFood(
                                                     FoodCategory.Beverages,
                                                     RestaurantData.foodItems)[index]
                                                 .nameFood,
-                                            shopAddress: RestaurantData.filterCategory(FoodCategory.Beverages, RestaurantData.foodItems)[index].place,
+                                            shopAddress: RestaurantData.sortFood(FoodCategory.Beverages, RestaurantData.foodItems)[index].place,
                                             rateStar: ''))))
                           ],
                         ),
@@ -320,10 +324,7 @@ class _RestaurantCartState extends State<RestaurantCart> {
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold),
                             CustomButton(
-                              text: const CustomText(
-                                  content: 'Go to Checkout',
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                              content: 'Go to Checkout',
                               color: AppColor.globalPink,
                               heightBox: 54,
                               widthBox: 172,

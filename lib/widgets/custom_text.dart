@@ -1,9 +1,5 @@
 import 'package:template/source/export.dart';
 
-class AppText {
-  static TextStyle inter = GoogleFonts.inter();
-}
-
 class CustomText extends StatelessWidget {
   const CustomText(
       {super.key,
@@ -13,7 +9,8 @@ class CustomText extends StatelessWidget {
       this.color,
       this.textDecoration,
       this.textAlign,
-      this.textOverflow});
+      this.textOverflow,
+      this.maxLines});
 
   final String content;
   final double? fontSize;
@@ -22,15 +19,16 @@ class CustomText extends StatelessWidget {
   final TextDecoration? textDecoration;
   final TextAlign? textAlign;
   final TextOverflow? textOverflow;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return Text(content,
         textAlign: textAlign,
+        maxLines: maxLines,
         overflow: textOverflow ?? TextOverflow.ellipsis,
-        style: AppText.inter.copyWith(
+        style: AppTextStyle.inter.copyWith(
             fontSize: fontSize ?? 17,
-            overflow: textOverflow ?? TextOverflow.ellipsis,
             fontWeight: fontWeight,
             color: color,
             decoration: textDecoration));

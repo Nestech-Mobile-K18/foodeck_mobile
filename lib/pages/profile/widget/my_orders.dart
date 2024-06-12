@@ -55,7 +55,7 @@ class _MyOrdersState extends State<MyOrders> {
                                     },
                                     controller: pageController,
                                     clipBehavior: Clip.none,
-                                    itemCount: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)
+                                    itemCount: RestaurantData.sortRestaurant(TitleFood.Recent, RestaurantData.restaurant)
                                         .length,
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (BuildContext context, int index) =>
@@ -68,30 +68,30 @@ class _MyOrdersState extends State<MyOrders> {
                                                 right: 10),
                                             paddingText: const EdgeInsets.only(
                                                 left: 3, top: 8),
-                                            foodImage: RestaurantData.kindFood(
+                                            foodImage: RestaurantData.sortRestaurant(
                                                     TitleFood.Recent,
                                                     RestaurantData
                                                         .restaurant)[index]
                                                 .image,
                                             deliveryTime:
-                                                '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].deliveryTime} mins',
-                                            shopName: RestaurantData.kindFood(
+                                                '${RestaurantData.sortRestaurant(TitleFood.Recent, RestaurantData.restaurant)[index].deliveryTime} mins',
+                                            shopName: RestaurantData.sortRestaurant(
                                                     TitleFood.Recent,
                                                     RestaurantData.restaurant)[index]
                                                 .shopName,
-                                            shopAddress: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].address,
-                                            rateStar: '${RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index].rate}',
+                                            shopAddress: RestaurantData.sortRestaurant(TitleFood.Recent, RestaurantData.restaurant)[index].address,
+                                            rateStar: '${RestaurantData.sortRestaurant(TitleFood.Recent, RestaurantData.restaurant)[index].rate}',
                                             action: () {
                                               explorePageBloc.add(
                                                   ExplorePageLikeEvent(
                                                       saveFood: RestaurantData
-                                                              .kindFood(
+                                                              .sortRestaurant(
                                                                   TitleFood.Recent,
                                                                   RestaurantData
                                                                       .restaurant)[
                                                           index]));
                                             },
-                                            restaurantModel: RestaurantData.kindFood(TitleFood.Recent, RestaurantData.restaurant)[index])),
+                                            restaurantModel: RestaurantData.sortRestaurant(TitleFood.Recent, RestaurantData.restaurant)[index])),
                               )),
                         )
                       ],
