@@ -3,8 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:template/src/mainApp.dart';
 
-import 'app.dart';
+import 'src/app.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -24,7 +25,7 @@ Future<void> main() async {
     runApp(
       DevicePreview(
         enabled: !kReleaseMode,
-        builder: (context) => const MyApp(),
+        builder: (context) => const MainApp(),
       ),
     );
   });
