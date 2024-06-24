@@ -26,84 +26,37 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-
-    initializeNetworkBloc().then((networkState) {
-      if (networkState is NetworkFailure) {
-        // no internet
-        GoRouter.of(context).push(RouteName.noInternet);
-      } else if (networkState is NetworkSuccess &&
-          !isAuthenticationInitialized) {
-        isAuthenticationInitialized = true; // Set the flag to true
-
-        initializeAuthenticationBloc().then((authState) {
-          if (authState is AuthenticationFailure) {
-            // login not yet
-            GoRouter.of(context).push(RouteName.login);
-          } else if (authState is AuthenticationSuccess) {
-            if (mounted) {
-              //find current location
-              GoRouter.of(context).push(RouteName.getCurrentLocation);
-            }
-          }
-        });
-      }
-    });
-  }
-
-  Future<NetworkState> initializeNetworkBloc() async {
-    final completer =
-        Completer<NetworkState>(); // Completer to handle the initialization
-
     networkBloc = context.read<NetworkBloc>()..add(NetworkObserve());
+    authBloc = context.read<AuthenticationBloc>()
+      ..add(AppStarted()); // Initialize authBloc
+
     networkStream = networkBloc.stream.listen((state) {
       if (!mounted) return; // Check if the widget is still mounted
 
       if (state is NetworkSuccess) {
-        completer.complete(
-            NetworkSuccess()); // Complete the completer with NetworkSuccess
+        authBloc.add(AppStarted());
       } else if (state is NetworkFailure) {
-        completer.complete(
-            NetworkFailure()); // Complete the completer with NetworkFailure
+        GoRouter.of(context).push(RouteName.noInternet);
       }
     });
 
-    return completer.future;
-  }
-
-  Future<AuthenticationState> initializeAuthenticationBloc() async {
-    final completer = Completer<
-        AuthenticationState>(); // Completer to handle the initialization
-
-    authBloc = context.read<AuthenticationBloc>()..add(AppStarted());
     authStream = authBloc.stream.listen((state) {
-      print('sstate $state');
-
       if (!mounted) return; // Check if the widget is still mounted
 
       if (state is AuthenticationSuccess) {
-
-  
-        completer.complete(AuthenticationSuccess(userInfor: state.userInfor
-            // userId: state.userId,
-            // name: state.name,
-            // avatar: state.avatar,
-            // password: state.password,
-            // phone: state.password,
-            // typeAuthen: state
-            //     .typeAuthen
-                )); // Complete the completer with NetworkSuccess
+        GoRouter.of(context).push(RouteName.getCurrentLocation);
       } else if (state is AuthenticationFailure) {
-        completer.complete(
-            AuthenticationFailure()); // Complete the completer with NetworkFailure
+        GoRouter.of(context).push(RouteName.login);
       }
     });
-    return completer.future;
   }
 
   @override
   void dispose() {
     authStream.cancel(); // Cancel the stream subscription
     networkStream.cancel();
+    authBloc.close();
+
     super.dispose();
   }
 
